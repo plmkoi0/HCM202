@@ -1,13 +1,16 @@
 import Bridge from './components/Bridge'
 import Hero from './components/Hero'
 import Intro from './components/Intro'
+import ArtifactViewerProvider from './components/Museum/ArtifactViewerProvider'
 import Museum from './components/Museum/Museum'
 import Nav from './components/Nav'
 import Placeholder from './components/Placeholder'
+import Quiz from './components/Quiz/Quiz'
 import { site } from './lib/site'
 
 export default function App() {
   return (
+    <ArtifactViewerProvider>
     <div className="paper-texture min-h-screen">
       <a
         href="#bao-tang"
@@ -21,7 +24,7 @@ export default function App() {
         <Intro />
         <Museum />
         <Bridge />
-        <Placeholder id="quiz" title="Quiz “Bạn là công dân kiểu gì?”" stage="giai đoạn M3" />
+        <Quiz />
         <Placeholder id="nguon" title="Nguồn tham khảo" stage="giai đoạn M4" />
         <Placeholder id="nhom" title="Nhóm thực hiện" stage="giai đoạn M4" />
       </main>
@@ -30,5 +33,6 @@ export default function App() {
         <p className="mx-auto mt-1 max-w-xl">{site.footer}</p>
       </footer>
     </div>
+    </ArtifactViewerProvider>
   )
 }

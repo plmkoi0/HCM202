@@ -1,49 +1,19 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
+import { useArtifactViewer } from '../../lib/artifactViewer'
 import { artifacts } from '../../lib/data'
-import ArtifactModal from './ArtifactModal'
 import PillarFilter, { type Filter } from './PillarFilter'
 import ProgressBar from './ProgressBar'
 import Timeline from './Timeline'
 
-const STORAGE_KEY = 'hcm202.viewed'
-
-function loadSeen(): Set<string> {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    return new Set(raw ? (JSON.parse(raw) as string[]) : [])
-  } catch {
-    return new Set()
-  }
-}
-
 export default function Museum() {
   const [filter, setFilter] = useState<Filter>('all')
-  const [openId, setOpenId] = useState<string | null>(null)
-  const [seen, setSeen] = useState<Set<string>>(loadSeen)
+  const { seen, open } = useArtifactViewer()
 
   const visible = useMemo(
     () => (filter === 'all' ? artifacts : artifacts.filter((a) => a.pillar === filter)),
     [filter],
   )
-
-  const open = useCallback((id: string) => {
-    setOpenId(id)
-    setSeen((prev) => (prev.has(id) ? prev : new Set(prev).add(id)))
-  }, [])
-  const close = useCallback(() => setOpenId(null), [])
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify([...seen]))
-    } catch {
-      // Trình duyệt chặn lưu trữ: tiến độ chỉ giữ trong phiên
-    }
-  }, [seen])
-
-  const idx = visible.findIndex((a) => a.id === openId)
-  const current = openId ? (artifacts.find((a) => a.id === openId) ?? null) : null
-  const prev = idx > 0 ? visible[idx - 1] : undefined
-  const next = idx >= 0 && idx < visible.length - 1 ? visible[idx + 1] : undefined
+  const visibleIds = useMemo(() => visible.map((a) => a.id), [visible])
 
   return (
     <section id="bao-tang" aria-labelledby="museum-title" className="px-4 py-16">
@@ -59,15 +29,8 @@ export default function Museum() {
           </div>
         </div>
 
-        <Timeline artifacts={visible} seen={seen} onOpen={open} />
+        <Timeline artifacts={visible} seen={seen} onOpen={(id) => open(id, visibleIds)} />
       </div>
-
-      <ArtifactModal
-        artifact={current}
-        onClose={close}
-        onPrev={prev ? () => open(prev.id) : undefined}
-        onNext={next ? () => open(next.id) : undefined}
-      />
     </section>
   )
 }

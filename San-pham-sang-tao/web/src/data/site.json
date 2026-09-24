@@ -2,7 +2,11 @@
   "name": "Của dân · Do dân · Vì dân — Bảo tàng số",
   "hero": {
     "eyebrow": "Bảo tàng số",
-    "stampLines": ["Của dân.", "Do dân.", "Vì dân."],
+    "stampLines": [
+      "Của dân.",
+      "Do dân.",
+      "Vì dân."
+    ],
     "subtitle": "Chủ nhân không đứng ngoài",
     "ctaMuseum": "Vào bảo tàng",
     "ctaQuiz": "Làm quiz ngay"
@@ -18,5 +22,21 @@
     "text": "Bác đã trao quyền làm chủ. Còn bạn dùng nó thế nào?",
     "cta": "Bắt đầu quiz"
   },
-  "footer": "Sản phẩm sáng tạo HCM202 — Chủ đề 4: Tư tưởng Hồ Chí Minh về Nhà nước của nhân dân, do nhân dân, vì nhân dân."
+  "footer": "Sản phẩm sáng tạo HCM202 — Chủ đề 4: Tư tưởng Hồ Chí Minh về Nhà nước của nhân dân, do nhân dân, vì nhân dân.",
+  "quiz": {
+    "title": "Bạn là công dân kiểu gì?",
+    "intro": "8 câu tình huống, mỗi câu 4 lựa chọn.",
+    "start": "Bắt đầu quiz",
+    "progress": "Câu {x}/{n}",
+    "back": "← Câu trước",
+    "resultEyebrow": "Kết quả của bạn",
+    "actionsTitle": "3 việc nên làm",
+    "chartTitle": "Tỉ lệ 4 kiểu",
+    "relatedTitle": "Hiện vật liên quan",
+    "reviewShow": "Xem giải thích từng câu",
+    "reviewHide": "Ẩn giải thích từng câu",
+    "yourChoice": "Lựa chọn của bạn",
+    "explainLabel": "Giải thích",
+    "retry": "Làm lại"
+  }
 }
