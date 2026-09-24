@@ -1,0 +1,65 @@
+{
+  "root": "Nhà nước của nhân dân, do nhân dân, vì nhân dân",
+  "source": "Mục 2 tài liệu thiết kế — Giáo trình HCM202, Chương IV, mục II",
+  "pillars": [
+    {
+      "id": "dan-chu",
+      "name": "Nhà nước dân chủ",
+      "items": [
+        {
+          "title": "Bản chất giai cấp",
+          "text": "mang bản chất giai cấp công nhân, thống nhất với tính nhân dân và tính dân tộc (GT tr. 83–84)."
+        },
+        {
+          "title": "Của nhân dân",
+          "text": "\"dân là chủ\". Tất cả mọi quyền lực đều là của nhân dân (t.8, tr.262)."
+        },
+        {
+          "title": "Do nhân dân",
+          "text": "\"dân làm chủ\". Dân bầu ra nhà nước; quyền làm chủ đi đôi với nghĩa vụ công dân (t.9, tr.258); phải có năng lực làm chủ (t.12, tr.527)."
+        },
+        {
+          "title": "Vì nhân dân",
+          "text": "\"Việc gì có lợi cho dân thì làm. Việc gì có hại cho dân thì phải tránh\" (t.4, tr.21). Thước đo là được lòng dân (t.4, tr.52)."
+        },
+        {
+          "title": "Dân chủ trực tiếp và gián tiếp",
+          "text": "quyền lực nhà nước là \"thừa ủy quyền\" của nhân dân; cán bộ là \"công bộc\" (t.4, tr.64–65); dân có quyền kiểm soát, phê bình, bãi miễn đại biểu (t.9, tr.81; t.12, tr.375; t.5, tr.75)."
+        }
+      ]
+    },
+    {
+      "id": "phap-quyen",
+      "name": "Nhà nước pháp quyền",
+      "items": [
+        {
+          "title": "Hợp hiến, hợp pháp",
+          "text": "Yêu sách 1919, phiên họp Chính phủ 3/9/1945, Tổng tuyển cử 6/1/1946, Quốc hội khóa I (GT tr. 88–89)."
+        },
+        {
+          "title": "Thượng tôn pháp luật",
+          "text": "làm tốt lập pháp (Hiến pháp 1946, 1959; 16 đạo luật, 613 sắc lệnh); đưa pháp luật vào cuộc sống; giáo dục pháp luật để dân \"dám nói, dám làm\" (t.15, tr.293); cán bộ gương mẫu \"phụng công, thủ pháp, chí công, vô tư\" (t.5, tr.473) (GT tr. 89–90)."
+        },
+        {
+          "title": "Pháp quyền nhân nghĩa",
+          "text": "tôn trọng quyền con người; pháp luật nhân văn, khuyến thiện (t.6, tr.437) (GT tr. 90–91)."
+        }
+      ]
+    },
+    {
+      "id": "trong-sach",
+      "name": "Nhà nước trong sạch, vững mạnh",
+      "items": [
+        {
+          "title": "Kiểm soát quyền lực là tất yếu",
+          "text": "cán bộ có quyền dễ lạm quyền (t.4, tr.51); Đảng kiểm tra; nhân dân giám sát (GT tr. 91)."
+        },
+        {
+          "title": "Phòng chống tiêu cực",
+          "text": "\"bệnh mẹ\" là chủ nghĩa cá nhân. Năm nhóm biện pháp: phát huy dân chủ; pháp luật, kỷ luật nghiêm minh, không có vùng cấm; lấy giáo dục làm chủ yếu; cán bộ nêu gương; huy động sức mạnh của lòng yêu nước (t.6, tr.127) (GT tr. 94–95)."
+        }
+      ],
+      "todo": "TODO: file giáo trình tải lên thiếu tr. 92–93 (phần cuối mục \"Kiểm soát quyền lực\" và phần đầu mục \"Phòng, chống tiêu cực\"). Nhóm cần bổ sung hai trang này trước khi chốt nội dung trụ cột 3."
+    }
+  ]
+}

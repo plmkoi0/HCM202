@@ -13,11 +13,12 @@ interface Props {
   answers?: CitizenTypeId[]
   onRetry: () => void
   retryLabel: string
-  /** Khu vực nút chia sẻ (M4) */
+  eyebrow: string
+  /** Khu vực nút chia sẻ */
   actions?: ReactNode
 }
 
-export default function Result({ typeId, answers, onRetry, retryLabel, actions }: Props) {
+export default function Result({ typeId, answers, onRetry, retryLabel, eyebrow, actions }: Props) {
   const ui = site.quiz
   const type = quiz.types.find((t) => t.id === typeId)!
   const { open } = useArtifactViewer()
@@ -31,7 +32,7 @@ export default function Result({ typeId, answers, onRetry, retryLabel, actions }
 
   return (
     <div>
-      <p className="text-sm font-semibold tracking-[0.2em] text-ink-soft uppercase">{ui.resultEyebrow}</p>
+      <p className="text-sm font-semibold tracking-[0.2em] text-ink-soft uppercase">{eyebrow}</p>
       <h3 ref={headingRef} tabIndex={-1} className="mt-2 text-3xl font-extrabold text-son-text outline-none sm:text-4xl">
         {type.name}
       </h3>

@@ -7,6 +7,7 @@ Thiết kế: [`../THIET-KE-WEB-APP.md`](../THIET-KE-WEB-APP.md).
 ```bash
 npm install
 npm run dev      # mở http://localhost:5173
+npm run test     # unit test (Vitest)
 npm run build    # kiểm tra kiểu + đóng gói vào dist/
 npm run lint
 ```
@@ -19,8 +20,10 @@ npm run lint
 | `src/data/quiz.json` | 8 câu hỏi, 4 kiểu công dân, thứ tự hòa điểm |
 | `src/data/sources.json` | Nguồn tham khảo APA7 |
 | `src/data/team.json` | Thành viên nhóm |
-| `src/data/site.json` | Chữ ở hero, lời dẫn, cầu nối, chân trang |
+| `src/data/site.json` | Chữ giao diện, `siteUrl` |
+| `src/data/mindmap.json` | Sơ đồ tư duy 3 trụ cột (mục 2) |
 
 - Trường còn thiếu ghi `TODO`. Web hiển thị các trường này dưới dạng "đang bổ sung".
 - Hiện vật có `"verified": false` hiện nhãn **[Chờ xác minh]**. Đổi thành `true` sau khi nhóm xác minh và ghi nguồn.
+- `team.json` rỗng thì mục "Nhóm" tự ẩn.
 - Ảnh: đặt vào `public/images/artifacts/HV-xx.jpg`, rồi điền `image.src` = `"images/artifacts/HV-xx.jpg"`, `image.alt` và `image.credit`. Khi `src` rỗng, web dùng khung giữ chỗ "Ảnh tư liệu — đang bổ sung".

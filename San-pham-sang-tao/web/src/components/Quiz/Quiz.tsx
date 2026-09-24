@@ -1,11 +1,12 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { quiz } from '../../lib/data'
 import { scrollToEl } from '../../lib/format'
-import { score } from '../../lib/scoring'
+import { isTypeId, score } from '../../lib/scoring'
 import { site } from '../../lib/site'
 import type { CitizenTypeId } from '../../types'
 import QuestionCard from './QuestionCard'
 import Result from './Result'
+import ShareActions from './ShareActions'
 
 function shuffled(n: number) {
   const a = Array.from({ length: n }, (_, i) => i)
@@ -16,19 +17,37 @@ function shuffled(n: number) {
   return a
 }
 
-type Phase = 'start' | 'play' | 'result'
+type Phase = 'start' | 'play' | 'result' | 'shared'
+
+/** Đọc ?kq=A|B|C|D; bỏ qua giá trị không hợp lệ. */
+function sharedType(): CitizenTypeId | null {
+  const kq = new URLSearchParams(window.location.search).get('kq')
+  return isTypeId(kq) ? kq : null
+}
 
 export default function Quiz() {
   const ui = site.quiz
   const total = quiz.questions.length
   const sectionRef = useRef<HTMLElement>(null)
-  const [phase, setPhase] = useState<Phase>('start')
+  const [sharedId] = useState(sharedType)
+  const [phase, setPhase] = useState<Phase>(sharedId ? 'shared' : 'start')
   const [idx, setIdx] = useState(0)
   const [answers, setAnswers] = useState<CitizenTypeId[]>([])
   // Thứ tự đáp án được trộn một lần mỗi lượt chơi
   const [orders, setOrders] = useState<number[][]>([])
 
+  // Mở từ link chia sẻ: cuộn tới trang kết quả
+  useEffect(() => {
+    if (sharedId) requestAnimationFrame(() => scrollToEl(sectionRef.current))
+  }, [sharedId])
+
   const start = () => {
+    if (sharedId) {
+      // Bỏ ?kq khỏi địa chỉ để làm lại không mở lại kết quả cũ
+      const u = new URL(window.location.href)
+      u.searchParams.delete('kq')
+      window.history.replaceState(null, '', u)
+    }
     setOrders(quiz.questions.map((q) => shuffled(q.options.length)))
     setAnswers([])
     setIdx(0)
@@ -81,16 +100,33 @@ export default function Quiz() {
             />
           )}
 
-          {phase === 'result' && (
+          {phase === 'result' && <PlayerResult answers={answers} onRetry={start} />}
+
+          {phase === 'shared' && sharedId && (
             <Result
-              typeId={score(answers, quiz.tieBreak).winner}
-              answers={answers}
+              typeId={sharedId}
+              eyebrow={site.share.sharedEyebrow}
               onRetry={start}
-              retryLabel={ui.retry}
+              retryLabel={site.share.takeQuiz}
+              actions={<ShareActions typeId={sharedId} />}
             />
           )}
         </div>
       </div>
     </section>
+  )
+}
+
+function PlayerResult({ answers, onRetry }: { answers: CitizenTypeId[]; onRetry: () => void }) {
+  const winner = score(answers, quiz.tieBreak).winner
+  return (
+    <Result
+      typeId={winner}
+      answers={answers}
+      eyebrow={site.quiz.resultEyebrow}
+      onRetry={onRetry}
+      retryLabel={site.quiz.retry}
+      actions={<ShareActions typeId={winner} />}
+    />
   )
 }

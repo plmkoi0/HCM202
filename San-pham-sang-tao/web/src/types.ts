@@ -74,3 +74,9 @@ export interface SourcesData {
 export interface TeamData {
   members: { name: string; role: string }[]
 }
+
+export interface MindMapData {
+  root: string
+  source: string
+  pillars: { id: PillarId; name: string; items: { title: string; text: string }[]; todo?: string }[]
+}

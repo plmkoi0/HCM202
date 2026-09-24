@@ -38,5 +38,35 @@
     "yourChoice": "Lựa chọn của bạn",
     "explainLabel": "Giải thích",
     "retry": "Làm lại"
+  },
+  "siteUrl": "https://plmkoi0.github.io/HCM202/",
+  "siteUrlNote": "TODO: xác nhận siteUrl ở M5 (sau khi deploy GitHub Pages)",
+  "share": {
+    "title": "Chia sẻ kết quả",
+    "downloadStory": "Tải thẻ 1080×1920",
+    "downloadSquare": "Tải thẻ 1080×1080",
+    "generating": "Đang tạo ảnh…",
+    "generateFailed": "Không tạo được ảnh, hãy thử lại.",
+    "copy": "Sao chép link",
+    "share": "Chia sẻ",
+    "copied": "Đã sao chép",
+    "copyFailed": "Không sao chép được. Link:",
+    "shareText": "Mình là \"{name}\". Còn bạn là công dân kiểu gì?",
+    "sharedEyebrow": "Kết quả được chia sẻ",
+    "takeQuiz": "Làm quiz của bạn",
+    "cardEyebrow": "Bạn là công dân kiểu gì?",
+    "cardScan": "Quét mã để làm quiz"
+  },
+  "mindmap": {
+    "title": "Sơ đồ tư duy",
+    "expandAll": "Mở tất cả",
+    "collapseAll": "Thu gọn tất cả"
+  },
+  "sources": {
+    "title": "Nguồn tham khảo",
+    "citeNote": "Trích dẫn trong bài viết theo dạng:"
+  },
+  "team": {
+    "title": "Nhóm thực hiện"
   }
 }

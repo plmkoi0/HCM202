@@ -1,9 +1,11 @@
+import { team } from '../lib/data'
+
 const LINKS = [
   { href: '#bao-tang', label: 'Bảo tàng' },
   { href: '#quiz', label: 'Quiz' },
   { href: '#nguon', label: 'Nguồn' },
   { href: '#nhom', label: 'Nhóm' },
-]
+].filter((l) => l.href !== '#nhom' || team.members.length > 0)
 
 export default function Nav() {
   return (
