@@ -1,0 +1,94 @@
+{
+  "citeFormat": "(Hồ Chí Minh, 2011, t.4, tr.64–65)",
+  "references": [
+    {
+      "id": "giao-trinh",
+      "todo": true,
+      "text": "TODO (nhóm điền): [Tác giả/Đơn vị biên soạn]. ([Năm]). [Tên giáo trình Tư tưởng Hồ Chí Minh] (tr. 72–98). [Nhà xuất bản/Trường]."
+    },
+    {
+      "id": "hcm-tt-1",
+      "author": "Hồ Chí Minh",
+      "year": "2011",
+      "title": "Toàn tập",
+      "detail": "Tập 1",
+      "publisher": "Nhà xuất bản Chính trị quốc gia"
+    },
+    {
+      "id": "hcm-tt-4",
+      "author": "Hồ Chí Minh",
+      "year": "2011",
+      "title": "Toàn tập",
+      "detail": "Tập 4",
+      "publisher": "Nhà xuất bản Chính trị quốc gia"
+    },
+    {
+      "id": "hcm-tt-5",
+      "author": "Hồ Chí Minh",
+      "year": "2011",
+      "title": "Toàn tập",
+      "detail": "Tập 5",
+      "publisher": "Nhà xuất bản Chính trị quốc gia"
+    },
+    {
+      "id": "hcm-tt-6",
+      "author": "Hồ Chí Minh",
+      "year": "2011",
+      "title": "Toàn tập",
+      "detail": "Tập 6",
+      "publisher": "Nhà xuất bản Chính trị quốc gia"
+    },
+    {
+      "id": "hcm-tt-7",
+      "author": "Hồ Chí Minh",
+      "year": "2011",
+      "title": "Toàn tập",
+      "detail": "Tập 7",
+      "publisher": "Nhà xuất bản Chính trị quốc gia"
+    },
+    {
+      "id": "hcm-tt-8",
+      "author": "Hồ Chí Minh",
+      "year": "2011",
+      "title": "Toàn tập",
+      "detail": "Tập 8",
+      "publisher": "Nhà xuất bản Chính trị quốc gia"
+    },
+    {
+      "id": "hcm-tt-9",
+      "author": "Hồ Chí Minh",
+      "year": "2011",
+      "title": "Toàn tập",
+      "detail": "Tập 9",
+      "publisher": "Nhà xuất bản Chính trị quốc gia"
+    },
+    {
+      "id": "hcm-tt-10",
+      "author": "Hồ Chí Minh",
+      "year": "2011",
+      "title": "Toàn tập",
+      "detail": "Tập 10",
+      "publisher": "Nhà xuất bản Chính trị quốc gia"
+    },
+    {
+      "id": "hcm-tt-12",
+      "author": "Hồ Chí Minh",
+      "year": "2011",
+      "title": "Toàn tập",
+      "detail": "Tập 12",
+      "publisher": "Nhà xuất bản Chính trị quốc gia"
+    },
+    {
+      "id": "hcm-tt-15",
+      "author": "Hồ Chí Minh",
+      "year": "2011",
+      "title": "Toàn tập",
+      "detail": "Tập 15",
+      "publisher": "Nhà xuất bản Chính trị quốc gia"
+    }
+  ],
+  "todo": [
+    "TODO: nguồn cho từng ảnh",
+    "TODO: nguồn cho từng sự kiện \"cần xác minh\""
+  ]
+}

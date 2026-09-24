@@ -1,0 +1,315 @@
+[
+  {
+    "id": "HV-01",
+    "date": "18/6/1919",
+    "year": 1919,
+    "title": "Yêu sách của nhân dân An Nam",
+    "subtitle": "Gửi Hội nghị Véc-xây",
+    "pillar": "phap-quyen",
+    "image": {
+      "src": "",
+      "alt": "TODO",
+      "credit": "TODO: nguồn ảnh"
+    },
+    "story": "TODO",
+    "quote": {
+      "text": "Thay thế chế độ ra các sắc lệnh bằng chế độ ra các đạo luật",
+      "cite": "Hồ Chí Minh, 2011, t.1, tr.441"
+    },
+    "today": "TODO",
+    "eventSource": "GT tr.88; ngày cụ thể: cần xác minh",
+    "sourceIds": [
+      "hcm-tt-1",
+      "giao-trinh"
+    ],
+    "verified": false
+  },
+  {
+    "id": "HV-02",
+    "date": "2/9/1945",
+    "year": 1945,
+    "title": "Tuyên ngôn Độc lập",
+    "subtitle": "Soạn tại 48 Hàng Ngang, đọc tại Quảng trường Ba Đình",
+    "pillar": "dan-chu",
+    "image": {
+      "src": "",
+      "alt": "TODO",
+      "credit": "TODO: nguồn ảnh"
+    },
+    "story": "TODO",
+    "quote": {
+      "text": "Nếu nước độc lập mà dân không hưởng hạnh phúc, tự do, thì độc lập cũng chẳng có nghĩa lý gì",
+      "cite": "Hồ Chí Minh, 2011, t.4, tr.64"
+    },
+    "today": "TODO",
+    "eventSource": "Địa điểm: cần xác minh",
+    "sourceIds": [
+      "hcm-tt-4"
+    ],
+    "verified": false
+  },
+  {
+    "id": "HV-03",
+    "date": "3/9/1945",
+    "year": 1945,
+    "title": "Phiên họp đầu tiên của Chính phủ lâm thời",
+    "pillar": "phap-quyen",
+    "image": {
+      "src": "",
+      "alt": "TODO",
+      "credit": "TODO: nguồn ảnh"
+    },
+    "story": "TODO",
+    "quote": {
+      "text": "Chúng ta phải có một hiến pháp dân chủ. Tôi đề nghị Chính phủ tổ chức càng sớm càng hay cuộc TỔNG TUYỂN CỬ với chế độ phổ thông đầu phiếu",
+      "cite": "Hồ Chí Minh, 2011, t.4, tr.7"
+    },
+    "today": "TODO",
+    "eventSource": "GT tr.88",
+    "sourceIds": [
+      "hcm-tt-4",
+      "giao-trinh"
+    ],
+    "verified": true
+  },
+  {
+    "id": "HV-04",
+    "date": "8/9/1945",
+    "year": 1945,
+    "title": "Sắc lệnh số 14-SL về tổ chức Tổng tuyển cử",
+    "pillar": "dan-chu",
+    "image": {
+      "src": "",
+      "alt": "TODO",
+      "credit": "TODO: nguồn ảnh"
+    },
+    "story": "TODO",
+    "quote": null,
+    "quoteNote": "TODO: dùng lại trích dẫn HV-03 hoặc để trống",
+    "today": "TODO",
+    "eventSource": "Cần xác minh",
+    "sourceIds": [],
+    "verified": false
+  },
+  {
+    "id": "HV-05",
+    "date": "17/10/1945",
+    "year": 1945,
+    "title": "Thư gửi Ủy ban nhân dân các kỳ, tỉnh, huyện và làng",
+    "pillar": "dan-chu",
+    "image": {
+      "src": "",
+      "alt": "TODO",
+      "credit": "TODO: nguồn ảnh"
+    },
+    "story": "TODO",
+    "quote": {
+      "lead": "Cán bộ là \"công bộc\" của dân,",
+      "text": "gánh vác việc chung cho dân, chứ không phải để đè đầu dân",
+      "cite": "Hồ Chí Minh, 2011, t.4, tr.64–65"
+    },
+    "today": "TODO",
+    "eventSource": "Tên thư và ngày: cần xác minh",
+    "sourceIds": [
+      "hcm-tt-4"
+    ],
+    "verified": false
+  },
+  {
+    "id": "HV-06",
+    "date": "23/11/1945",
+    "year": 1945,
+    "title": "Sắc lệnh 64-SL thành lập Ban Thanh tra đặc biệt",
+    "pillar": "trong-sach",
+    "image": {
+      "src": "",
+      "alt": "TODO",
+      "credit": "TODO: nguồn ảnh"
+    },
+    "story": "TODO",
+    "quote": {
+      "text": "dân ghét các ông chủ tịch, các ông Ủy viên vì cái tật ngông nghênh, cậy thế, cậy quyền…",
+      "cite": "Hồ Chí Minh, 2011, t.4, tr.51"
+    },
+    "today": "TODO",
+    "eventSource": "Cần xác minh",
+    "sourceIds": [
+      "hcm-tt-4"
+    ],
+    "verified": false
+  },
+  {
+    "id": "HV-07",
+    "date": "6/1/1946",
+    "year": 1946,
+    "title": "Cuộc Tổng tuyển cử đầu tiên",
+    "subtitle": "Lá phiếu, thẻ cử tri, ảnh cử tri xếp hàng",
+    "pillar": "dan-chu",
+    "image": {
+      "src": "",
+      "alt": "TODO",
+      "credit": "TODO: nguồn ảnh"
+    },
+    "story": "Ngày 6/1/1946, lần đầu tiên trong lịch sử, mọi người dân Việt Nam từ 18 tuổi trở lên, không phân biệt nam nữ, giàu nghèo, dân tộc, tôn giáo, được trực tiếp bỏ phiếu kín bầu Quốc hội. Đây cũng là lần đầu tiên ở Đông Nam Á có cuộc bầu cử như vậy (GT tr. 88).",
+    "quote": {
+      "text": "Nước ta là nước dân chủ, nghĩa là nước nhà do nhân dân làm chủ",
+      "cite": "Hồ Chí Minh, 2011, t.9, tr.258"
+    },
+    "quoteNote": "Đây là \"nhà nước do nhân dân\", tức dân tự lập ra nhà nước bằng lá phiếu.",
+    "today": "TODO",
+    "todayPrompt": "Lần bầu cử gần nhất, bạn đã tìm hiểu ứng cử viên chưa?",
+    "eventSource": "GT tr.88: phổ thông đầu phiếu, trực tiếp, bỏ phiếu kín, từ 18 tuổi, không phân biệt nam nữ, giàu nghèo, dân tộc, tôn giáo; lần đầu ở Đông Nam Á",
+    "sourceIds": [
+      "hcm-tt-9",
+      "giao-trinh"
+    ],
+    "verified": true
+  },
+  {
+    "id": "HV-08",
+    "date": "2/3/1946",
+    "year": 1946,
+    "title": "Phiên họp đầu tiên của Quốc hội khóa I",
+    "pillar": "phap-quyen",
+    "image": {
+      "src": "",
+      "alt": "TODO",
+      "credit": "TODO: nguồn ảnh"
+    },
+    "story": "TODO",
+    "quote": {
+      "text": "vì đồng bào ủy thác thì tôi phải gắng sức làm… Bao giờ đồng bào cho tôi lui, thì tôi rất vui lòng lui",
+      "cite": "Hồ Chí Minh, 2011, t.4, tr.187"
+    },
+    "today": "TODO",
+    "eventSource": "GT tr.88; địa điểm Nhà hát Lớn Hà Nội: cần xác minh",
+    "sourceIds": [
+      "hcm-tt-4",
+      "giao-trinh"
+    ],
+    "verified": false
+  },
+  {
+    "id": "HV-09",
+    "date": "9/11/1946",
+    "year": 1946,
+    "title": "Hiến pháp 1946",
+    "subtitle": "Hiến pháp đầu tiên",
+    "pillar": "phap-quyen",
+    "image": {
+      "src": "",
+      "alt": "TODO",
+      "credit": "TODO: nguồn ảnh"
+    },
+    "story": "TODO",
+    "quote": {
+      "text": "Chính phủ Việt Nam sẽ tha thứ hay trừng trị họ theo luật pháp… Nhưng sẽ không có ai bị tàn sát",
+      "cite": "Hồ Chí Minh, 2011, t.6, tr.437"
+    },
+    "quoteNote": "Minh họa pháp quyền nhân nghĩa.",
+    "today": "TODO",
+    "eventSource": "GT tr.89; ngày thông qua, số chương/điều, việc 9/11 là Ngày Pháp luật Việt Nam: cần xác minh",
+    "sourceIds": [
+      "hcm-tt-6",
+      "giao-trinh"
+    ],
+    "verified": false
+  },
+  {
+    "id": "HV-10",
+    "date": "27/11/1946",
+    "year": 1946,
+    "title": "Sắc lệnh 223-SL về tội hối lộ, tham ô công quỹ",
+    "pillar": "trong-sach",
+    "image": {
+      "src": "",
+      "alt": "TODO",
+      "credit": "TODO: nguồn ảnh"
+    },
+    "story": "TODO",
+    "quote": {
+      "text": "có quyền mà thiếu lương tâm là có dịp đục khoét, có dịp ăn của đút, có dịp 'dĩ công vi tư'",
+      "cite": "Hồ Chí Minh, 2011, t.6, tr.127"
+    },
+    "today": "TODO",
+    "eventSource": "Cần xác minh",
+    "sourceIds": [
+      "hcm-tt-6"
+    ],
+    "verified": false
+  },
+  {
+    "id": "HV-11",
+    "date": "10/1947",
+    "year": 1947,
+    "title": "Sửa đổi lối làm việc",
+    "subtitle": "Tác phẩm",
+    "pillar": "trong-sach",
+    "image": {
+      "src": "",
+      "alt": "TODO",
+      "credit": "TODO: nguồn ảnh"
+    },
+    "story": "TODO",
+    "quote": {
+      "text": "muôn việc thành công hoặc thất bại đều do cán bộ tốt hoặc kém",
+      "cite": "Hồ Chí Minh, 2011, t.5, tr.280"
+    },
+    "today": "TODO",
+    "eventSource": "GT tr.78, 82; thời gian: cần xác minh",
+    "sourceIds": [
+      "hcm-tt-5",
+      "giao-trinh"
+    ],
+    "verified": false
+  },
+  {
+    "id": "HV-12",
+    "date": "1959",
+    "year": 1959,
+    "title": "Hiến pháp 1959",
+    "pillar": "dan-chu",
+    "image": {
+      "src": "",
+      "alt": "TODO",
+      "credit": "TODO: nguồn ảnh"
+    },
+    "story": "TODO",
+    "quote": {
+      "text": "Nhà nước của ta là Nhà nước dân chủ nhân dân, dựa trên nền tảng liên minh công nông, do giai cấp công nhân lãnh đạo",
+      "cite": "Hiến pháp 1959, Lời nói đầu"
+    },
+    "today": "TODO",
+    "eventSource": "GT tr.83, 89",
+    "sourceIds": [
+      "giao-trinh"
+    ],
+    "verified": true
+  },
+  {
+    "id": "HV-13",
+    "date": "3/2/1969",
+    "year": 1969,
+    "title": "Nâng cao đạo đức cách mạng, quét sạch chủ nghĩa cá nhân",
+    "subtitle": "Báo Nhân Dân số 5409",
+    "pillar": "trong-sach",
+    "image": {
+      "src": "",
+      "alt": "TODO",
+      "credit": "TODO: nguồn ảnh"
+    },
+    "story": "TODO",
+    "quote": {
+      "lead": "Tóm ý:",
+      "text": "một số cán bộ, đảng viên sa vào tham ô, lãng phí, quan liêu vì chủ nghĩa cá nhân",
+      "cite": "GT tr.82",
+      "paraphrase": true
+    },
+    "today": "TODO",
+    "eventSource": "GT tr.82",
+    "sourceIds": [
+      "giao-trinh"
+    ],
+    "verified": true
+  }
+]

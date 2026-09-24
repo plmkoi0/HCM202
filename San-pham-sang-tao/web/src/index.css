@@ -1,0 +1,167 @@
+@import 'tailwindcss';
+
+/*
+ * Màu theo mục 7 của tài liệu thiết kế.
+ * Các biến *-text là sắc độ dùng cho chữ để đạt tương phản WCAG AA
+ * (vàng đồng gốc #B8892B trên nền giấy ngà chỉ đạt 2.7:1).
+ */
+:root {
+  --paper: #f4ede0;
+  --card: #fbf7ef;
+  --ink: #1f1b16;
+  --ink-soft: #5a5044;
+  --line: #d6c7ad;
+
+  --son: #a4262c;
+  --muc: #23395b;
+  --dong: #b8892b;
+
+  --son-text: #a4262c;
+  --muc-text: #23395b;
+  --dong-text: #7a5a17;
+
+  --on-son: #f4ede0;
+  --on-muc: #f4ede0;
+  --on-dong: #1f1b16;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #1c1a17;
+    --card: #27241f;
+    --ink: #f4ede0;
+    --ink-soft: #bfb4a3;
+    --line: #4a4339;
+
+    --son-text: #e88a8e;
+    --muc-text: #9db4db;
+    --dong-text: #d9ae55;
+
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-line: var(--line);
+
+  --color-son: var(--son);
+  --color-muc: var(--muc);
+  --color-dong: var(--dong);
+  --color-son-text: var(--son-text);
+  --color-muc-text: var(--muc-text);
+  --color-dong-text: var(--dong-text);
+  --color-on-son: var(--on-son);
+  --color-on-muc: var(--on-muc);
+  --color-on-dong: var(--on-dong);
+
+  --font-serif: 'Noto Serif', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 4.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-serif);
+    line-height: 1.25;
+  }
+  :focus-visible {
+    outline: 3px solid var(--son-text);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+/* Nền giấy: vân nhẹ bằng gradient, không dùng ảnh */
+.paper-texture {
+  background-image:
+    radial-gradient(circle at 20% 10%, color-mix(in srgb, var(--dong) 7%, transparent) 0, transparent 40%),
+    radial-gradient(circle at 85% 60%, color-mix(in srgb, var(--son) 5%, transparent) 0, transparent 45%);
+}
+
+/* Phiếu thư mục: viền răng cưa nhẹ ở mép trên và dưới */
+.catalog-card {
+  position: relative;
+  isolation: isolate;
+}
+.catalog-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--card);
+  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  --r: 4px;
+  --s: 12px;
+  mask:
+    radial-gradient(var(--r) at 50% 0, #0000 97%, #000) 50% 0 / var(--s) 51% repeat-x,
+    radial-gradient(var(--r) at 50% 100%, #0000 97%, #000) 50% 100% / var(--s) 51% repeat-x;
+  box-shadow: 0 1px 0 var(--line);
+}
+
+/* Con dấu đỏ ở hero */
+@keyframes stamp-in {
+  0% {
+    opacity: 0;
+    transform: scale(1.8) rotate(-18deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(0.94) rotate(-10deg);
+  }
+  100% {
+    opacity: 0.92;
+    transform: scale(1) rotate(-10deg);
+  }
+}
+.stamp {
+  transform: rotate(-10deg);
+  opacity: 0.92;
+  animation: stamp-in 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.2) 0.35s both;
+}
+
+/* Phiếu hiện ra dần khi cuộn */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .stamp {
+    animation: none;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
