@@ -1,27 +1,34 @@
-import { artifacts, quiz, sources, team } from './lib/data'
-import { PILLARS } from './lib/pillars'
+import Bridge from './components/Bridge'
+import Hero from './components/Hero'
+import Intro from './components/Intro'
+import Museum from './components/Museum/Museum'
+import Nav from './components/Nav'
+import Placeholder from './components/Placeholder'
+import { site } from './lib/site'
 
-// M1: khung dự án, kiểm tra dữ liệu đã nạp. Giao diện đầy đủ ở M2.
 export default function App() {
   return (
-    <main className="paper-texture mx-auto min-h-screen max-w-3xl px-4 py-12">
-      <h1 className="text-3xl font-bold text-son-text">Của dân · Do dân · Vì dân — Bảo tàng số</h1>
-      <p className="mt-2 font-serif text-lg italic">Chủ nhân không đứng ngoài</p>
-      <ul className="mt-8 space-y-1">
-        <li>{artifacts.length} hiện vật</li>
-        <li>
-          {quiz.questions.length} câu hỏi · {quiz.types.length} kiểu công dân
-        </li>
-        <li>{sources.references.length} nguồn tham khảo</li>
-        <li>{team.members.length} thành viên</li>
-      </ul>
-      <ul className="mt-6 flex flex-wrap gap-2">
-        {PILLARS.map((p) => (
-          <li key={p.id} className="rounded-full border border-line px-3 py-1 text-sm">
-            {p.name}: {artifacts.filter((a) => a.pillar === p.id).length}
-          </li>
-        ))}
-      </ul>
-    </main>
+    <div className="paper-texture min-h-screen">
+      <a
+        href="#bao-tang"
+        className="sr-only z-50 bg-ink px-3 py-2 text-paper focus:not-sr-only focus:fixed focus:top-2 focus:left-2"
+      >
+        Bỏ qua tới Bảo tàng
+      </a>
+      <Nav />
+      <main>
+        <Hero />
+        <Intro />
+        <Museum />
+        <Bridge />
+        <Placeholder id="quiz" title="Quiz “Bạn là công dân kiểu gì?”" stage="giai đoạn M3" />
+        <Placeholder id="nguon" title="Nguồn tham khảo" stage="giai đoạn M4" />
+        <Placeholder id="nhom" title="Nhóm thực hiện" stage="giai đoạn M4" />
+      </main>
+      <footer className="border-t border-line px-4 py-8 text-center text-sm text-ink-soft">
+        <p className="font-serif font-semibold text-ink">{site.name}</p>
+        <p className="mx-auto mt-1 max-w-xl">{site.footer}</p>
+      </footer>
+    </div>
   )
 }

@@ -19,6 +19,7 @@ npm run lint
 | `src/data/quiz.json` | 8 câu hỏi, 4 kiểu công dân, thứ tự hòa điểm |
 | `src/data/sources.json` | Nguồn tham khảo APA7 |
 | `src/data/team.json` | Thành viên nhóm |
+| `src/data/site.json` | Chữ ở hero, lời dẫn, cầu nối, chân trang |
 
 - Trường còn thiếu ghi `TODO`. Web hiển thị các trường này dưới dạng "đang bổ sung".
 - Hiện vật có `"verified": false` hiện nhãn **[Chờ xác minh]**. Đổi thành `true` sau khi nhóm xác minh và ghi nguồn.

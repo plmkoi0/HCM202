@@ -1,0 +1,22 @@
+{
+  "name": "Của dân · Do dân · Vì dân — Bảo tàng số",
+  "hero": {
+    "eyebrow": "Bảo tàng số",
+    "stampLines": ["Của dân.", "Do dân.", "Vì dân."],
+    "subtitle": "Chủ nhân không đứng ngoài",
+    "ctaMuseum": "Vào bảo tàng",
+    "ctaQuiz": "Làm quiz ngay"
+  },
+  "intro": {
+    "quote": {
+      "text": "Trong Nhà nước Việt Nam Dân chủ Cộng hòa của chúng ta, tất cả mọi quyền lực đều là của nhân dân",
+      "cite": "Hồ Chí Minh, 2011, t.8, tr.262"
+    },
+    "paragraph": "TODO"
+  },
+  "bridge": {
+    "text": "Bác đã trao quyền làm chủ. Còn bạn dùng nó thế nào?",
+    "cta": "Bắt đầu quiz"
+  },
+  "footer": "Sản phẩm sáng tạo HCM202 — Chủ đề 4: Tư tưởng Hồ Chí Minh về Nhà nước của nhân dân, do nhân dân, vì nhân dân."
+}

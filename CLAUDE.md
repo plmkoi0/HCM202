@@ -34,10 +34,17 @@ HCM202/
         │   ├── favicon.svg
         │   └── images/artifacts/    ← ảnh tư liệu (chưa có ảnh)
         └── src/
-            ├── data/                ← artifacts.json, quiz.json, sources.json, team.json
-            ├── lib/                 ← data.ts (nạp JSON), pillars.ts (3 trụ cột)
+            ├── data/                ← artifacts.json, quiz.json, sources.json, team.json,
+            │                          site.json (chữ ở hero, lời dẫn, cầu nối, chân trang)
+            ├── components/
+            │   ├── Nav.tsx, Hero.tsx, Intro.tsx, Bridge.tsx
+            │   ├── Placeholder.tsx  ← giữ chỗ cho Quiz / Nguồn / Nhóm (M3, M4)
+            │   ├── Museum/          ← Museum, PillarFilter, ProgressBar, Timeline,
+            │   │                      ArtifactCard, ArtifactModal
+            │   └── ui/              ← QuoteBlock, Todo, PillarChip, VerifyBadge, ImageFrame
+            ├── lib/                 ← data.ts, site.ts, pillars.ts, pillarStyles.ts, useReveal.ts
             ├── types.ts             ← kiểu dữ liệu cho các file JSON
-            ├── index.css            ← màu, font, hiệu ứng (mục 7)
+            ├── index.css            ← màu, font, phiếu răng cưa, con dấu, hiệu ứng (mục 7)
             ├── App.tsx
             └── main.tsx
 ```
@@ -45,7 +52,9 @@ Chạy: `cd San-pham-sang-tao/web && npm install && npm run dev`. Kiểm tra: `n
 
 ## Tiến độ (theo mục 10 tài liệu thiết kế)
 - [x] **M1** — Khởi tạo Vite + React + TS + Tailwind; 4 file JSON từ mục 4, 5, 9; màu và font theo mục 7
-- [ ] **M2** — Hero, bộ lọc, dòng thời gian, phiếu và cửa sổ chi tiết hiện vật, thanh tiến độ
+- [x] **M2** — Hero, bộ lọc, dòng thời gian, phiếu và cửa sổ chi tiết hiện vật, thanh tiến độ
+  - Cửa sổ chi tiết dùng `<dialog>` (Esc để đóng, nút Trước/Sau); tiến độ "đã xem" lưu ở localStorage
+  - Mục Quiz, Nguồn, Nhóm hiện là khung giữ chỗ để menu neo hoạt động
 - [ ] **M3** — Quiz 8 câu, `scoring.ts` có unit test, trang kết quả, xem lại giải thích
 - [ ] **M4** — Thẻ kết quả PNG, link `?kq=`, Web Share, Open Graph, sơ đồ tư duy, trang nguồn và nhóm
 - [ ] **M5** — GitHub Actions deploy Pages, thống kê, kiểm tra trên điện thoại
@@ -54,6 +63,7 @@ Chạy: `cd San-pham-sang-tao/web && npm install && npm run dev`. Kiểm tra: `n
 - `verified: true` chỉ đặt cho hiện vật có cột "Nguồn sự kiện" chỉ ghi GT (HV-03, HV-07, HV-12, HV-13). Các hiện vật còn lại có mục "cần xác minh" nên để `false`.
 - `eventSource` chép nguyên cột "Nguồn sự kiện" để nhóm biết cần xác minh gì.
 - `quote.lead` là phần dẫn nằm ngoài ngoặc kép (vd. HV-05, kiểu A). `quote.paraphrase: true` là tóm ý, không phải trích nguyên văn (HV-13).
+- Nhãn `[Chờ xác minh]` hiện trên phiếu và cửa sổ chi tiết khi `verified: false`. Trường `TODO` hiện thành ô viền đứt "TODO".
 - Màu chữ vàng đồng dùng `#7A5A17` (nền sáng) để đạt WCAG AA; `#B8892B` giữ cho nền nhãn, đường kẻ.
 
 ## TODO còn lại (nội dung — nhóm cung cấp)
@@ -65,6 +75,7 @@ Chạy: `cd San-pham-sang-tao/web && npm install && npm run dev`. Kiểm tra: `n
 - [ ] HV-04: chọn dùng lại trích dẫn HV-03 hay để trống
 - [ ] HV-12 (Hiến pháp 1959, Lời nói đầu) và HV-13 (tóm ý, GT tr.82) chưa có số tập/số trang *Toàn tập*; cần nguồn APA7 cho Hiến pháp 1959
 - [ ] Đối chiếu mọi trích dẫn với bản gốc *Toàn tập*
+- [ ] `site.json` → `intro.paragraph`: đoạn lời dẫn ngắn (§1; tài liệu chỉ có câu trích)
 - [ ] `team.json`: tên và vai trò thành viên
 - [ ] Hạn nộp
 
