@@ -1,9 +1,9 @@
-# CLAUDE.md — Sản phẩm sáng tạo
+# CLAUDE.md — HCM202
 
 File này lưu thông tin về repo để Claude (Claude Code / Claude chat) hiểu nhanh bối cảnh khi làm việc.
 
 ## Tổng quan
-- **Tên repo:** San-pham-sang-tao (Sản phẩm sáng tạo)
+- **Tên repo:** HCM202
 - **Môn học:** HCM202 — Tư tưởng Hồ Chí Minh
 - **Mục đích:** Lưu trữ và phát triển sản phẩm sáng tạo của nhóm cho môn HCM202.
 - **Chủ repo:** plmkoi0
@@ -21,6 +21,7 @@ File này lưu thông tin về repo để Claude (Claude Code / Claude chat) hi�
 ## Cấu trúc thư mục
 <!-- Cập nhật khi thêm file/thư mục -->
 - `CLAUDE.md` — thông tin repo cho Claude
+- `San-pham-sang-tao/` — thư mục chứa sản phẩm sáng tạo của nhóm
 
 ## Mốc thời gian
 - Hạn nộp: _(cập nhật)_
