@@ -8,8 +8,10 @@ Thiết kế: [`../THIET-KE-WEB-APP.md`](../THIET-KE-WEB-APP.md).
 npm install
 npm run dev      # mở http://localhost:5173
 npm run test     # unit test (Vitest)
-npm run build    # kiểm tra kiểu + đóng gói vào dist/
+npm run build    # kiểm tra kiểu + đóng gói bản online vào dist/
 npm run lint
+npm run build:offline    # bản offline một file: dist-offline/index.html
+npm run package:offline  # build offline + nén dist-offline/HCM202-San-pham-sang-tao.zip
 ```
 
 ## Sửa nội dung (không cần sửa code)
@@ -55,3 +57,22 @@ Bản online **không** được công cụ tìm kiếm liệt kê. Có ba lớp
 Khi `siteUrl` còn là `TODO`, bản online tự dùng địa chỉ đang mở để tạo link chia sẻ và mã QR.
 
 Kiểm tra sau khi deploy: mở `https://<tên>.vercel.app/robots.txt` phải thấy `Disallow: /`.
+
+## Bản offline để nộp bài (một file HTML)
+
+```bash
+npm run package:offline
+```
+
+Lệnh này build bản offline rồi tạo `dist-offline/HCM202-San-pham-sang-tao.zip`, gồm:
+
+- `index.html`: toàn bộ web trong **một file**. JS, CSS, font (Noto Serif, Be Vietnam Pro), ảnh trong `public/images/` và favicon đều được nhúng base64. Mở bằng cách bấm đúp, không cần mạng, không gửi request nào ra ngoài.
+- `HUONG-DAN-CHAY.txt`: hướng dẫn ngắn cho người chấm (mẫu ở `scripts/HUONG-DAN-CHAY.txt`).
+
+Khác biệt so với bản online (bật bằng `VITE_OFFLINE=true` trong `.env.offline`):
+
+- Không có nút **Chia sẻ** (Web Share). Chỉ còn **Tải thẻ** 1080×1920 / 1080×1080 và **Sao chép link**.
+- **Sao chép link** và mã QR trên thẻ trỏ tới `siteUrl` online. Khi `siteUrl` còn `TODO`, nút sao chép bị khóa và thẻ PNG không có mã QR.
+- Chân trang có dòng "Bản offline — xem bản online tại …".
+
+**Build lại bản offline** mỗi khi sửa nội dung, thêm ảnh hoặc điền `siteUrl`. Thư mục `dist-offline/` không được commit (đã có trong `.gitignore`).

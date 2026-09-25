@@ -1,13 +1,16 @@
+import publicImages from 'virtual:public-images'
 import { isTodo } from '../../lib/data'
 import type { Artifact } from '../../types'
 
 /** Ảnh tư liệu, hoặc khung SVG giữ chỗ khi nhóm chưa cung cấp ảnh (mục 4). */
 export default function ImageFrame({ image }: { image: Artifact['image'] }) {
   if (image.src) {
+    // Bản offline: ảnh đã nhúng base64; bản online: lấy từ public/
+    const src = publicImages[image.src.replace(/^\.?\//, '')] ?? image.src
     return (
       <figure>
         <img
-          src={image.src}
+          src={src}
           alt={isTodo(image.alt) ? '' : image.alt}
           className="w-full rounded-sm border border-line object-cover"
           loading="lazy"

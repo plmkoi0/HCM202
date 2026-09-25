@@ -69,5 +69,8 @@
   },
   "team": {
     "title": "Nhóm thực hiện"
+  },
+  "offline": {
+    "note": "Bản offline — xem bản online tại"
   }
 }

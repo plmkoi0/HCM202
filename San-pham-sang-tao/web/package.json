@@ -8,7 +8,9 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "build:offline": "tsc -b && vite build --mode offline",
+    "package:offline": "npm run build:offline && node scripts/package-offline.mjs"
   },
   "dependencies": {
     "html-to-image": "^1.11.13",
@@ -27,6 +29,7 @@
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.2",
     "vite": "^8.3.0",
+    "vite-plugin-singlefile": "^2.3.3",
     "vitest": "^5.0.1"
   }
 }

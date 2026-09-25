@@ -78,7 +78,7 @@ const ShareCard = forwardRef<HTMLDivElement, Props>(function ShareCard({ type, f
             fontFamily: SERIF,
             fontWeight: 700,
             fontStyle: 'italic',
-            fontSize: story ? 60 : 44,
+            fontSize: story ? 52 : 44,
             borderTop: `2px solid ${C.line}`,
             borderBottom: `2px solid ${C.line}`,
             padding: story ? '36px 0' : '20px 0',

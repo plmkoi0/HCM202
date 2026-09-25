@@ -3,6 +3,7 @@ import QRCode from 'qrcode'
 import { useEffect, useRef, useState } from 'react'
 import { quiz } from '../../lib/data'
 import { fmt } from '../../lib/format'
+import { OFFLINE } from '../../lib/offline'
 import { CARD_SIZE, copyText, shareUrl, type CardFormat } from '../../lib/share'
 import { site } from '../../lib/site'
 import type { CitizenTypeId } from '../../types'
@@ -88,9 +89,12 @@ export default function ShareActions({ typeId }: { typeId: CitizenTypeId }) {
         <button type="button" className={btn} disabled={!url} onClick={copy}>
           {ui.copy}
         </button>
-        <button type="button" className={btn} disabled={!url} onClick={share}>
-          {ui.share}
-        </button>
+        {/* Bản offline không có Web Share: chỉ giữ tải thẻ và sao chép link */}
+        {!OFFLINE && (
+          <button type="button" className={btn} disabled={!url} onClick={share}>
+            {ui.share}
+          </button>
+        )}
       </div>
       {!url && (
         <div className="mt-3">

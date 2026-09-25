@@ -1,3 +1,4 @@
+import { OFFLINE } from './offline'
 import { site } from './site'
 import type { CitizenTypeId } from '../types'
 
@@ -11,11 +12,11 @@ export const CARD_SIZE: Record<CardFormat, { w: number; h: number }> = {
 /**
  * Địa chỉ bản online. Ưu tiên site.json → siteUrl; khi siteUrl còn TODO thì
  * bản online dùng chính địa chỉ đang mở. Trả về null nếu không xác định được
- * (vd. mở từ file:// khi chưa điền siteUrl).
+ * (bản offline khi chưa điền siteUrl).
  */
 export function onlineUrl(): string | null {
   if (/^https?:\/\//.test(site.siteUrl)) return site.siteUrl
-  if (/^https?:$/.test(window.location.protocol)) return window.location.origin + window.location.pathname
+  if (!OFFLINE && /^https?:$/.test(window.location.protocol)) return window.location.origin + window.location.pathname
   return null
 }
 

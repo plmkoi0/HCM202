@@ -44,9 +44,13 @@ export default function Quiz() {
   const start = () => {
     if (sharedId) {
       // Bỏ ?kq khỏi địa chỉ để làm lại không mở lại kết quả cũ
-      const u = new URL(window.location.href)
-      u.searchParams.delete('kq')
-      window.history.replaceState(null, '', u)
+      try {
+        const u = new URL(window.location.href)
+        u.searchParams.delete('kq')
+        window.history.replaceState(null, '', u)
+      } catch {
+        // Một số trình duyệt chặn đổi địa chỉ khi mở từ file://; bỏ qua
+      }
     }
     setOrders(quiz.questions.map((q) => shuffled(q.options.length)))
     setAnswers([])
