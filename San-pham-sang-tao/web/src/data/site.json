@@ -39,8 +39,8 @@
     "explainLabel": "Giải thích",
     "retry": "Làm lại"
   },
-  "siteUrl": "https://plmkoi0.github.io/HCM202/",
-  "siteUrlNote": "TODO: xác nhận siteUrl ở M5 (sau khi deploy GitHub Pages)",
+  "siteUrl": "TODO",
+  "siteUrlNote": "TODO: điền link Vercel (https://…) sau khi deploy. Khi còn TODO, bản online tự dùng địa chỉ đang mở.",
   "share": {
     "title": "Chia sẻ kết quả",
     "downloadStory": "Tải thẻ 1080×1920",
@@ -55,7 +55,8 @@
     "sharedEyebrow": "Kết quả được chia sẻ",
     "takeQuiz": "Làm quiz của bạn",
     "cardEyebrow": "Bạn là công dân kiểu gì?",
-    "cardScan": "Quét mã để làm quiz"
+    "cardScan": "Quét mã để làm quiz",
+    "noUrl": "Chưa có link online (site.json → siteUrl), nên chưa sao chép link hay tạo mã QR được."
   },
   "mindmap": {
     "title": "Sơ đồ tư duy",

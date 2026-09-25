@@ -8,8 +8,22 @@ export const CARD_SIZE: Record<CardFormat, { w: number; h: number }> = {
   square: { w: 1080, h: 1080 },
 }
 
+/**
+ * Địa chỉ bản online. Ưu tiên site.json → siteUrl; khi siteUrl còn TODO thì
+ * bản online dùng chính địa chỉ đang mở. Trả về null nếu không xác định được
+ * (vd. mở từ file:// khi chưa điền siteUrl).
+ */
+export function onlineUrl(): string | null {
+  if (/^https?:\/\//.test(site.siteUrl)) return site.siteUrl
+  if (/^https?:$/.test(window.location.protocol)) return window.location.origin + window.location.pathname
+  return null
+}
+
 /** Link chia sẻ theo kết quả: siteUrl + ?kq=X */
-export const shareUrl = (t: CitizenTypeId) => `${site.siteUrl}?kq=${t}`
+export function shareUrl(t: CitizenTypeId): string | null {
+  const base = onlineUrl()
+  return base ? `${base}?kq=${t}` : null
+}
 
 export async function copyText(text: string): Promise<boolean> {
   try {

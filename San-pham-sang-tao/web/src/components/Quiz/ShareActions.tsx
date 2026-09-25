@@ -6,6 +6,7 @@ import { fmt } from '../../lib/format'
 import { CARD_SIZE, copyText, shareUrl, type CardFormat } from '../../lib/share'
 import { site } from '../../lib/site'
 import type { CitizenTypeId } from '../../types'
+import Todo from '../ui/Todo'
 import ShareCard from './ShareCard'
 
 const btn = 'rounded-sm border-2 border-ink px-4 py-2 font-semibold hover:bg-ink hover:text-paper disabled:opacity-50'
@@ -21,6 +22,7 @@ export default function ShareActions({ typeId }: { typeId: CitizenTypeId }) {
   const [status, setStatus] = useState('')
 
   useEffect(() => {
+    if (!url) return
     QRCode.toDataURL(url, { margin: 1, width: 440, color: { dark: '#1F1B16', light: '#F4EDE0' } })
       .then(setQr)
       .catch(() => setQr(''))
@@ -58,10 +60,12 @@ export default function ShareActions({ typeId }: { typeId: CitizenTypeId }) {
   }
 
   const copy = async () => {
+    if (!url) return
     setStatus((await copyText(url)) ? ui.copied : `${ui.copyFailed} ${url}`)
   }
 
   const share = async () => {
+    if (!url) return
     if (!navigator.share) return copy()
     try {
       await navigator.share({ title: site.name, text: fmt(ui.shareText, { name: type.name }), url })
@@ -75,24 +79,29 @@ export default function ShareActions({ typeId }: { typeId: CitizenTypeId }) {
     <div className="mt-6">
       <h4 className="text-lg font-bold">{ui.title}</h4>
       <div className="mt-3 flex flex-wrap gap-3">
-        <button type="button" className={btn} disabled={!!format || !qr} onClick={() => download('story')}>
+        <button type="button" className={btn} disabled={!!format || (!!url && !qr)} onClick={() => download('story')}>
           {ui.downloadStory}
         </button>
-        <button type="button" className={btn} disabled={!!format || !qr} onClick={() => download('square')}>
+        <button type="button" className={btn} disabled={!!format || (!!url && !qr)} onClick={() => download('square')}>
           {ui.downloadSquare}
         </button>
-        <button type="button" className={btn} onClick={copy}>
+        <button type="button" className={btn} disabled={!url} onClick={copy}>
           {ui.copy}
         </button>
-        <button type="button" className={btn} onClick={share}>
+        <button type="button" className={btn} disabled={!url} onClick={share}>
           {ui.share}
         </button>
       </div>
+      {!url && (
+        <div className="mt-3">
+          <Todo note={ui.noUrl} />
+        </div>
+      )}
       <p role="status" aria-live="polite" className="mt-2 min-h-6 text-sm font-medium break-all">
         {status}
       </p>
 
-      {format && qr && (
+      {format && (!url || qr) && (
         <div aria-hidden="true" style={{ position: 'fixed', left: -20000, top: 0, pointerEvents: 'none' }}>
           <ShareCard ref={cardRef} type={type} format={format} qr={qr} url={url} />
         </div>

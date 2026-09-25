@@ -13,8 +13,9 @@ const SANS = "'Be Vietnam Pro', system-ui, sans-serif"
 interface Props {
   type: CitizenType
   format: CardFormat
+  /** Mã QR và link; không có khi chưa xác định được địa chỉ online */
   qr: string
-  url: string
+  url: string | null
 }
 
 /** Thẻ kết quả để chụp thành PNG (html-to-image). */
@@ -87,11 +88,17 @@ const ShareCard = forwardRef<HTMLDivElement, Props>(function ShareCard({ type, f
           {quiz.closing}
         </div>
         <div style={{ marginTop: story ? 48 : 28, display: 'flex', alignItems: 'center', gap: 36 }}>
-          <img src={qr} alt="" width={story ? 220 : 170} height={story ? 220 : 170} style={{ display: 'block' }} />
+          {url && qr && (
+            <img src={qr} alt="" width={story ? 220 : 170} height={story ? 220 : 170} style={{ display: 'block' }} />
+          )}
           <div style={{ minWidth: 0 }}>
             <div style={{ fontFamily: SERIF, fontWeight: 700, fontSize: story ? 38 : 30, lineHeight: 1.3 }}>{site.name}</div>
-            <div style={{ marginTop: 10, fontSize: story ? 28 : 22, color: C.soft }}>{site.share.cardScan}</div>
-            <div style={{ marginTop: 6, fontSize: story ? 26 : 20, color: C.soft, wordBreak: 'break-all' }}>{url}</div>
+            {url && (
+              <>
+                <div style={{ marginTop: 10, fontSize: story ? 28 : 22, color: C.soft }}>{site.share.cardScan}</div>
+                <div style={{ marginTop: 6, fontSize: story ? 26 : 20, color: C.soft, wordBreak: 'break-all' }}>{url}</div>
+              </>
+            )}
           </div>
         </div>
       </div>
