@@ -104,21 +104,23 @@ Quy ước cột "Nguồn sự kiện":
 - **GT tr.x**: có trong giáo trình, dùng được ngay.
 - **Cần xác minh**: kiến thức lịch sử ngoài giáo trình. Nhóm phải đối chiếu với nguồn chính thống (Bảo tàng Hồ Chí Minh, Bảo tàng Lịch sử Quốc gia, Cổng TTĐT Quốc hội quochoi.vn, Thư viện pháp luật) và ghi nguồn APA7 trước khi đưa lên web. Trên bản web, các trường này hiển thị nhãn `[Chờ xác minh]` cho đến khi nhóm cập nhật.
 
-| Mã | Thời gian | Hiện vật / tư liệu | Trụ cột | Câu nói của Bác (nguồn) | Nguồn sự kiện |
-|---|---|---|---|---|---|
-| HV-01 | 18/6/1919 | *Yêu sách của nhân dân An Nam* gửi Hội nghị Véc-xây | pháp quyền | "Thay thế chế độ ra các sắc lệnh bằng chế độ ra các đạo luật" (t.1, tr.441) | GT tr.88; ngày cụ thể: cần xác minh |
-| HV-02 | 2/9/1945 | *Tuyên ngôn Độc lập* (soạn tại 48 Hàng Ngang, đọc tại Quảng trường Ba Đình) | dân chủ | "Nếu nước độc lập mà dân không hưởng hạnh phúc, tự do, thì độc lập cũng chẳng có nghĩa lý gì" (t.4, tr.64) | Địa điểm: cần xác minh |
-| HV-03 | 3/9/1945 | Phiên họp đầu tiên của Chính phủ lâm thời | pháp quyền | "Chúng ta phải có một hiến pháp dân chủ. Tôi đề nghị Chính phủ tổ chức càng sớm càng hay cuộc TỔNG TUYỂN CỬ với chế độ phổ thông đầu phiếu" (t.4, tr.7) | GT tr.88 |
-| HV-04 | 8/9/1945 | Sắc lệnh số 14-SL về tổ chức Tổng tuyển cử | dân chủ | Dùng lại trích dẫn HV-03 hoặc để trống | Cần xác minh |
-| HV-05 | 17/10/1945 | Thư gửi Ủy ban nhân dân các kỳ, tỉnh, huyện và làng | dân chủ | Cán bộ là "công bộc" của dân, "gánh vác việc chung cho dân, chứ không phải để đè đầu dân" (t.4, tr.64–65) | Tên thư và ngày: cần xác minh |
-| HV-06 | 23/11/1945 | Sắc lệnh 64-SL thành lập Ban Thanh tra đặc biệt | trong sạch | "dân ghét các ông chủ tịch, các ông Ủy viên vì cái tật ngông nghênh, cậy thế, cậy quyền…" (t.4, tr.51) | Cần xác minh |
-| HV-07 | 6/1/1946 | Cuộc Tổng tuyển cử đầu tiên: lá phiếu, thẻ cử tri, ảnh cử tri xếp hàng | dân chủ | "Nước ta là nước dân chủ, nghĩa là nước nhà do nhân dân làm chủ" (t.9, tr.258) | GT tr.88: phổ thông đầu phiếu, trực tiếp, bỏ phiếu kín, từ 18 tuổi, không phân biệt nam nữ, giàu nghèo, dân tộc, tôn giáo; lần đầu ở Đông Nam Á |
-| HV-08 | 2/3/1946 | Phiên họp đầu tiên của Quốc hội khóa I | pháp quyền | "vì đồng bào ủy thác thì tôi phải gắng sức làm… Bao giờ đồng bào cho tôi lui, thì tôi rất vui lòng lui" (t.4, tr.187) | GT tr.88; địa điểm Nhà hát Lớn Hà Nội: cần xác minh |
-| HV-09 | 9/11/1946 | *Hiến pháp 1946*, hiến pháp đầu tiên | pháp quyền | "Chính phủ Việt Nam sẽ tha thứ hay trừng trị họ theo luật pháp… Nhưng sẽ không có ai bị tàn sát" (t.6, tr.437), minh họa pháp quyền nhân nghĩa | GT tr.89; ngày thông qua, số chương/điều, việc 9/11 là Ngày Pháp luật Việt Nam: cần xác minh |
-| HV-10 | 27/11/1946 | Sắc lệnh 223-SL về tội hối lộ, tham ô công quỹ | trong sạch | "có quyền mà thiếu lương tâm là có dịp đục khoét, có dịp ăn của đút, có dịp 'dĩ công vi tư'" (t.6, tr.127) | Cần xác minh |
-| HV-11 | 10/1947 | Tác phẩm *Sửa đổi lối làm việc* | trong sạch | "muôn việc thành công hoặc thất bại đều do cán bộ tốt hoặc kém" (t.5, tr.280) | GT tr.78, 82; thời gian: cần xác minh |
-| HV-12 | 1959 | *Hiến pháp 1959* | dân chủ | Lời nói đầu: "Nhà nước của ta là Nhà nước dân chủ nhân dân, dựa trên nền tảng liên minh công nông, do giai cấp công nhân lãnh đạo" | GT tr.83, 89 |
-| HV-13 | 3/2/1969 | Bài báo *Nâng cao đạo đức cách mạng, quét sạch chủ nghĩa cá nhân* (báo Nhân Dân số 5409) | trong sạch | Tóm ý: một số cán bộ, đảng viên sa vào tham ô, lãng phí, quan liêu vì chủ nghĩa cá nhân | GT tr.82 |
+| Mã | Thời gian | Hiện vật / tư liệu | Trụ cột | Câu nói của Bác (nguồn) | Ghi chú ngữ cảnh | Nguồn sự kiện |
+|---|---|---|---|---|---|---|
+| HV-01 | 18/6/1919 | *Yêu sách của nhân dân An Nam* gửi Hội nghị Véc-xây | pháp quyền | "Thay thế chế độ ra các sắc lệnh bằng chế độ ra các đạo luật" (t.1, tr.441) | — | GT tr.88; ngày cụ thể: cần xác minh |
+| HV-02 | 2/9/1945 | *Tuyên ngôn Độc lập* (soạn tại 48 Hàng Ngang, đọc tại Quảng trường Ba Đình) | dân chủ | "Nếu nước độc lập mà dân không hưởng hạnh phúc, tự do, thì độc lập cũng chẳng có nghĩa lý gì" (t.4, tr.64) | Câu nói năm 1945, khi nước nhà vừa giành độc lập (GT tr. 79); không phải lời văn trong bản Tuyên ngôn Độc lập. | Địa điểm: cần xác minh |
+| HV-03 | 3/9/1945 | Phiên họp đầu tiên của Chính phủ lâm thời | pháp quyền | "Chúng ta phải có một hiến pháp dân chủ. Tôi đề nghị Chính phủ tổ chức càng sớm càng hay cuộc TỔNG TUYỂN CỬ với chế độ phổ thông đầu phiếu" (t.4, tr.7) | — | GT tr.88 |
+| HV-04 | 8/9/1945 | Sắc lệnh số 14-SL về tổ chức Tổng tuyển cử | dân chủ | Dùng lại trích dẫn HV-03 hoặc để trống | — | Cần xác minh |
+| HV-05 | 17/10/1945 | Thư gửi Ủy ban nhân dân các kỳ, tỉnh, huyện và làng | dân chủ | Cán bộ là "công bộc" của dân, "gánh vác việc chung cho dân, chứ không phải để đè đầu dân" (t.4, tr.64–65) | _(không có ghi chú; câu trích có ở GT tr. 85)_ | Tên thư và ngày: cần xác minh |
+| HV-06 | 23/11/1945 | Sắc lệnh 64-SL thành lập Ban Thanh tra đặc biệt | trong sạch | "dân ghét các ông chủ tịch, các ông Ủy viên vì cái tật ngông nghênh, cậy thế, cậy quyền…" (t.4, tr.51) | Bác chỉ ra cán bộ nắm quyền có thể lạm quyền, vì thế cần kiểm soát quyền lực nhà nước (GT tr. 91); không phải lời văn trong Sắc lệnh 64-SL. | Cần xác minh |
+| HV-07 | 6/1/1946 | Cuộc Tổng tuyển cử đầu tiên: lá phiếu, thẻ cử tri, ảnh cử tri xếp hàng | dân chủ | "Nước ta là nước dân chủ, nghĩa là nước nhà do nhân dân làm chủ" (t.9, tr.258) | Đây là "nhà nước do nhân dân", tức dân tự lập ra nhà nước bằng lá phiếu (GT tr. 86). | GT tr.88: phổ thông đầu phiếu, trực tiếp, bỏ phiếu kín, từ 18 tuổi, không phân biệt nam nữ, giàu nghèo, dân tộc, tôn giáo; lần đầu ở Đông Nam Á |
+| HV-08 | 2/3/1946 | Phiên họp đầu tiên của Quốc hội khóa I | pháp quyền | "vì đồng bào ủy thác thì tôi phải gắng sức làm… Bao giờ đồng bào cho tôi lui, thì tôi rất vui lòng lui" (t.4, tr.187) | Bác nói về chức Chủ tịch nước của mình (GT tr. 79). | GT tr.88; địa điểm Nhà hát Lớn Hà Nội: cần xác minh |
+| HV-09 | 9/11/1946 | *Hiến pháp 1946*, hiến pháp đầu tiên | pháp quyền | "Chính phủ Việt Nam sẽ tha thứ hay trừng trị họ theo luật pháp… Nhưng sẽ không có ai bị tàn sát" (t.6, tr.437) | Câu nói về cách đối xử với những kẻ phản bội Tổ quốc, minh họa pháp quyền nhân nghĩa (GT tr. 91); không phải lời văn trong Hiến pháp 1946. | GT tr.89; ngày thông qua, số chương/điều, việc 9/11 là Ngày Pháp luật Việt Nam: cần xác minh |
+| HV-10 | 27/11/1946 | Sắc lệnh 223-SL về tội hối lộ, tham ô công quỹ | trong sạch | "có quyền mà thiếu lương tâm là có dịp đục khoét, có dịp ăn của đút, có dịp 'dĩ công vi tư'" (t.6, tr.127) | Câu nói về cán bộ có quyền mà thiếu lương tâm (GT tr. 94); không phải lời văn trong Sắc lệnh 223-SL. | Cần xác minh |
+| HV-11 | 10/1947 | Tác phẩm *Sửa đổi lối làm việc* | trong sạch | "muôn việc thành công hoặc thất bại đều do cán bộ tốt hoặc kém" (t.5, tr.280) | — | GT tr.78, 82; thời gian: cần xác minh |
+| HV-12 | 1959 | *Hiến pháp 1959* | dân chủ | Lời nói đầu: "Nhà nước của ta là Nhà nước dân chủ nhân dân, dựa trên nền tảng liên minh công nông, do giai cấp công nhân lãnh đạo" (Hiến pháp 1959, Lời nói đầu; dẫn theo GT tr. 83) | — | GT tr.83, 89 |
+| HV-13 | 3/2/1969 | Bài báo *Nâng cao đạo đức cách mạng, quét sạch chủ nghĩa cá nhân* (báo Nhân Dân số 5409) | trong sạch | Tóm ý: một số cán bộ, đảng viên sa vào tham ô, lãng phí, quan liêu vì chủ nghĩa cá nhân | — | GT tr.82 |
+
+Cột "Ghi chú ngữ cảnh" tương ứng trường `quoteNote` trong `artifacts.json`, hiển thị dưới câu trích ở khối "Bác nói gì". Nội dung đã đối chiếu với giáo trình (bản PDF); "GT tr." là số trang giáo trình.
 
 **Quy định hiển thị:**
 - Bắt buộc có tối thiểu 8 hiện vật lúc nộp. Ưu tiên theo thứ tự: HV-02, 03, 05, 07, 08, 09, 11, 13.
@@ -126,7 +128,7 @@ Quy ước cột "Nguồn sự kiện":
 
 ### Mẫu nội dung một phiếu hiện vật (HV-07)
 - **Câu chuyện** (tối đa 80 chữ): Ngày 6/1/1946, lần đầu tiên trong lịch sử, mọi người dân Việt Nam từ 18 tuổi trở lên, không phân biệt nam nữ, giàu nghèo, dân tộc, tôn giáo, được trực tiếp bỏ phiếu kín bầu Quốc hội. Đây cũng là lần đầu tiên ở Đông Nam Á có cuộc bầu cử như vậy (GT tr. 88).
-- **Bác nói gì**: "Nước ta là nước dân chủ, nghĩa là nước nhà do nhân dân làm chủ" (Hồ Chí Minh, 2011, t.9, tr.258). Kèm một dòng giải thích: đây là "nhà nước do nhân dân", tức dân tự lập ra nhà nước bằng lá phiếu.
+- **Bác nói gì**: "Nước ta là nước dân chủ, nghĩa là nước nhà do nhân dân làm chủ" (Hồ Chí Minh, 2011, t.9, tr.258). Kèm một dòng giải thích: đây là "nhà nước do nhân dân", tức dân tự lập ra nhà nước bằng lá phiếu (GT tr. 86).
 - **Ngày nay** (nhóm viết, tối đa 60 chữ, có nguồn): liên hệ với việc sinh viên lần đầu đi bầu. Câu hỏi gợi mở: "Lần bầu cử gần nhất, bạn đã tìm hiểu ứng cử viên chưa?"
 
 Nhóm viết các phiếu còn lại theo đúng mẫu này. Claude Code chỉ dựng khung, điền phần có sẵn trong bảng, và để `TODO` ở các trường còn thiếu.

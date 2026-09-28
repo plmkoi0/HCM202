@@ -41,10 +41,12 @@
       "text": "Nếu nước độc lập mà dân không hưởng hạnh phúc, tự do, thì độc lập cũng chẳng có nghĩa lý gì",
       "cite": "Hồ Chí Minh, 2011, t.4, tr.64"
     },
+    "quoteNote": "Câu nói năm 1945, khi nước nhà vừa giành độc lập (GT tr. 79); không phải lời văn trong bản Tuyên ngôn Độc lập.",
     "today": "TODO",
     "eventSource": "Địa điểm: cần xác minh",
     "sourceIds": [
-      "hcm-tt-4"
+      "hcm-tt-4",
+      "giao-trinh"
     ],
     "verified": false
   },
@@ -111,7 +113,8 @@
     "today": "TODO",
     "eventSource": "Tên thư và ngày: cần xác minh",
     "sourceIds": [
-      "hcm-tt-4"
+      "hcm-tt-4",
+      "giao-trinh"
     ],
     "verified": false
   },
@@ -131,10 +134,12 @@
       "text": "dân ghét các ông chủ tịch, các ông Ủy viên vì cái tật ngông nghênh, cậy thế, cậy quyền…",
       "cite": "Hồ Chí Minh, 2011, t.4, tr.51"
     },
+    "quoteNote": "Bác chỉ ra cán bộ nắm quyền có thể lạm quyền, vì thế cần kiểm soát quyền lực nhà nước (GT tr. 91); không phải lời văn trong Sắc lệnh 64-SL.",
     "today": "TODO",
     "eventSource": "Cần xác minh",
     "sourceIds": [
-      "hcm-tt-4"
+      "hcm-tt-4",
+      "giao-trinh"
     ],
     "verified": false
   },
@@ -155,7 +160,7 @@
       "text": "Nước ta là nước dân chủ, nghĩa là nước nhà do nhân dân làm chủ",
       "cite": "Hồ Chí Minh, 2011, t.9, tr.258"
     },
-    "quoteNote": "Đây là \"nhà nước do nhân dân\", tức dân tự lập ra nhà nước bằng lá phiếu.",
+    "quoteNote": "Đây là \"nhà nước do nhân dân\", tức dân tự lập ra nhà nước bằng lá phiếu (GT tr. 86).",
     "today": "TODO",
     "todayPrompt": "Lần bầu cử gần nhất, bạn đã tìm hiểu ứng cử viên chưa?",
     "eventSource": "GT tr.88: phổ thông đầu phiếu, trực tiếp, bỏ phiếu kín, từ 18 tuổi, không phân biệt nam nữ, giàu nghèo, dân tộc, tôn giáo; lần đầu ở Đông Nam Á",
@@ -181,6 +186,7 @@
       "text": "vì đồng bào ủy thác thì tôi phải gắng sức làm… Bao giờ đồng bào cho tôi lui, thì tôi rất vui lòng lui",
       "cite": "Hồ Chí Minh, 2011, t.4, tr.187"
     },
+    "quoteNote": "Bác nói về chức Chủ tịch nước của mình (GT tr. 79).",
     "today": "TODO",
     "eventSource": "GT tr.88; địa điểm Nhà hát Lớn Hà Nội: cần xác minh",
     "sourceIds": [
@@ -206,7 +212,7 @@
       "text": "Chính phủ Việt Nam sẽ tha thứ hay trừng trị họ theo luật pháp… Nhưng sẽ không có ai bị tàn sát",
       "cite": "Hồ Chí Minh, 2011, t.6, tr.437"
     },
-    "quoteNote": "Minh họa pháp quyền nhân nghĩa.",
+    "quoteNote": "Câu nói về cách đối xử với những kẻ phản bội Tổ quốc, minh họa pháp quyền nhân nghĩa (GT tr. 91); không phải lời văn trong Hiến pháp 1946.",
     "today": "TODO",
     "eventSource": "GT tr.89; ngày thông qua, số chương/điều, việc 9/11 là Ngày Pháp luật Việt Nam: cần xác minh",
     "sourceIds": [
@@ -231,10 +237,12 @@
       "text": "có quyền mà thiếu lương tâm là có dịp đục khoét, có dịp ăn của đút, có dịp 'dĩ công vi tư'",
       "cite": "Hồ Chí Minh, 2011, t.6, tr.127"
     },
+    "quoteNote": "Câu nói về cán bộ có quyền mà thiếu lương tâm (GT tr. 94); không phải lời văn trong Sắc lệnh 223-SL.",
     "today": "TODO",
     "eventSource": "Cần xác minh",
     "sourceIds": [
-      "hcm-tt-6"
+      "hcm-tt-6",
+      "giao-trinh"
     ],
     "verified": false
   },
@@ -277,7 +285,7 @@
     "story": "TODO",
     "quote": {
       "text": "Nhà nước của ta là Nhà nước dân chủ nhân dân, dựa trên nền tảng liên minh công nông, do giai cấp công nhân lãnh đạo",
-      "cite": "Hiến pháp 1959, Lời nói đầu"
+      "cite": "Hiến pháp 1959, Lời nói đầu; dẫn theo GT tr. 83"
     },
     "today": "TODO",
     "eventSource": "GT tr.83, 89",
