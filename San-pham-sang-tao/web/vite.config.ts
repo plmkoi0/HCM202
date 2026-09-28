@@ -63,6 +63,31 @@ function offlineAssets(offline: boolean): Plugin {
   }
 }
 
+/**
+ * Chèn og:url, og:image (1200×630), twitter:image với URL tuyệt đối = siteUrl + "og-image.png".
+ * Không chèn khi siteUrl còn TODO hoặc ở bản offline.
+ */
+function ogImage(offline: boolean): Plugin {
+  return {
+    name: 'hcm202-og-image',
+    transformIndexHtml(html) {
+      if (offline) return html
+      const { siteUrl } = JSON.parse(readFileSync('src/data/site.json', 'utf8')) as { siteUrl: string }
+      if (!/^https?:\/\//.test(siteUrl)) return html
+      const base = siteUrl.endsWith('/') ? siteUrl : siteUrl + '/'
+      const image = base + 'og-image.png'
+      const tags = [
+        `<meta property="og:url" content="${base}" />`,
+        `<meta property="og:image" content="${image}" />`,
+        '<meta property="og:image:width" content="1200" />',
+        '<meta property="og:image:height" content="630" />',
+        `<meta name="twitter:image" content="${image}" />`,
+      ]
+      return html.replace('</head>', tags.map((t) => '    ' + t).join('\n') + '\n  </head>')
+    },
+  }
+}
+
 // base './': đường dẫn tương đối, chạy được trên Vercel và khi mở trực tiếp file
 export default defineConfig(({ mode }) => {
   const offline = mode === 'offline'
@@ -70,7 +95,7 @@ export default defineConfig(({ mode }) => {
     base: './',
     // Bản offline chỉ có một file index.html; ảnh và favicon đã được nhúng
     publicDir: offline ? false : PUBLIC_DIR,
-    plugins: [react(), tailwindcss(), offlineAssets(offline), ...(offline ? [viteSingleFile()] : [])],
+    plugins: [react(), tailwindcss(), offlineAssets(offline), ogImage(offline), ...(offline ? [viteSingleFile()] : [])],
     build: offline ? { outDir: 'dist-offline', emptyOutDir: true } : {},
   }
 })

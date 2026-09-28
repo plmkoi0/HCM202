@@ -1,5 +1,7 @@
 import { sources } from '../lib/data'
+import { sortedReferences, todoReferences } from '../lib/sources'
 import { site } from '../lib/site'
+import ReferenceText from './ui/Reference'
 import Todo from './ui/Todo'
 
 /** Nguồn tham khảo theo APA7 (mục 9). */
@@ -12,17 +14,16 @@ export default function Sources() {
           {ui.title}
         </h2>
         <ul className="mt-8 space-y-3">
-          {sources.references.map((r) =>
-            r.todo ? (
-              <li key={r.id}>
-                <Todo note={r.text?.replace(/^TODO[^:]*:\s*/, '')} />
-              </li>
-            ) : (
-              <li key={r.id} className="pl-8 -indent-8">
-                {r.author}. ({r.year}). <i>{r.title}</i> ({r.detail}). {r.publisher}.
-              </li>
-            ),
-          )}
+          {sortedReferences.map((r) => (
+            <li key={r.id} className="pl-8 -indent-8">
+              <ReferenceText r={r} />
+            </li>
+          ))}
+          {todoReferences.map((r) => (
+            <li key={r.id}>
+              <Todo note={r.text?.replace(/^TODO[^:]*:\s*/, '')} />
+            </li>
+          ))}
           {sources.todo.map((t) => (
             <li key={t}>
               <Todo note={t.replace(/^TODO:?\s*/, '')} />

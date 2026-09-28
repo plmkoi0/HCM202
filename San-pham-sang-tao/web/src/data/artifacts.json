@@ -11,18 +11,21 @@
       "alt": "TODO",
       "credit": "TODO: nguồn ảnh"
     },
-    "story": "TODO",
+    "story": "Ngày 18/6/1919, Nguyễn Ái Quốc thay mặt Hội những người An Nam yêu nước gửi tới Hội nghị Véc-xây bản Yêu sách tám điểm (Đặng Kim Oanh & Vũ Thị Ngọc Liên, 2020). Yêu sách đòi người bản xứ được hưởng những bảo đảm về mặt pháp luật như người Âu châu, đòi thay chế độ ra các sắc lệnh bằng chế độ ra các đạo luật. Người sớm thấy tầm quan trọng của pháp luật (GT tr. 88).",
     "quote": {
       "text": "Thay thế chế độ ra các sắc lệnh bằng chế độ ra các đạo luật",
       "cite": "Hồ Chí Minh, 2011, t.1, tr.441"
     },
-    "today": "TODO",
-    "eventSource": "GT tr.88; ngày cụ thể: cần xác minh",
+    "today": "Hiến pháp năm 2013 quy định Nhà nước \"được tổ chức và hoạt động theo Hiến pháp và pháp luật, quản lý xã hội bằng Hiến pháp và pháp luật\" (Quốc hội, 2013, Điều 8). Đòi hỏi năm 1919 nay đã thành nguyên tắc hiến định.",
+    "todayPrompt": "Bạn đã từng đọc trọn một điều luật liên quan trực tiếp đến mình chưa?",
+    "eventSource": "GT tr.88; ngày 18/6/1919: Đặng Kim Oanh & Vũ Thị Ngọc Liên (2020)",
     "sourceIds": [
       "hcm-tt",
-      "giao-trinh"
+      "giao-trinh",
+      "dang-kim-oanh-2020",
+      "hp-2013"
     ],
-    "verified": false
+    "verified": true
   },
   {
     "id": "HV-02",
@@ -36,19 +39,22 @@
       "alt": "TODO",
       "credit": "TODO: nguồn ảnh"
     },
-    "story": "TODO",
+    "story": "Từ 25/8 đến 2/9/1945, Chủ tịch Hồ Chí Minh ở và làm việc tại tầng hai ngôi nhà 48 Hàng Ngang, Hà Nội, nơi Người viết bản Tuyên ngôn Độc lập. Ngày 2/9/1945, Người đọc Tuyên ngôn tại Quảng trường Ba Đình (Ban Quản lý di tích danh thắng Hà Nội, n.d.), khai sinh nước Việt Nam Dân chủ Cộng hòa, nhà nước dân chủ nhân dân đầu tiên ở Đông Nam châu Á (GT tr. 84).",
     "quote": {
       "text": "Nếu nước độc lập mà dân không hưởng hạnh phúc, tự do, thì độc lập cũng chẳng có nghĩa lý gì",
       "cite": "Hồ Chí Minh, 2011, t.4, tr.64"
     },
-    "quoteNote": "Câu nói năm 1945, khi nước nhà vừa giành độc lập (GT tr. 79); không phải lời văn trong bản Tuyên ngôn Độc lập.",
-    "today": "TODO",
-    "eventSource": "Địa điểm: cần xác minh",
+    "quoteNote": "Trích *Thư gửi Ủy ban nhân dân các kỳ, tỉnh, huyện và làng* ngày 17/10/1945 (Chu Đức Tính, 2020; GT tr. 79), không phải lời văn trong bản Tuyên ngôn Độc lập.",
+    "today": "Điều 3 Hiến pháp năm 2013 đặt mục tiêu \"mọi người có cuộc sống ấm no, tự do, hạnh phúc, có điều kiện phát triển toàn diện\" (Quốc hội, 2013). Độc lập phải gắn với hạnh phúc của người dân, đúng như lời Bác năm 1945.",
+    "todayPrompt": "Với bạn, hạnh phúc của người dân được đo bằng những điều cụ thể nào?",
+    "eventSource": "Địa điểm, thời gian: Ban Quản lý di tích danh thắng Hà Nội (n.d.); GT tr.84",
     "sourceIds": [
       "hcm-tt",
-      "giao-trinh"
+      "giao-trinh",
+      "bqldt-48-hang-ngang",
+      "hp-2013"
     ],
-    "verified": false
+    "verified": true
   },
   {
     "id": "HV-03",
@@ -61,16 +67,19 @@
       "alt": "TODO",
       "credit": "TODO: nguồn ảnh"
     },
-    "story": "TODO",
+    "story": "Ngày 3/9/1945, chỉ một ngày sau khi đọc Tuyên ngôn Độc lập, Hồ Chí Minh đề nghị tại phiên họp đầu tiên của Chính phủ lâm thời: phải có hiến pháp dân chủ và sớm tổ chức Tổng tuyển cử. Có Quốc hội do dân bầu, nước ta mới có cơ sở pháp lý vững chắc và một cơ chế quyền lực hợp pháp theo đúng thông lệ của nhà nước pháp quyền hiện đại (GT tr. 88).",
     "quote": {
       "text": "Chúng ta phải có một hiến pháp dân chủ. Tôi đề nghị Chính phủ tổ chức càng sớm càng hay cuộc TỔNG TUYỂN CỬ với chế độ phổ thông đầu phiếu",
       "cite": "Hồ Chí Minh, 2011, t.4, tr.7"
     },
-    "today": "TODO",
+    "today": "Năm 2025, dự thảo sửa đổi, bổ sung một số điều của Hiến pháp được đưa ra lấy ý kiến Nhân dân từ 6/5 đến 29/5, có thể góp ý ngay trên ứng dụng VNeID; kết quả thu về 280.226.909 lượt ý kiến, 99,75% tán thành (Cổng Thông tin điện tử Chính phủ, 2025b; Thu Hằng, 2025).",
+    "todayPrompt": "Bạn đã từng góp ý cho một dự thảo văn bản pháp luật chưa?",
     "eventSource": "GT tr.88",
     "sourceIds": [
       "hcm-tt",
-      "giao-trinh"
+      "giao-trinh",
+      "cp-2025-vneid",
+      "thu-hang-2025"
     ],
     "verified": true
   },
@@ -85,13 +94,22 @@
       "alt": "TODO",
       "credit": "TODO: nguồn ảnh"
     },
-    "story": "TODO",
-    "quote": null,
-    "quoteNote": "TODO: dùng lại trích dẫn HV-03 hoặc để trống",
-    "today": "TODO",
-    "eventSource": "Cần xác minh",
-    "sourceIds": [],
-    "verified": false
+    "story": "Ngày 8/9/1945, Sắc lệnh số 14 của Chủ tịch Chính phủ lâm thời quyết định mở cuộc Tổng tuyển cử bầu Quốc dân Đại hội trong thời hạn hai tháng. Sắc lệnh quy định: \"Tất cả công dân Việt Nam, cả trai và gái, từ 18 tuổi trở lên, đều có quyền tuyển cử và ứng cử\", trừ người bị tước công quyền và người trí óc không bình thường (Chủ tịch Chính phủ lâm thời, 1945).",
+    "quote": {
+      "text": "Chúng ta phải có một hiến pháp dân chủ. Tôi đề nghị Chính phủ tổ chức càng sớm càng hay cuộc TỔNG TUYỂN CỬ với chế độ phổ thông đầu phiếu",
+      "cite": "Hồ Chí Minh, 2011, t.4, tr.7"
+    },
+    "quoteNote": "Đề nghị của Bác tại phiên họp Chính phủ ngày 3/9/1945, năm ngày trước khi có Sắc lệnh này (GT tr. 88).",
+    "today": "Điều 27 Hiến pháp năm 2013 vẫn giữ mốc tuổi ấy: công dân đủ 18 tuổi có quyền bầu cử, đủ 21 tuổi có quyền ứng cử vào Quốc hội, Hội đồng nhân dân (Quốc hội, 2013).",
+    "todayPrompt": "Bạn đã đủ tuổi bầu cử chưa, và đã dùng quyền ấy lần nào?",
+    "eventSource": "Chủ tịch Chính phủ lâm thời (1945), bản trên Thư viện Pháp luật",
+    "sourceIds": [
+      "hcm-tt",
+      "giao-trinh",
+      "sl-14-1945",
+      "hp-2013"
+    ],
+    "verified": true
   },
   {
     "id": "HV-05",
@@ -104,19 +122,22 @@
       "alt": "TODO",
       "credit": "TODO: nguồn ảnh"
     },
-    "story": "TODO",
+    "story": "Ngày 17/10/1945, Chủ tịch Hồ Chí Minh viết thư gửi Ủy ban nhân dân các kỳ, tỉnh, huyện và làng (Chu Đức Tính, 2020). Người nhắc cán bộ chính quyền mới rằng các cơ quan của Chính phủ, từ toàn quốc cho đến các làng, đều là \"công bộc\" của dân. Quyền lực nhà nước là do nhân dân ủy thác cho, nên cán bộ phải làm đầy tớ cho dân chứ không được đứng trên dân (GT tr. 85).",
     "quote": {
       "lead": "Cán bộ là \"công bộc\" của dân,",
       "text": "gánh vác việc chung cho dân, chứ không phải để đè đầu dân",
       "cite": "Hồ Chí Minh, 2011, t.4, tr.64–65"
     },
-    "today": "TODO",
-    "eventSource": "Tên thư và ngày: cần xác minh",
+    "today": "Điều 8 Hiến pháp năm 2013 yêu cầu cơ quan nhà nước, cán bộ, công chức, viên chức \"tôn trọng Nhân dân, tận tụy phục vụ Nhân dân, liên hệ chặt chẽ với Nhân dân, lắng nghe ý kiến và chịu sự giám sát của Nhân dân\" (Quốc hội, 2013).",
+    "todayPrompt": "Lần gần nhất làm thủ tục hành chính, bạn có được phục vụ như một người chủ?",
+    "eventSource": "Tên thư, ngày 17/10/1945: Chu Đức Tính (2020); GT tr.85",
     "sourceIds": [
       "hcm-tt",
-      "giao-trinh"
+      "giao-trinh",
+      "chu-duc-tinh-2020",
+      "hp-2013"
     ],
-    "verified": false
+    "verified": true
   },
   {
     "id": "HV-06",
@@ -129,19 +150,21 @@
       "alt": "TODO",
       "credit": "TODO: nguồn ảnh"
     },
-    "story": "TODO",
+    "story": "Ngày 23/11/1945, Chủ tịch Hồ Chí Minh ký Sắc lệnh số 64/SL thành lập Ban Thanh tra đặc biệt, sự kiện đánh dấu sự ra đời của ngành Thanh tra Việt Nam (Toàn Thắng, 2025). Chỉ vài tháng sau ngày lập nước, Người đã thấy cán bộ nắm quyền có thể trở nên lạm quyền, vì thế phải kiểm soát quyền lực nhà nước (GT tr. 91).",
     "quote": {
       "text": "dân ghét các ông chủ tịch, các ông Ủy viên vì cái tật ngông nghênh, cậy thế, cậy quyền…",
       "cite": "Hồ Chí Minh, 2011, t.4, tr.51"
     },
     "quoteNote": "Bác chỉ ra cán bộ nắm quyền có thể lạm quyền, vì thế cần kiểm soát quyền lực nhà nước (GT tr. 91); không phải lời văn trong Sắc lệnh 64-SL.",
-    "today": "TODO",
-    "eventSource": "Cần xác minh",
+    "today": "Ngày 23/11 hằng năm là Ngày truyền thống Thanh tra Việt Nam. Năm 2025, kỷ niệm 80 năm, ngành Thanh tra được nhìn nhận là lực lượng nòng cốt trong đấu tranh phòng, chống tham nhũng, tiêu cực (Toàn Thắng, 2025).",
+    "todayPrompt": "Ngoài cơ quan thanh tra, sinh viên có thể góp phần giám sát quyền lực bằng cách nào?",
+    "eventSource": "Toàn Thắng (2025); GT tr.91",
     "sourceIds": [
       "hcm-tt",
-      "giao-trinh"
+      "giao-trinh",
+      "toan-thang-2025"
     ],
-    "verified": false
+    "verified": true
   },
   {
     "id": "HV-07",
@@ -161,12 +184,13 @@
       "cite": "Hồ Chí Minh, 2011, t.9, tr.258"
     },
     "quoteNote": "Đây là \"nhà nước do nhân dân\", tức dân tự lập ra nhà nước bằng lá phiếu (GT tr. 86).",
-    "today": "TODO",
+    "today": "Ngày 15/3/2026, cử tri cả nước bầu đại biểu Quốc hội khóa XVI và Hội đồng nhân dân các cấp nhiệm kỳ 2026–2031. Theo báo cáo sơ bộ, khoảng 76.198.214/76.423.940 cử tri đi bầu, đạt 99,7%, tỷ lệ cao nhất từ trước đến nay (Phan Phương, 2026).",
     "todayPrompt": "Lần bầu cử gần nhất, bạn đã tìm hiểu ứng cử viên chưa?",
     "eventSource": "GT tr.88: phổ thông đầu phiếu, trực tiếp, bỏ phiếu kín, từ 18 tuổi, không phân biệt nam nữ, giàu nghèo, dân tộc, tôn giáo; lần đầu ở Đông Nam Á",
     "sourceIds": [
       "hcm-tt",
-      "giao-trinh"
+      "giao-trinh",
+      "phan-phuong-2026"
     ],
     "verified": true
   },
@@ -181,19 +205,22 @@
       "alt": "TODO",
       "credit": "TODO: nguồn ảnh"
     },
-    "story": "TODO",
+    "story": "Sáng 2/3/1946, tại Nhà hát Lớn Hà Nội, Quốc hội khóa I họp phiên đầu tiên với gần 300 đại biểu (Báo Điện tử Đảng Cộng sản Việt Nam, 2019). Quốc hội lập ra các tổ chức, bộ máy và chức vụ chính thức của Nhà nước; Hồ Chí Minh được bầu làm Chủ tịch Chính phủ liên hiệp đầu tiên. Từ đây, Chính phủ có đầy đủ tư cách pháp lý (GT tr. 88–89).",
     "quote": {
       "text": "vì đồng bào ủy thác thì tôi phải gắng sức làm… Bao giờ đồng bào cho tôi lui, thì tôi rất vui lòng lui",
       "cite": "Hồ Chí Minh, 2011, t.4, tr.187"
     },
     "quoteNote": "Bác nói về chức Chủ tịch nước của mình (GT tr. 79).",
-    "today": "TODO",
-    "eventSource": "GT tr.88; địa điểm Nhà hát Lớn Hà Nội: cần xác minh",
+    "today": "Điều 7 Hiến pháp năm 2013 quy định đại biểu Quốc hội, đại biểu Hội đồng nhân dân bị bãi nhiệm \"khi không còn xứng đáng với sự tín nhiệm của Nhân dân\" (Quốc hội, 2013). Lời Bác \"bao giờ đồng bào cho tôi lui\" nay đã thành cơ chế pháp lý.",
+    "todayPrompt": "Bạn có biết đại biểu Quốc hội nào đại diện cho nơi mình cư trú?",
+    "eventSource": "GT tr.88–89; địa điểm Nhà hát Lớn Hà Nội: Báo Điện tử Đảng Cộng sản Việt Nam (2019)",
     "sourceIds": [
       "hcm-tt",
-      "giao-trinh"
+      "giao-trinh",
+      "dcsvn-2019",
+      "hp-2013"
     ],
-    "verified": false
+    "verified": true
   },
   {
     "id": "HV-09",
@@ -207,19 +234,22 @@
       "alt": "TODO",
       "credit": "TODO: nguồn ảnh"
     },
-    "story": "TODO",
+    "story": "Ngày 9/11/1946, tại kỳ họp thứ hai, Quốc hội khóa I thông qua Hiến pháp đầu tiên của nước Việt Nam Dân chủ Cộng hòa với 240 phiếu thuận, 2 phiếu chống (Infonet, 2021). Hiến pháp gồm lời nói đầu, 7 chương, 70 điều; Điều thứ 1 ghi: \"Nước Việt Nam là một nước dân chủ cộng hoà\" (Quốc hội, 1946). Hồ Chí Minh tham gia lãnh đạo quá trình soạn thảo (GT tr. 89).",
     "quote": {
       "text": "Chính phủ Việt Nam sẽ tha thứ hay trừng trị họ theo luật pháp… Nhưng sẽ không có ai bị tàn sát",
       "cite": "Hồ Chí Minh, 2011, t.6, tr.437"
     },
     "quoteNote": "Câu nói về cách đối xử với những kẻ phản bội Tổ quốc, minh họa pháp quyền nhân nghĩa (GT tr. 91); không phải lời văn trong Hiến pháp 1946.",
-    "today": "TODO",
-    "eventSource": "GT tr.89; ngày thông qua, số chương/điều, việc 9/11 là Ngày Pháp luật Việt Nam: cần xác minh",
+    "today": "Luật Phổ biến, giáo dục pháp luật năm 2012 lấy ngày 9/11, ngày thông qua Hiến pháp năm 1946, làm Ngày Pháp luật nước Cộng hòa xã hội chủ nghĩa Việt Nam (Infonet, 2021).",
+    "todayPrompt": "Ngày Pháp luật năm nay, bạn sẽ tìm hiểu một quy định nào?",
+    "eventSource": "GT tr.89; ngày thông qua, số phiếu, 7 chương 70 điều, Ngày Pháp luật 9/11: Infonet (2021), Quốc hội (1946)",
     "sourceIds": [
       "hcm-tt",
-      "giao-trinh"
+      "giao-trinh",
+      "infonet-2021",
+      "hp-1946"
     ],
-    "verified": false
+    "verified": true
   },
   {
     "id": "HV-10",
@@ -232,19 +262,23 @@
       "alt": "TODO",
       "credit": "TODO: nguồn ảnh"
     },
-    "story": "TODO",
+    "story": "Ngày 27/11/1946, Chủ tịch Hồ Chí Minh ký Sắc lệnh số 223 ấn định hình phạt tội đưa và nhận hối lộ (Cổng Thông tin điện tử Chính phủ, n.d.). Người phạm tội hối lộ, biển thủ công quỹ có thể bị phạt khổ sai từ 5 đến 20 năm, phạt tiền gấp đôi số tang vật và bị tịch thu tới ba phần tư gia sản (Nguyễn Đăng Luận, 2007).",
     "quote": {
       "text": "có quyền mà thiếu lương tâm là có dịp đục khoét, có dịp ăn của đút, có dịp 'dĩ công vi tư'",
       "cite": "Hồ Chí Minh, 2011, t.6, tr.127"
     },
     "quoteNote": "Câu nói về cán bộ có quyền mà thiếu lương tâm (GT tr. 94); không phải lời văn trong Sắc lệnh 223-SL.",
-    "today": "TODO",
-    "eventSource": "Cần xác minh",
+    "today": "Luật Phòng, chống tham nhũng số 36/2018/QH14, có hiệu lực từ 1/7/2019, quy định công dân có quyền phát hiện, phản ánh, tố cáo, tố giác, báo tin về hành vi tham nhũng (Quốc hội, 2018, Điều 5). Chống \"giặc nội xâm\" là việc của mọi người (GT tr. 81).",
+    "todayPrompt": "Nếu bị đòi \"bồi dưỡng\" khi làm thủ tục, bạn biết phản ánh ở đâu?",
+    "eventSource": "Cổng Thông tin điện tử Chính phủ (n.d.); Nguyễn Đăng Luận (2007)",
     "sourceIds": [
       "hcm-tt",
-      "giao-trinh"
+      "giao-trinh",
+      "sl-223-1946",
+      "nguyen-dang-luan-2007",
+      "luat-pctn-2018"
     ],
-    "verified": false
+    "verified": true
   },
   {
     "id": "HV-11",
@@ -258,18 +292,21 @@
       "alt": "TODO",
       "credit": "TODO: nguồn ảnh"
     },
-    "story": "TODO",
+    "story": "Tháng 10/1947, Hồ Chí Minh viết tác phẩm Sửa đổi lối làm việc với bút danh X.Y.Z. Tác phẩm gồm 6 phần, bàn về chỉnh đốn Đảng trên các mặt chính trị, tư tưởng, tổ chức và đạo đức (Nguyễn Xuân Thắng, 2017). Người khẳng định cán bộ là gốc của mọi công việc, nên phải hiểu, huấn luyện, đề bạt và sử dụng cán bộ cho đúng (GT tr. 82).",
     "quote": {
       "text": "muôn việc thành công hoặc thất bại đều do cán bộ tốt hoặc kém",
       "cite": "Hồ Chí Minh, 2011, t.5, tr.280"
     },
-    "today": "TODO",
-    "eventSource": "GT tr.78, 82; thời gian: cần xác minh",
+    "today": "Ngày 15/5/2016, Bộ Chính trị ban hành Chỉ thị số 05-CT/TW về đẩy mạnh học tập và làm theo tư tưởng, đạo đức, phong cách Hồ Chí Minh (Bộ Chính trị, 2016). Những yêu cầu về lối làm việc Bác nêu từ năm 1947 vẫn là chuẩn mực để cán bộ tự soi mình.",
+    "todayPrompt": "Trong nhóm làm bài này, lối làm việc nào của chính chúng ta cần sửa?",
+    "eventSource": "GT tr.78, 82; thời gian: Nguyễn Xuân Thắng (2017)",
     "sourceIds": [
       "hcm-tt",
-      "giao-trinh"
+      "giao-trinh",
+      "nguyen-xuan-thang-2017",
+      "ct-05-2016"
     ],
-    "verified": false
+    "verified": true
   },
   {
     "id": "HV-12",
@@ -282,15 +319,18 @@
       "alt": "TODO",
       "credit": "TODO: nguồn ảnh"
     },
-    "story": "TODO",
+    "story": "Ngày 31/12/1959, Quốc hội thông qua Hiến pháp mới gồm 10 chương, 112 điều; Hiến pháp được công bố ngày 1/1/1960 (Cổng Thông tin điện tử Chính phủ, 2025a). Đây là lần thứ hai Hồ Chí Minh tham gia lãnh đạo soạn thảo Hiến pháp (GT tr. 89). Lời nói đầu khẳng định bản chất giai cấp công nhân của Nhà nước, dựa trên nền tảng liên minh công nông (GT tr. 83).",
     "quote": {
       "text": "Nhà nước của ta là Nhà nước dân chủ nhân dân, dựa trên nền tảng liên minh công nông, do giai cấp công nhân lãnh đạo",
       "cite": "Hiến pháp 1959, Lời nói đầu; dẫn theo GT tr. 83"
     },
-    "today": "TODO",
-    "eventSource": "GT tr.83, 89",
+    "today": "Điều 2 Hiến pháp năm 2013 khẳng định Nhà nước ta là \"nhà nước pháp quyền xã hội chủ nghĩa của Nhân dân, do Nhân dân, vì Nhân dân\"; tất cả quyền lực nhà nước thuộc về Nhân dân, nền tảng là liên minh công nhân, nông dân và đội ngũ trí thức (Quốc hội, 2013).",
+    "todayPrompt": "Vì sao đội ngũ trí thức được nhắc tới trong nền tảng của quyền lực nhà nước?",
+    "eventSource": "GT tr.83, 89; ngày thông qua, công bố, 10 chương 112 điều: Cổng Thông tin điện tử Chính phủ (2025a)",
     "sourceIds": [
-      "giao-trinh"
+      "giao-trinh",
+      "cp-2025-hien-phap",
+      "hp-2013"
     ],
     "verified": true
   },
@@ -306,17 +346,19 @@
       "alt": "TODO",
       "credit": "TODO: nguồn ảnh"
     },
-    "story": "TODO",
+    "story": "Ngày 3/2/1969, báo Nhân Dân số 5409 đăng bài Nâng cao đạo đức cách mạng, quét sạch chủ nghĩa cá nhân, viết trong những tháng cuối đời của Hồ Chí Minh. Sau khi nêu ưu điểm của đảng viên, Người chỉ ra \"còn một số ít cán bộ, đảng viên mà đạo đức, phẩm chất còn thấp kém\", mang nặng chủ nghĩa cá nhân, sa vào tham ô, lãng phí, quan liêu (GT tr. 82).",
     "quote": {
       "lead": "Tóm ý:",
       "text": "một số cán bộ, đảng viên sa vào tham ô, lãng phí, quan liêu vì chủ nghĩa cá nhân",
       "cite": "GT tr.82",
       "paraphrase": true
     },
-    "today": "TODO",
+    "today": "Ngày 9/5/2024, Bộ Chính trị ban hành Quy định số 144-QĐ/TW về chuẩn mực đạo đức cách mạng của cán bộ, đảng viên trong giai đoạn mới (Bộ Chính trị, 2024). Cuộc đấu tranh với chủ nghĩa cá nhân mà Bác cảnh báo năm 1969 vẫn đang tiếp diễn.",
+    "todayPrompt": "Chủ nghĩa cá nhân có thể lộ ra thế nào khi làm việc nhóm ở lớp?",
     "eventSource": "GT tr.82",
     "sourceIds": [
-      "giao-trinh"
+      "giao-trinh",
+      "qd-144-2024"
     ],
     "verified": true
   }

@@ -27,17 +27,19 @@ HCM202/
 ├── vercel.json                      ← deploy Vercel: build web/, output dist, header X-Robots-Tag noindex
 └── San-pham-sang-tao/
     ├── THIET-KE-WEB-APP.md          ← tài liệu thiết kế
+    ├── NOI-DUNG-BO-SUNG.md          ← nội dung nhóm duyệt (câu chuyện, ngày nay, nguồn web); chỉ nhập mục "Duyệt: [x]"
     └── web/                         ← Vite + React + TypeScript + Tailwind CSS v4 + Vitest
         ├── index.html               ← meta robots noindex, Open Graph, Twitter card
         ├── vite.config.ts           ← base './'; mode "offline": vite-plugin-singlefile, nhúng ảnh
-        │                              public/images + favicon (module ảo virtual:public-images)
+        │                              public/images + favicon (module ảo virtual:public-images);
+        │                              chèn og:url/og:image từ siteUrl lúc build (bản online)
         ├── .env.offline             ← VITE_OFFLINE=true (chỉ dùng khi build bản offline)
         ├── README.md                ← cách chạy, sửa nội dung, deploy Vercel, bản offline
         ├── scripts/
         │   ├── package-offline.mjs  ← nén dist-offline/HCM202-San-pham-sang-tao.zip (không cần công cụ zip)
         │   └── HUONG-DAN-CHAY.txt   ← mẫu hướng dẫn chạy kèm file zip
         ├── public/
-        │   ├── favicon.svg, robots.txt (Disallow: /)
+        │   ├── favicon.svg, robots.txt (Disallow: /), og-image.png (1200×630)
         │   └── images/artifacts/    ← ảnh tư liệu (chưa có ảnh)
         └── src/
             ├── data/                ← artifacts, quiz, sources, team, mindmap (mục 2),
@@ -50,12 +52,13 @@ HCM202/
             │   ├── Museum/          ← Museum, PillarFilter, ProgressBar, Timeline, ArtifactCard,
             │   │                      ArtifactModal, ArtifactViewerProvider (modal dùng chung)
             │   ├── Quiz/            ← Quiz, QuestionCard, Result, Review, ShareActions, ShareCard
-            │   └── ui/              ← QuoteBlock, Todo, PillarChip, VerifyBadge, ImageFrame
+            │   └── ui/              ← QuoteBlock, Todo, PillarChip, VerifyBadge, ImageFrame, Reference (APA7)
             ├── lib/                 ← data, site, pillars, pillarStyles, useReveal,
             │                          artifactViewer (context mở modal theo id), format,
             │                          scoring (+ scoring.test.ts), share (siteUrl, khổ thẻ, sao chép),
             │                          offline (cờ OFFLINE), quizStart (nút ngoài vào thẳng câu 1),
-            │                          data.test.ts (ẩn hiện vật, tối thiểu 8 hiện vật hiển thị)
+            │                          data.test.ts (ẩn hiện vật, tối thiểu 8 hiện vật hiển thị),
+            │                          sources (sắp xếp nguồn theo tác giả, tra theo id)
             ├── vite-env.d.ts        ← kiểu cho VITE_OFFLINE và virtual:public-images
             ├── types.ts             ← kiểu dữ liệu cho các file JSON
             ├── index.css            ← màu, phiếu răng cưa, con dấu, hiệu ứng (mục 7)
@@ -99,17 +102,22 @@ Kiểm tra: `npm run test && npm run build && npm run build:offline && npm run l
   - *Toàn tập* gộp một mục APA7 (`hcm-tt`, Tập 1–15)
   - "Làm quiz ngay" (hero) và "Bắt đầu quiz" (cầu nối) vào thẳng câu 1; đang làm dở thì chỉ cuộn tới
   - Chữ giao diện còn viết cứng đã chuyển vào `site.json`
+- [x] **Nhập nội dung đã duyệt** (`NOI-DUNG-BO-SUNG.md`, mọi mục đều "Duyệt: [x]")
+  - Lời dẫn; Câu chuyện, Ngày nay, câu hỏi gợi mở, nguồn sự kiện cho 13 hiện vật (HV-07 giữ câu chuyện cũ); mọi hiện vật `verified: true`
+  - HV-04 dùng lại trích dẫn HV-03 kèm ghi chú; ghi chú ngữ cảnh mới cho HV-02
+  - 19 nguồn web APA7 trong `sources.json`; trang Nguồn xếp theo tác giả (`localeCompare('vi')`), URL mở tab mới
+  - `og-image.png` + og:image/twitter:image chèn lúc build khi `siteUrl` đã điền
 
 ## Ghi chú dữ liệu
-- `verified: true` chỉ đặt cho hiện vật có cột "Nguồn sự kiện" chỉ ghi GT (HV-03, HV-07, HV-12, HV-13). Các hiện vật còn lại có mục "cần xác minh" nên để `false`.
-- `eventSource` chép nguyên cột "Nguồn sự kiện" để nhóm biết cần xác minh gì.
+- `verified: true` cho cả 13 hiện vật sau khi nhóm duyệt `NOI-DUNG-BO-SUNG.md` (nên hiện không còn nhãn `[Chờ xác minh]`).
+- `eventSource` chép nguyên dòng "Nguồn sự kiện" (bảng mục 4 / `NOI-DUNG-BO-SUNG.md`).
 - `quote.lead` là phần dẫn nằm ngoài ngoặc kép (vd. HV-05, kiểu A). `quote.paraphrase: true` là tóm ý, không phải trích nguyên văn (HV-13).
 - `hidden: true` (tùy chọn, mặc định không ẩn hiện vật nào) ẩn hiện vật khỏi dòng thời gian, số đếm bộ lọc, tổng tiến độ, nút Trước/Sau và chip "Hiện vật liên quan". Lọc một lần ở `lib/data.ts` (`artifacts` chỉ gồm hiện vật đang hiển thị, `isVisibleArtifact`). Tiến độ "đã xem" chỉ giữ id đang hiển thị (id cũ trong localStorage bị bỏ). Test `data.test.ts` yêu cầu tối thiểu 8 hiện vật hiển thị (mục 4).
 - Nhãn `[Chờ xác minh]` hiện trên phiếu và cửa sổ chi tiết khi `verified: false`. Trường `TODO` hiện thành ô viền đứt "TODO".
 - Chữ giao diện nằm hết trong `site.json` (menu `nav`, `skipLink`, `museum` gồm tiêu đề, bộ lọc, tiến độ `{x}/{n}`, phiếu, cửa sổ chi tiết, ghi chú ô TODO; `pillars` nhãn trụ cột; `quiz`, `share`, `mindmap`, `sources`, `offline`); câu hỏi, kiểu công dân, `closing` trong `quiz.json`. Component chỉ còn ký hiệu (—, “ ”, ✓, ·, +/−).
 - `site.json` → `siteUrl` đang là `TODO` (điền link Vercel sau khi deploy). Link chia sẻ và mã QR = `siteUrl + ?kq=X`.
-  Khi còn `TODO`: bản online dùng địa chỉ đang mở; bản offline khóa nút "Sao chép link" và thẻ PNG không có mã QR.
-- `sources.json`: *Toàn tập* là một mục APA7 chung cho bộ nhiều tập (`hcm-tt`, Tập 1–15); trích dẫn trong bài vẫn ghi tập và trang (vd. t.4, tr.64–65).
+  Khi còn `TODO`: bản online dùng địa chỉ đang mở; bản offline khóa nút "Sao chép link" và thẻ PNG không có mã QR; không chèn og:url/og:image.
+- `sources.json`: nguồn web có `apa` (chuỗi APA7, `*…*` là chữ nghiêng) + `url`; `author` dùng để sắp xếp. Nguồn TODO (`todo: true`) xếp cuối. *Toàn tập* là một mục APA7 chung cho bộ nhiều tập (`hcm-tt`, Tập 1–15); trích dẫn trong bài vẫn ghi tập và trang (vd. t.4, tr.64–65).
 - `mindmap.json` chép nguyên mục 2 tài liệu thiết kế; lưu ý thiếu tr. 92–93 nằm ở `todo` của trụ cột 3.
 - `team.json` đang để `{"members": []}` (tạm hoãn) nên mục Nhóm bị ẩn.
 - Tỉ lệ phần trăm tính bằng phương pháp phần dư lớn nhất (phần dư bằng nhau thì theo `tieBreak`), nên tổng luôn bằng 100%; có test duyệt đủ 165 tổ hợp 8 câu.
@@ -118,18 +126,13 @@ Kiểm tra: `npm run test && npm run build && npm run build:offline && npm run l
 - Màu chữ vàng đồng dùng `#7A5A17` (nền sáng) để đạt WCAG AA; `#B8892B` giữ cho nền nhãn, đường kẻ.
 
 ## TODO còn lại (nội dung — nhóm cung cấp)
-- [ ] Nguồn APA7 của giáo trình (`sources.json` → `giao-trinh`) và bổ sung giáo trình **tr. 92–93**
-- [ ] Ảnh tư liệu + `alt` + nguồn ảnh cho cả 13 hiện vật
-- [ ] "Câu chuyện" cho 12 hiện vật (đã có HV-07)
-- [ ] "Ngày nay" cho 13 hiện vật (HV-07 có sẵn câu hỏi gợi mở)
-- [ ] Xác minh và ghi nguồn APA7 cho mục "cần xác minh": HV-01, 02, 04, 05, 06, 08, 09, 10, 11
-- [ ] HV-04: chọn dùng lại trích dẫn HV-03 hay để trống
-- [ ] HV-13 (tóm ý, GT tr.82) chưa có số tập/số trang *Toàn tập*. HV-12 đang dẫn gián tiếp "dẫn theo GT tr. 83"; muốn trích trực tiếp thì cần nguồn APA7 cho Hiến pháp 1959
-- [ ] Đối chiếu mọi trích dẫn với bản gốc *Toàn tập*
-- [ ] `site.json` → `intro.paragraph`: đoạn lời dẫn ngắn (§1; tài liệu chỉ có câu trích)
-- [ ] `public/og-image.png` (1200×630) và thẻ `og:image` trong `index.html`
+- [ ] Nguồn APA7 của giáo trình (`sources.json` → `giao-trinh`; file PDF không có trang bìa) và bổ sung giáo trình **tr. 92–93**
+- [ ] Ảnh tư liệu + `alt` + nguồn ảnh (và giấy phép nếu lấy trên mạng) cho cả 13 hiện vật
+- [ ] HV-13 (tóm ý, GT tr.82) chưa có số tập/số trang *Toàn tập*. HV-12 đang dẫn gián tiếp "dẫn theo GT tr. 83"
+- [ ] Đối chiếu mọi trích dẫn với bản gốc *Toàn tập* — đặc biệt HV-05: GT tr. 85 ghi "gánh **vác** việc chung cho dân", bài Chu Đức Tính (2020) ghi "gánh việc chung cho dân"; web đang theo giáo trình
+- [ ] HV-07 "Ngày nay": số liệu bầu cử 2026 là số sơ bộ (21/3/2026); thay số và nguồn nếu có báo cáo chính thức
 - [ ] Deploy Vercel theo `San-pham-sang-tao/web/README.md` (kết nối repo riêng tư, kiểm tra Production Branch và Deployment Protection)
-- [ ] Điền `siteUrl` trong `site.json` bằng link Vercel và thêm `og:url` trong `index.html`
+- [ ] Điền `siteUrl` trong `site.json` bằng link Vercel (og:url, og:image tự chèn khi build)
 - [ ] Nếu hiện vật nào chưa kịp hoàn thiện khi nộp: đặt `"hidden": true` (vẫn phải còn ≥ 8 hiện vật; mục 4 ưu tiên HV-02, 03, 05, 07, 08, 09, 11, 13)
 - [ ] Build lại bản offline (`npm run package:offline`) sau khi có `siteUrl` và ảnh, rồi mới nộp file zip
 - [ ] Thử bản offline trên Firefox và Edge thật (mới kiểm tra bằng Chromium headless)

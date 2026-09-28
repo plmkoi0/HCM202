@@ -1,9 +1,11 @@
 import { useEffect, useRef } from 'react'
-import { isTodo, sources } from '../../lib/data'
+import { isTodo } from '../../lib/data'
+import { referenceById } from '../../lib/sources'
 import { PILLAR_BY_ID } from '../../lib/pillars'
 import { site } from '../../lib/site'
-import type { Artifact, Reference } from '../../types'
+import type { Artifact } from '../../types'
 import ImageFrame from '../ui/ImageFrame'
+import ReferenceText from '../ui/Reference'
 import PillarChip from '../ui/PillarChip'
 import QuoteBlock from '../ui/QuoteBlock'
 import Todo from '../ui/Todo'
@@ -16,13 +18,11 @@ interface Props {
   onNext?: () => void
 }
 
-const refById = Object.fromEntries(sources.references.map((r) => [r.id, r])) as Record<string, Reference>
-
 function refLabel(id: string) {
-  const r = refById[id]
+  const r = referenceById[id]
   if (!r) return `${id} (TODO)`
   if (r.todo) return site.museum.modal.textbookTodo
-  return `${r.author}. (${r.year}). ${r.title} (${r.detail}).`
+  return <ReferenceText r={r} />
 }
 
 function Block({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {

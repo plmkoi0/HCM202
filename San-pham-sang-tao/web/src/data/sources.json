@@ -13,10 +13,123 @@
       "title": "Toàn tập",
       "detail": "Tập 1–15",
       "publisher": "Nhà xuất bản Chính trị quốc gia"
+    },
+    {
+      "id": "bqldt-48-hang-ngang",
+      "author": "Ban Quản lý di tích danh thắng Hà Nội",
+      "apa": "Ban Quản lý di tích danh thắng Hà Nội. (n.d.). *Di tích 48 phố Hàng Ngang – nơi Chủ tịch Hồ Chí Minh viết Tuyên ngôn Độc lập khai sinh nước Việt Nam Dân chủ Cộng hòa*.",
+      "url": "https://banqldtdthanoi.vn/di-tich-do-ban-quan-ly-truc-tiep/di-tich-ngoi-nha-48-hang-ngang-noi-ra-doi-tuyen-ngon-doc-lap/"
+    },
+    {
+      "id": "dcsvn-2019",
+      "author": "Báo Điện tử Đảng Cộng sản Việt Nam",
+      "apa": "Báo Điện tử Đảng Cộng sản Việt Nam. (2019, ngày 4 tháng 10). *Kỳ họp thứ nhất của Quốc hội khoá I*.",
+      "url": "https://dangcongsan.vn/tu-lieu-tham-khao-cuoc-thi-trac-nghiem-tim-hieu-90-nam-lich-su-ve-vang-cua-dang-cong-san-viet-nam/tu-lieu-90-nam-lich-su-dang/ky-hop-thu-nhat-cua-quoc-hoi-khoa-i-538108.html"
+    },
+    {
+      "id": "ct-05-2016",
+      "author": "Bộ Chính trị",
+      "apa": "Bộ Chính trị. (2016). *Chỉ thị số 05-CT/TW ngày 15/5/2016 về đẩy mạnh học tập và làm theo tư tưởng, đạo đức, phong cách Hồ Chí Minh*. Tư liệu văn kiện Đảng.",
+      "url": "https://tulieuvankien.dangcongsan.vn/he-thong-van-ban/van-ban-cua-dang/chi-thi-so-05-cttw-ngay-1552016-cua-bo-chinh-tri-ve-day-manh-hoc-tap-va-lam-theo-tu-tuong-dao-duc-phong-cach-ho-5005"
+    },
+    {
+      "id": "qd-144-2024",
+      "author": "Bộ Chính trị",
+      "apa": "Bộ Chính trị. (2024). *Quy định số 144-QĐ/TW ngày 09/5/2024 về chuẩn mực đạo đức cách mạng của cán bộ, đảng viên trong giai đoạn mới*. Tư liệu văn kiện Đảng.",
+      "url": "https://tulieuvankien.dangcongsan.vn/he-thong-van-ban/van-ban-cua-dang/quy-dinh-so-144-qdtw-ngay-0952024-cua-bo-chinh-tri-ve-chuan-muc-dao-duc-cach-mang-cua-can-bo-dang-vien-trong-giai-doan-10415"
+    },
+    {
+      "id": "chu-duc-tinh-2020",
+      "author": "Chu Đức Tính",
+      "apa": "Chu Đức Tính. (2020, ngày 3 tháng 9). \"Việc gì lợi cho dân, ta phải hết sức làm\". *Báo Nhân Dân*.",
+      "url": "https://nhandan.vn/baothoinay-chinhtri-diemnhan/viec-gi-loi-cho-dan-ta-phai-het-suc-lam-615409/"
+    },
+    {
+      "id": "sl-14-1945",
+      "author": "Chủ tịch Chính phủ lâm thời",
+      "apa": "Chủ tịch Chính phủ lâm thời. (1945). *Sắc lệnh số 14 ngày 8/9/1945 về việc mở cuộc tổng tuyển cử để bầu Quốc dân Đại hội*. Thư viện Pháp luật.",
+      "url": "https://thuvienphapluat.vn/van-ban/Bo-may-hanh-chinh/Sac-lenh-14-mo-cuoc-tong-tuyen-cu-bau-Quoc-dan-Dai-hoi-35858.aspx"
+    },
+    {
+      "id": "sl-223-1946",
+      "author": "Cổng Thông tin điện tử Chính phủ",
+      "apa": "Cổng Thông tin điện tử Chính phủ. (n.d.). *Sắc lệnh số 223 của Chủ tịch nước: Sắc lệnh ấn định hình phạt tội đưa và nhận hối lộ*.",
+      "url": "https://chinhphu.vn/default.aspx?pageid=27160&docid=6000"
+    },
+    {
+      "id": "cp-2025-hien-phap",
+      "author": "Cổng Thông tin điện tử Chính phủ",
+      "apa": "Cổng Thông tin điện tử Chính phủ. (2025a, ngày 6 tháng 5). *Hiến pháp Việt Nam qua các thời kỳ*.",
+      "url": "https://xaydungchinhsach.chinhphu.vn/hien-phap-viet-nam-qua-cac-thoi-ky-119250506164837894.htm"
+    },
+    {
+      "id": "cp-2025-vneid",
+      "author": "Cổng Thông tin điện tử Chính phủ",
+      "apa": "Cổng Thông tin điện tử Chính phủ. (2025b, ngày 29 tháng 5). *Hướng dẫn thực hiện góp ý sửa đổi, bổ sung một số điều của Hiến pháp trên VNeID*.",
+      "url": "https://xaydungchinhsach.chinhphu.vn/huong-dan-thuc-hien-gop-y-sua-doi-bo-sung-mot-so-dieu-cua-hien-phap-tren-vneid-119250507153616593.htm"
+    },
+    {
+      "id": "dang-kim-oanh-2020",
+      "author": "Đặng Kim Oanh, & Vũ Thị Ngọc Liên",
+      "apa": "Đặng Kim Oanh, & Vũ Thị Ngọc Liên. (2020, ngày 17 tháng 11). Bản yêu sách của nhân dân An Nam 100 năm với những âm hưởng hào hùng. *Tạp chí Lịch sử Đảng*.",
+      "url": "https://tapchilichsudang.vn/ban-yeu-sach-cua-nhan-dan-an-nam-100-nam-voi-nhung-am-huong-hao-hung.html"
+    },
+    {
+      "id": "infonet-2021",
+      "author": "Infonet",
+      "apa": "Infonet. (2021, ngày 9 tháng 11). 75 năm ngày ra đời bản Hiến pháp 1946, 8 năm ngày Pháp luật Việt Nam: Khẳng định quyền lực thuộc về nhân dân. *Kiểm sát Online*.",
+      "url": "https://kiemsat.vn/75-nam-ngay-ra-doi-ban-hien-phap-1946-8-nam-ngay-phap-luat-viet-nam-khang-dinh-quyen-luc-thuoc-ve-nhan-dan-62664.html"
+    },
+    {
+      "id": "nguyen-dang-luan-2007",
+      "author": "Nguyễn Đăng Luận",
+      "apa": "Nguyễn Đăng Luận. (2007, ngày 8 tháng 5). Bác Hồ và đạo luật chống tham nhũng đầu tiên. *Báo Công an Nhân dân*.",
+      "url": "https://cand.vn/Phong-su-tu-lieu/Bac-Ho-va-dao-luat-chong-tham-nhung-dau-tien-i42714"
+    },
+    {
+      "id": "nguyen-xuan-thang-2017",
+      "author": "Nguyễn Xuân Thắng",
+      "apa": "Nguyễn Xuân Thắng. (2017, ngày 1 tháng 11). 70 năm tác phẩm \"Sửa đổi lối làm việc\": Vẹn nguyên giá trị lý luận và thực tiễn. *Báo Quân khu 7*.",
+      "url": "https://baoquankhu7.vn/70-nam-tac-pham-sua-doi-loi-lam-viec-ven-nguyen-gia-tri-ly-luan-va-thuc-tien--1208799921-006142s34510gs"
+    },
+    {
+      "id": "phan-phuong-2026",
+      "author": "Phan Phương",
+      "apa": "Phan Phương. (2026, ngày 21 tháng 3). Họp báo công bố kết quả bầu cử: Tỷ lệ cử tri tham gia bỏ phiếu cao nhất từ trước đến nay. *Bnews*.",
+      "url": "https://bnews.vn/hop-bao-cong-bo-ket-qua-bau-cu-ty-le-cu-tri-tham-gia-bo-phieu-cao-nhat-tu-truoc-den-nay/414779.html"
+    },
+    {
+      "id": "hp-2013",
+      "author": "Quốc hội nước Cộng hòa xã hội chủ nghĩa Việt Nam",
+      "apa": "Quốc hội nước Cộng hòa xã hội chủ nghĩa Việt Nam. (2013). *Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam*. Thư viện Pháp luật.",
+      "url": "https://thuvienphapluat.vn/van-ban/Bo-may-hanh-chinh/Hien-phap-nam-2013-215627.aspx"
+    },
+    {
+      "id": "luat-pctn-2018",
+      "author": "Quốc hội nước Cộng hòa xã hội chủ nghĩa Việt Nam",
+      "apa": "Quốc hội nước Cộng hòa xã hội chủ nghĩa Việt Nam. (2018). *Luật Phòng, chống tham nhũng số 36/2018/QH14*. LuatVietnam.",
+      "url": "https://luatvietnam.vn/can-bo/luat-phong-chong-tham-nhung-2018-169348-d1.html"
+    },
+    {
+      "id": "hp-1946",
+      "author": "Quốc hội nước Việt Nam Dân chủ Cộng hòa",
+      "apa": "Quốc hội nước Việt Nam Dân chủ Cộng hòa. (1946). *Hiến pháp nước Việt Nam Dân chủ Cộng hòa năm 1946*. Thư viện Pháp luật.",
+      "url": "https://thuvienphapluat.vn/van-ban/Bo-may-hanh-chinh/Hien-phap-1946-Viet-Nam-Dan-Chu-Cong-Hoa-36134.aspx"
+    },
+    {
+      "id": "thu-hang-2025",
+      "author": "Thu Hằng",
+      "apa": "Thu Hằng. (2025, ngày 16 tháng 6). Quốc hội thông qua Nghị quyết sửa đổi, bổ sung một số điều của Hiến pháp. *Báo Nhân Dân*.",
+      "url": "https://nhandan.vn/quoc-hoi-thong-qua-nghi-quyet-sua-doi-bo-sung-mot-so-dieu-cua-hien-phap-post887153.html"
+    },
+    {
+      "id": "toan-thang-2025",
+      "author": "Toàn Thắng",
+      "apa": "Toàn Thắng. (2025, ngày 17 tháng 11). 80 năm Ngày truyền thống Thanh tra Việt Nam: Lực lượng nòng cốt trong đấu tranh, phòng, chống tham nhũng, tiêu cực. *Báo Điện tử Chính phủ*.",
+      "url": "https://baochinhphu.vn/80-nam-ngay-truyen-thong-thanh-tra-viet-nam-luc-luong-nong-cot-trong-dau-tranh-phong-chong-tham-nhung-tieu-cuc-102251117120525587.htm"
     }
   ],
   "todo": [
-    "TODO: nguồn cho từng ảnh",
-    "TODO: nguồn cho từng sự kiện \"cần xác minh\""
+    "TODO: nguồn cho từng ảnh"
   ]
 }

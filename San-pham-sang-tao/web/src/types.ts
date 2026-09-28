@@ -65,6 +65,9 @@ export interface Reference {
   title?: string
   detail?: string
   publisher?: string
+  /** Nguồn web: chuỗi APA7 đầy đủ (không gồm URL); *…* là chữ nghiêng */
+  apa?: string
+  url?: string
 }
 
 export interface SourcesData {
