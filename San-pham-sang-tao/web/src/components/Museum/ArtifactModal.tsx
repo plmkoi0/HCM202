@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { isTodo, sources } from '../../lib/data'
 import { PILLAR_BY_ID } from '../../lib/pillars'
+import { site } from '../../lib/site'
 import type { Artifact, Reference } from '../../types'
 import ImageFrame from '../ui/ImageFrame'
 import PillarChip from '../ui/PillarChip'
@@ -20,7 +21,7 @@ const refById = Object.fromEntries(sources.references.map((r) => [r.id, r])) as 
 function refLabel(id: string) {
   const r = refById[id]
   if (!r) return `${id} (TODO)`
-  if (r.todo) return 'Giáo trình HCM202 (TODO: thông tin xuất bản)'
+  if (r.todo) return site.museum.modal.textbookTodo
   return `${r.author}. (${r.year}). ${r.title} (${r.detail}).`
 }
 
@@ -38,6 +39,8 @@ function Block({ n, title, children }: { n: string; title: string; children: Rea
 
 /** Cửa sổ chi tiết hiện vật gồm 3 khối: Câu chuyện · Bác nói gì · Ngày nay. */
 export default function ArtifactModal({ artifact: a, onClose, onPrev, onNext }: Props) {
+  const ui = site.museum.modal
+  const todo = site.museum.todo
   const ref = useRef<HTMLDialogElement>(null)
 
   useEffect(() => {
@@ -84,9 +87,9 @@ export default function ArtifactModal({ artifact: a, onClose, onPrev, onNext }: 
               type="button"
               onClick={() => ref.current?.close()}
               className="rounded px-2 py-1 text-sm font-semibold hover:bg-line"
-              aria-label="Đóng"
+              aria-label={ui.closeAria}
             >
-              Đóng ✕
+              {ui.close}
             </button>
           </header>
 
@@ -106,34 +109,34 @@ export default function ArtifactModal({ artifact: a, onClose, onPrev, onNext }: 
             </div>
 
             <div className="mt-6 space-y-6">
-              <Block n="01" title="Câu chuyện">
-                {isTodo(a.story) ? <Todo note="Câu chuyện (tối đa 80 chữ)." /> : <p>{a.story}</p>}
+              <Block n="01" title={ui.story}>
+                {isTodo(a.story) ? <Todo note={todo.story} /> : <p>{a.story}</p>}
               </Block>
 
-              <Block n="02" title="Bác nói gì">
+              <Block n="02" title={ui.quote}>
                 {a.quote ? (
                   <>
                     <QuoteBlock quote={a.quote} />
                     {a.quoteNote && !isTodo(a.quoteNote) && <p className="mt-3 text-sm">{a.quoteNote}</p>}
                   </>
                 ) : (
-                  <Todo note={a.quoteNote?.replace(/^TODO:?\s*/, '') ?? 'Câu nói của Bác.'} />
+                  <Todo note={a.quoteNote?.replace(/^TODO:?\s*/, '') ?? todo.quote} />
                 )}
               </Block>
 
-              <Block n="03" title="Ngày nay">
-                {isTodo(a.today) ? <Todo note="Phần “Ngày nay” (tối đa 60 chữ, có nguồn)." /> : <p>{a.today}</p>}
+              <Block n="03" title={ui.today}>
+                {isTodo(a.today) ? <Todo note={todo.today} /> : <p>{a.today}</p>}
                 {a.todayPrompt && <p className="mt-3 font-serif text-lg italic">{a.todayPrompt}</p>}
               </Block>
             </div>
 
             <footer className="mt-8 space-y-2 border-t border-line pt-4 text-xs text-ink-soft">
               <p>
-                <span className="font-semibold">Nguồn sự kiện:</span> {a.eventSource}
+                <span className="font-semibold">{ui.eventSource}:</span> {a.eventSource}
               </p>
               {a.sourceIds.length > 0 && (
                 <div>
-                  <span className="font-semibold">Tài liệu:</span>
+                  <span className="font-semibold">{ui.sources}:</span>
                   <ul className="mt-1 list-disc pl-5">
                     {a.sourceIds.map((id) => (
                       <li key={id}>{refLabel(id)}</li>
@@ -144,14 +147,14 @@ export default function ArtifactModal({ artifact: a, onClose, onPrev, onNext }: 
             </footer>
           </div>
 
-          <nav aria-label="Chuyển hiện vật" className="flex justify-between gap-2 border-t border-line px-4 py-3 sm:px-6">
+          <nav aria-label={ui.navAria} className="flex justify-between gap-2 border-t border-line px-4 py-3 sm:px-6">
             <button
               type="button"
               onClick={onPrev}
               disabled={!onPrev}
               className="rounded px-3 py-2 text-sm font-semibold hover:bg-line disabled:opacity-40 disabled:hover:bg-transparent"
             >
-              ← Trước
+              {ui.prev}
             </button>
             <button
               type="button"
@@ -159,7 +162,7 @@ export default function ArtifactModal({ artifact: a, onClose, onPrev, onNext }: 
               disabled={!onNext}
               className="rounded px-3 py-2 text-sm font-semibold hover:bg-line disabled:opacity-40 disabled:hover:bg-transparent"
             >
-              Sau →
+              {ui.next}
             </button>
           </nav>
         </div>

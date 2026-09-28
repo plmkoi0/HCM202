@@ -1,3 +1,4 @@
+import { site } from '../../lib/site'
 import { useReveal } from '../../lib/useReveal'
 import type { Artifact } from '../../types'
 import { PILLAR_BORDER, PILLAR_TEXT } from '../../lib/pillarStyles'
@@ -25,7 +26,8 @@ export default function ArtifactCard({ artifact: a, seen, onOpen }: Props) {
           <span className="font-mono text-xs tracking-wider text-ink-soft">{a.id}</span>
           {seen && (
             <span className="text-xs font-medium text-ink-soft">
-              <span aria-hidden="true">✓ </span>Đã xem
+              <span aria-hidden="true">✓ </span>
+              {site.museum.cardSeen}
             </span>
           )}
         </span>
@@ -37,7 +39,7 @@ export default function ArtifactCard({ artifact: a, seen, onOpen }: Props) {
         </span>
         <span className="mt-2 block font-serif text-lg leading-snug font-semibold group-hover:underline">{a.title}</span>
         {a.subtitle && <span className="mt-1 block text-sm text-ink-soft">{a.subtitle}</span>}
-        <span className="mt-3 block text-sm font-medium text-son-text">Xem hiện vật →</span>
+        <span className="mt-3 block text-sm font-medium text-son-text">{site.museum.cardOpen}</span>
       </button>
     </div>
   )

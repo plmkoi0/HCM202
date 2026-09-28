@@ -1,5 +1,14 @@
 {
   "name": "Của dân · Do dân · Vì dân — Bảo tàng số",
+  "skipLink": "Bỏ qua tới Bảo tàng",
+  "nav": {
+    "ariaLabel": "Điều hướng chính",
+    "brand": "Bảo tàng số",
+    "museum": "Bảo tàng",
+    "quiz": "Quiz",
+    "sources": "Nguồn",
+    "team": "Nhóm"
+  },
   "hero": {
     "eyebrow": "Bảo tàng số",
     "stampLines": [
@@ -12,16 +21,64 @@
     "ctaQuiz": "Làm quiz ngay"
   },
   "intro": {
+    "ariaLabel": "Lời dẫn",
     "quote": {
       "text": "Trong Nhà nước Việt Nam Dân chủ Cộng hòa của chúng ta, tất cả mọi quyền lực đều là của nhân dân",
       "cite": "Hồ Chí Minh, 2011, t.8, tr.262"
     },
-    "paragraph": "TODO"
+    "paragraph": "TODO",
+    "todoNote": "Đoạn lời dẫn ngắn."
   },
   "bridge": {
+    "ariaLabel": "Cầu nối",
     "text": "Bác đã trao quyền làm chủ. Còn bạn dùng nó thế nào?",
     "cta": "Bắt đầu quiz"
   },
+  "pillars": {
+    "dan-chu": {
+      "label": "Dân chủ",
+      "name": "Nhà nước dân chủ"
+    },
+    "phap-quyen": {
+      "label": "Pháp quyền",
+      "name": "Nhà nước pháp quyền"
+    },
+    "trong-sach": {
+      "label": "Trong sạch",
+      "name": "Nhà nước trong sạch, vững mạnh"
+    }
+  },
+  "museum": {
+    "title": "Bảo tàng số",
+    "filterAria": "Lọc theo trụ cột",
+    "filterAll": "Tất cả",
+    "progress": "Bạn đã xem {x}/{n} hiện vật",
+    "cardOpen": "Xem hiện vật →",
+    "cardSeen": "Đã xem",
+    "verifyBadge": "[Chờ xác minh]",
+    "verifyTitle": "Sự kiện này đang chờ nhóm đối chiếu với nguồn chính thống",
+    "imagePlaceholder": "Ảnh tư liệu — đang bổ sung",
+    "imageCredit": "Nguồn ảnh:",
+    "modal": {
+      "close": "Đóng ✕",
+      "closeAria": "Đóng",
+      "navAria": "Chuyển hiện vật",
+      "prev": "← Trước",
+      "next": "Sau →",
+      "story": "Câu chuyện",
+      "quote": "Bác nói gì",
+      "today": "Ngày nay",
+      "eventSource": "Nguồn sự kiện",
+      "sources": "Tài liệu",
+      "textbookTodo": "Giáo trình HCM202 (TODO: thông tin xuất bản)"
+    },
+    "todo": {
+      "story": "Câu chuyện (tối đa 80 chữ).",
+      "quote": "Câu nói của Bác.",
+      "today": "Phần “Ngày nay” (tối đa 60 chữ, có nguồn)."
+    }
+  },
+  "todoDefault": "Nhóm đang bổ sung nội dung.",
   "footer": "Sản phẩm sáng tạo HCM202 — Chủ đề 4: Tư tưởng Hồ Chí Minh về Nhà nước của nhân dân, do nhân dân, vì nhân dân.",
   "quiz": {
     "title": "Bạn là công dân kiểu gì?",

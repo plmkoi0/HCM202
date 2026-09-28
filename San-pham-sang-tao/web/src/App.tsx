@@ -21,7 +21,7 @@ export default function App() {
           href="#bao-tang"
           className="sr-only z-50 bg-ink px-3 py-2 text-paper focus:not-sr-only focus:fixed focus:top-2 focus:left-2"
         >
-          Bỏ qua tới Bảo tàng
+          {site.skipLink}
         </a>
         <Nav />
         <main>

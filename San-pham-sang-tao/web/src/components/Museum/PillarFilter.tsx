@@ -1,4 +1,5 @@
 import { PILLARS } from '../../lib/pillars'
+import { site } from '../../lib/site'
 import type { Artifact, PillarId } from '../../types'
 import { PILLAR_CHIP } from '../../lib/pillarStyles'
 
@@ -12,7 +13,7 @@ interface Props {
 
 export default function PillarFilter({ value, onChange, artifacts }: Props) {
   const options: { id: Filter; label: string; count: number }[] = [
-    { id: 'all', label: 'Tất cả', count: artifacts.length },
+    { id: 'all', label: site.museum.filterAll, count: artifacts.length },
     ...PILLARS.map((p) => ({ id: p.id, label: p.label, count: artifacts.filter((a) => a.pillar === p.id).length })),
   ]
   return (
@@ -20,7 +21,7 @@ export default function PillarFilter({ value, onChange, artifacts }: Props) {
     // py-1 chừa chỗ cho viền focus, vì khung cuộn cắt phần tràn theo chiều dọc.
     <div
       role="group"
-      aria-label="Lọc theo trụ cột"
+      aria-label={site.museum.filterAria}
       className="-mx-4 flex gap-2 overflow-x-auto px-4 py-1 [scrollbar-width:none] md:mx-0 md:flex-wrap md:overflow-visible md:px-0 [&::-webkit-scrollbar]:hidden"
     >
       {options.map((o) => {

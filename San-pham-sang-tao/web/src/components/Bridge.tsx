@@ -4,7 +4,7 @@ import { site } from '../lib/site'
 export default function Bridge() {
   const { bridge } = site
   return (
-    <section aria-label="Cầu nối" className="px-4 py-20">
+    <section aria-label={bridge.ariaLabel} className="px-4 py-20">
       <div className="mx-auto max-w-3xl text-center">
         <p className="font-serif text-2xl leading-snug sm:text-3xl">{bridge.text}</p>
         <a

@@ -1,5 +1,6 @@
 import publicImages from 'virtual:public-images'
 import { isTodo } from '../../lib/data'
+import { site } from '../../lib/site'
 import type { Artifact } from '../../types'
 
 /** Ảnh tư liệu, hoặc khung SVG giữ chỗ khi nhóm chưa cung cấp ảnh (mục 4). */
@@ -16,19 +17,19 @@ export default function ImageFrame({ image }: { image: Artifact['image'] }) {
           loading="lazy"
         />
         <figcaption className="mt-1 text-xs text-ink-soft">
-          Nguồn ảnh: {isTodo(image.credit) ? 'TODO' : image.credit}
+          {site.museum.imageCredit} {isTodo(image.credit) ? 'TODO' : image.credit}
         </figcaption>
       </figure>
     )
   }
   return (
-    <figure role="img" aria-label="Ảnh tư liệu — đang bổ sung">
+    <figure role="img" aria-label={site.museum.imagePlaceholder}>
       <svg viewBox="0 0 320 180" className="w-full text-ink-soft" aria-hidden="true">
         <rect x="4" y="4" width="312" height="172" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="6 5" rx="3" />
         <path d="M130 108l22-26 18 20 12-12 22 18z" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
         <circle cx="192" cy="70" r="7" fill="none" stroke="currentColor" strokeWidth="1.5" />
         <text x="160" y="140" textAnchor="middle" fontSize="13" fill="currentColor" fontFamily="Be Vietnam Pro, system-ui, sans-serif">
-          Ảnh tư liệu — đang bổ sung
+          {site.museum.imagePlaceholder}
         </text>
       </svg>
     </figure>

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useArtifactViewer } from '../../lib/artifactViewer'
 import { artifacts } from '../../lib/data'
+import { site } from '../../lib/site'
 import PillarFilter, { type Filter } from './PillarFilter'
 import ProgressBar from './ProgressBar'
 import Timeline from './Timeline'
@@ -19,7 +20,7 @@ export default function Museum() {
     <section id="bao-tang" aria-labelledby="museum-title" className="px-4 py-16">
       <div className="mx-auto max-w-5xl">
         <h2 id="museum-title" className="text-3xl font-bold sm:text-4xl">
-          Bảo tàng số
+          {site.museum.title}
         </h2>
 
         <div className="sticky top-14 z-30 -mx-4 mt-6 border-b border-line bg-paper/95 px-4 py-1.5 backdrop-blur md:py-3">
