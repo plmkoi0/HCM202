@@ -21,7 +21,7 @@ function refLabel(id: string) {
   const r = refById[id]
   if (!r) return `${id} (TODO)`
   if (r.todo) return 'Giáo trình HCM202 (TODO: thông tin xuất bản)'
-  return `${r.author} (${r.year}). ${r.title}, ${r.detail}.`
+  return `${r.author}. (${r.year}). ${r.title} (${r.detail}).`
 }
 
 function Block({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {

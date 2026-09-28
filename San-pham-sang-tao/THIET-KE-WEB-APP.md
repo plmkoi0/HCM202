@@ -292,7 +292,7 @@ San-pham-sang-tao/
   "quote": { "text": "…", "cite": "Hồ Chí Minh, 2011, t.9, tr.258" },
   "quoteNote": "…",
   "today": "TODO",
-  "sourceIds": ["hcm-tt-9", "giao-trinh"],
+  "sourceIds": ["hcm-tt", "giao-trinh"],
   "verified": false,
   "hidden": false
 }
@@ -315,12 +315,12 @@ Trường tùy chọn `hidden` (phương án dự phòng khi nộp): đặt `"hi
 
 ## 9. Nguồn tham khảo (APA7) — dữ liệu ban đầu
 
-- Hồ Chí Minh. (2011). *Toàn tập* (Tập 1). Nhà xuất bản Chính trị quốc gia.
-- Tương tự cho các tập 4, 5, 6, 7, 8, 9, 10, 12, 15.
+- Hồ Chí Minh. (2011). *Toàn tập* (Tập 1–15). Nhà xuất bản Chính trị quốc gia.
+  - Một mục chung cho bộ nhiều tập (id `hcm-tt` trong `sources.json`); không tách từng tập.
 - `TODO (nhóm điền)`: [Tác giả/Đơn vị biên soạn]. ([Năm]). *[Tên giáo trình Tư tưởng Hồ Chí Minh]* (tr. 72–98). [Nhà xuất bản/Trường].
 - `TODO`: nguồn cho từng ảnh và từng sự kiện "cần xác minh".
 
-Trích dẫn trong bài viết theo dạng: (Hồ Chí Minh, 2011, t.4, tr.64–65).
+Trích dẫn trong bài viết vẫn ghi số tập và số trang, theo dạng: (Hồ Chí Minh, 2011, t.4, tr.64–65).
 
 ---
 

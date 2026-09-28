@@ -100,6 +100,7 @@ Kiểm tra: `npm run test && npm run build && npm run build:offline && npm run l
 - Chữ giao diện (tiêu đề, nút, thông báo) nằm trong `site.json`; câu hỏi, kiểu công dân, `closing` trong `quiz.json`.
 - `site.json` → `siteUrl` đang là `TODO` (điền link Vercel sau khi deploy). Link chia sẻ và mã QR = `siteUrl + ?kq=X`.
   Khi còn `TODO`: bản online dùng địa chỉ đang mở; bản offline khóa nút "Sao chép link" và thẻ PNG không có mã QR.
+- `sources.json`: *Toàn tập* là một mục APA7 chung cho bộ nhiều tập (`hcm-tt`, Tập 1–15); trích dẫn trong bài vẫn ghi tập và trang (vd. t.4, tr.64–65).
 - `mindmap.json` chép nguyên mục 2 tài liệu thiết kế; lưu ý thiếu tr. 92–93 nằm ở `todo` của trụ cột 3.
 - `team.json` đang để `{"members": []}` (tạm hoãn) nên mục Nhóm bị ẩn.
 - Tỉ lệ phần trăm tính bằng phương pháp phần dư lớn nhất (phần dư bằng nhau thì theo `tieBreak`), nên tổng luôn bằng 100%; có test duyệt đủ 165 tổ hợp 8 câu.
