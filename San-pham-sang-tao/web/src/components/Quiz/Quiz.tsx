@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { quiz } from '../../lib/data'
 import { scrollToEl } from '../../lib/format'
+import { useQuizStartRequest } from '../../lib/quizStart'
 import { isTypeId, score } from '../../lib/scoring'
 import { site } from '../../lib/site'
 import type { CitizenTypeId } from '../../types'
@@ -41,7 +42,7 @@ export default function Quiz() {
     if (sharedId) requestAnimationFrame(() => scrollToEl(sectionRef.current))
   }, [sharedId])
 
-  const start = () => {
+  const start = useCallback(() => {
     if (sharedId) {
       // Bỏ ?kq khỏi địa chỉ để làm lại không mở lại kết quả cũ
       try {
@@ -57,7 +58,18 @@ export default function Quiz() {
     setIdx(0)
     setPhase('play')
     scrollToEl(sectionRef.current)
-  }
+  }, [sharedId])
+
+  // "Làm quiz ngay" (hero) và "Bắt đầu quiz" (cầu nối): vào thẳng câu 1.
+  // Đang làm dở thì chỉ cuộn tới, không xóa câu trả lời.
+  useQuizStartRequest(
+    useCallback(() => {
+      if (phase === 'play') {
+        scrollToEl(sectionRef.current)
+        sectionRef.current?.querySelector<HTMLElement>('h3[tabindex]')?.focus({ preventScroll: true })
+      } else start()
+    }, [phase, start]),
+  )
 
   const choose = (t: CitizenTypeId) => {
     const next = [...answers]

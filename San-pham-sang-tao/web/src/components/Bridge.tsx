@@ -1,3 +1,4 @@
+import { requestQuizStart } from '../lib/quizStart'
 import { site } from '../lib/site'
 
 export default function Bridge() {
@@ -8,6 +9,10 @@ export default function Bridge() {
         <p className="font-serif text-2xl leading-snug sm:text-3xl">{bridge.text}</p>
         <a
           href="#quiz"
+          onClick={(e) => {
+            e.preventDefault()
+            requestQuizStart()
+          }}
           className="mt-8 inline-block rounded-sm bg-son px-6 py-3 font-semibold text-on-son shadow-sm transition hover:brightness-110"
         >
           {bridge.cta} →

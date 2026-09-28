@@ -1,3 +1,4 @@
+import { requestQuizStart } from '../lib/quizStart'
 import { site } from '../lib/site'
 
 export default function Hero() {
@@ -26,6 +27,10 @@ export default function Hero() {
           </a>
           <a
             href="#quiz"
+            onClick={(e) => {
+              e.preventDefault()
+              requestQuizStart()
+            }}
             className="rounded-sm border-2 border-ink px-6 py-3 font-semibold transition hover:bg-ink hover:text-paper"
           >
             {hero.ctaQuiz}
