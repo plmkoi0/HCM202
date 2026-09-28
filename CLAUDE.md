@@ -101,7 +101,7 @@ Kiểm tra: `npm run test && npm run build && npm run build:offline && npm run l
   Khi còn `TODO`: bản online dùng địa chỉ đang mở; bản offline khóa nút "Sao chép link" và thẻ PNG không có mã QR.
 - `mindmap.json` chép nguyên mục 2 tài liệu thiết kế; lưu ý thiếu tr. 92–93 nằm ở `todo` của trụ cột 3.
 - `team.json` đang để `{"members": []}` (tạm hoãn) nên mục Nhóm bị ẩn.
-- Tỉ lệ phần trăm làm tròn từng kiểu nên tổng có thể là 99–101%.
+- Tỉ lệ phần trăm tính bằng phương pháp phần dư lớn nhất (phần dư bằng nhau thì theo `tieBreak`), nên tổng luôn bằng 100%; có test duyệt đủ 165 tổ hợp 8 câu.
 - Font tự host trong `src/assets/fonts` (không dùng Google Fonts) để html-to-image nhúng được font vào thẻ PNG. Noto Serif: 400, 400 nghiêng, 600, 700, 700 nghiêng, 800. Be Vietnam Pro: 400, 400 nghiêng, 500, 600, 700. Thêm weight mới thì cập nhật `fonts.css`.
 - Ảnh hiện vật: đặt trong `public/images/…`, `image.src` ghi đường dẫn tương đối (vd. `images/artifacts/HV-07.jpg`). Bản offline tự nhúng base64 mọi ảnh trong `public/images`.
 - Màu chữ vàng đồng dùng `#7A5A17` (nền sáng) để đạt WCAG AA; `#B8892B` giữ cho nền nhãn, đường kẻ.

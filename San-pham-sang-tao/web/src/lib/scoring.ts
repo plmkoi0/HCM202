@@ -4,7 +4,7 @@ export const TYPE_IDS: CitizenTypeId[] = ['A', 'B', 'C', 'D']
 
 export interface ScoreResult {
   counts: Record<CitizenTypeId, number>
-  /** Tỉ lệ phần trăm (làm tròn) của từng kiểu */
+  /** Tỉ lệ phần trăm nguyên của từng kiểu; tổng luôn bằng 100 (khi có câu trả lời) */
   percents: Record<CitizenTypeId, number>
   winner: CitizenTypeId
 }
@@ -21,12 +21,32 @@ export function score(answers: CitizenTypeId[], tieBreak: CitizenTypeId[]): Scor
   const order = [...tieBreak, ...TYPE_IDS.filter((t) => !tieBreak.includes(t))]
   const winner = order.find((t) => counts[t] === max)!
 
-  const total = answers.length
-  const percents = Object.fromEntries(
-    TYPE_IDS.map((t) => [t, total ? Math.round((counts[t] / total) * 100) : 0]),
-  ) as Record<CitizenTypeId, number>
+  return { counts, percents: toPercents(counts, answers.length, order), winner }
+}
 
-  return { counts, percents, winner }
+/**
+ * Phương pháp phần dư lớn nhất: lấy phần nguyên của từng tỉ lệ, rồi chia phần
+ * còn thiếu (để đủ 100) cho các kiểu có phần dư lớn nhất. Phần dư bằng nhau thì
+ * ưu tiên theo thứ tự `order` (tieBreak).
+ */
+function toPercents(
+  counts: Record<CitizenTypeId, number>,
+  total: number,
+  order: CitizenTypeId[],
+): Record<CitizenTypeId, number> {
+  const percents: Record<CitizenTypeId, number> = { A: 0, B: 0, C: 0, D: 0 }
+  if (!total) return percents
+
+  // Dùng số nguyên để tránh sai số dấu phẩy động: count*100 = floor*total + remainder
+  const remainder = {} as Record<CitizenTypeId, number>
+  for (const t of TYPE_IDS) {
+    percents[t] = Math.floor((counts[t] * 100) / total)
+    remainder[t] = (counts[t] * 100) % total
+  }
+  const missing = 100 - TYPE_IDS.reduce((sum, t) => sum + percents[t], 0)
+  const byRemainder = [...order].sort((a, b) => remainder[b] - remainder[a])
+  for (const t of byRemainder.slice(0, missing)) percents[t] += 1
+  return percents
 }
 
 export function isTypeId(v: unknown): v is CitizenTypeId {
