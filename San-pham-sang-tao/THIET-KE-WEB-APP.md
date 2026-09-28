@@ -293,10 +293,13 @@ San-pham-sang-tao/
   "quoteNote": "…",
   "today": "TODO",
   "sourceIds": ["hcm-tt-9", "giao-trinh"],
-  "verified": false
+  "verified": false,
+  "hidden": false
 }
 ```
 Khi `verified: false`, phiếu hiện vật hiển thị nhãn nhỏ `[Chờ xác minh]`.
+
+Trường tùy chọn `hidden` (phương án dự phòng khi nộp): đặt `"hidden": true` để tạm ẩn hiện vật chưa sẵn sàng. Bỏ trường này hoặc để `false` thì hiện vật hiển thị bình thường. Mặc định không ẩn hiện vật nào. Hiện vật ẩn không xuất hiện ở dòng thời gian, số đếm của bộ lọc, tổng tiến độ, nút Trước/Sau và chip "Hiện vật liên quan". Tiến độ "đã xem" chỉ đếm hiện vật đang hiển thị. Lúc nộp vẫn phải còn tối thiểu 8 hiện vật hiển thị (mục 4).
 
 `quiz.json`:
 ```json

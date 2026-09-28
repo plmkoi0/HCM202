@@ -27,6 +27,7 @@ npm run package:offline  # build offline + nén dist-offline/HCM202-San-pham-san
 
 - Trường còn thiếu ghi `TODO`. Web hiển thị các trường này dưới dạng "đang bổ sung".
 - Hiện vật có `"verified": false` hiện nhãn **[Chờ xác minh]**. Đổi thành `true` sau khi nhóm xác minh và ghi nguồn.
+- **Ẩn hiện vật chưa sẵn sàng** (phương án dự phòng khi nộp): thêm `"hidden": true` vào hiện vật đó trong `artifacts.json`, rồi build lại. Hiện vật ẩn biến mất khỏi dòng thời gian, số đếm bộ lọc, tổng tiến độ, nút Trước/Sau và chip "Hiện vật liên quan" của quiz. Xóa trường này (hoặc đặt `false`) để hiện lại. Phải còn tối thiểu 8 hiện vật hiển thị; `npm run test` sẽ báo lỗi nếu ít hơn.
 - `team.json` rỗng thì mục "Nhóm" tự ẩn.
 - Ảnh: đặt vào `public/images/artifacts/HV-xx.jpg`, rồi điền `image.src` = `"images/artifacts/HV-xx.jpg"`, `image.alt` và `image.credit`. Khi `src` rỗng, web dùng khung giữ chỗ "Ảnh tư liệu — đang bổ sung".
 

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { ArtifactViewerContext } from '../../lib/artifactViewer'
-import { artifacts } from '../../lib/data'
+import { artifacts, isVisibleArtifact } from '../../lib/data'
 import ArtifactModal from './ArtifactModal'
 
 const STORAGE_KEY = 'hcm202.viewed'
@@ -8,7 +8,9 @@ const STORAGE_KEY = 'hcm202.viewed'
 function loadSeen(): Set<string> {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    return new Set(raw ? (JSON.parse(raw) as string[]) : [])
+    const ids = raw ? (JSON.parse(raw) as unknown) : []
+    // Chỉ giữ id của hiện vật đang hiển thị; id cũ/ẩn bị bỏ và ghi đè khi lưu lại
+    return new Set(Array.isArray(ids) ? ids.filter((id): id is string => typeof id === 'string' && isVisibleArtifact(id)) : [])
   } catch {
     return new Set()
   }
@@ -21,8 +23,9 @@ export default function ArtifactViewerProvider({ children }: { children: ReactNo
   const [seen, setSeen] = useState<Set<string>>(loadSeen)
 
   const open = useCallback((id: string, nextList?: string[]) => {
+    if (!isVisibleArtifact(id)) return
     setOpenId(id)
-    if (nextList) setList(nextList)
+    if (nextList) setList(nextList.filter(isVisibleArtifact))
     setSeen((prev) => (prev.has(id) ? prev : new Set(prev).add(id)))
   }, [])
   const close = useCallback(() => setOpenId(null), [])

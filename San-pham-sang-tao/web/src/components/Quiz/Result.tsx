@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useArtifactViewer } from '../../lib/artifactViewer'
-import { artifacts, quiz } from '../../lib/data'
+import { artifacts, isVisibleArtifact, quiz } from '../../lib/data'
 import { score, TYPE_IDS } from '../../lib/scoring'
 import { site } from '../../lib/site'
 import type { CitizenTypeId } from '../../types'
@@ -25,6 +25,7 @@ export default function Result({ typeId, answers, onRetry, retryLabel, eyebrow, 
   const [showReview, setShowReview] = useState(false)
   const headingRef = useRef<HTMLHeadingElement>(null)
   const result = answers ? score(answers, quiz.tieBreak) : null
+  const related = type.relatedArtifacts.filter(isVisibleArtifact)
 
   useEffect(() => {
     headingRef.current?.focus({ preventScroll: true })
@@ -78,24 +79,28 @@ export default function Result({ typeId, answers, onRetry, retryLabel, eyebrow, 
         </>
       )}
 
-      <h4 className="mt-8 text-lg font-bold">{ui.relatedTitle}</h4>
-      <ul className="mt-3 flex flex-wrap gap-2">
-        {type.relatedArtifacts.map((id) => {
-          const a = artifacts.find((x) => x.id === id)
-          return (
-            <li key={id}>
-              <button
-                type="button"
-                aria-haspopup="dialog"
-                onClick={() => open(id, type.relatedArtifacts)}
-                className="rounded-full border border-line bg-card px-3 py-1.5 text-sm hover:border-ink"
-              >
-                <span className="font-mono text-xs text-ink-soft">{id}</span> {a?.title ?? 'TODO'}
-              </button>
-            </li>
-          )
-        })}
-      </ul>
+      {related.length > 0 && (
+        <>
+          <h4 className="mt-8 text-lg font-bold">{ui.relatedTitle}</h4>
+          <ul className="mt-3 flex flex-wrap gap-2">
+            {related.map((id) => {
+              const a = artifacts.find((x) => x.id === id)
+              return (
+                <li key={id}>
+                  <button
+                    type="button"
+                    aria-haspopup="dialog"
+                    onClick={() => open(id, related)}
+                    className="rounded-full border border-line bg-card px-3 py-1.5 text-sm hover:border-ink"
+                  >
+                    <span className="font-mono text-xs text-ink-soft">{id}</span> {a?.title ?? 'TODO'}
+                  </button>
+                </li>
+              )
+            })}
+          </ul>
+        </>
+      )}
 
       <p className="mt-10 border-y border-line py-6 text-center font-serif text-2xl font-bold italic">{quiz.closing}</p>
 

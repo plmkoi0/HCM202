@@ -26,6 +26,8 @@ export interface Artifact {
   eventSource: string
   sourceIds: string[]
   verified: boolean
+  /** true: ẩn khỏi web (dòng thời gian, bộ lọc, tiến độ, Trước/Sau, chip liên quan) */
+  hidden?: boolean
 }
 
 export type CitizenTypeId = 'A' | 'B' | 'C' | 'D'

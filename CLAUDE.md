@@ -95,6 +95,7 @@ Kiểm tra: `npm run test && npm run build && npm run build:offline && npm run l
 - `verified: true` chỉ đặt cho hiện vật có cột "Nguồn sự kiện" chỉ ghi GT (HV-03, HV-07, HV-12, HV-13). Các hiện vật còn lại có mục "cần xác minh" nên để `false`.
 - `eventSource` chép nguyên cột "Nguồn sự kiện" để nhóm biết cần xác minh gì.
 - `quote.lead` là phần dẫn nằm ngoài ngoặc kép (vd. HV-05, kiểu A). `quote.paraphrase: true` là tóm ý, không phải trích nguyên văn (HV-13).
+- `hidden: true` (tùy chọn, mặc định không ẩn hiện vật nào) ẩn hiện vật khỏi dòng thời gian, số đếm bộ lọc, tổng tiến độ, nút Trước/Sau và chip "Hiện vật liên quan". Lọc một lần ở `lib/data.ts` (`artifacts` chỉ gồm hiện vật đang hiển thị, `isVisibleArtifact`). Tiến độ "đã xem" chỉ giữ id đang hiển thị (id cũ trong localStorage bị bỏ). Test `data.test.ts` yêu cầu tối thiểu 8 hiện vật hiển thị (mục 4).
 - Nhãn `[Chờ xác minh]` hiện trên phiếu và cửa sổ chi tiết khi `verified: false`. Trường `TODO` hiện thành ô viền đứt "TODO".
 - Chữ giao diện (tiêu đề, nút, thông báo) nằm trong `site.json`; câu hỏi, kiểu công dân, `closing` trong `quiz.json`.
 - `site.json` → `siteUrl` đang là `TODO` (điền link Vercel sau khi deploy). Link chia sẻ và mã QR = `siteUrl + ?kq=X`.
