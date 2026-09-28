@@ -54,7 +54,8 @@ HCM202/
             ├── lib/                 ← data, site, pillars, pillarStyles, useReveal,
             │                          artifactViewer (context mở modal theo id), format,
             │                          scoring (+ scoring.test.ts), share (siteUrl, khổ thẻ, sao chép),
-            │                          offline (cờ OFFLINE)
+            │                          offline (cờ OFFLINE), quizStart (nút ngoài vào thẳng câu 1),
+            │                          data.test.ts (ẩn hiện vật, tối thiểu 8 hiện vật hiển thị)
             ├── vite-env.d.ts        ← kiểu cho VITE_OFFLINE và virtual:public-images
             ├── types.ts             ← kiểu dữ liệu cho các file JSON
             ├── index.css            ← màu, phiếu răng cưa, con dấu, hiệu ứng (mục 7)
@@ -90,6 +91,14 @@ Kiểm tra: `npm run test && npm run build && npm run build:offline && npm run l
   - Bản online: cấu hình Vercel không liệt kê công khai (`vercel.json`, meta robots, `robots.txt`)
   - Bản offline một file (`build:offline`, `package:offline`): đã kiểm tra bằng Chromium headless qua file:// khi chặn mạng — không có request, không lỗi console, bảo tàng, quiz, `?kq=B`, tải thẻ PNG có dấu đúng; index.html ≈ 0,71 MB
   - Đã kiểm tra giao diện 360px và 1440px cho cả hai bản
+- [x] **Rà soát sau M5**
+  - Ghi chú ngữ cảnh (`quoteNote`) cho HV-02, 06, 07, 08, 09, 10 và nguồn giáo trình, lấy từ giáo trình (nhóm đã đối chiếu PDF); cột "Ghi chú ngữ cảnh" ở bảng mục 4 tài liệu thiết kế
+  - Tỉ lệ phần trăm luôn đủ 100% (phần dư lớn nhất)
+  - Bộ lọc dính trên điện thoại: một hàng cuộn ngang, khối dính cao 77px ở 360px
+  - Trường `hidden` để ẩn hiện vật chưa sẵn sàng (mặc định không ẩn); đã thử với HV-04 rồi trả lại
+  - *Toàn tập* gộp một mục APA7 (`hcm-tt`, Tập 1–15)
+  - "Làm quiz ngay" (hero) và "Bắt đầu quiz" (cầu nối) vào thẳng câu 1; đang làm dở thì chỉ cuộn tới
+  - Chữ giao diện còn viết cứng đã chuyển vào `site.json`
 
 ## Ghi chú dữ liệu
 - `verified: true` chỉ đặt cho hiện vật có cột "Nguồn sự kiện" chỉ ghi GT (HV-03, HV-07, HV-12, HV-13). Các hiện vật còn lại có mục "cần xác minh" nên để `false`.
@@ -115,12 +124,13 @@ Kiểm tra: `npm run test && npm run build && npm run build:offline && npm run l
 - [ ] "Ngày nay" cho 13 hiện vật (HV-07 có sẵn câu hỏi gợi mở)
 - [ ] Xác minh và ghi nguồn APA7 cho mục "cần xác minh": HV-01, 02, 04, 05, 06, 08, 09, 10, 11
 - [ ] HV-04: chọn dùng lại trích dẫn HV-03 hay để trống
-- [ ] HV-12 (Hiến pháp 1959, Lời nói đầu) và HV-13 (tóm ý, GT tr.82) chưa có số tập/số trang *Toàn tập*; cần nguồn APA7 cho Hiến pháp 1959
+- [ ] HV-13 (tóm ý, GT tr.82) chưa có số tập/số trang *Toàn tập*. HV-12 đang dẫn gián tiếp "dẫn theo GT tr. 83"; muốn trích trực tiếp thì cần nguồn APA7 cho Hiến pháp 1959
 - [ ] Đối chiếu mọi trích dẫn với bản gốc *Toàn tập*
 - [ ] `site.json` → `intro.paragraph`: đoạn lời dẫn ngắn (§1; tài liệu chỉ có câu trích)
 - [ ] `public/og-image.png` (1200×630) và thẻ `og:image` trong `index.html`
 - [ ] Deploy Vercel theo `San-pham-sang-tao/web/README.md` (kết nối repo riêng tư, kiểm tra Production Branch và Deployment Protection)
 - [ ] Điền `siteUrl` trong `site.json` bằng link Vercel và thêm `og:url` trong `index.html`
+- [ ] Nếu hiện vật nào chưa kịp hoàn thiện khi nộp: đặt `"hidden": true` (vẫn phải còn ≥ 8 hiện vật; mục 4 ưu tiên HV-02, 03, 05, 07, 08, 09, 11, 13)
 - [ ] Build lại bản offline (`npm run package:offline`) sau khi có `siteUrl` và ảnh, rồi mới nộp file zip
 - [ ] Thử bản offline trên Firefox và Edge thật (mới kiểm tra bằng Chromium headless)
 - [ ] _(tạm hoãn)_ `team.json`: tên và vai trò thành viên
