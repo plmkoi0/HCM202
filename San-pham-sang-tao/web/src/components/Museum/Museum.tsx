@@ -22,9 +22,9 @@ export default function Museum() {
           Bảo tàng số
         </h2>
 
-        <div className="sticky top-14 z-30 -mx-4 mt-6 border-b border-line bg-paper/95 px-4 py-3 backdrop-blur">
+        <div className="sticky top-14 z-30 -mx-4 mt-6 border-b border-line bg-paper/95 px-4 py-1.5 backdrop-blur md:py-3">
           <PillarFilter value={filter} onChange={setFilter} artifacts={artifacts} />
-          <div className="mt-3">
+          <div className="mt-1.5 md:mt-3">
             <ProgressBar seen={seen.size} total={artifacts.length} />
           </div>
         </div>

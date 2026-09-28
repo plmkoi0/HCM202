@@ -16,7 +16,13 @@ export default function PillarFilter({ value, onChange, artifacts }: Props) {
     ...PILLARS.map((p) => ({ id: p.id, label: p.label, count: artifacts.filter((a) => a.pillar === p.id).length })),
   ]
   return (
-    <div role="group" aria-label="Lọc theo trụ cột" className="flex flex-wrap gap-2">
+    // Dưới md: một hàng, cuộn ngang trong khung riêng (không xuống dòng, không đẩy trang rộng ra).
+    // py-1 chừa chỗ cho viền focus, vì khung cuộn cắt phần tràn theo chiều dọc.
+    <div
+      role="group"
+      aria-label="Lọc theo trụ cột"
+      className="-mx-4 flex gap-2 overflow-x-auto px-4 py-1 [scrollbar-width:none] md:mx-0 md:flex-wrap md:overflow-visible md:px-0 [&::-webkit-scrollbar]:hidden"
+    >
       {options.map((o) => {
         const active = value === o.id
         const activeCls = o.id === 'all' ? 'bg-ink text-paper border-ink' : `${PILLAR_CHIP[o.id]} border-transparent`
@@ -26,7 +32,9 @@ export default function PillarFilter({ value, onChange, artifacts }: Props) {
             type="button"
             aria-pressed={active}
             onClick={() => onChange(o.id)}
-            className={`rounded-full border px-3.5 py-1.5 text-sm font-medium transition ${
+            // Hàng cuộn ngang: đưa nút đang được focus (bàn phím) vào hẳn khung nhìn
+            onFocus={(e) => e.currentTarget.scrollIntoView({ block: 'nearest', inline: 'nearest' })}
+            className={`shrink-0 rounded-full border px-3.5 py-1 text-sm font-medium whitespace-nowrap transition focus-visible:outline-offset-1 md:py-1.5 ${
               active ? activeCls : 'border-line bg-card hover:border-ink'
             }`}
           >
