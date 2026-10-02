@@ -1,7 +1,7 @@
 # THIẾT KẾ GAME — Con đường tư tưởng HCM
 
 **Môn:** HCM202 · **Sản phẩm sáng tạo thứ hai** (độc lập với bảo tàng số) · **Chủ đề 4** — Tư tưởng Hồ Chí Minh về Nhà nước của nhân dân, do nhân dân, vì nhân dân
-**Phiên bản:** 1.2 · 03/10/2026 · **Trạng thái:** đã chốt các quyết định chính, chờ rà soát G0
+**Phiên bản:** 1.3 · 03/10/2026 · **Trạng thái:** G0 xong (rà soát, xác minh nền tảng, ước lượng chi phí) — **chờ nhóm duyệt các đề xuất ở mục 20** trước khi làm G1
 **Vị trí:** nhánh `game` của repo `HCM202`, file `docs/THIET-KE-GAME.md` — nguồn chuẩn duy nhất cho game (luật, bàn cờ, màn hình, kiến trúc, kiểm thử, lộ trình).
 
 ---
@@ -391,11 +391,21 @@ Reducer thuần, không phụ thuộc trình duyệt hay Node. Hành động:
 - State có **danh sách sự kiện** để client diễn hoạt cảnh tuần tự.
 
 ### 15.4 Server trên Vercel
-**Nền tảng (đúng vào 10/2026 — cần xác minh lại khi làm):**
-- WebSocket trên Vercel Functions **public beta từ 22/06/2026**, mọi gói, chạy trên Fluid Compute.
-- Mỗi kết nối gắn cố định với instance đã nhận nó. Gói Hobby: kết nối tối đa **300 giây** rồi bị đóng → client phải tự nối lại.
+**Nền tảng (đã xác minh ở G0, 03/10/2026 — xác minh lại trước G3 và trước buổi chơi):**
+- WebSocket trên Vercel Functions **public beta từ 22/06/2026**, mọi gói, cần Fluid Compute (mặc định cho project tạo từ 23/04/2025).
+- Mỗi kết nối gắn cố định với instance đã nhận nó suốt đời kết nối. Gói Hobby: kết nối mặc định và tối đa **300 giây** rồi bị đóng (Pro/Enterprise 800 giây; mức mở rộng 1.800 giây khi beta chỉ cho Pro/Enterprise) → client phải tự nối lại.
+- Tính phí như mọi lần gọi function: Active CPU chỉ tính lúc code xử lý tin; **Provisioned Memory tính suốt đời instance**, kết nối mở giữ instance sống. Gói Hobby luôn chạy 2 GB / 1 vCPU, không chỉnh được.
 - Các instance **không chung bộ nhớ** → trạng thái phòng và phát tin chéo instance đi qua **Redis từ Vercel Marketplace**.
-- WebSocket gốc hỗ trợ một số framework (vd. Hono, Express, h3). Cách chạy với project Vite có thư mục `api/`: `TODO` — xác nhận ở G0.
+- **Cách chạy với project Vite có thư mục `api/` (đã xác nhận): không cần framework.**
+  - Vite build giao diện tĩnh; mỗi file trong `api/` là một Vercel Function Node.js dùng handler kiểu Web (`export async function GET(request: Request)` trả `Response`).
+  - Nâng cấp WebSocket bằng `experimental_upgradeWebSocket(handler, { maxPayload })` của gói `@vercel/functions` (có từ 3.7.0, bản hiện hành 3.9.10; `maxPayload` mặc định 256 KiB), cần thêm gói `ws`. Hàm này chỉ chạy trong runtime Vercel có hỗ trợ upgrade; ở nơi khác báo lỗi "not available in the current runtime environment".
+  - Tên hàm còn tiền tố `experimental_` → khóa phiên bản `@vercel/functions` trong `package.json`; chỉ gọi hàm này ở `api/` để khi đổi chỉ sửa một chỗ.
+  - Gói Hobby giới hạn **12 function mỗi deployment** khi dùng `api/` không framework → dùng **một function bắt tất cả** `api/[...path].ts` chuyển tiếp vào `server/` (code ngoài `api/` không bị tính là function). Một function chung còn giúp các request dùng chung instance và bộ nhớ đệm.
+  - Chạy cục bộ và test: server Node riêng (`ws` + `http`) gọi cùng `server/`, Redis giả lập trong bộ nhớ — không phụ thuộc runtime Vercel.
+  - WebSocket thật trên Vercel chỉ kiểm được khi có deploy preview (cần tài khoản nhóm) → **polling dự phòng là bắt buộc** và làm trước WebSocket ở G3; nên deploy preview sớm (ngay sau G3) thay vì đợi G6.
+  - Client chủ động nối lại trước mốc 300 giây (vd. ở ~280 giây, lúc không có câu hỏi đang mở) để tránh bị cắt giữa lúc trả lời.
+- **Redis:** chọn **Upstash for Redis** trên Marketplace (gói Free: 500.000 lệnh/tháng, 256 MB, 10.000 kết nối đồng thời, có pub/sub và Lua). Không chọn Redis Cloud gói Free (30 MB, **30 kết nối, 100 lệnh/giây**) vì mỗi instance cần 2 kết nối (lệnh + subscribe) và lúc polling dự phòng có thể chạm 100 lệnh/giây.
+- Nguồn đã dùng: tài liệu và changelog Vercel (WebSockets, Functions Limits, Hobby Plan, Configuring Memory) qua trích đoạn tìm kiếm; mã nguồn gói `@vercel/functions@3.9.10` trên npm; bảng giá Upstash, so sánh Upstash/Redis Cloud. Môi trường làm G0 bị chặn truy cập trực tiếp `vercel.com`, `upstash.com`, nên **nhóm nên mở lại các trang này khi tạo project**: vercel.com/docs/functions/websockets, vercel.com/docs/plans/hobby, vercel.com/docs/functions/limitations, upstash.com/pricing/redis.
 
 **Thiết kế:**
 - **Client → server:** HTTP `POST /api/rooms` (tạo), `POST /api/rooms/:code/join`, `POST /api/rooms/:code/actions`. Mỗi hành động có `actionId` (chống gửi trùng) và token người chơi.
@@ -428,7 +438,25 @@ Reducer thuần, không phụ thuộc trình duyệt hay Node. Hành động:
   - Cộng 20 người chơi một mình.
   - Tính cả lúc dùng polling dự phòng và các buổi tập.
 - **Cần ước lượng:** số kết nối đồng thời, lượt gọi function, số lệnh Redis; so với hạn mức miễn phí của Vercel Hobby và gói Redis miễn phí trên Marketplace.
-- **Kết quả ước lượng:** `TODO` — điền ở G0.
+- **Kết quả ước lượng (G0, 03/10/2026):**
+  - **Giả định cho một buổi:** 8 phòng × 5 người + 20 phòng 1 người = **28 phòng, 60 máy**; mỗi máy mở game ~15 phút (gồm phòng chờ); ~100 hành động mỗi phòng mỗi ván 10 phút (tung, trả lời, power-up, hành động hết hạn gửi trùng từ nhiều máy, bước bot); state phòng ~10 KB.
+  - **Kết nối đồng thời:** tối đa ~60 WebSocket. Mỗi kết nối bị đóng sau 300 giây → ~4 lần nối mỗi máy mỗi buổi.
+  - **Hai trường hợp:** *bình thường* (WebSocket chạy) và *xấu nhất* (cả 60 máy dùng polling 1,5 s/lần suốt 15 phút = 36.000 lần gọi).
+
+  | Hạn mức (Free) | Bình thường / buổi | Xấu nhất / buổi | Hạn mức / tháng | Số buổi tối đa (xấu nhất) |
+  |---|---|---|---|---|
+  | Vercel — lượt gọi function | ~3.500 (2.800 hành động + 240 lần nối + vào phòng) | ~40.000 | 1.000.000 | ~25 |
+  | Vercel — Active CPU (~20 ms/lần gọi) | ~1 phút | ~13 phút | 4 giờ | ~18 |
+  | Vercel — Provisioned Memory (2 GB cố định) | ~1,5 GB-giờ (vài instance dùng chung) | ~30 GB-giờ (mỗi kết nối một instance) | 360 GB-giờ | ~12 |
+  | Vercel — Fast Data Transfer | ~0,2 GB | ~0,3 GB | 100 GB | > 300 |
+  | Vercel — CDN Requests | ~5.000 | ~40.000 | 1.000.000 | ~25 |
+  | **Upstash — lệnh Redis** (~10 lệnh/hành động gồm đọc, ghi có kiểm tra version, chống trùng `actionId`, giới hạn tần suất, publish và tin pub/sub nhận ở mỗi instance) | ~30.000 | ~66.000 (+1 lệnh mỗi lần poll) | 500.000 | **~7** |
+  | Upstash — kết nối đồng thời (2 mỗi instance) | ≤ 10 | ≤ 120 | 10.000 | — |
+  | Upstash — băng thông (~70 KB/hành động) | ~0,2 GB | ~0,3 GB | 10 GB | ~30 |
+
+  - **Kết luận:** một buổi trên lớp và vài buổi tập **nằm trong hạn mức miễn phí**. Hạn mức chặt nhất là **số lệnh Upstash** (khoảng 16 buổi bình thường hoặc 7 buổi xấu nhất mỗi tháng), sau đó là Provisioned Memory nếu Vercel xếp mỗi kết nối vào một instance riêng.
+  - **Rủi ro:** gói Hobby vượt hạn mức thì **project bị tạm dừng tới khi hết chu kỳ 30 ngày** (không trả thêm được). Chưa xác nhận được Upstash có tính mỗi tin pub/sub nhận được là một lệnh hay không — bảng trên đã tính trường hợp có. Gói Hobby chỉ dùng cho mục đích cá nhân, phi thương mại (bài tập môn học phù hợp).
+  - **Cách giữ an toàn (áp dụng khi làm G3):** một function chung `api/[...path].ts`; polling chỉ đọc khóa `version` (1 lệnh) và trả `304` khi không đổi, có bộ đệm ~1 s trong instance cho mỗi phòng; chỉ publish `version` + diff; không ghi nhịp tim (heartbeat) vào Redis, trạng thái kết nối lấy từ sự kiện mở/đóng WebSocket và lần gọi gần nhất; buổi tập dùng ít máy; xem trang Usage của Vercel và Upstash trước buổi chơi; luôn có "Chơi trên một máy" và bản offline làm dự phòng.
 - **Phương án thay nếu vượt hạn mức:** nhà cung cấp realtime trên Vercel Marketplace (Ably, Pusher, Supabase Realtime…) với một function cấp token.
 
 ### 15.6 Bản build
@@ -543,7 +571,7 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 
 | Mốc | Nội dung | Trạng thái |
 |---|---|---|
-| **G0 — Nhánh và rà soát** | Tạo nhánh mồ côi `game`; chép dữ liệu khởi đầu, nguồn tham chiếu và font từ nhánh web (ghi `NGUON.md`); tạo `CLAUDE.md` của nhánh; đối chiếu tài liệu này với dữ liệu; xác nhận nền tảng Vercel; ước lượng chi phí (15.5); tạo mẫu `docs/CAU-HOI-GAME.mau.md` để nhóm bắt đầu soạn câu hỏi; cập nhật mục 20. **Dừng chờ duyệt** | ☐ |
+| **G0 — Nhánh và rà soát** | Tạo nhánh mồ côi `game`; chép dữ liệu khởi đầu, nguồn tham chiếu và font từ nhánh web (ghi `NGUON.md`); tạo `CLAUDE.md` của nhánh; đối chiếu tài liệu này với dữ liệu; xác nhận nền tảng Vercel; ước lượng chi phí (15.5); tạo mẫu `docs/CAU-HOI-GAME.mau.md` để nhóm bắt đầu soạn câu hỏi; cập nhật mục 20. **Dừng chờ duyệt** | ☑ Xong 03/10/2026 — chờ nhóm duyệt (mục 20). Nhánh `game` đẩy được với đúng tên `game` |
 | **G1 — Nền móng** | Khởi tạo dự án ở gốc nhánh, JSON + kiểu dữ liệu, **bộ câu hỏi thử** (13.3), script nhập câu hỏi, test dữ liệu, engine + bot + unit test, mô phỏng cân bằng (điền mục 11) | ☐ |
 | **G2 — Chơi trên một máy** | Bàn cờ SVG, xúc xắc, ngựa đi từng ô, các loại ô, túi power-up, thẻ bẫy, bot, thử thách cá nhân + kỷ lục, lưu/tiếp tục ván, hoàn tác — chơi trọn ván | ☐ |
 | **G3 — Server** | Tạo/vào phòng, sức chứa, chọn màu, hành động, bước bot, Redis, pub/sub, WebSocket + polling, nối lại, chuyển chủ phòng, `/api/health`; test server, mô phỏng tải, chạy cục bộ | ☐ |
@@ -587,21 +615,68 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 - [x] Game là sản phẩm độc lập, làm trên nhánh `game` riêng; dữ liệu chép lúc tạo nhánh thuộc về game, không đồng bộ lại với web.
 - [x] Bộ câu hỏi do nhóm cung cấp sau; trong lúc chờ dùng câu hỏi thử.
 
-**Nhóm cần quyết:**
+**Kết quả rà soát G0 (03/10/2026) — đối chiếu tài liệu này với dữ liệu đã chép:**
+
+| Mục | Dữ liệu | Đối chiếu |
+|---|---|---|
+| Trụ cột | 3: `dan-chu`, `phap-quyen`, `trong-sach` (`mindmap.json`, `pillars.json`) | Khớp giả định 3 trụ cột (13.3). 6 nhánh chia đều 2 nhánh mỗi trụ cột (xem D1). Tên trụ cột có ở cả `mindmap.json` và `pillars.json`, hiện trùng khớp → đề xuất `pillars.json` là nguồn nhãn/tên/màu, test kiểm hai file khớp id và tên |
+| Màu trụ cột | Đỏ son `#A4262C`, Xanh mực `#23395B`, Vàng đồng `#B8892B` (chữ trên nền sáng `#7A5A17`) | Trùng sắc với màu ngựa dễ nhầm (xem D6) |
+| Hiện vật | 13 (HV-01 → HV-13), mọi `pillar` hợp lệ, mọi hiện vật `verified: true`, không có `hidden` | Phân bố dân chủ 5, pháp quyền 4, trong sạch 4. Chưa có ảnh. `sourceIds` trỏ tới `sources.json` của web — không được chép (xem N1) |
+| `todo` trong `mindmap.json` | 1 mục, trụ cột `trong-sach`: giáo trình thiếu tr. 92–93 | Trụ cột này chỉ có 2 mục nội dung (dân chủ 5, pháp quyền 3) → khó đủ ~20 câu (xem N2) |
+| Nhánh web | `CLAUDE.md` nằm ở `San-pham-sang-tao/web/CLAUDE.md`; không có `web/scripts/package-offline.mjs` — web hiện chỉ còn bản offline, script là `scripts/package.mjs` | Không ảnh hưởng game; game tự viết script đóng gói riêng |
+| Cân bằng (ước tính thô) | Script tạm, **không phải mô phỏng chính thức G1**: bố cục Ngắn, xác suất đúng 70/50/35%, ~20 s/lượt, ván dừng khi người đầu tiên về đích | 1 người ~3,9 phút (trung vị 10 lượt) · 3 người ~8 phút, 84% ván xong ≤ 10 phút · 5 người ~11,7 phút, 42% xong ≤ 10 phút, **3% xong ≤ 5 phút**; dính bẫy ~0,8 lần/người; chuỗi đứng yên dài nhất ~3 lượt (xem T1) |
+
+**Nhóm cần quyết** — mỗi mục có phương án Claude Code đề xuất (**in đậm**); nhóm đồng ý thì dùng làm mặc định, không thì ghi phương án khác. Duyệt xong mới làm G1.
+
+*Bàn cờ:*
+- [ ] **D1. Trụ cột của 6 nhánh.** Đề xuất: **lặp theo thứ tự trong `mindmap.json`** — nhánh 1–6 = dân chủ, pháp quyền, trong sạch, dân chủ, pháp quyền, trong sạch (tính từ dữ liệu: nhánh *i* → trụ cột *i* mod số trụ cột, không viết cứng). Cổng của màu trống thành ô câu hỏi độ khó 1 thuộc trụ cột của nhánh đó.
+- [ ] **D2. Vị trí 2 power-up và 2 bẫy trên vòng chung.** 8 ô câu hỏi không chia đều cho 3 trụ cột. Đề xuất: **mỗi nhánh = [cổng, ô 2, ô 3]; power-up ở ô 3 nhánh 1 và nhánh 5, bẫy ở ô 3 nhánh 3 và nhánh 6** → ô câu hỏi: dân chủ 3, pháp quyền 3, trong sạch 2 (trụ cột ít nội dung nhất có ít ô câu hỏi nhất). Vị trí cuối chỉnh theo mô phỏng G1.
+- [ ] **D3. Trụ cột và độ khó của đường về đích, Đích.** Thiết kế chưa nói ô về đích thuộc trụ cột nào. Đề xuất: **4 ô độ khó 2, 2, 3, 3; trụ cột xoay vòng bắt đầu từ trụ cột của nhánh có cổng người đó (vd. cổng ở nhánh pháp quyền → pháp quyền, trong sạch, dân chủ, pháp quyền); Đích: trụ cột ngẫu nhiên theo seed, độ khó 3.** Phương án khác: cả đường về đích theo trụ cột của nhánh mình.
+- [ ] **D4. Bố cục Dài cụ thể.** Đề xuất: **vòng chung 24 ô = 6 cổng + 3 power-up + 3 bẫy + 12 câu hỏi; đường về đích 5 ô độ khó 2, 2, 3, 3, 3.**
+- [ ] **D5. Quãng đường.** Đề xuất: **cổng (bước 0) → 17 ô vòng chung → rẽ vào đường về đích ở ô ngay trước cổng của mình → 4 ô về đích → Đích = 22 bước** (bố cục Dài: 23 + 5 + 1 = 29 bước). Khớp "khoảng 21–22 ô" ở mục 4.
+- [ ] **D6. Màu ngựa khác màu trụ cột.** Bàn có 6 màu người chơi (cổng, đường về đích, ngựa) và 3 màu trụ cột (đoạn đường). Đề xuất: **ngựa dùng 6 màu tươi khác hẳn đỏ son / xanh mực / vàng đồng (vd. xanh lá, cam, tím, xanh ngọc, hồng, xanh dương sáng), mỗi màu một ký hiệu; ô câu hỏi hiện trụ cột bằng viền màu + biểu tượng và chữ viết tắt trụ cột**, không chỉ bằng màu.
+
+*Luật — chi tiết thiếu:*
+- [ ] **L1. Tiến 3 ô gần Đích.** Hiệu ứng không dây chuyền nên Tiến 3 ô tới Đích sẽ về đích không cần trả lời. Đề xuất: **Tiến 3 ô dừng tối đa ở ô cuối đường về đích; vào Đích luôn phải trả lời câu về đích.** Bẫy lùi đi lùi theo đường của người đó (có thể từ đường về đích ra vòng chung), không quá cổng.
+- [ ] **L2. 50:50 với câu ít đáp án.** Câu `truefalse` chỉ có 2 đáp án, câu `single` có thể có 3. Đề xuất: **50:50 loại đáp án sai tới khi còn 2 (4 → 2, 3 → 2); câu 2 đáp án thì nút mờ, không mất power-up.**
+- [ ] **L3. Xúc xắc ×2 và luật ra 6.** Đề xuất: **được tung thêm khi mặt xúc xắc là 6 (trước khi nhân đôi)**, không tính theo số sau khi nhân.
+- [ ] **L4. Thử thách cá nhân và giới hạn giờ.** Đề xuất: **giữ mặc định 10 phút; kỷ lục (ít lượt nhất) chỉ lưu khi về đích; hết giờ thì báo số ô còn lại.**
+- [ ] **L5. Lộ đáp án.** Bản online vẫn đóng gói `questions.json` (cho Kho câu hỏi và Chơi trên một máy), nên ai mở mã trang vẫn xem được đáp án; quy định "state không chứa đáp án" (15.4) chỉ chặn xem qua mạng. Đề xuất: **chấp nhận (game ôn tập), giữ quy định 15.4 và ẩn nút Kho câu hỏi khi đang ở trong phòng.** Phương án khác (tốn công hơn): bản online tải câu hỏi từ server, không đóng gói.
+
+*Thời lượng trên lớp:*
+- [ ] **T1. Mini game 5–7 phút và mặc định 10 phút.** Mục 1 và 19 dùng game 5–7 phút trên lớp; mặc định 10 phút đã chốt và không đổi. Theo ước tính thô, phòng 5 người chơi 5 phút gần như luôn kết thúc theo giờ (xếp theo số ô còn lại). Mức ~20 s/lượt cũng còn lạc quan (riêng đồng hồ trả lời đã 20 s). Đề xuất: **giữ mặc định 10 phút; trên lớp chủ phòng chọn 5 phút; màn kết thúc theo giờ vẫn tôn vinh người dẫn đầu; mô phỏng G1 chạy cả 20 s và 25 s/lượt.** Hỏi nhóm: có thêm mốc **7 phút** vào danh sách 5 / 10 / 15 / không giới hạn không?
+
+*Dữ liệu và nội dung:*
+- [ ] **N1. Thẻ hiện vật trong game.** `sourceIds` trỏ tới `sources.json` không được chép; chưa có ảnh. Đề xuất: **thẻ chỉ hiện mã, ngày, tên, trụ cột, câu chuyện, trích dẫn kèm `quote.cite` và ghi chú ngữ cảnh — không có ảnh, "Ngày nay" và danh sách nguồn APA; tôn trọng `hidden: true` (không hiện chip).** Nếu muốn hiện nguồn APA thì chép thêm `sources.json` (sửa mục 14 trước).
+- [ ] **N2. Phân bổ câu hỏi.** Đề xuất: **mỗi trụ cột ≥ 10 câu độ khó 1, ≥ 6 câu độ khó 2, ≥ 4 câu độ khó 3** (đã ghi trong file mẫu). Trụ cột trong sạch ít nội dung: nếu không đủ 20 câu, có chấp nhận ít hơn không (D2 đã cho trụ cột này ít ô câu hỏi nhất)?
+- [ ] **N3. Định dạng `fillQuote`.** Đề xuất: **đánh dấu chỗ trống bằng `___` trong cột câu hỏi; đáp án là từ/cụm từ điền vào** (đã ghi trong file mẫu).
+- [ ] **N4. Nhãn thẻ bẫy (mục 7)** — chọn A hoặc B:
+  - **A. Trung tính (mặc định):** "Bẫy — mất lượt" · "Bẫy — lùi {n} ô".
+  - B. Gắn nội dung môn học; dòng hiệu ứng vẫn trung tính; chỉ dùng nguồn mục 13.2 có số trang. Nhóm đối chiếu lại với giáo trình / *Toàn tập* trước khi chọn:
+
+    | Thẻ | Nhãn | Dòng hiệu ứng | Nguồn |
+    |---|---|---|---|
+    | Mất lượt | Cậy thế, cậy quyền | Bỏ lượt tiếp theo | t.4, tr.51 (HV-06); GT tr. 91 |
+    | Lùi ngẫu nhiên | Chủ nghĩa cá nhân — "bệnh mẹ" | Lùi {n} ô | GT tr. 94–95 (`mindmap.json`, trụ cột trong sạch) |
+    | Mất lượt (thêm, tùy chọn) | "Dĩ công vi tư" | Bỏ lượt tiếp theo | t.6, tr.127 (HV-10) |
+    | Lùi ngẫu nhiên (thêm, tùy chọn) | Tham ô, lãng phí, quan liêu | Lùi {n} ô | GT tr. 82 (HV-13 — tóm ý, chưa có số trang *Toàn tập*) |
+
 - [ ] Tên chính thức của game.
-- [ ] Nhãn thẻ bẫy: giữ trung tính hay gắn với nội dung môn học (cần trích dẫn và số trang).
 
 **Nội dung (nhóm cung cấp):**
 - [ ] Soạn và gửi `docs/CAU-HOI-GAME.md` theo mẫu `docs/CAU-HOI-GAME.mau.md` (mục 13.4): mục tiêu ≥ 60 câu, đủ trụ cột và độ khó, mỗi câu có nguồn kèm số trang; nhớ phần giáo trình tr. 92–93.
 
 **Hạ tầng (cần tài khoản nhóm):**
-- [ ] Tạo project Vercel thứ hai, nối repo `HCM202`, Production Branch = `game`.
-- [ ] Gắn Redis từ Vercel Marketplace.
+- [ ] Tạo project Vercel thứ hai, nối repo `HCM202`, Production Branch = `game`, Root Directory = gốc nhánh, Fluid Compute bật (mặc định).
+- [ ] Gắn **Upstash for Redis** (gói Free) từ Vercel Marketplace (15.4, 15.5).
 - [ ] Điền `siteUrl` của game.
+- [ ] Đề xuất: deploy preview ngay sau G3 để thử WebSocket thật sớm, không đợi G6.
 
-**Cần xác minh (G0):**
-- [ ] Trạng thái WebSocket trên Vercel và cách chạy với Vite + `api/`.
-- [ ] Hạn mức miễn phí hiện hành của Vercel Hobby và gói Redis.
+**Cần xác minh:**
+- [x] Trạng thái WebSocket trên Vercel và cách chạy với Vite + `api/` — đã xác minh ở G0 (15.4).
+- [x] Hạn mức miễn phí hiện hành của Vercel Hobby và gói Redis — đã ước lượng ở G0 (15.5).
+- [ ] Trước G3: Upstash có tính mỗi tin pub/sub nhận được là một lệnh không; tên biến môi trường Marketplace đặt cho Redis (`REDIS_URL` / `KV_URL`…).
+- [ ] Trên deploy preview: WebSocket qua `experimental_upgradeWebSocket` chạy được, đóng sau 300 giây, client tự nối lại.
 
 ---
 

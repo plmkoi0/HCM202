@@ -40,13 +40,14 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 
 ## Cấu trúc thư mục
 
-**Hiện tại (đầu G0):**
+**Hiện tại (sau G0):**
 ```
 /
 ├── CLAUDE.md                     ← file này
 ├── .gitignore
 ├── docs/
 │   ├── THIET-KE-GAME.md          ← tài liệu thiết kế (nguồn chuẩn)
+│   ├── CAU-HOI-GAME.mau.md       ← mẫu để nhóm soạn câu hỏi (mục 13.4)
 │   └── nguon/THIET-KE-WEB-APP.md ← bản sao nguồn tham chiếu (chép từ nhánh web)
 └── src/
     ├── data/
@@ -86,13 +87,19 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 
 | Mốc | Nội dung | Trạng thái |
 |---|---|---|
-| **G0 — Nhánh và rà soát** | Nhánh mồ côi, chép dữ liệu + `NGUON.md`, `CLAUDE.md`, đối chiếu thiết kế với dữ liệu, xác minh Vercel, ước lượng chi phí, mẫu câu hỏi, cập nhật mục 20 | ◐ Đang làm |
+| **G0 — Nhánh và rà soát** | Nhánh mồ côi, chép dữ liệu + `NGUON.md`, `CLAUDE.md`, đối chiếu thiết kế với dữ liệu, xác minh Vercel, ước lượng chi phí, mẫu câu hỏi, cập nhật mục 20 | ☑ Xong 03/10/2026 — **chờ nhóm duyệt** (mục 20) |
 | **G1 — Nền móng** | Dự án Vite, JSON + kiểu, câu hỏi thử, script nhập câu hỏi, test dữ liệu, engine + bot + unit test, mô phỏng cân bằng | ☐ |
 | **G2 — Chơi trên một máy** | Bàn cờ SVG, xúc xắc, ngựa, ô, power-up, bẫy, bot, thử thách cá nhân, lưu/tiếp tục, hoàn tác | ☐ |
 | **G3 — Server** | Phòng, sức chứa, màu, hành động, bot, Redis, pub/sub, WebSocket + polling, nối lại, chủ phòng, `/api/health`, test, mô phỏng tải | ☐ |
 | **G4 — Chơi qua phòng** | Trang chủ, tạo/vào phòng (mã, QR, link), phòng chờ, chơi qua mạng, trạng thái kết nối, kết thúc, chơi lại, Đoán cùng | ☐ |
 | **G5 — Hoàn thiện** | Ôn câu sai, thống kê, Kho câu hỏi, Luật chơi, Cài đặt, âm thanh, phím tắt, giao diện, reduced motion | ☐ |
 | **G6 — Phát hành** | Hướng dẫn tạo project Vercel + Redis (nhóm làm), deploy preview, diễn tập, `check:release`, bản offline, README | ☐ |
+
+## Ghi chú nền tảng (G0, chi tiết ở mục 15.4–15.5)
+- Vite (giao diện tĩnh) + `api/` (Vercel Functions Node.js, handler kiểu Web), **không cần framework**. WebSocket: `experimental_upgradeWebSocket()` của `@vercel/functions` (cần `ws`), chỉ chạy trong runtime Vercel → chạy cục bộ/test bằng server Node riêng + Redis giả lập.
+- Hobby: kết nối WebSocket tối đa 300 giây; 2 GB / 1 vCPU cố định; **tối đa 12 function mỗi deployment** → dùng một function `api/[...path].ts` chuyển vào `server/`.
+- Hạn mức chặt nhất là số lệnh Upstash (500.000/tháng): ~30.000 lệnh mỗi buổi bình thường, ~66.000 khi mọi máy dùng polling. Vượt hạn mức Hobby → project bị dừng tới hết chu kỳ 30 ngày.
+- Nhánh được đẩy đúng tên `game` (môi trường cho phép), không cần tên thay thế.
 
 ## Ghi chú dữ liệu
 - 3 trụ cột: `dan-chu` (Đỏ son `#A4262C`), `phap-quyen` (Xanh mực `#23395B`), `trong-sach` (Vàng đồng `#B8892B`; chữ trên nền sáng dùng `#7A5A17` để đạt WCAG AA). Tên trụ cột đọc từ dữ liệu, không viết cứng.
@@ -102,17 +109,18 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 ## TODO (mục 20 tài liệu thiết kế)
 
 **Nhóm cần quyết:**
-- [ ] Duyệt G0 và các đề xuất ở mục 20 (cách gán trụ cột cho 6 nhánh và đường về đích, Tiến 3 ô gần Đích, màu ngựa, phân bổ độ khó…).
+- [ ] **Duyệt G0** — các đề xuất D1–D6 (bàn cờ), L1–L5 (luật còn thiếu), T1 (thời lượng trên lớp), N1–N4 (dữ liệu, nội dung, nhãn thẻ bẫy) ở mục 20. Duyệt xong mới làm G1; thay đổi nào được duyệt thì sửa tài liệu thiết kế trước.
 - [ ] Tên chính thức của game.
-- [ ] Nhãn thẻ bẫy: giữ trung tính hay gắn với nội dung môn học (cần trích dẫn và số trang).
+- [ ] Nhãn thẻ bẫy (N4): A trung tính hoặc B gắn nội dung (bảng nhãn có nguồn ở mục 20).
 
 **Nội dung (nhóm cung cấp):**
 - [ ] Soạn và gửi `docs/CAU-HOI-GAME.md` theo mẫu `docs/CAU-HOI-GAME.mau.md`: ≥ 60 câu, đủ trụ cột và độ khó, mỗi câu có nguồn kèm số trang; nhớ phần giáo trình tr. 92–93.
 
 **Hạ tầng (cần tài khoản nhóm):**
 - [ ] Tạo project Vercel thứ hai, nối repo `HCM202`, Production Branch = `game`, Root Directory = gốc nhánh.
-- [ ] Gắn Redis từ Vercel Marketplace.
+- [ ] Gắn **Upstash for Redis** (gói Free) từ Vercel Marketplace — không dùng Redis Cloud Free (30 kết nối, 100 lệnh/giây).
 - [ ] Điền `siteUrl` của game.
 
 **Cần xác minh lại khi làm G3/G6:**
-- [ ] WebSocket trên Vercel Functions vẫn đang beta — kiểm tra lại giới hạn và cách cấu hình trước khi viết server.
+- [ ] WebSocket trên Vercel Functions vẫn đang beta (`experimental_upgradeWebSocket` của `@vercel/functions`) — kiểm tra lại giới hạn trước khi viết server; thử thật trên deploy preview.
+- [ ] Upstash có tính mỗi tin pub/sub nhận được là một lệnh không; tên biến môi trường Redis do Marketplace đặt.

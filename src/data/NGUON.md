@@ -5,7 +5,7 @@ Các file dưới đây được **chép một lần** từ nhánh web (bảo t�
 - **Repo:** `plmkoi0/HCM202`
 - **Nhánh web:** `claude/zen-fermi-bg6som` (nhánh mặc định của repo; nhánh làm việc `claude/kind-keller-ds1gdx` cùng commit)
 - **Commit nguồn:** `2bda3971b27cf005680f32c6d0772fe851100587` — "Chuyển CLAUDE.md vào San-pham-sang-tao/web"
-- **Ngày chép:** 02/10/2026
+- **Ngày chép:** 03/10/2026 (giờ Việt Nam)
 - **Cách chép:** `git show <commit>:<đường dẫn>` (file đã commit, chép nguyên byte)
 
 ## Danh sách file đã chép
