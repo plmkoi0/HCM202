@@ -1,6 +1,6 @@
 # CLAUDE.md — HCM202
 
-File này lưu thông tin về repo để Claude (Claude Code / Claude chat) hiểu nhanh bối cảnh khi làm việc.
+File này (`San-pham-sang-tao/web/CLAUDE.md`) lưu thông tin về repo để Claude (Claude Code / Claude chat) hiểu nhanh bối cảnh khi làm việc.
 
 ## Tổng quan
 - **Tên repo:** HCM202
@@ -23,12 +23,12 @@ File này lưu thông tin về repo để Claude (Claude Code / Claude chat) hi�
 ## Cấu trúc thư mục
 ```
 HCM202/
-├── CLAUDE.md
 └── San-pham-sang-tao/
     ├── THIET-KE-WEB-APP.md          ← tài liệu thiết kế
     ├── NOI-DUNG-BO-SUNG.md          ← nội dung nhóm duyệt (câu chuyện, ngày nay, nguồn web); chỉ nhập mục "Duyệt: [x]"
     ├── QUIZ-KIEN-THUC.md            ← quiz kiến thức nhóm duyệt (10 câu chính + 2 câu dự phòng, mức xếp loại)
     └── web/                         ← Vite + React + TypeScript + Tailwind CSS v4 + Vitest
+        ├── CLAUDE.md                ← file này
         ├── index.html               ← khung trang: tiêu đề, meta description, theme-color
         ├── vite.config.ts           ← base './'; vite-plugin-singlefile; plugin embedAssets nhúng ảnh
         │                              public/images (module ảo virtual:public-images) + favicon; publicDir: false
@@ -133,7 +133,7 @@ Kiểm tra trước khi commit: `npm run test && npm run build && npm run packag
 - **Không tự thêm sự kiện, số liệu, trích dẫn ngoài tài liệu thiết kế** (`San-pham-sang-tao/THIET-KE-WEB-APP.md`). Trường nào thiếu thì ghi `TODO`.
 - Nội dung về tư tưởng Hồ Chí Minh phải chính xác, có trích dẫn nguồn kèm số tập và số trang.
 - Không tự lấy ảnh trên mạng khi chưa rõ bản quyền; không tự vẽ chân dung Bác.
-- Nội dung nằm trong `web/src/data/*.json`, không viết cứng trong component.
+- Nội dung nằm trong `src/data/*.json`, không viết cứng trong component.
 - Web chạy hoàn toàn trên trình duyệt từ một file `index.html`: mọi tài nguyên (font, ảnh, favicon) nhúng sẵn, **không có request mạng nào**.
 - Commit message ngắn gọn bằng tiếng Việt, mô tả rõ thay đổi.
 - Cập nhật file này sau mỗi giai đoạn (tiến độ, cấu trúc thư mục, TODO).
