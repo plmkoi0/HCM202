@@ -141,7 +141,7 @@ Kiểm tra: `npm run test && npm run build && npm run build:offline && npm run l
 - [ ] HV-13 (tóm ý, GT tr.82) chưa có số tập/số trang *Toàn tập*. HV-12 đang dẫn gián tiếp "dẫn theo GT tr. 83"
 - [ ] Đối chiếu mọi trích dẫn với bản gốc *Toàn tập* — đặc biệt HV-05: GT tr. 85 ghi "gánh **vác** việc chung cho dân", bài Chu Đức Tính (2020) ghi "gánh việc chung cho dân"; web đang theo giáo trình
 - [ ] HV-07 "Ngày nay": số liệu bầu cử 2026 là số sơ bộ (21/3/2026); thay số và nguồn nếu có báo cáo chính thức
-- [ ] Câu 2 quiz: phần giải thích có cụm "Phương án B là nội dung của \"dân làm chủ\"", nhưng lựa chọn được trộn và không đánh chữ nên "B" không chỉ đúng phương án. Nhóm nên sửa câu chữ trong `QUIZ-KIEN-THUC.md` (vd. nêu thẳng nội dung phương án) rồi nhập lại
+- [ ] Câu 2 quiz: phần giải thích có cụm "Phương án B là nội dung của "dân làm chủ"", nhưng lựa chọn được trộn và không đánh chữ nên "B" không chỉ đúng phương án. Nhóm nên sửa câu chữ trong `QUIZ-KIEN-THUC.md` (vd. nêu thẳng nội dung phương án) rồi nhập lại
 - [ ] Deploy Vercel theo `San-pham-sang-tao/web/README.md` (kết nối repo riêng tư, kiểm tra Production Branch và Deployment Protection)
 - [ ] Điền `siteUrl` trong `site.json` bằng link Vercel (og:url, og:image tự chèn khi build)
 - [ ] Nếu hiện vật nào chưa kịp hoàn thiện khi nộp: đặt `"hidden": true` (vẫn phải còn ≥ 8 hiện vật; mục 4 ưu tiên HV-02, 03, 05, 07, 08, 09, 11, 13)
