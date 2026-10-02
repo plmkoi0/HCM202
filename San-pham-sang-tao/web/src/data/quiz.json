@@ -1,278 +1,198 @@
 {
   "closing": "Chủ nhân không đứng ngoài",
-  "types": [
+  "levels": [
     {
-      "id": "A",
-      "name": "Chủ nhân tích cực",
-      "desc": "Biết quyền, dùng quyền đúng kênh, làm tròn nghĩa vụ",
-      "quote": {
-        "lead": "Nhà nước",
-        "text": "mong đồng bào giúp đỡ, đôn đốc, kiểm soát và phê bình",
-        "cite": "Hồ Chí Minh, 2011, t.9, tr.81"
-      },
-      "actions": [
-        "Rủ bạn bè cùng góp ý dự thảo",
-        "Chia sẻ kiến thức pháp luật",
-        "Làm gương"
-      ],
-      "relatedArtifacts": [
-        "HV-05",
-        "HV-07"
-      ]
+      "id": "am-hieu",
+      "min": 9,
+      "max": 10,
+      "name": "Chủ nhân am hiểu",
+      "message": "Bạn nắm chắc tư tưởng Hồ Chí Minh về nhà nước của dân, do dân, vì dân. Hãy chia sẻ để bạn bè cùng thử!"
     },
     {
-      "id": "B",
-      "name": "Người đứng ngoài",
-      "desc": "Nghĩ việc chung là của \"người khác\"",
-      "quote": {
-        "text": "Muốn làm chủ được tốt, phải có năng lực làm chủ",
-        "cite": "Hồ Chí Minh, 2011, t.12, tr.527"
-      },
-      "actions": [
-        "Đọc 1 tin chính sách mỗi tuần",
-        "Đi bầu và tìm hiểu ứng viên",
-        "Thử 1 dịch vụ công trực tuyến"
-      ],
-      "relatedArtifacts": [
-        "HV-07",
-        "HV-08"
-      ]
+      "id": "dang-hoc",
+      "min": 6,
+      "max": 8,
+      "name": "Chủ nhân đang học",
+      "message": "Bạn đã hiểu phần lớn. Xem lại các câu chưa đúng và ghé hiện vật liên quan nhé."
     },
     {
-      "id": "C",
-      "name": "Người ngại lên tiếng",
-      "desc": "Thấy sai nhưng im lặng vì sợ va chạm",
-      "quote": {
-        "text": "làm sao cho nhân dân biết hưởng quyền dân chủ, biết dùng quyền dân chủ của mình, dám nói, dám làm",
-        "cite": "Hồ Chí Minh, 2011, t.15, tr.293"
-      },
-      "actions": [
-        "Tìm hiểu kênh phản ánh chính thức",
-        "Góp ý bằng văn bản",
-        "Hỏi trực tiếp tại buổi đối thoại"
-      ],
-      "relatedArtifacts": [
-        "HV-03",
-        "HV-09"
-      ]
-    },
-    {
-      "id": "D",
-      "name": "Người nhiệt tình vội vã",
-      "desc": "Nhiệt huyết nhưng cảm tính, thiếu kiểm chứng, coi nhẹ quy định",
-      "quote": {
-        "text": "nhân dân có quyền lợi làm chủ, thì phải có nghĩa vụ làm tròn bổn phận công dân, giữ đúng đạo đức công dân",
-        "cite": "Hồ Chí Minh, 2011, t.9, tr.258"
-      },
-      "actions": [
-        "Kiểm chứng nguồn trước khi chia sẻ",
-        "Phản ánh đúng kênh, đúng luật",
-        "Góp ý mang tính xây dựng"
-      ],
-      "relatedArtifacts": [
-        "HV-09",
-        "HV-10"
-      ]
+      "id": "ghe-bao-tang",
+      "min": 0,
+      "max": 5,
+      "name": "Hãy ghé thêm bảo tàng",
+      "message": "Quay lại Bảo tàng số, đọc các hiện vật rồi thử lại. Hiểu quyền làm chủ là bước đầu để dùng quyền ấy."
     }
   ],
   "questions": [
     {
       "id": "q1",
-      "title": "Lá phiếu đầu tiên",
-      "prompt": "Bạn vừa đủ tuổi đi bầu, nhưng ngày bầu cử trùng lịch đi chơi với bạn bè.",
+      "pillar": "dan-chu",
+      "title": "Bản chất nhà nước",
+      "prompt": "Theo Hồ Chí Minh, Nhà nước Việt Nam Dân chủ Cộng hòa mang bản chất của giai cấp nào?",
       "options": [
-        {
-          "type": "A",
-          "text": "Tìm hiểu tiểu sử các ứng cử viên, đi bầu sớm rồi đi chơi."
-        },
-        {
-          "type": "B",
-          "text": "Ở nhà, vì nghĩ một phiếu của mình chẳng thay đổi được gì."
-        },
-        {
-          "type": "C",
-          "text": "Đi bầu nhưng không tìm hiểu trước, thấy người bên cạnh chọn ai thì chọn theo."
-        },
-        {
-          "type": "D",
-          "text": "Nhờ bố mẹ bầu hộ cho tiện."
-        }
+        "Giai cấp công nhân",
+        "Toàn dân, không mang bản chất giai cấp nào",
+        "Giai cấp nông dân",
+        "Tầng lớp trí thức"
       ],
-      "explain": "Nhà nước do nhân dân lập nên bằng bầu cử phổ thông, trực tiếp, bỏ phiếu kín. Bầu hộ là trái nguyên tắc (GT tr. 86, 88; HV-07)."
+      "correctIndex": 0,
+      "explain": "Nhà nước Việt Nam là nhà nước dân chủ nhưng \"tuyệt nhiên nó không phải là 'Nhà nước toàn dân'\" phi giai cấp; đó là nhà nước mang bản chất giai cấp công nhân, thống nhất với tính nhân dân và tính dân tộc (GT tr. 83).",
+      "relatedArtifacts": [
+        "HV-12"
+      ]
     },
     {
       "id": "q2",
-      "title": "Thủ tục ở phường",
-      "prompt": "Cán bộ hẹn bạn \"tuần sau quay lại\" và ám chỉ nếu \"bồi dưỡng\" thì sẽ nhanh hơn.",
+      "pillar": "dan-chu",
+      "title": "Nhà nước của nhân dân",
+      "prompt": "Nguyên lý \"dân là chủ\" khẳng định điều gì?",
       "options": [
-        {
-          "type": "A",
-          "text": "Hỏi rõ thời hạn giải quyết theo quy định, giữ giấy hẹn, phản ánh qua kênh chính thức nếu bị gây khó."
-        },
-        {
-          "type": "B",
-          "text": "Bỏ luôn, không làm thủ tục nữa."
-        },
-        {
-          "type": "C",
-          "text": "\"Bồi dưỡng\" cho xong, không muốn rắc rối."
-        },
-        {
-          "type": "D",
-          "text": "Quay video đăng ngay lên mạng, kèm lời lẽ xúc phạm."
-        }
+        "Nhân dân là chủ thể tối cao của mọi quyền lực",
+        "Quyền lợi và nghĩa vụ của nhân dân với tư cách người chủ",
+        "Nhà nước phục vụ lợi ích và nguyện vọng của nhân dân",
+        "Nhà nước do nhân dân bầu ra sau thắng lợi cách mạng"
       ],
-      "explain": "Cán bộ là công bộc, \"không phải để đè đầu dân\". Nhân dân có quyền kiểm soát, phê bình (GT tr. 85; HV-05, HV-10)."
+      "correctIndex": 0,
+      "explain": "Nhà nước của dân tức là \"dân là chủ\"; nguyên lý này khẳng định địa vị chủ thể tối cao của mọi quyền lực là nhân dân (GT tr. 84). Phương án B là nội dung của \"dân làm chủ\" (GT tr. 86).",
+      "relatedArtifacts": [
+        "HV-02"
+      ]
     },
     {
       "id": "q3",
-      "title": "Góp ý dự thảo luật",
-      "prompt": "Quốc hội đang lấy ý kiến về một dự thảo luật ảnh hưởng tới sinh viên.",
+      "pillar": "dan-chu",
+      "title": "Nhà nước do nhân dân",
+      "prompt": "\"Dân làm chủ\" nhấn mạnh điều gì?",
       "options": [
-        {
-          "type": "A",
-          "text": "Đọc dự thảo, gửi góp ý qua kênh lấy ý kiến chính thức."
-        },
-        {
-          "type": "B",
-          "text": "Không quan tâm, đó là chuyện của người lớn."
-        },
-        {
-          "type": "C",
-          "text": "Có ý kiến nhưng chỉ than phiền với bạn bè."
-        },
-        {
-          "type": "D",
-          "text": "Chia sẻ một bài \"tóm tắt\" trên mạng dù chưa đọc dự thảo gốc."
-        }
+        "Quyền lợi và nghĩa vụ của nhân dân với tư cách người chủ",
+        "Mọi quyền lực nhà nước đều thuộc về nhân dân",
+        "Cán bộ là đầy tớ của nhân dân",
+        "Nhà nước phải được lòng dân"
       ],
-      "explain": "Luật pháp dân chủ là công cụ quyền lực của nhân dân (GT tr. 86; HV-09)."
+      "correctIndex": 0,
+      "explain": "Nếu \"dân là chủ\" xác định vị thế của nhân dân đối với quyền lực nhà nước thì \"dân làm chủ\" nhấn mạnh quyền lợi và nghĩa vụ của nhân dân với tư cách người chủ: \"nhân dân có quyền lợi làm chủ, thì phải có nghĩa vụ làm tròn bổn phận công dân\" (GT tr. 86).",
+      "relatedArtifacts": [
+        "HV-07"
+      ]
     },
     {
       "id": "q4",
-      "title": "Tin đồn tham nhũng",
-      "prompt": "Bạn thấy một bài đăng lan truyền tố một cán bộ tham nhũng.",
+      "pillar": "dan-chu",
+      "title": "Hình thức dân chủ",
+      "prompt": "Hồ Chí Minh coi hình thức dân chủ nào là \"hoàn bị nhất\"?",
       "options": [
-        {
-          "type": "A",
-          "text": "Kiểm tra nguồn chính thống; nếu có bằng chứng thật thì tố cáo đúng kênh."
-        },
-        {
-          "type": "B",
-          "text": "Lướt qua, không liên quan đến mình."
-        },
-        {
-          "type": "C",
-          "text": "Biết một vụ tương tự ở địa phương nhưng im lặng vì sợ liên lụy."
-        },
-        {
-          "type": "D",
-          "text": "Chia sẻ ngay, kèm bình luận gay gắt."
-        }
+        "Dân chủ trực tiếp",
+        "Dân chủ gián tiếp",
+        "Dân chủ đại diện",
+        "Dân chủ tập trung"
       ],
-      "explain": "Phòng chống tiêu cực bằng dân chủ và pháp luật nghiêm minh, \"không có vùng cấm\", nhưng phải đúng người, đúng tội (GT tr. 94; HV-06, HV-10)."
+      "correctIndex": 0,
+      "explain": "Dân chủ trực tiếp là hình thức nhân dân trực tiếp quyết định mọi vấn đề liên quan đến vận mệnh quốc gia; Hồ Chí Minh coi trọng hình thức này \"bởi đây là hình thức dân chủ hoàn bị nhất\" (GT tr. 85).",
+      "relatedArtifacts": [
+        "HV-08"
+      ]
     },
     {
       "id": "q5",
-      "title": "Con đường hỏng",
-      "prompt": "Đoạn đường trước khu trọ bị hỏng nhiều tháng.",
+      "pillar": "dan-chu",
+      "title": "Dân chủ gián tiếp",
+      "prompt": "Trong hình thức dân chủ gián tiếp, Hồ Chí Minh xác định quyền lực nhà nước là gì?",
       "options": [
-        {
-          "type": "A",
-          "text": "Gửi phản ánh tới phường qua kênh tiếp nhận chính thức, rủ hàng xóm cùng kiến nghị."
-        },
-        {
-          "type": "B",
-          "text": "Đi đường khác cho nhanh."
-        },
-        {
-          "type": "C",
-          "text": "Nghĩ chắc đã có ai phản ánh rồi."
-        },
-        {
-          "type": "D",
-          "text": "Đăng bài công kích chính quyền phường trên nhóm cư dân."
-        }
+        "\"Thừa ủy quyền\" của nhân dân",
+        "Quyền lực tự có của bộ máy nhà nước",
+        "Quyền lực riêng của đội ngũ cán bộ",
+        "Quyền lực do pháp luật quốc tế trao cho"
       ],
-      "explain": "\"Việc gì có lợi cho dân thì làm\". Dân có quyền đôn đốc để nhà nước làm tròn trách nhiệm (GT tr. 85, 87)."
+      "correctIndex": 0,
+      "explain": "\"Quyền lực nhà nước là 'thừa ủy quyền' của nhân dân. Tự bản thân nhà nước không có quyền lực\"; vì vậy cơ quan nhà nước và cán bộ đều là \"công bộc\" của nhân dân (GT tr. 85).",
+      "relatedArtifacts": [
+        "HV-05"
+      ]
     },
     {
       "id": "q6",
-      "title": "Buổi đối thoại",
-      "prompt": "Địa phương hoặc nhà trường tổ chức buổi đối thoại, tiếp xúc với sinh viên.",
+      "pillar": "dan-chu",
+      "title": "Nhà nước vì nhân dân",
+      "prompt": "Theo Hồ Chí Minh, thước đo một Nhà nước vì dân là gì?",
       "options": [
-        {
-          "type": "A",
-          "text": "Chuẩn bị câu hỏi cụ thể, đến dự và phát biểu."
-        },
-        {
-          "type": "B",
-          "text": "Không đi vì mất thời gian."
-        },
-        {
-          "type": "C",
-          "text": "Đến dự, có điều muốn hỏi nhưng không dám phát biểu."
-        },
-        {
-          "type": "D",
-          "text": "Đến để \"bắt lỗi\", đặt câu hỏi gay gắt dựa trên tin chưa kiểm chứng."
-        }
+        "Được lòng dân",
+        "Có bộ máy đông đảo",
+        "Có nhiều đạo luật",
+        "Có nền kinh tế tăng trưởng nhanh"
       ],
-      "explain": "Dân chủ trực tiếp là hình thức dân chủ hoàn bị nhất (GT tr. 85; HV-08)."
+      "correctIndex": 0,
+      "explain": "\"Theo Hồ Chí Minh, thước đo một Nhà nước vì dân là phải được lòng dân\"; cán bộ phải \"làm sao cho được lòng dân, dân tin, dân mến, dân yêu\" (GT tr. 87).",
+      "relatedArtifacts": [
+        "HV-02"
+      ]
     },
     {
       "id": "q7",
-      "title": "Tài sản chung",
-      "prompt": "Bạn thấy vài bạn viết vẽ, làm hỏng bàn ghế thư viện trường.",
+      "pillar": "phap-quyen",
+      "title": "Nhà nước hợp hiến, hợp pháp",
+      "prompt": "Tại phiên họp đầu tiên của Chính phủ lâm thời ngày 3/9/1945, Hồ Chí Minh đề nghị việc gì?",
       "options": [
-        {
-          "type": "A",
-          "text": "Nhắc nhở nhẹ nhàng; nếu tiếp diễn thì báo người quản lý."
-        },
-        {
-          "type": "B",
-          "text": "Không phải đồ của mình nên kệ."
-        },
-        {
-          "type": "C",
-          "text": "Thấy không đúng nhưng sợ mất lòng nên thôi."
-        },
-        {
-          "type": "D",
-          "text": "Chụp ảnh đăng lên nhóm lớp, bêu tên các bạn đó."
-        }
+        "Sớm tổ chức Tổng tuyển cử với chế độ phổ thông đầu phiếu để có hiến pháp dân chủ",
+        "Thành lập ngay Ban Thanh tra đặc biệt",
+        "Ban hành Luật Phòng, chống tham nhũng",
+        "Thông qua Hiến pháp năm 1959"
       ],
-      "explain": "Làm chủ đi đôi với nghĩa vụ, trong đó có bảo vệ tài sản công cộng (GT tr. 86)."
+      "correctIndex": 0,
+      "explain": "Hồ Chí Minh đề nghị: \"Chúng ta phải có một hiến pháp dân chủ. Tôi đề nghị Chính phủ tổ chức càng sớm càng hay cuộc TỔNG TUYỂN CỬ với chế độ phổ thông đầu phiếu\" (Hồ Chí Minh, 2011, t.4, tr.7; GT tr. 88).",
+      "relatedArtifacts": [
+        "HV-03"
+      ]
     },
     {
       "id": "q8",
-      "title": "Ngày Pháp luật",
-      "prompt": "Trường tổ chức cuộc thi tìm hiểu pháp luật.",
+      "pillar": "phap-quyen",
+      "title": "Thượng tôn pháp luật",
+      "prompt": "Ở cương vị Chủ tịch nước, Hồ Chí Minh đã ký lệnh công bố bao nhiêu đạo luật và sắc lệnh?",
       "options": [
-        {
-          "type": "A",
-          "text": "Tham gia và rủ bạn cùng tìm hiểu quyền, nghĩa vụ công dân."
-        },
-        {
-          "type": "B",
-          "text": "Nghĩ pháp luật là việc của sinh viên ngành luật."
-        },
-        {
-          "type": "C",
-          "text": "Muốn tham gia nhưng ngại bị cho là \"làm màu\"."
-        },
-        {
-          "type": "D",
-          "text": "Cho rằng xem vài clip ngắn trên mạng là đủ, không cần học."
-        }
+        "16 đạo luật và 613 sắc lệnh",
+        "613 đạo luật và 16 sắc lệnh",
+        "70 đạo luật và 243 sắc lệnh",
+        "243 đạo luật và 613 sắc lệnh"
       ],
-      "explain": "Bác coi trọng giáo dục pháp luật, nâng cao dân trí, nhất là với thế hệ trẻ (GT tr. 89; HV-09)."
+      "correctIndex": 0,
+      "explain": "Hồ Chí Minh hai lần lãnh đạo soạn thảo Hiến pháp (1946, 1959), ký lệnh công bố 16 đạo luật, 613 sắc lệnh, trong đó có 243 sắc lệnh quy định về tổ chức Nhà nước và pháp luật (GT tr. 89).",
+      "relatedArtifacts": [
+        "HV-09"
+      ]
+    },
+    {
+      "id": "q9",
+      "pillar": "phap-quyen",
+      "title": "Pháp quyền nhân nghĩa",
+      "prompt": "\"Pháp quyền nhân nghĩa\" theo Hồ Chí Minh trước hết là gì?",
+      "options": [
+        "Nhà nước tôn trọng, bảo đảm đầy đủ các quyền con người, chăm lo lợi ích của mọi người",
+        "Nhà nước chỉ dùng giáo dục, không dùng hình phạt",
+        "Pháp luật chỉ áp dụng với cán bộ, không áp dụng với dân",
+        "Mọi tội phạm đều được tha thứ"
+      ],
+      "correctIndex": 0,
+      "explain": "\"Pháp quyền nhân nghĩa\" tức là trước hết Nhà nước phải \"tôn trọng, bảo đảm thực hiện đầy đủ các quyền con người, chăm lo đến lợi ích của mọi người\"; pháp luật có tính nhân văn, khuyến thiện nhưng vẫn nghiêm minh (GT tr. 90–91).",
+      "relatedArtifacts": [
+        "HV-09"
+      ]
+    },
+    {
+      "id": "q10",
+      "pillar": "trong-sach",
+      "title": "Phòng, chống tiêu cực",
+      "prompt": "Theo Hồ Chí Minh, đâu là giải pháp căn bản và có ý nghĩa lâu dài để phòng, chống tiêu cực trong Nhà nước?",
+      "options": [
+        "Nâng cao trình độ dân chủ, thực hành dân chủ rộng rãi, phát huy quyền làm chủ của nhân dân",
+        "Tăng số lượng cơ quan thanh tra",
+        "Xử phạt thật nặng mọi vi phạm",
+        "Giảm bớt quyền hạn của cán bộ cấp cơ sở"
+      ],
+      "correctIndex": 0,
+      "explain": "Trong hệ thống biện pháp, \"nâng cao trình độ dân chủ trong xã hội, thực hành dân chủ rộng rãi, phát huy quyền làm chủ của nhân dân đó là giải pháp căn bản và có ý nghĩa lâu dài\" (GT tr. 94). Hồ Chí Minh cũng cho rằng \"việc gì cũng xử phạt thì lại không đúng\", phải lấy giáo dục làm chủ yếu (GT tr. 94).",
+      "relatedArtifacts": [
+        "HV-06"
+      ]
     }
-  ],
-  "tieBreak": [
-    "C",
-    "D",
-    "B",
-    "A"
   ]
 }

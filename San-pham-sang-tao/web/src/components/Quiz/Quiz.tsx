@@ -2,9 +2,9 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { quiz } from '../../lib/data'
 import { scrollToEl } from '../../lib/format'
 import { useQuizStartRequest } from '../../lib/quizStart'
-import { isTypeId, score } from '../../lib/scoring'
+import { findLevel, levelFor, score } from '../../lib/scoring'
 import { site } from '../../lib/site'
-import type { CitizenTypeId } from '../../types'
+import type { Level } from '../../types'
 import QuestionCard from './QuestionCard'
 import Result from './Result'
 import ShareActions from './ShareActions'
@@ -20,30 +20,31 @@ function shuffled(n: number) {
 
 type Phase = 'start' | 'play' | 'result' | 'shared'
 
-/** Đọc ?kq=A|B|C|D; bỏ qua giá trị không hợp lệ. */
-function sharedType(): CitizenTypeId | null {
+/** Đọc ?kq=<id mức> (quiz.json → levels); bỏ qua giá trị không hợp lệ. */
+function sharedLevel(): Level | null {
   const kq = new URLSearchParams(window.location.search).get('kq')
-  return isTypeId(kq) ? kq : null
+  return findLevel(kq, quiz.levels) ?? null
 }
 
 export default function Quiz() {
   const ui = site.quiz
   const total = quiz.questions.length
   const sectionRef = useRef<HTMLElement>(null)
-  const [sharedId] = useState(sharedType)
-  const [phase, setPhase] = useState<Phase>(sharedId ? 'shared' : 'start')
+  const [shared] = useState(sharedLevel)
+  const [phase, setPhase] = useState<Phase>(shared ? 'shared' : 'start')
   const [idx, setIdx] = useState(0)
-  const [answers, setAnswers] = useState<CitizenTypeId[]>([])
+  // answers[i]: chỉ số lựa chọn (thứ tự gốc) của câu i; đã có giá trị thì câu bị khóa
+  const [answers, setAnswers] = useState<(number | undefined)[]>([])
   // Thứ tự đáp án được trộn một lần mỗi lượt chơi
   const [orders, setOrders] = useState<number[][]>([])
 
   // Mở từ link chia sẻ: cuộn tới trang kết quả
   useEffect(() => {
-    if (sharedId) requestAnimationFrame(() => scrollToEl(sectionRef.current))
-  }, [sharedId])
+    if (shared) requestAnimationFrame(() => scrollToEl(sectionRef.current))
+  }, [shared])
 
   const start = useCallback(() => {
-    if (sharedId) {
+    if (shared) {
       // Bỏ ?kq khỏi địa chỉ để làm lại không mở lại kết quả cũ
       try {
         const u = new URL(window.location.href)
@@ -58,7 +59,7 @@ export default function Quiz() {
     setIdx(0)
     setPhase('play')
     scrollToEl(sectionRef.current)
-  }, [sharedId])
+  }, [shared])
 
   // "Làm quiz ngay" (hero) và "Bắt đầu quiz" (cầu nối): vào thẳng câu 1.
   // Đang làm dở thì chỉ cuộn tới, không xóa câu trả lời.
@@ -71,16 +72,18 @@ export default function Quiz() {
     }, [phase, start]),
   )
 
-  const choose = (t: CitizenTypeId) => {
+  // Chọn đáp án thì khóa câu; câu đã trả lời không sửa lại được
+  const choose = (optionIndex: number) => {
+    if (answers[idx] !== undefined) return
     const next = [...answers]
-    next[idx] = t
+    next[idx] = optionIndex
     setAnswers(next)
-    if (idx < total - 1) {
-      setIdx(idx + 1)
-    } else {
-      setPhase('result')
-      scrollToEl(sectionRef.current)
-    }
+  }
+
+  const goNext = () => {
+    if (idx < total - 1) setIdx(idx + 1)
+    else setPhase('result')
+    scrollToEl(sectionRef.current)
   }
 
   return (
@@ -110,21 +113,22 @@ export default function Quiz() {
               index={idx}
               total={total}
               order={orders[idx]}
-              selected={answers[idx]}
+              chosen={answers[idx]}
               onChoose={choose}
-              onBack={idx > 0 ? () => setIdx(idx - 1) : undefined}
+              onNext={goNext}
+              isLast={idx === total - 1}
             />
           )}
 
           {phase === 'result' && <PlayerResult answers={answers} onRetry={start} />}
 
-          {phase === 'shared' && sharedId && (
+          {phase === 'shared' && shared && (
             <Result
-              typeId={sharedId}
+              level={shared}
               eyebrow={site.share.sharedEyebrow}
               onRetry={start}
               retryLabel={site.share.takeQuiz}
-              actions={<ShareActions typeId={sharedId} />}
+              actions={<ShareActions level={shared} />}
             />
           )}
         </div>
@@ -133,16 +137,18 @@ export default function Quiz() {
   )
 }
 
-function PlayerResult({ answers, onRetry }: { answers: CitizenTypeId[]; onRetry: () => void }) {
-  const winner = score(answers, quiz.tieBreak).winner
+function PlayerResult({ answers, onRetry }: { answers: (number | undefined)[]; onRetry: () => void }) {
+  const points = score(quiz.questions, answers)
+  const level = levelFor(points, quiz.levels)
   return (
     <Result
-      typeId={winner}
+      level={level}
+      points={points}
       answers={answers}
       eyebrow={site.quiz.resultEyebrow}
       onRetry={onRetry}
       retryLabel={site.quiz.retry}
-      actions={<ShareActions typeId={winner} />}
+      actions={<ShareActions level={level} points={points} />}
     />
   )
 }

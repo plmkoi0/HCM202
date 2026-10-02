@@ -6,17 +6,23 @@ import { fmt } from '../../lib/format'
 import { OFFLINE } from '../../lib/offline'
 import { CARD_SIZE, copyText, shareUrl, type CardFormat } from '../../lib/share'
 import { site } from '../../lib/site'
-import type { CitizenTypeId } from '../../types'
+import type { Level } from '../../types'
 import Todo from '../ui/Todo'
 import ShareCard from './ShareCard'
 
 const btn = 'rounded-sm border-2 border-ink px-4 py-2 font-semibold hover:bg-ink hover:text-paper disabled:opacity-50'
 
+interface Props {
+  level: Level
+  /** Điểm của người chơi; không có khi mở từ link chia sẻ */
+  points?: number
+}
+
 /** Tải thẻ kết quả PNG, sao chép link, chia sẻ (mục 6). */
-export default function ShareActions({ typeId }: { typeId: CitizenTypeId }) {
+export default function ShareActions({ level, points }: Props) {
   const ui = site.share
-  const type = quiz.types.find((t) => t.id === typeId)!
-  const url = shareUrl(typeId)
+  const total = quiz.questions.length
+  const url = shareUrl(level.id)
   const cardRef = useRef<HTMLDivElement>(null)
   const [format, setFormat] = useState<CardFormat | null>(null)
   const [qr, setQr] = useState('')
@@ -41,7 +47,7 @@ export default function ShareActions({ typeId }: { typeId: CitizenTypeId }) {
         if (cancelled) return
         const a = document.createElement('a')
         a.href = dataUrl
-        a.download = `cua-dan-do-dan-vi-dan-${typeId}-${w}x${h}.png`
+        a.download = `cua-dan-do-dan-vi-dan-${level.id}-${w}x${h}.png`
         a.click()
         setStatus('')
       } catch {
@@ -53,7 +59,7 @@ export default function ShareActions({ typeId }: { typeId: CitizenTypeId }) {
     return () => {
       cancelled = true
     }
-  }, [format, typeId, ui.generateFailed])
+  }, [format, level.id, ui.generateFailed])
 
   const download = (f: CardFormat) => {
     setStatus(ui.generating)
@@ -69,7 +75,11 @@ export default function ShareActions({ typeId }: { typeId: CitizenTypeId }) {
     if (!url) return
     if (!navigator.share) return copy()
     try {
-      await navigator.share({ title: site.name, text: fmt(ui.shareText, { name: type.name }), url })
+      const text =
+        points === undefined
+          ? fmt(ui.shareTextLevel, { level: level.name })
+          : fmt(ui.shareText, { score: points, total, level: level.name })
+      await navigator.share({ title: site.name, text, url })
     } catch (e) {
       // Người dùng tự hủy thì bỏ qua; lỗi khác thì sao chép link
       if ((e as DOMException)?.name !== 'AbortError') await copy()
@@ -107,7 +117,7 @@ export default function ShareActions({ typeId }: { typeId: CitizenTypeId }) {
 
       {format && (!url || qr) && (
         <div aria-hidden="true" style={{ position: 'fixed', left: -20000, top: 0, pointerEvents: 'none' }}>
-          <ShareCard ref={cardRef} type={type} format={format} qr={qr} url={url} />
+          <ShareCard ref={cardRef} level={level} points={points} total={total} format={format} qr={qr} url={url} />
         </div>
       )}
     </div>

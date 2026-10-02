@@ -1,63 +1,79 @@
 import { describe, expect, it } from 'vitest'
-import quiz from '../data/quiz.json'
-import type { CitizenTypeId } from '../types'
-import { isTypeId, score } from './scoring'
+import artifactsJson from '../data/artifacts.json'
+import quizJson from '../data/quiz.json'
+import type { QuizData } from '../types'
+import { findLevel, levelFor, score } from './scoring'
 
-const tie = quiz.tieBreak as CitizenTypeId[]
-const seq = (s: string) => s.split('') as CitizenTypeId[]
+const quiz = quizJson as QuizData
+const { questions, levels } = quiz
+const total = questions.length
 
 describe('score', () => {
-  it('dùng thứ tự hòa điểm C → D → B → A từ quiz.json', () => {
-    expect(tie).toEqual(['C', 'D', 'B', 'A'])
+  it('đúng cả 10 câu → 10, sai cả 10 câu → 0', () => {
+    expect(score(questions, questions.map((q) => q.correctIndex))).toBe(10)
+    expect(score(questions, questions.map((q) => (q.correctIndex + 1) % 4))).toBe(0)
   })
 
-  it('thắng rõ ràng', () => {
-    const r = score(seq('AAAAABCD'), tie)
-    expect(r.winner).toBe('A')
-    expect(r.counts).toEqual({ A: 5, B: 1, C: 1, D: 1 })
-  })
-
-  it('hòa 2 kiểu: theo thứ tự ưu tiên', () => {
-    expect(score(seq('AAAABBBB'), tie).winner).toBe('B')
-    expect(score(seq('AAAADDDD'), tie).winner).toBe('D')
-    expect(score(seq('DDDCCCAB'), tie).winner).toBe('C')
-  })
-
-  it('hòa 4 kiểu: chọn C', () => {
-    expect(score(seq('AABBCCDD'), tie).winner).toBe('C')
-  })
-
-  it('tính đúng tỉ lệ phần trăm', () => {
-    expect(score(seq('AAAACCDD'), tie).percents).toEqual({ A: 50, B: 0, C: 25, D: 25 })
-    expect(score(seq('AABBCCDD'), tie).percents).toEqual({ A: 25, B: 25, C: 25, D: 25 })
-    // 12,5% và 87,5%: phần dư bằng nhau, ưu tiên theo tieBreak (B trước A)
-    expect(score(seq('ABBBBBBB'), tie).percents).toEqual({ A: 12, B: 88, C: 0, D: 0 })
-    // 37,5% · 37,5% · 25%: phần dư bằng nhau, C được ưu tiên hơn A
-    expect(score(seq('AAACCCDD'), tie).percents).toEqual({ A: 37, B: 0, C: 38, D: 25 })
-  })
-
-  it('tổng phần trăm luôn bằng 100 với mọi tổ hợp 8 câu', () => {
-    let combos = 0
-    for (let a = 0; a <= 8; a++)
-      for (let b = 0; a + b <= 8; b++)
-        for (let c = 0; a + b + c <= 8; c++) {
-          const d = 8 - a - b - c
-          const answers = seq('A'.repeat(a) + 'B'.repeat(b) + 'C'.repeat(c) + 'D'.repeat(d))
-          const { percents } = score(answers, tie)
-          expect(percents.A + percents.B + percents.C + percents.D).toBe(100)
-          combos++
-        }
-    expect(combos).toBe(165)
-  })
-
-  it('không có câu trả lời thì tỉ lệ bằng 0', () => {
-    expect(score([], tie).percents).toEqual({ A: 0, B: 0, C: 0, D: 0 })
+  it('đếm đúng số câu trả lời đúng; câu chưa trả lời không tính', () => {
+    const answers = questions.map((q, i) => (i % 2 === 0 ? q.correctIndex : (q.correctIndex + 1) % 4))
+    expect(score(questions, answers)).toBe(5)
+    expect(score(questions, [])).toBe(0)
   })
 })
 
-describe('isTypeId', () => {
-  it('chỉ nhận A, B, C, D', () => {
-    expect(['A', 'B', 'C', 'D'].every(isTypeId)).toBe(true)
-    expect(['a', 'E', '', 'AB', null].some(isTypeId)).toBe(false)
+describe('levelFor', () => {
+  it.each([
+    [0, 'ghe-bao-tang'],
+    [5, 'ghe-bao-tang'],
+    [6, 'dang-hoc'],
+    [8, 'dang-hoc'],
+    [9, 'am-hieu'],
+    [10, 'am-hieu'],
+  ])('%i điểm → %s', (points, id) => {
+    expect(levelFor(points, levels).id).toBe(id)
+  })
+
+  it('levels phủ kín 0–10, không chồng lấn', () => {
+    for (let p = 0; p <= total; p++) {
+      expect(levels.filter((l) => p >= l.min && p <= l.max)).toHaveLength(1)
+    }
+    for (const l of levels) {
+      expect(Number.isInteger(l.min) && Number.isInteger(l.max) && l.min <= l.max).toBe(true)
+      expect(l.min).toBeGreaterThanOrEqual(0)
+      expect(l.max).toBeLessThanOrEqual(total)
+    }
+  })
+
+  it('findLevel chỉ nhận id mức có trong quiz.json', () => {
+    expect(findLevel('dang-hoc', levels)?.name).toBe('Chủ nhân đang học')
+    for (const bad of ['', 'A', 'DANG-HOC', null, 7]) expect(findLevel(bad, levels)).toBeUndefined()
+  })
+})
+
+describe('dữ liệu quiz', () => {
+  it('có 10 câu, id không trùng, trụ cột hợp lệ', () => {
+    expect(questions).toHaveLength(10)
+    expect(new Set(questions.map((q) => q.id)).size).toBe(10)
+    for (const q of questions) expect(['dan-chu', 'phap-quyen', 'trong-sach']).toContain(q.pillar)
+  })
+
+  it('mỗi câu có đúng 4 lựa chọn và correctIndex hợp lệ', () => {
+    for (const q of questions) {
+      expect(q.options).toHaveLength(4)
+      expect(Number.isInteger(q.correctIndex) && q.correctIndex >= 0 && q.correctIndex < 4).toBe(true)
+    }
+  })
+
+  it('mọi relatedArtifacts tồn tại trong artifacts.json', () => {
+    const ids = new Set((artifactsJson as { id: string }[]).map((a) => a.id))
+    for (const q of questions) {
+      expect(q.relatedArtifacts.length).toBeGreaterThan(0)
+      for (const id of q.relatedArtifacts) expect(ids.has(id), `${q.id} → ${id}`).toBe(true)
+    }
+  })
+
+  it('id mức không trùng và dùng được trong ?kq=', () => {
+    expect(new Set(levels.map((l) => l.id)).size).toBe(levels.length)
+    for (const l of levels) expect(l.id).toMatch(/^[a-z0-9-]+$/)
   })
 })

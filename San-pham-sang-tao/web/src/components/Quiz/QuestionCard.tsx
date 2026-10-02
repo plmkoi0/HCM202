@@ -1,7 +1,9 @@
 import { useEffect, useRef } from 'react'
 import { fmt } from '../../lib/format'
 import { site } from '../../lib/site'
-import type { CitizenTypeId, Question } from '../../types'
+import type { Question } from '../../types'
+import PillarChip from '../ui/PillarChip'
+import RelatedChips from './RelatedChips'
 
 interface Props {
   question: Question
@@ -9,33 +11,30 @@ interface Props {
   total: number
   /** Thứ tự hiển thị đáp án (chỉ số trong question.options), cố định trong lượt chơi */
   order: number[]
-  selected?: CitizenTypeId
-  onChoose: (t: CitizenTypeId) => void
-  onBack?: () => void
+  /** Lựa chọn đã chọn (thứ tự gốc); có giá trị nghĩa là câu đã khóa */
+  chosen?: number
+  onChoose: (optionIndex: number) => void
+  onNext: () => void
+  isLast: boolean
 }
 
-export default function QuestionCard({ question, index, total, order, selected, onChoose, onBack }: Props) {
+export default function QuestionCard({ question, index, total, order, chosen, onChoose, onNext, isLast }: Props) {
   const ui = site.quiz
   const headingRef = useRef<HTMLHeadingElement>(null)
+  const locked = chosen !== undefined
+  const isCorrect = chosen === question.correctIndex
   const progressLabel = fmt(ui.progress, { x: index + 1, n: total })
 
-  // Chuyển câu: đưa tiêu điểm về tiêu đề để người dùng bàn phím/đọc màn hình theo kịp
+  // Chuyển câu: đưa tiêu điểm về tiêu đề câu để người dùng bàn phím/đọc màn hình theo kịp
   useEffect(() => {
     headingRef.current?.focus({ preventScroll: true })
   }, [question.id])
 
   return (
     <div>
-      <div className="flex items-center justify-between gap-3 text-sm font-medium">
+      <div className="flex flex-wrap items-center justify-between gap-2 text-sm font-medium">
         <span id="quiz-progress">{progressLabel}</span>
-        <button
-          type="button"
-          onClick={onBack}
-          disabled={!onBack}
-          className="rounded px-2 py-1 hover:bg-line disabled:invisible"
-        >
-          {ui.back}
-        </button>
+        <PillarChip pillar={question.pillar} />
       </div>
       <div
         role="progressbar"
@@ -56,34 +55,83 @@ export default function QuestionCard({ question, index, total, order, selected, 
       </h3>
       <p className="mt-3 text-lg">{question.prompt}</p>
 
-      <ul className="mt-6 space-y-3">
-        {order.map((oi, n) => {
-          const opt = question.options[oi]
-          const active = selected === opt.type
+      <ul aria-label={ui.optionsAria} className="mt-6 space-y-3">
+        {order.map((oi) => {
+          const correct = oi === question.correctIndex
+          const mine = oi === chosen
+          // Sau khi khóa: tô đáp án đúng và đáp án đã chọn, kèm ✓/✗ và nhãn chữ (không chỉ dựa vào màu)
+          const state = !locked ? 'idle' : correct ? 'correct' : mine ? 'wrong' : 'other'
+          const box = {
+            idle: 'border-line bg-card hover:border-ink',
+            correct: 'border-muc bg-muc/10',
+            wrong: 'border-son bg-son/10',
+            other: 'border-line bg-card text-ink-soft',
+          }[state]
+          const icon = {
+            idle: 'border-ink-soft',
+            correct: 'border-muc bg-muc text-on-muc',
+            wrong: 'border-son bg-son text-on-son',
+            other: 'border-line',
+          }[state]
           return (
             <li key={oi}>
               <button
                 type="button"
-                aria-pressed={active}
-                onClick={() => onChoose(opt.type)}
-                className={`flex w-full items-start gap-3 rounded-sm border-2 px-4 py-3 text-left transition motion-reduce:transition-none ${
-                  active ? 'border-son bg-son/10' : 'border-line bg-card hover:border-ink'
-                }`}
+                aria-disabled={locked}
+                onClick={() => !locked && onChoose(oi)}
+                className={`flex w-full items-start gap-3 rounded-sm border-2 px-4 py-3 text-left transition motion-reduce:transition-none ${box} ${locked ? 'cursor-default' : ''}`}
               >
                 <span
                   aria-hidden="true"
-                  className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-sm font-semibold ${
-                    active ? 'border-son bg-son text-on-son' : 'border-ink-soft'
-                  }`}
+                  className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 text-sm font-bold ${icon}`}
                 >
-                  {n + 1}
+                  {state === 'correct' ? '✓' : state === 'wrong' ? '✗' : ''}
                 </span>
-                <span>{opt.text}</span>
+                <span className="min-w-0">
+                  <span className="block">{question.options[oi]}</span>
+                  {locked && (correct || mine) && (
+                    <span className="mt-1 flex flex-wrap gap-x-3 text-sm font-semibold">
+                      {correct && <span className="text-muc-text">{ui.correctAnswer}</span>}
+                      {mine && <span className={correct ? 'text-muc-text' : 'text-son-text'}>{ui.yourChoice}</span>}
+                    </span>
+                  )}
+                </span>
               </button>
             </li>
           )
         })}
       </ul>
+
+      {/* Thông báo Đúng/Chưa đúng cho trình đọc màn hình */}
+      <div role="status" aria-live="polite" className="mt-5">
+        {locked && (
+          <p className={`text-lg font-bold ${isCorrect ? 'text-muc-text' : 'text-son-text'}`}>
+            <span aria-hidden="true">{isCorrect ? '✓ ' : '✗ '}</span>
+            {isCorrect ? ui.correct : ui.incorrect}
+            {!isCorrect && (
+              <span className="block text-base font-medium text-ink">
+                {ui.correctAnswer}: {question.options[question.correctIndex]}
+              </span>
+            )}
+          </p>
+        )}
+      </div>
+
+      {locked && (
+        <div className="mt-4 border-t border-line pt-4">
+          <p>
+            <span className="font-semibold">{ui.explainLabel}:</span> {question.explain}
+          </p>
+          <RelatedChips ids={question.relatedArtifacts} />
+          <button
+            type="button"
+            onClick={onNext}
+            className="mt-6 rounded-sm bg-son px-6 py-3 font-semibold text-on-son shadow-sm hover:brightness-110"
+          >
+            {isLast ? ui.finish : ui.next} →
+          </button>
+        </div>
+      )}
     </div>
   )
 }

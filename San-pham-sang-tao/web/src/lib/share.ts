@@ -1,6 +1,5 @@
 import { OFFLINE } from './offline'
 import { site } from './site'
-import type { CitizenTypeId } from '../types'
 
 /** Khổ thẻ kết quả PNG (mục 6) */
 export type CardFormat = 'story' | 'square'
@@ -20,10 +19,10 @@ export function onlineUrl(): string | null {
   return null
 }
 
-/** Link chia sẻ theo kết quả: siteUrl + ?kq=X */
-export function shareUrl(t: CitizenTypeId): string | null {
+/** Link chia sẻ theo mức xếp loại: siteUrl + ?kq=<id mức> */
+export function shareUrl(levelId: string): string | null {
   const base = onlineUrl()
-  return base ? `${base}?kq=${t}` : null
+  return base ? `${base}?kq=${levelId}` : null
 }
 
 export async function copyText(text: string): Promise<boolean> {

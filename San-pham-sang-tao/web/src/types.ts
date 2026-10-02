@@ -30,30 +30,32 @@ export interface Artifact {
   hidden?: boolean
 }
 
-export type CitizenTypeId = 'A' | 'B' | 'C' | 'D'
-
-export interface CitizenType {
-  id: CitizenTypeId
-  name: string
-  desc: string
-  quote: Quote
-  actions: string[]
+export interface Question {
+  id: string
+  pillar: PillarId
+  title: string
+  prompt: string
+  /** Đúng 4 lựa chọn, theo thứ tự gốc trong QUIZ-KIEN-THUC.md */
+  options: string[]
+  /** Chỉ số đáp án đúng trong `options` (thứ tự gốc, trước khi trộn) */
+  correctIndex: number
+  explain: string
   relatedArtifacts: string[]
 }
 
-export interface Question {
+/** Mức xếp loại theo điểm, min–max tính cả hai đầu */
+export interface Level {
   id: string
-  title: string
-  prompt: string
-  options: { type: CitizenTypeId; text: string }[]
-  explain: string
+  min: number
+  max: number
+  name: string
+  message: string
 }
 
 export interface QuizData {
   closing: string
-  types: CitizenType[]
+  levels: Level[]
   questions: Question[]
-  tieBreak: CitizenTypeId[]
 }
 
 export interface Reference {
