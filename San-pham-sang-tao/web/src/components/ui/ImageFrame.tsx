@@ -6,7 +6,7 @@ import type { Artifact } from '../../types'
 /** Ảnh tư liệu, hoặc khung SVG giữ chỗ khi nhóm chưa cung cấp ảnh (mục 4). */
 export default function ImageFrame({ image }: { image: Artifact['image'] }) {
   if (image.src) {
-    // Bản offline: ảnh đã nhúng base64; bản online: lấy từ public/
+    // Ảnh đã nhúng base64 lúc build (virtual:public-images)
     const src = publicImages[image.src.replace(/^\.?\//, '')] ?? image.src
     return (
       <figure>

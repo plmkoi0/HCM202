@@ -9,8 +9,7 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "vitest run",
-    "build:offline": "tsc -b && vite build --mode offline",
-    "package:offline": "npm run build:offline && node scripts/package-offline.mjs"
+    "package": "npm run build && node scripts/package.mjs"
   },
   "dependencies": {
     "html-to-image": "^1.11.13",

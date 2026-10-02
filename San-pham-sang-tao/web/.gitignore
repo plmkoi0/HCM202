@@ -23,5 +23,3 @@ dist-ssr
 *.sln
 *.sw?
 
-# Bản offline (npm run build:offline, npm run package:offline)
-dist-offline

@@ -33,44 +33,40 @@ function listFiles(dir: string): string[] {
 }
 
 /**
- * Module ảo `virtual:public-images`: bảng { "images/artifacts/HV-07.jpg": "data:…" }.
- * Bản offline nhúng mọi ảnh trong public/images; bản online để trống (ảnh lấy từ public/).
- * Bản offline cũng nhúng favicon vào index.html.
+ * Module ảo `virtual:public-images`: bảng { "images/artifacts/HV-07.jpg": "data:…" }
+ * gồm mọi ảnh trong public/images, nhúng base64 vào file index.html duy nhất.
+ * Favicon cũng được nhúng vào index.html.
  */
-function offlineAssets(offline: boolean): Plugin {
+function embedAssets(): Plugin {
   const id = 'virtual:public-images'
   const resolved = '\0' + id
   return {
-    name: 'hcm202-offline-assets',
+    name: 'hcm202-embed-assets',
     resolveId: (source) => (source === id ? resolved : undefined),
     load(loadId) {
       if (loadId !== resolved) return
       const map: Record<string, string> = {}
-      if (offline) {
-        for (const file of listFiles(join(PUBLIC_DIR, 'images'))) {
-          const uri = dataUri(file)
-          if (uri) map[relative(PUBLIC_DIR, file).split(sep).join('/')] = uri
-          this.addWatchFile(file)
-        }
+      for (const file of listFiles(join(PUBLIC_DIR, 'images'))) {
+        const uri = dataUri(file)
+        if (uri) map[relative(PUBLIC_DIR, file).split(sep).join('/')] = uri
+        this.addWatchFile(file)
       }
       return `export default ${JSON.stringify(map)}`
     },
     transformIndexHtml(html) {
-      if (!offline) return html
       const icon = dataUri(join(PUBLIC_DIR, 'favicon.svg'))
       return icon ? html.replace('href="./favicon.svg"', `href="${icon}"`) : html
     },
   }
 }
 
-// base './': đường dẫn tương đối, chạy được trên Vercel và khi mở trực tiếp file
-export default defineConfig(({ mode }) => {
-  const offline = mode === 'offline'
-  return {
-    base: './',
-    // Bản offline chỉ có một file index.html; ảnh và favicon đã được nhúng
-    publicDir: offline ? false : PUBLIC_DIR,
-    plugins: [react(), tailwindcss(), offlineAssets(offline), ...(offline ? [viteSingleFile()] : [])],
-    build: offline ? { outDir: 'dist-offline', emptyOutDir: true } : {},
-  }
+/**
+ * Một bản build duy nhất: dist/index.html chứa toàn bộ JS, CSS, font, ảnh, favicon
+ * (vite-plugin-singlefile), mở bằng cách bấm đúp (file://) khi không có mạng.
+ * public/ chỉ là nơi để ảnh nguồn; không chép ra dist.
+ */
+export default defineConfig({
+  base: './',
+  publicDir: false,
+  plugins: [react(), tailwindcss(), embedAssets(), viteSingleFile()],
 })

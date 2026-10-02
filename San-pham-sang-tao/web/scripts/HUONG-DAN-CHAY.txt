@@ -9,3 +9,4 @@ LƯU Ý
 - Nên dùng trình duyệt Google Chrome hoặc Microsoft Edge.
 - Không cần mạng Internet.
 - Không cần cài đặt gì thêm.
+- Nhấn F11 để xem toàn màn hình khi trình chiếu.

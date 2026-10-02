@@ -1,7 +1,7 @@
 /*
  * Font tự host (từ gói @fontsource, giấy phép OFL — xem fonts/LICENSE-*.txt).
  * Chỉ gồm các weight đang dùng, subset latin + vietnamese, định dạng woff2.
- * Bản online: Vite xuất thành file riêng. Bản offline: nhúng base64 vào index.html.
+ * Khi build, font được nhúng base64 vào file dist/index.html duy nhất.
  */
 @font-face {
   font-family: 'Noto Serif';

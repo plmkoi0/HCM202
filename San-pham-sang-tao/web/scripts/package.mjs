@@ -1,4 +1,4 @@
-// Đóng gói bản offline: dist-offline/HCM202-San-pham-sang-tao.zip
+// Đóng gói sản phẩm: dist/HCM202-San-pham-sang-tao.zip
 // gồm index.html và HUONG-DAN-CHAY.txt. Không cần công cụ zip bên ngoài.
 import { readFileSync, statSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url'
 import zlib from 'node:zlib'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
-const outDir = join(root, 'dist-offline')
+const outDir = join(root, 'dist')
 const zipPath = join(outDir, 'HCM202-San-pham-sang-tao.zip')
 
 const guide = readFileSync(join(root, 'scripts/HUONG-DAN-CHAY.txt'), 'utf8')
