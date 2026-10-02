@@ -12,7 +12,7 @@ File này lưu thông tin về repo để Claude (Claude Code / Claude chat) hi�
 ## Nội dung sản phẩm (theo mục 1 tài liệu thiết kế)
 - **Tên sản phẩm:** Của dân · Do dân · Vì dân — Bảo tàng số
 - **Chủ đề:** Chủ đề 4 — Tư tưởng Hồ Chí Minh về Nhà nước của nhân dân, do nhân dân, vì nhân dân
-- **Hình thức:** Web app tĩnh, một trang cuộn dài, chạy tốt trên điện thoại. Bảo tàng số (dòng thời gian hiện vật) → Quiz "Bạn là công dân kiểu gì?" → Chia sẻ kết quả
+- **Hình thức:** Web app tĩnh, một trang cuộn dài, chạy tốt trên điện thoại. Bảo tàng số (dòng thời gian hiện vật) → Quiz kiến thức "Bạn hiểu Nhà nước của dân đến đâu?" → Chia sẻ kết quả
 - **Thông điệp xuyên suốt:** "Chủ nhân không đứng ngoài"
 - **Đối tượng:** Sinh viên đại học
 - **Nguồn chuẩn:** Giáo trình HCM202, Chương IV, mục II (tr. 83–95) và *Hồ Chí Minh Toàn tập* (Nxb Chính trị quốc gia, 2011)
@@ -28,6 +28,7 @@ HCM202/
 └── San-pham-sang-tao/
     ├── THIET-KE-WEB-APP.md          ← tài liệu thiết kế
     ├── NOI-DUNG-BO-SUNG.md          ← nội dung nhóm duyệt (câu chuyện, ngày nay, nguồn web); chỉ nhập mục "Duyệt: [x]"
+    ├── QUIZ-KIEN-THUC.md            ← quiz kiến thức nhóm duyệt (10 câu chính + 2 câu dự phòng, mức xếp loại)
     └── web/                         ← Vite + React + TypeScript + Tailwind CSS v4 + Vitest
         ├── index.html               ← meta robots noindex, Open Graph, Twitter card
         ├── vite.config.ts           ← base './'; mode "offline": vite-plugin-singlefile, nhúng ảnh
@@ -51,11 +52,11 @@ HCM202/
             │   ├── Nav, Hero, Intro, Bridge, MindMap, Sources, Team (.tsx)
             │   ├── Museum/          ← Museum, PillarFilter, ProgressBar, Timeline, ArtifactCard,
             │   │                      ArtifactModal, ArtifactViewerProvider (modal dùng chung)
-            │   ├── Quiz/            ← Quiz, QuestionCard, Result, Review, ShareActions, ShareCard
+            │   ├── Quiz/            ← Quiz, QuestionCard, Result, Review, RelatedChips, ShareActions, ShareCard
             │   └── ui/              ← QuoteBlock, Todo, PillarChip, VerifyBadge, ImageFrame, Reference (APA7)
             ├── lib/                 ← data, site, pillars, pillarStyles, useReveal,
             │                          artifactViewer (context mở modal theo id), format,
-            │                          scoring (+ scoring.test.ts), share (siteUrl, khổ thẻ, sao chép),
+            │                          scoring (điểm, mức xếp loại; + scoring.test.ts), share (siteUrl, khổ thẻ, sao chép),
             │                          offline (cờ OFFLINE), quizStart (nút ngoài vào thẳng câu 1),
             │                          data.test.ts (ẩn hiện vật, tối thiểu 8 hiện vật hiển thị),
             │                          sources (sắp xếp nguồn theo tác giả, tra theo id)
@@ -83,7 +84,7 @@ Kiểm tra: `npm run test && npm run build && npm run build:offline && npm run l
 - [x] **M2** — Hero, bộ lọc, dòng thời gian, phiếu và cửa sổ chi tiết hiện vật, thanh tiến độ
   - Cửa sổ chi tiết dùng `<dialog>` (Esc để đóng, nút Trước/Sau); tiến độ "đã xem" lưu ở localStorage
   - Mục Quiz, Nguồn, Nhóm hiện là khung giữ chỗ để menu neo hoạt động
-- [x] **M3** — Quiz 8 câu, `scoring.ts` có unit test, trang kết quả, xem lại giải thích
+- [x] **M3** — Quiz 8 câu, `scoring.ts` có unit test, trang kết quả, xem lại giải thích _(quiz tính cách, đã thay bằng quiz kiến thức ngày 2/10/2026 — xem dưới)_
   - Mỗi màn hình một câu, "Câu x/8", nút quay lại; đáp án trộn một lần mỗi lượt chơi
   - Chip "Hiện vật liên quan" mở đúng ArtifactModal (qua `ArtifactViewerProvider`), tính vào tiến độ "đã xem"
 - [x] **M4** — Thẻ kết quả PNG, link `?kq=`, Web Share, Open Graph, sơ đồ tư duy, trang nguồn
@@ -107,6 +108,12 @@ Kiểm tra: `npm run test && npm run build && npm run build:offline && npm run l
   - HV-04 dùng lại trích dẫn HV-03 kèm ghi chú; ghi chú ngữ cảnh mới cho HV-02
   - 19 nguồn web APA7 trong `sources.json`; trang Nguồn xếp theo tác giả (`localeCompare('vi')`), URL mở tab mới
   - `og-image.png` + og:image/twitter:image chèn lúc build khi `siteUrl` đã điền
+- [x] **Quiz kiến thức** "Bạn hiểu Nhà nước của dân đến đâu?" (2/10/2026, nội dung `QUIZ-KIEN-THUC.md`, thay quiz tính cách)
+  - 10 câu chính (không đưa Câu 11, 12 dự phòng), "Câu x/10", đáp án trộn mỗi lượt; chọn xong khóa câu, hiện Đúng/Chưa đúng (aria-live), ✓/✗ + nhãn chữ, giải thích, chip hiện vật; không có "Câu trước"
+  - Kết quả: điểm x/10, mức + lời nhắn, closing, danh sách câu chưa đúng, "Xem lại tất cả", "Làm lại"
+  - Thẻ PNG: tiêu đề quiz, điểm, mức, closing, tên web, QR; `?kq=<id mức>` hiện thẻ mức (không điểm)
+  - `og-image.png` thay bằng ảnh mới của nhóm (tiêu đề quiz kiến thức); og/twitter description đổi tên quiz
+  - Kiểm thử Playwright qua file:// khi chặn mạng ở 360px và 1440px: làm hết quiz bằng chuột (10/10 → "Chủ nhân am hiểu") và bằng bàn phím (0/10 → "Hãy ghé thêm bảo tàng"), chip mở đúng hiện vật, `?kq=`, tải thẻ PNG, axe không lỗi, không lỗi console, không request ra ngoài, không cuộn ngang
 
 ## Ghi chú dữ liệu
 - `verified: true` cho cả 13 hiện vật sau khi nhóm duyệt `NOI-DUNG-BO-SUNG.md` (nên hiện không còn nhãn `[Chờ xác minh]`).
@@ -114,13 +121,16 @@ Kiểm tra: `npm run test && npm run build && npm run build:offline && npm run l
 - `quote.lead` là phần dẫn nằm ngoài ngoặc kép (vd. HV-05, kiểu A). `quote.paraphrase: true` là tóm ý, không phải trích nguyên văn (HV-13).
 - `hidden: true` (tùy chọn, mặc định không ẩn hiện vật nào) ẩn hiện vật khỏi dòng thời gian, số đếm bộ lọc, tổng tiến độ, nút Trước/Sau và chip "Hiện vật liên quan". Lọc một lần ở `lib/data.ts` (`artifacts` chỉ gồm hiện vật đang hiển thị, `isVisibleArtifact`). Tiến độ "đã xem" chỉ giữ id đang hiển thị (id cũ trong localStorage bị bỏ). Test `data.test.ts` yêu cầu tối thiểu 8 hiện vật hiển thị (mục 4).
 - Nhãn `[Chờ xác minh]` hiện trên phiếu và cửa sổ chi tiết khi `verified: false`. Trường `TODO` hiện thành ô viền đứt "TODO".
-- Chữ giao diện nằm hết trong `site.json` (menu `nav`, `skipLink`, `museum` gồm tiêu đề, bộ lọc, tiến độ `{x}/{n}`, phiếu, cửa sổ chi tiết, ghi chú ô TODO; `pillars` nhãn trụ cột; `quiz`, `share`, `mindmap`, `sources`, `offline`); câu hỏi, kiểu công dân, `closing` trong `quiz.json`. Component chỉ còn ký hiệu (—, “ ”, ✓, ·, +/−).
-- `site.json` → `siteUrl` đang là `TODO` (điền link Vercel sau khi deploy). Link chia sẻ và mã QR = `siteUrl + ?kq=X`.
+- Chữ giao diện nằm hết trong `site.json` (menu `nav`, `skipLink`, `museum` gồm tiêu đề, bộ lọc, tiến độ `{x}/{n}`, phiếu, cửa sổ chi tiết, ghi chú ô TODO; `pillars` nhãn trụ cột; `quiz`, `share`, `mindmap`, `sources`, `offline`); câu hỏi, mức xếp loại, `closing` trong `quiz.json`. Component chỉ còn ký hiệu (—, “ ”, ✓, ·, +/−).
+- `site.json` → `siteUrl` đang là `TODO` (điền link Vercel sau khi deploy). Link chia sẻ và mã QR = `siteUrl + ?kq=<id mức>`.
   Khi còn `TODO`: bản online dùng địa chỉ đang mở; bản offline khóa nút "Sao chép link" và thẻ PNG không có mã QR; không chèn og:url/og:image.
 - `sources.json`: nguồn web có `apa` (chuỗi APA7, `*…*` là chữ nghiêng) + `url`; `author` dùng để sắp xếp. Nguồn TODO (`todo: true`) xếp cuối. *Toàn tập* là một mục APA7 chung cho bộ nhiều tập (`hcm-tt`, Tập 1–15); trích dẫn trong bài vẫn ghi tập và trang (vd. t.4, tr.64–65).
 - `mindmap.json` chép nguyên mục 2 tài liệu thiết kế; lưu ý thiếu tr. 92–93 nằm ở `todo` của trụ cột 3.
 - `team.json` đang để `{"members": []}` (tạm hoãn) nên mục Nhóm bị ẩn.
-- Tỉ lệ phần trăm tính bằng phương pháp phần dư lớn nhất (phần dư bằng nhau thì theo `tieBreak`), nên tổng luôn bằng 100%; có test duyệt đủ 165 tổ hợp 8 câu.
+- `quiz.json` (quiz kiến thức): `questions[]` { id, pillar, title, prompt, options[4], correctIndex, explain, relatedArtifacts[] }, `levels[]` { id, min, max, name, message }, `closing`. Chép nguyên văn 10 câu chính từ `QUIZ-KIEN-THUC.md`.
+  - `correctIndex` theo thứ tự gốc (trong file mọi đáp án đúng đều là A, nên việc trộn thứ tự mỗi lượt là bắt buộc). Lựa chọn hiển thị không đánh chữ A–D.
+  - Mức: `am-hieu` 9–10, `dang-hoc` 6–8, `ghe-bao-tang` 0–5; `levelFor` đọc ngưỡng từ `levels`, không viết cứng. Test: các mốc 0/5/6/8/9/10, levels phủ kín 0–10 không chồng lấn, 4 lựa chọn + `correctIndex` hợp lệ, `relatedArtifacts` tồn tại.
+  - Đã bỏ 4 kiểu công dân, `tieBreak`, tỉ lệ phần trăm 4 kiểu cùng code của quiz cũ.
 - Font tự host trong `src/assets/fonts` (không dùng Google Fonts) để html-to-image nhúng được font vào thẻ PNG. Noto Serif: 400, 400 nghiêng, 600, 700, 700 nghiêng, 800. Be Vietnam Pro: 400, 400 nghiêng, 500, 600, 700. Thêm weight mới thì cập nhật `fonts.css`.
 - Ảnh hiện vật: đặt trong `public/images/…`, `image.src` ghi đường dẫn tương đối (vd. `images/artifacts/HV-07.jpg`). Bản offline tự nhúng base64 mọi ảnh trong `public/images`.
 - Màu chữ vàng đồng dùng `#7A5A17` (nền sáng) để đạt WCAG AA; `#B8892B` giữ cho nền nhãn, đường kẻ.
@@ -131,6 +141,7 @@ Kiểm tra: `npm run test && npm run build && npm run build:offline && npm run l
 - [ ] HV-13 (tóm ý, GT tr.82) chưa có số tập/số trang *Toàn tập*. HV-12 đang dẫn gián tiếp "dẫn theo GT tr. 83"
 - [ ] Đối chiếu mọi trích dẫn với bản gốc *Toàn tập* — đặc biệt HV-05: GT tr. 85 ghi "gánh **vác** việc chung cho dân", bài Chu Đức Tính (2020) ghi "gánh việc chung cho dân"; web đang theo giáo trình
 - [ ] HV-07 "Ngày nay": số liệu bầu cử 2026 là số sơ bộ (21/3/2026); thay số và nguồn nếu có báo cáo chính thức
+- [ ] Câu 2 quiz: phần giải thích có cụm "Phương án B là nội dung của \"dân làm chủ\"", nhưng lựa chọn được trộn và không đánh chữ nên "B" không chỉ đúng phương án. Nhóm nên sửa câu chữ trong `QUIZ-KIEN-THUC.md` (vd. nêu thẳng nội dung phương án) rồi nhập lại
 - [ ] Deploy Vercel theo `San-pham-sang-tao/web/README.md` (kết nối repo riêng tư, kiểm tra Production Branch và Deployment Protection)
 - [ ] Điền `siteUrl` trong `site.json` bằng link Vercel (og:url, og:image tự chèn khi build)
 - [ ] Nếu hiện vật nào chưa kịp hoàn thiện khi nộp: đặt `"hidden": true` (vẫn phải còn ≥ 8 hiện vật; mục 4 ưu tiên HV-02, 03, 05, 07, 08, 09, 11, 13)
