@@ -2,7 +2,7 @@
 
 Thiết kế: [`../THIET-KE-WEB-APP.md`](../THIET-KE-WEB-APP.md).
 
-Sản phẩm chỉ có **một bản offline**: một file `index.html` chạy trên máy ở lớp, không cần mạng (bỏ bản online ngày 2/10/2026).
+Web gồm **một file `index.html`**, mở trên trình duyệt và chạy không cần mạng; dùng để demo trên lớp.
 
 ## Chạy khi phát triển
 
@@ -52,7 +52,7 @@ Nội dung lấy nguyên văn từ `../QUIZ-KIEN-THUC.md` (nhóm đã duyệt). 
 - `pillar`: `dan-chu`, `phap-quyen` hoặc `trong-sach` (hiện thành nhãn trụ cột).
 - `options`: đúng 4 lựa chọn theo thứ tự gốc; `correctIndex` là vị trí đáp án đúng trong thứ tự này (0–3). Web tự trộn thứ tự khi hiển thị, nên không cần xáo trong file. Lựa chọn không đánh chữ A–D, vì vậy giải thích không nên viết "Phương án B".
 - `relatedArtifacts`: id hiện vật có trong `artifacts.json` (chip mở cửa sổ hiện vật).
-- `levels`: mỗi mức một khoảng điểm `min`–`max` (tính cả hai đầu). Các khoảng phải phủ kín 0–10 và không chồng lấn. `id` dùng cho link chia sẻ `?kq=<id>`, chỉ gồm chữ thường, số, dấu gạch ngang.
+- `levels`: mỗi mức một khoảng điểm `min`–`max` (tính cả hai đầu). Các khoảng phải phủ kín 0–10 và không chồng lấn. `id` dùng trong tên file thẻ kết quả PNG, chỉ gồm chữ thường, số, dấu gạch ngang.
 - Sửa xong chạy `npm run test`: test kiểm tra 4 lựa chọn mỗi câu, `correctIndex` hợp lệ, hiện vật liên quan tồn tại và levels phủ kín 0–10.
 
 - Trường còn thiếu ghi `TODO`. Web hiển thị các trường này dưới dạng "đang bổ sung".
@@ -68,8 +68,20 @@ npm run build    # kiểm tra kiểu + tạo dist/index.html (một file duy nh�
 npm run package  # build rồi nén dist/HCM202-San-pham-sang-tao.zip
 ```
 
-- `dist/index.html`: toàn bộ web trong **một file**. JS, CSS, font (Noto Serif, Be Vietnam Pro), ảnh trong `public/images/` và favicon đều được nhúng base64. Mở bằng cách bấm đúp (file://), không cần mạng, không gửi request nào ra ngoài.
-- `dist/HCM202-San-pham-sang-tao.zip`: gồm `index.html` và `HUONG-DAN-CHAY.txt` (mẫu ở `scripts/HUONG-DAN-CHAY.txt`).
-- Kết quả quiz chỉ chia sẻ bằng cách **tải thẻ PNG** (1080×1920 và 1080×1080).
+- `dist/index.html`: toàn bộ web trong **một file**. JS, CSS, font (Noto Serif, Be Vietnam Pro), ảnh trong `public/images/` và favicon đều được nhúng base64; web không gửi request nào ra ngoài.
+- `dist/HCM202-San-pham-sang-tao.zip`: file nộp bài, gồm `index.html` và `HUONG-DAN-CHAY.txt` (mẫu ở `scripts/HUONG-DAN-CHAY.txt`).
+- Kết quả quiz lưu thành **thẻ PNG** (1080×1920 và 1080×1080) bằng nút tải thẻ.
 - **Build lại** (`npm run package`) mỗi khi sửa nội dung hoặc thêm ảnh. Thư mục `dist/` không được commit (đã có trong `.gitignore`).
-- Khi trình chiếu: mở bằng Chrome hoặc Edge, nhấn F11 để xem toàn màn hình.
+
+## Mở file
+
+1. Giải nén file zip ra một thư mục (không mở trực tiếp bên trong file zip).
+2. Bấm đúp `index.html`. Nên dùng Google Chrome hoặc Microsoft Edge.
+3. Không cần mạng Internet, không cần cài đặt.
+
+## Mẹo trình chiếu
+
+- **F11**: xem toàn màn hình (nhấn lại để thoát).
+- **Ctrl +** / **Ctrl −**: phóng to / thu nhỏ chữ cho cả lớp nhìn rõ; **Ctrl 0**: về cỡ mặc định.
+- Màn hình máy chiếu 1280×720 hoặc 1920×1080 đều hiển thị đủ, không cuộn ngang.
+- Tiến độ "đã xem" của bảo tàng lưu trong trình duyệt của máy đang dùng; muốn bắt đầu lại từ 0/13 thì mở cửa sổ ẩn danh.

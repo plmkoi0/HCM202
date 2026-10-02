@@ -200,7 +200,3 @@ Xếp theo thứ tự chữ cái của tác giả. Cột trái là `id` dùng tr
 - **Người ký Sắc lệnh số 14 (HV-04).** Bản trên Thư viện Pháp luật ghi người ký là Võ Nguyên Giáp (Bộ trưởng Nội vụ), trong khi nhiều bài viết nói Chủ tịch Hồ Chí Minh ký. Bản nháp tránh nêu tên người ký, chỉ ghi "Sắc lệnh số 14 của Chủ tịch Chính phủ lâm thời" đúng như tên văn bản.
 - **Điều 2, 3, 7, 8, 27 Hiến pháp 2013** dùng trong phần "Ngày nay" không bị sửa bởi Nghị quyết 203/2025/QH15 (Nghị quyết chỉ sửa Điều 9, 10, 84, 110, 111).
 - **Vẫn còn thiếu (nhóm tự bổ sung):** thông tin xuất bản của giáo trình (file PDF không có trang bìa), giáo trình tr. 92–93, ảnh tư liệu kèm nguồn. Ảnh an toàn nhất là ảnh nhóm tự chụp tại Di tích 48 Hàng Ngang hoặc Bảo tàng Hồ Chí Minh; nếu dùng ảnh trên mạng phải ghi rõ nguồn và giấy phép.
-
-## 5. Ảnh xem trước khi chia sẻ link (`og-image.png`)
-
-File `og-image.png` (1200×630) gửi kèm, đặt vào `San-pham-sang-tao/web/public/og-image.png`. Ảnh chỉ dùng chữ và màu của web, không dùng hình ảnh có bản quyền.

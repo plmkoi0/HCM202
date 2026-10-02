@@ -1,12 +1,12 @@
 CỦA DÂN · DO DÂN · VÌ DÂN — BẢO TÀNG SỐ
-Sản phẩm sáng tạo HCM202 (bản offline)
+Sản phẩm sáng tạo HCM202
 
 CÁCH CHẠY
 1. Giải nén file .zip ra một thư mục (không mở trực tiếp bên trong file .zip).
 2. Bấm đúp vào file index.html.
+3. Nên dùng trình duyệt Google Chrome hoặc Microsoft Edge.
+4. Nhấn F11 để xem toàn màn hình (nhấn lại để thoát).
 
 LƯU Ý
-- Nên dùng trình duyệt Google Chrome hoặc Microsoft Edge.
 - Không cần mạng Internet.
 - Không cần cài đặt gì thêm.
-- Nhấn F11 để xem toàn màn hình khi trình chiếu.

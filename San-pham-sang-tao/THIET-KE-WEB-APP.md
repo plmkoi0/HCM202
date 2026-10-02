@@ -11,12 +11,10 @@
 |---|---|
 | Tên sản phẩm | **Của dân · Do dân · Vì dân — Bảo tàng số** |
 | Thông điệp xuyên suốt | **"Chủ nhân không đứng ngoài"** |
-| Hình thức | Web app tĩnh, một trang cuộn dài, đóng gói thành **một file `index.html` chạy offline** trên máy ở lớp (bấm đúp, không cần mạng); hiển thị tốt trên điện thoại và máy chiếu |
+| Hình thức | Web app chạy offline bằng một file `index.html`, mở trên trình duyệt, không cần mạng. Một trang cuộn dài, hiển thị tốt trên máy chiếu và điện thoại; dùng để demo trên lớp |
 | Cấu trúc | Phần 1: Bảo tàng số (dòng thời gian hiện vật) → Phần 2: Quiz kiến thức "Bạn hiểu Nhà nước của dân đến đâu?" → Chia sẻ kết quả |
 | Đối tượng | Sinh viên đại học |
 | Nguồn chuẩn | Giáo trình HCM202, Chương IV, mục II (tr. 83–95) và *Hồ Chí Minh Toàn tập* (Nxb Chính trị quốc gia, 2011) |
-
-> **Quyết định:** Chỉ dùng bản offline để demo trên lớp, bỏ bản online ngày 2/10/2026. Không có link công khai, link chia sẻ, Open Graph hay thống kê truy cập.
 
 ### Mạch ý tưởng
 Người xem đi qua các hiện vật lịch sử để thấy nhà nước "của dân, do dân, vì dân" được Bác xây dựng thế nào (quá khứ). Sau đó họ làm quiz kiến thức để kiểm tra mình hiểu tư tưởng ấy đến đâu; mỗi câu có giải thích theo giáo trình và dẫn về hiện vật liên quan (hiện tại). Cuối cùng họ nhận một thẻ kết quả để chia sẻ (lan tỏa).
@@ -28,7 +26,7 @@ Người xem đi qua các hiện vật lịch sử để thấy nhà nước "c�
 | Nội dung (3đ) | Mỗi hiện vật và câu hỏi gắn với luận điểm giáo trình, có trích dẫn kèm số tập và số trang |
 | Ý tưởng (2đ) | Kết hợp "bảo tàng" với "quiz kiến thức": trả lời xong thấy ngay đúng/sai, giải thích và hiện vật liên quan; phần "Ngày nay" của hiện vật gắn với đời sống sinh viên |
 | Hình thức (2đ) | Phong cách hồ sơ lưu trữ: giấy ngà, con dấu đỏ, phiếu hiện vật |
-| Lan tỏa (2đ) | Thẻ kết quả PNG tải về được (khổ story 1080×1920 và vuông 1080×1080) để người chơi tự đăng lên mạng xã hội |
+| Lan tỏa (2đ) | Thẻ kết quả PNG tải về được (khổ 1080×1920 và 1080×1080); trình chiếu và cho cả lớp cùng chơi khi demo |
 | Thái độ (1đ) | Trang "Nguồn tham khảo" theo APA7 và trang "Nhóm thực hiện" |
 
 ---
@@ -186,11 +184,10 @@ Mọi mức đều kết bằng câu "Chủ nhân không đứng ngoài".
 
 ## 6. Lan tỏa và chia sẻ
 
-Chia sẻ chỉ còn **tải thẻ kết quả PNG** (bỏ link chia sẻ, nút Web Share, Open Graph và thống kê cùng bản online ngày 2/10/2026).
-
-- **Thẻ kết quả**: tạo ảnh PNG khổ 1080×1920 (vừa story) và 1080×1080 bằng `html-to-image`, ngay trên máy, không cần mạng. Thẻ gồm tiêu đề quiz, điểm x/10, tên mức, thông điệp "Chủ nhân không đứng ngoài" và tên web (không có mã QR, không có URL).
-- Font được nhúng sẵn trong file nên ảnh hiển thị đúng dấu tiếng Việt khi chạy offline.
-- Người chơi tự đăng ảnh lên mạng xã hội nếu muốn; web không gửi dữ liệu đi đâu.
+- **Thẻ kết quả PNG**: sau khi làm quiz, người chơi tải thẻ khổ 1080×1920 (vừa story) hoặc 1080×1080, tạo ngay trên máy bằng `html-to-image`. Thẻ gồm tiêu đề quiz, điểm x/10, tên mức, thông điệp "Chủ nhân không đứng ngoài" và tên web.
+- Font được nhúng sẵn trong file nên ảnh luôn hiển thị đúng dấu tiếng Việt.
+- **Khi demo trên lớp**: trình chiếu web toàn màn hình (F11), cả lớp cùng trả lời từng câu quiz; ai muốn có thể tải thẻ kết quả để tự đăng lên mạng xã hội.
+- Web không gửi dữ liệu đi đâu; mọi xử lý chạy trên trình duyệt.
 
 ---
 
@@ -216,8 +213,8 @@ Không dùng hình ảnh nhân vật có bản quyền. Không tự vẽ chân d
 
 ## 8. Kỹ thuật
 
-- **Nền tảng**: Vite + React + TypeScript + Tailwind CSS. Web tĩnh, không có backend.
-- **Bản phát hành**: Chỉ dùng bản offline để demo trên lớp, bỏ bản online ngày 2/10/2026. `npm run build` tạo thẳng một file `dist/index.html` (vite-plugin-singlefile) đã nhúng JS, CSS, font, ảnh và favicon; `npm run package` nén thêm `dist/HCM202-San-pham-sang-tao.zip` gồm `index.html` và `HUONG-DAN-CHAY.txt`. `npm run dev` dùng khi phát triển.
+- **Nền tảng**: Vite + React + TypeScript + Tailwind CSS. Web tĩnh, không có backend, không có request mạng.
+- **Đóng gói**: `npm run package` → file zip nộp bài `dist/HCM202-San-pham-sang-tao.zip`, gồm `index.html` và `HUONG-DAN-CHAY.txt`. `index.html` do `npm run build` tạo (vite-plugin-singlefile), là một file duy nhất đã nhúng JS, CSS, font, ảnh và favicon. `npm run dev` dùng khi phát triển.
 - **Dữ liệu tách khỏi code**, để nhóm sửa nội dung không cần động vào code:
   - `src/data/artifacts.json` — hiện vật
   - `src/data/quiz.json` — 10 câu hỏi kiến thức và các mức xếp loại
@@ -322,18 +319,18 @@ Trích dẫn trong bài viết vẫn ghi số tập và số trang, theo dạng:
 | M1 | Khởi tạo Vite + React + TS + Tailwind; tạo 4 file JSON từ mục 4, 5, 9; màu và font theo mục 7 | Chạy được local, có dữ liệu |
 | M2 | Hero, bộ lọc, dòng thời gian, phiếu và cửa sổ chi tiết hiện vật, thanh tiến độ | Bảo tàng hoạt động đầy đủ |
 | M3 | Quiz 10 câu kiến thức (ban đầu là quiz tính cách 8 câu, đổi ngày 2/10/2026 — xem mục 5), tính điểm và xếp mức (`scoring.ts` có unit test), trang kết quả, xem lại câu chưa đúng và toàn bộ | Quiz hoạt động đầy đủ |
-| M4 | Thẻ kết quả PNG (điểm, mức), sơ đồ tư duy, trang nguồn và nhóm (link chia sẻ, Web Share, Open Graph đã bỏ cùng bản online ngày 2/10/2026) | Chia sẻ được bằng thẻ PNG |
-| M5 | Bản offline một file `dist/index.html` (vite-plugin-singlefile, nhúng font, ảnh, favicon); `npm run package` tạo file zip kèm hướng dẫn; kiểm tra ở 360px và máy chiếu 1280×720, 1920×1080 khi tắt mạng. Ban đầu dự kiến deploy online (GitHub Pages, sau đổi sang Vercel); chỉ dùng bản offline để demo trên lớp, bỏ bản online ngày 2/10/2026 | File zip để demo trên lớp |
+| M4 | Thẻ kết quả PNG (điểm, mức), sơ đồ tư duy, trang nguồn và nhóm | Tải được thẻ kết quả |
+| M5 | Đóng gói một file, kiểm tra trên máy ở lớp: `npm run build` tạo `dist/index.html` (nhúng font, ảnh, favicon), `npm run package` tạo file zip kèm hướng dẫn chạy; kiểm tra ở 360px và độ phân giải máy chiếu 1280×720, 1920×1080 khi tắt mạng | File zip để demo trên lớp |
 
 ### Tiêu chí nghiệm thu
-- [ ] Hiển thị đúng ở màn hình 360px và 1440px; không cuộn ngang
+- [ ] Hiển thị đúng ở màn hình 360px, 1280×720 và 1920×1080; không cuộn ngang
 - [ ] Bộ lọc 3 trụ cột lọc đúng hiện vật
 - [ ] Mọi trích dẫn hiển thị kèm số tập và số trang
 - [ ] Quiz tính đúng điểm và mức xếp loại, levels phủ kín 0–10 (có unit test)
 - [ ] Thẻ kết quả tải về hiển thị đúng dấu tiếng Việt
 - [ ] Mở `dist/index.html` bằng file:// khi tắt mạng: không lỗi console, không request ra ngoài
 - [ ] Không có nội dung nào do Claude Code tự thêm ngoài tài liệu; chỗ thiếu ghi `TODO`
-- [ ] Lighthouse trên điện thoại: Performance ≥ 85, Accessibility ≥ 90
+- [ ] Kiểm tra khả năng tiếp cận bằng axe: không lỗi
 
 ---
 
