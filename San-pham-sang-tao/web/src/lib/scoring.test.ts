@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import artifactsJson from '../data/artifacts.json'
 import quizJson from '../data/quiz.json'
 import type { QuizData } from '../types'
-import { findLevel, levelFor, score } from './scoring'
+import { levelFor, score } from './scoring'
 
 const quiz = quizJson as QuizData
 const { questions, levels } = quiz
@@ -44,10 +44,6 @@ describe('levelFor', () => {
     }
   })
 
-  it('findLevel chỉ nhận id mức có trong quiz.json', () => {
-    expect(findLevel('dang-hoc', levels)?.name).toBe('Chủ nhân đang học')
-    for (const bad of ['', 'A', 'DANG-HOC', null, 7]) expect(findLevel(bad, levels)).toBeUndefined()
-  })
 })
 
 describe('dữ liệu quiz', () => {
@@ -72,7 +68,7 @@ describe('dữ liệu quiz', () => {
     }
   })
 
-  it('id mức không trùng và dùng được trong ?kq=', () => {
+  it('id mức không trùng, dùng được trong tên file thẻ PNG', () => {
     expect(new Set(levels.map((l) => l.id)).size).toBe(levels.length)
     for (const l of levels) expect(l.id).toMatch(/^[a-z0-9-]+$/)
   })

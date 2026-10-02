@@ -1,7 +1,7 @@
 import { forwardRef } from 'react'
 import { quiz } from '../../lib/data'
 import { fmt } from '../../lib/format'
-import { CARD_SIZE, type CardFormat } from '../../lib/share'
+import { CARD_SIZE, type CardFormat } from '../../lib/card'
 import { site } from '../../lib/site'
 import type { Level } from '../../types'
 
@@ -12,20 +12,16 @@ const SANS = "'Be Vietnam Pro', system-ui, sans-serif"
 
 interface Props {
   level: Level
-  /** Điểm x/total; không có khi mở từ link chia sẻ */
-  points?: number
+  points: number
   total: number
   format: CardFormat
-  /** Mã QR và link; không có khi chưa xác định được địa chỉ online */
-  qr: string
-  url: string | null
 }
 
 /**
  * Thẻ kết quả để chụp thành PNG (html-to-image): tiêu đề quiz, điểm x/10,
- * tên mức, câu closing, tên web, mã QR.
+ * tên mức, câu closing, tên web.
  */
-const ShareCard = forwardRef<HTMLDivElement, Props>(function ShareCard({ level, points, total, format, qr, url }, ref) {
+const ShareCard = forwardRef<HTMLDivElement, Props>(function ShareCard({ level, points, total, format }, ref) {
   const { w, h } = CARD_SIZE[format]
   const story = format === 'story'
   const pad = story ? 96 : 72
@@ -49,19 +45,17 @@ const ShareCard = forwardRef<HTMLDivElement, Props>(function ShareCard({ level, 
       <div style={{ fontFamily: SERIF, fontWeight: 700, fontSize: story ? 72 : 54, lineHeight: 1.2 }}>{site.quiz.title}</div>
 
       <div>
-        {points !== undefined && (
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 24 }}>
-            <span style={{ fontSize: story ? 34 : 28, letterSpacing: 6, textTransform: 'uppercase', color: C.soft, fontWeight: 600 }}>
-              {site.quiz.scoreLabel}
-            </span>
-            <span style={{ fontFamily: SERIF, fontWeight: 800, fontSize: story ? 220 : 150, lineHeight: 1, color: C.son }}>
-              {fmt(site.quiz.scoreValue, { score: points, total })}
-            </span>
-          </div>
-        )}
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 24 }}>
+          <span style={{ fontSize: story ? 34 : 28, letterSpacing: 6, textTransform: 'uppercase', color: C.soft, fontWeight: 600 }}>
+            {site.quiz.scoreLabel}
+          </span>
+          <span style={{ fontFamily: SERIF, fontWeight: 800, fontSize: story ? 220 : 150, lineHeight: 1, color: C.son }}>
+            {fmt(site.quiz.scoreValue, { score: points, total })}
+          </span>
+        </div>
         <div
           style={{
-            marginTop: points !== undefined ? (story ? 56 : 32) : 0,
+            marginTop: story ? 56 : 32,
             display: 'inline-block',
             border: `6px double ${C.son}`,
             padding: story ? '28px 40px' : '18px 30px',
@@ -92,19 +86,8 @@ const ShareCard = forwardRef<HTMLDivElement, Props>(function ShareCard({ level, 
         >
           {quiz.closing}
         </div>
-        <div style={{ marginTop: story ? 48 : 28, display: 'flex', alignItems: 'center', gap: 36 }}>
-          {url && qr && (
-            <img src={qr} alt="" width={story ? 220 : 170} height={story ? 220 : 170} style={{ display: 'block' }} />
-          )}
-          <div style={{ minWidth: 0 }}>
-            <div style={{ fontFamily: SERIF, fontWeight: 700, fontSize: story ? 38 : 30, lineHeight: 1.3 }}>{site.name}</div>
-            {url && (
-              <>
-                <div style={{ marginTop: 10, fontSize: story ? 28 : 22, color: C.soft }}>{site.share.cardScan}</div>
-                <div style={{ marginTop: 6, fontSize: story ? 26 : 20, color: C.soft, wordBreak: 'break-all' }}>{url}</div>
-              </>
-            )}
-          </div>
+        <div style={{ marginTop: story ? 48 : 28, fontFamily: SERIF, fontWeight: 700, fontSize: story ? 38 : 30, lineHeight: 1.3 }}>
+          {site.name}
         </div>
       </div>
     </div>

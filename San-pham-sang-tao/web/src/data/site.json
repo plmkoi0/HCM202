@@ -103,24 +103,12 @@
     "reviewHide": "Ẩn phần xem lại",
     "retry": "Làm lại"
   },
-  "siteUrl": "TODO",
-  "siteUrlNote": "TODO: điền link Vercel (https://…) sau khi deploy. Khi còn TODO, bản online tự dùng địa chỉ đang mở.",
   "share": {
     "title": "Chia sẻ kết quả",
     "downloadStory": "Tải thẻ 1080×1920",
     "downloadSquare": "Tải thẻ 1080×1080",
     "generating": "Đang tạo ảnh…",
-    "generateFailed": "Không tạo được ảnh, hãy thử lại.",
-    "copy": "Sao chép link",
-    "share": "Chia sẻ",
-    "copied": "Đã sao chép",
-    "copyFailed": "Không sao chép được. Link:",
-    "shareText": "Mình đạt {score}/{total} — \"{level}\". Bạn hiểu Nhà nước của dân đến đâu?",
-    "sharedEyebrow": "Kết quả được chia sẻ",
-    "takeQuiz": "Làm quiz của bạn",
-    "cardScan": "Quét mã để làm quiz",
-    "noUrl": "Chưa có link online (site.json → siteUrl), nên chưa sao chép link hay tạo mã QR được.",
-    "shareTextLevel": "Mình là \"{level}\". Bạn hiểu Nhà nước của dân đến đâu?"
+    "generateFailed": "Không tạo được ảnh, hãy thử lại."
   },
   "mindmap": {
     "title": "Sơ đồ tư duy",
@@ -133,8 +121,5 @@
   },
   "team": {
     "title": "Nhóm thực hiện"
-  },
-  "offline": {
-    "note": "Bản offline — xem bản online tại"
   }
 }

@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { quiz } from '../../lib/data'
 import { scrollToEl } from '../../lib/format'
 import { useQuizStartRequest } from '../../lib/quizStart'
-import { findLevel, levelFor, score } from '../../lib/scoring'
+import { levelFor, score } from '../../lib/scoring'
 import { site } from '../../lib/site'
-import type { Level } from '../../types'
 import QuestionCard from './QuestionCard'
 import Result from './Result'
 import ShareActions from './ShareActions'
@@ -18,48 +17,26 @@ function shuffled(n: number) {
   return a
 }
 
-type Phase = 'start' | 'play' | 'result' | 'shared'
-
-/** Đọc ?kq=<id mức> (quiz.json → levels); bỏ qua giá trị không hợp lệ. */
-function sharedLevel(): Level | null {
-  const kq = new URLSearchParams(window.location.search).get('kq')
-  return findLevel(kq, quiz.levels) ?? null
-}
+type Phase = 'start' | 'play' | 'result'
 
 export default function Quiz() {
   const ui = site.quiz
   const total = quiz.questions.length
   const sectionRef = useRef<HTMLElement>(null)
-  const [shared] = useState(sharedLevel)
-  const [phase, setPhase] = useState<Phase>(shared ? 'shared' : 'start')
+  const [phase, setPhase] = useState<Phase>('start')
   const [idx, setIdx] = useState(0)
   // answers[i]: chỉ số lựa chọn (thứ tự gốc) của câu i; đã có giá trị thì câu bị khóa
   const [answers, setAnswers] = useState<(number | undefined)[]>([])
   // Thứ tự đáp án được trộn một lần mỗi lượt chơi
   const [orders, setOrders] = useState<number[][]>([])
 
-  // Mở từ link chia sẻ: cuộn tới trang kết quả
-  useEffect(() => {
-    if (shared) requestAnimationFrame(() => scrollToEl(sectionRef.current))
-  }, [shared])
-
   const start = useCallback(() => {
-    if (shared) {
-      // Bỏ ?kq khỏi địa chỉ để làm lại không mở lại kết quả cũ
-      try {
-        const u = new URL(window.location.href)
-        u.searchParams.delete('kq')
-        window.history.replaceState(null, '', u)
-      } catch {
-        // Một số trình duyệt chặn đổi địa chỉ khi mở từ file://; bỏ qua
-      }
-    }
     setOrders(quiz.questions.map((q) => shuffled(q.options.length)))
     setAnswers([])
     setIdx(0)
     setPhase('play')
     scrollToEl(sectionRef.current)
-  }, [shared])
+  }, [])
 
   // "Làm quiz ngay" (hero) và "Bắt đầu quiz" (cầu nối): vào thẳng câu 1.
   // Đang làm dở thì chỉ cuộn tới, không xóa câu trả lời.
@@ -122,15 +99,6 @@ export default function Quiz() {
 
           {phase === 'result' && <PlayerResult answers={answers} onRetry={start} />}
 
-          {phase === 'shared' && shared && (
-            <Result
-              level={shared}
-              eyebrow={site.share.sharedEyebrow}
-              onRetry={start}
-              retryLabel={site.share.takeQuiz}
-              actions={<ShareActions level={shared} />}
-            />
-          )}
         </div>
       </div>
     </section>
@@ -141,14 +109,8 @@ function PlayerResult({ answers, onRetry }: { answers: (number | undefined)[]; o
   const points = score(quiz.questions, answers)
   const level = levelFor(points, quiz.levels)
   return (
-    <Result
-      level={level}
-      points={points}
-      answers={answers}
-      eyebrow={site.quiz.resultEyebrow}
-      onRetry={onRetry}
-      retryLabel={site.quiz.retry}
-      actions={<ShareActions level={level} points={points} />}
-    />
+    <Result level={level} points={points} answers={answers} onRetry={onRetry}>
+      <ShareActions level={level} points={points} />
+    </Result>
   )
 }

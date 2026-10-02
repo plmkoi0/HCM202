@@ -9,11 +9,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const outDir = join(root, 'dist-offline')
 const zipPath = join(outDir, 'HCM202-San-pham-sang-tao.zip')
 
-// Hướng dẫn: thêm dòng link bản online nếu site.json đã có siteUrl
-const site = JSON.parse(readFileSync(join(root, 'src/data/site.json'), 'utf8'))
-const onlineLine = /^https?:\/\//.test(site.siteUrl) ? `- Bản online: ${site.siteUrl}` : ''
 const guide = readFileSync(join(root, 'scripts/HUONG-DAN-CHAY.txt'), 'utf8')
-  .replace('{{ONLINE}}', onlineLine)
   .trimEnd()
   .replace(/\r?\n/g, '\r\n') // xuống dòng kiểu Windows cho Notepad
 const guideBytes = Buffer.concat([Buffer.from([0xef, 0xbb, 0xbf]), Buffer.from(guide + '\r\n', 'utf8')])

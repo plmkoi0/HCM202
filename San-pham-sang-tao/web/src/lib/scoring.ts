@@ -14,7 +14,3 @@ export function levelFor(points: number, levels: Level[]): Level {
   if (!level) throw new Error(`Không có mức xếp loại cho ${points} điểm`)
   return level
 }
-
-export function findLevel(id: unknown, levels: Level[]): Level | undefined {
-  return typeof id === 'string' ? levels.find((l) => l.id === id) : undefined
-}

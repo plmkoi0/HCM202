@@ -9,8 +9,6 @@ import Quiz from './components/Quiz/Quiz'
 import Sources from './components/Sources'
 import Team from './components/Team'
 import { team } from './lib/data'
-import { OFFLINE } from './lib/offline'
-import { onlineUrl } from './lib/share'
 import { site } from './lib/site'
 
 export default function App() {
@@ -37,26 +35,8 @@ export default function App() {
         <footer className="border-t border-line px-4 py-8 text-center text-sm text-ink-soft">
           <p className="font-serif font-semibold text-ink">{site.name}</p>
           <p className="mx-auto mt-1 max-w-xl">{site.footer}</p>
-          {OFFLINE && <OfflineNote />}
         </footer>
       </div>
     </ArtifactViewerProvider>
-  )
-}
-
-/** Dòng nhỏ ở chân trang bản offline, trỏ về bản online (site.json → siteUrl). */
-function OfflineNote() {
-  const url = onlineUrl()
-  return (
-    <p className="mt-3 text-xs">
-      {site.offline.note}{' '}
-      {url ? (
-        <a href={url} target="_blank" rel="noopener noreferrer" className="underline">
-          {url}
-        </a>
-      ) : (
-        'TODO'
-      )}
-    </p>
   )
 }
