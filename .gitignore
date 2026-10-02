@@ -1,0 +1,23 @@
+# Phụ thuộc và bản build
+node_modules/
+dist/
+dist-offline/
+*.zip
+*.tsbuildinfo
+
+# Biến môi trường (thông tin Redis chỉ ở server)
+.env
+.env.*
+!.env.example
+
+# Vercel
+.vercel/
+
+# Nhật ký, công cụ
+*.log
+npm-debug.log*
+coverage/
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea/

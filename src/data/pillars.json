@@ -1,0 +1,38 @@
+{
+  "source": "Chép một lần từ nhánh web (xem NGUON.md): id theo pillars.ts, label/name theo site.json → pillars, màu theo token trong index.css mà pillarStyles.ts dùng",
+  "pillars": [
+    {
+      "id": "dan-chu",
+      "label": "Dân chủ",
+      "name": "Nhà nước dân chủ",
+      "token": "son",
+      "colorName": "Đỏ son",
+      "color": "#A4262C",
+      "onColor": "#F4EDE0",
+      "textColor": "#A4262C",
+      "textColorDark": "#E88A8E"
+    },
+    {
+      "id": "phap-quyen",
+      "label": "Pháp quyền",
+      "name": "Nhà nước pháp quyền",
+      "token": "muc",
+      "colorName": "Xanh mực",
+      "color": "#23395B",
+      "onColor": "#F4EDE0",
+      "textColor": "#23395B",
+      "textColorDark": "#9DB4DB"
+    },
+    {
+      "id": "trong-sach",
+      "label": "Trong sạch",
+      "name": "Nhà nước trong sạch, vững mạnh",
+      "token": "dong",
+      "colorName": "Vàng đồng",
+      "color": "#B8892B",
+      "onColor": "#1F1B16",
+      "textColor": "#7A5A17",
+      "textColorDark": "#D9AE55"
+    }
+  ]
+}

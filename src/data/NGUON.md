@@ -1,0 +1,31 @@
+# Nguồn gốc dữ liệu khởi đầu
+
+Các file dưới đây được **chép một lần** từ nhánh web (bảo tàng số) lúc tạo nhánh `game`. Đây chỉ là ghi nguồn gốc: sau khi chép, dữ liệu **thuộc về game**, sửa trực tiếp trên nhánh `game` khi cần và **không đồng bộ lại với web**. Game không import mã hay dữ liệu từ nhánh web khi chạy hoặc build.
+
+- **Repo:** `plmkoi0/HCM202`
+- **Nhánh web:** `claude/zen-fermi-bg6som` (nhánh mặc định của repo; nhánh làm việc `claude/kind-keller-ds1gdx` cùng commit)
+- **Commit nguồn:** `2bda3971b27cf005680f32c6d0772fe851100587` — "Chuyển CLAUDE.md vào San-pham-sang-tao/web"
+- **Ngày chép:** 02/10/2026
+- **Cách chép:** `git show <commit>:<đường dẫn>` (file đã commit, chép nguyên byte)
+
+## Danh sách file đã chép
+
+| Nguồn (nhánh web, commit trên) | Đích (nhánh `game`) | Ghi chú |
+|---|---|---|
+| `San-pham-sang-tao/THIET-KE-WEB-APP.md` | `docs/nguon/THIET-KE-WEB-APP.md` | Nguồn tham chiếu (mục 13.2), nhất là mục 2 và mục 4 |
+| `San-pham-sang-tao/web/src/data/artifacts.json` | `src/data/artifacts.json` | 13 hiện vật HV-01 → HV-13, nguyên bản |
+| `San-pham-sang-tao/web/src/data/mindmap.json` | `src/data/mindmap.json` | 3 trụ cột, nguyên bản (gồm `todo` tr. 92–93) |
+| `San-pham-sang-tao/web/src/lib/pillars.ts` (id) + `web/src/data/site.json` → `pillars` (nhãn, tên) + `web/src/lib/pillarStyles.ts` → token trong `web/src/index.css` (màu) | `src/data/pillars.json` | Chỉ lấy giá trị, không chép mã |
+| `San-pham-sang-tao/web/src/assets/fonts/LICENSE-be-vietnam-pro.txt`, `LICENSE-noto-serif.txt` | `src/assets/fonts/` | Giấy phép SIL OFL 1.1 |
+| `San-pham-sang-tao/web/src/assets/fonts/be-vietnam-pro-{latin,vietnamese}-{400-normal,400-italic,600-normal,700-normal}.woff2` | `src/assets/fonts/` | Be Vietnam Pro: chữ nội dung (400), nghiêng cho tên tác phẩm (400 nghiêng), nút/nhãn (600), số và tiêu đề nhỏ (700) |
+| `San-pham-sang-tao/web/src/assets/fonts/noto-serif-{latin,vietnamese}-{700-normal,400-italic}.woff2` | `src/assets/fonts/` | Noto Serif: tiêu đề (700), trích dẫn trong câu `fillQuote` (400 nghiêng) |
+
+Không chép: `sources.json`, `quiz.json`, `site.json`, `team.json`, ảnh, mã nguồn web; các weight font khác (Be Vietnam Pro 500; Noto Serif 400, 600, 700 nghiêng, 800).
+
+## Mã băm SHA-256 lúc chép
+
+```
+19465cc7ca4ee4f325558e8715440b2394eafe3ee3c4bed4da56f049b91b25aa  src/data/artifacts.json
+3f61fbd13650fb937a92fb0146f297d79af9957f93e13843ebaf66ad7fae4052  src/data/mindmap.json
+a1540a3ed32bca5fde9fa292b3813c76d93858bd5fa041a076cc23be1a3aa1ea  docs/nguon/THIET-KE-WEB-APP.md
+```
