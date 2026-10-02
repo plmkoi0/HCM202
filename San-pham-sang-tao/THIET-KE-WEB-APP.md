@@ -12,19 +12,19 @@
 | Tên sản phẩm | **Của dân · Do dân · Vì dân — Bảo tàng số** |
 | Thông điệp xuyên suốt | **"Chủ nhân không đứng ngoài"** |
 | Hình thức | Web app tĩnh, một trang cuộn dài, chạy tốt trên điện thoại |
-| Cấu trúc | Phần 1: Bảo tàng số (dòng thời gian hiện vật) → Phần 2: Quiz "Bạn là công dân kiểu gì?" → Chia sẻ kết quả |
+| Cấu trúc | Phần 1: Bảo tàng số (dòng thời gian hiện vật) → Phần 2: Quiz kiến thức "Bạn hiểu Nhà nước của dân đến đâu?" → Chia sẻ kết quả |
 | Đối tượng | Sinh viên đại học |
 | Nguồn chuẩn | Giáo trình HCM202, Chương IV, mục II (tr. 83–95) và *Hồ Chí Minh Toàn tập* (Nxb Chính trị quốc gia, 2011) |
 
 ### Mạch ý tưởng
-Người xem đi qua các hiện vật lịch sử để thấy nhà nước "của dân, do dân, vì dân" được Bác xây dựng thế nào (quá khứ). Sau đó họ làm quiz để tự hỏi mình đang dùng quyền làm chủ ra sao (hiện tại). Cuối cùng họ nhận một thẻ kết quả để chia sẻ (lan tỏa).
+Người xem đi qua các hiện vật lịch sử để thấy nhà nước "của dân, do dân, vì dân" được Bác xây dựng thế nào (quá khứ). Sau đó họ làm quiz kiến thức để kiểm tra mình hiểu tư tưởng ấy đến đâu; mỗi câu có giải thích theo giáo trình và dẫn về hiện vật liên quan (hiện tại). Cuối cùng họ nhận một thẻ kết quả để chia sẻ (lan tỏa).
 
 ### Đối chiếu với tiêu chí chấm SPST
 
 | Tiêu chí | Web đáp ứng bằng |
 |---|---|
 | Nội dung (3đ) | Mỗi hiện vật và câu hỏi gắn với luận điểm giáo trình, có trích dẫn kèm số tập và số trang |
-| Ý tưởng (2đ) | Kết hợp "bảo tàng" với "quiz tính cách"; tình huống lấy từ đời sống sinh viên |
+| Ý tưởng (2đ) | Kết hợp "bảo tàng" với "quiz kiến thức": trả lời xong thấy ngay đúng/sai, giải thích và hiện vật liên quan; phần "Ngày nay" của hiện vật gắn với đời sống sinh viên |
 | Hình thức (2đ) | Phong cách hồ sơ lưu trữ: giấy ngà, con dấu đỏ, phiếu hiện vật |
 | Lan tỏa (2đ) | Thẻ kết quả tải về được, link chia sẻ theo kết quả, bộ đếm lượt truy cập |
 | Thái độ (1đ) | Trang "Nguồn tham khảo" theo APA7 và trang "Nhóm thực hiện" |
@@ -79,15 +79,16 @@ Web tổ chức nội dung theo **3 trụ cột** của giáo trình. Mỗi hi�
 §3 CẦU NỐI
    "Bác đã trao quyền làm chủ. Còn bạn dùng nó thế nào?" → [Bắt đầu quiz]
 
-§4 QUIZ "BẠN LÀ CÔNG DÂN KIỂU GÌ?"
-   8 câu tình huống, mỗi câu 4 lựa chọn, 1 câu mỗi màn hình
+§4 QUIZ KIẾN THỨC "BẠN HIỂU NHÀ NƯỚC CỦA DÂN ĐẾN ĐÂU?"
+   10 câu, mỗi câu 4 lựa chọn, 1 câu mỗi màn hình ("Câu x/10")
+   Chọn xong: khóa câu, hiện Đúng/Chưa đúng + đáp án đúng + giải thích
+   + chip hiện vật liên quan → [Câu tiếp theo] / [Xem kết quả]
 
 §5 KẾT QUẢ
-   - Kiểu công dân + mô tả + câu nói của Bác + 3 việc nên làm
-   - Biểu đồ thanh tỉ lệ 4 kiểu
-   - Liên kết tới hiện vật liên quan
-   - [Tải thẻ kết quả] [Sao chép link] [Chia sẻ] [Làm lại]
-   - [Xem giải thích từng câu]
+   - Điểm x/10 + tên mức + lời nhắn + "Chủ nhân không đứng ngoài"
+   - [Tải thẻ kết quả] [Sao chép link] [Chia sẻ]
+   - Danh sách câu chưa đúng (lựa chọn của bạn, đáp án đúng, giải thích)
+   - [Xem lại tất cả] [Làm lại]
 
 §6 SƠ ĐỒ TƯ DUY (tóm tắt 3 trụ cột, dạng cây mở/đóng được)
 
@@ -137,92 +138,56 @@ Nhóm viết các phiếu còn lại theo đúng mẫu này. Claude Code chỉ d
 
 ---
 
-## 5. Quiz "Bạn là công dân kiểu gì?"
+## 5. Quiz kiến thức "Bạn hiểu Nhà nước của dân đến đâu?"
 
-### 5.1 Bốn kiểu công dân
+> Đổi từ quiz tính cách sang quiz kiến thức ngày 2/10/2026 (nội dung: QUIZ-KIEN-THUC.md).
 
-| Mã | Tên | Mô tả ngắn | Câu nói của Bác | 3 việc nên làm | Hiện vật liên quan |
-|---|---|---|---|---|---|
-| A | **Chủ nhân tích cực** | Biết quyền, dùng quyền đúng kênh, làm tròn nghĩa vụ | Nhà nước "mong đồng bào giúp đỡ, đôn đốc, kiểm soát và phê bình" (t.9, tr.81) | Rủ bạn bè cùng góp ý dự thảo; chia sẻ kiến thức pháp luật; làm gương | HV-05, HV-07 |
-| B | **Người đứng ngoài** | Nghĩ việc chung là của "người khác" | "Muốn làm chủ được tốt, phải có năng lực làm chủ" (t.12, tr.527) | Đọc 1 tin chính sách mỗi tuần; đi bầu và tìm hiểu ứng viên; thử 1 dịch vụ công trực tuyến | HV-07, HV-08 |
-| C | **Người ngại lên tiếng** | Thấy sai nhưng im lặng vì sợ va chạm | "làm sao cho nhân dân biết hưởng quyền dân chủ, biết dùng quyền dân chủ của mình, dám nói, dám làm" (t.15, tr.293) | Tìm hiểu kênh phản ánh chính thức; góp ý bằng văn bản; hỏi trực tiếp tại buổi đối thoại | HV-03, HV-09 |
-| D | **Người nhiệt tình vội vã** | Nhiệt huyết nhưng cảm tính, thiếu kiểm chứng, coi nhẹ quy định | "nhân dân có quyền lợi làm chủ, thì phải có nghĩa vụ làm tròn bổn phận công dân, giữ đúng đạo đức công dân" (t.9, tr.258) | Kiểm chứng nguồn trước khi chia sẻ; phản ánh đúng kênh, đúng luật; góp ý mang tính xây dựng | HV-09, HV-10 |
+Câu hỏi, lựa chọn và giải thích (kèm số trang giáo trình) lấy nguyên văn từ `QUIZ-KIEN-THUC.md` (nhóm đã duyệt) vào `src/data/quiz.json`. Web chỉ dùng 10 câu chính; Câu 11, 12 là câu dự phòng, giữ trong file .md, không đưa vào web.
 
-Giọng văn ở phần kết quả: tích cực, không chê bai. Mỗi kiểu đều kết thúc bằng câu "Chủ nhân không đứng ngoài".
+### 5.1 Cách chơi
+- 10 câu, mỗi câu 4 lựa chọn, 1 đáp án đúng; một câu mỗi màn hình, có "Câu x/10" và thanh tiến độ.
+- Thứ tự đáp án được trộn mỗi lượt và giữ cố định trong lượt đó (`correctIndex` tính theo thứ tự gốc). Lựa chọn không đánh chữ A–D.
+- Chọn đáp án thì câu bị khóa: hiện "Đúng" / "Chưa đúng" (đặt trong vùng aria-live), tô đáp án đúng và đáp án đã chọn kèm ký hiệu ✓/✗ và nhãn chữ "Đáp án đúng", "Lựa chọn của bạn" (không dùng màu làm tín hiệu duy nhất); hiện giải thích và chip hiện vật liên quan (mở cửa sổ hiện vật, tính vào tiến độ "đã xem"). Sau đó mới có nút "Câu tiếp theo" / "Xem kết quả".
+- Không có nút quay lại câu trước: câu đã trả lời không sửa lại được. Chuyển câu thì tiêu điểm về tiêu đề câu.
 
-### 5.2 Tám câu hỏi (trộn ngẫu nhiên thứ tự đáp án khi hiển thị)
+### 5.2 Mười câu hỏi
 
-**Câu 1 — Lá phiếu đầu tiên.** Bạn vừa đủ tuổi đi bầu, nhưng ngày bầu cử trùng lịch đi chơi với bạn bè.
-- A: Tìm hiểu tiểu sử các ứng cử viên, đi bầu sớm rồi đi chơi.
-- B: Ở nhà, vì nghĩ một phiếu của mình chẳng thay đổi được gì.
-- C: Đi bầu nhưng không tìm hiểu trước, thấy người bên cạnh chọn ai thì chọn theo.
-- D: Nhờ bố mẹ bầu hộ cho tiện.
-- *Giải thích:* Nhà nước do nhân dân lập nên bằng bầu cử phổ thông, trực tiếp, bỏ phiếu kín. Bầu hộ là trái nguyên tắc (GT tr. 86, 88; HV-07).
+| Câu | Chủ đề | Trụ cột | Đáp án đúng | Hiện vật liên quan |
+|---|---|---|---|---|
+| 1 | Bản chất nhà nước | Dân chủ | Giai cấp công nhân | HV-12 |
+| 2 | Nhà nước của nhân dân | Dân chủ | Nhân dân là chủ thể tối cao của mọi quyền lực | HV-02 |
+| 3 | Nhà nước do nhân dân | Dân chủ | Quyền lợi và nghĩa vụ của nhân dân với tư cách người chủ | HV-07 |
+| 4 | Hình thức dân chủ | Dân chủ | Dân chủ trực tiếp | HV-08 |
+| 5 | Dân chủ gián tiếp | Dân chủ | "Thừa ủy quyền" của nhân dân | HV-05 |
+| 6 | Nhà nước vì nhân dân | Dân chủ | Được lòng dân | HV-02 |
+| 7 | Nhà nước hợp hiến, hợp pháp | Pháp quyền | Sớm tổ chức Tổng tuyển cử với chế độ phổ thông đầu phiếu để có hiến pháp dân chủ | HV-03 |
+| 8 | Thượng tôn pháp luật | Pháp quyền | 16 đạo luật và 613 sắc lệnh | HV-09 |
+| 9 | Pháp quyền nhân nghĩa | Pháp quyền | Nhà nước tôn trọng, bảo đảm đầy đủ các quyền con người, chăm lo lợi ích của mọi người | HV-09 |
+| 10 | Phòng, chống tiêu cực | Trong sạch, vững mạnh | Nâng cao trình độ dân chủ, thực hành dân chủ rộng rãi, phát huy quyền làm chủ của nhân dân | HV-06 |
 
-**Câu 2 — Thủ tục ở phường.** Cán bộ hẹn bạn "tuần sau quay lại" và ám chỉ nếu "bồi dưỡng" thì sẽ nhanh hơn.
-- A: Hỏi rõ thời hạn giải quyết theo quy định, giữ giấy hẹn, phản ánh qua kênh chính thức nếu bị gây khó.
-- B: Bỏ luôn, không làm thủ tục nữa.
-- C: "Bồi dưỡng" cho xong, không muốn rắc rối.
-- D: Quay video đăng ngay lên mạng, kèm lời lẽ xúc phạm.
-- *Giải thích:* Cán bộ là công bộc, "không phải để đè đầu dân". Nhân dân có quyền kiểm soát, phê bình (GT tr. 85; HV-05, HV-10).
+### 5.3 Mức xếp loại
 
-**Câu 3 — Góp ý dự thảo luật.** Quốc hội đang lấy ý kiến về một dự thảo luật ảnh hưởng tới sinh viên.
-- A: Đọc dự thảo, gửi góp ý qua kênh lấy ý kiến chính thức.
-- B: Không quan tâm, đó là chuyện của người lớn.
-- C: Có ý kiến nhưng chỉ than phiền với bạn bè.
-- D: Chia sẻ một bài "tóm tắt" trên mạng dù chưa đọc dự thảo gốc.
-- *Giải thích:* Luật pháp dân chủ là công cụ quyền lực của nhân dân (GT tr. 86; HV-09).
+| Điểm | Mức | id (dùng cho `?kq=`) | Lời nhắn |
+|---|---|---|---|
+| 9–10 | Chủ nhân am hiểu | `am-hieu` | Bạn nắm chắc tư tưởng Hồ Chí Minh về nhà nước của dân, do dân, vì dân. Hãy chia sẻ để bạn bè cùng thử! |
+| 6–8 | Chủ nhân đang học | `dang-hoc` | Bạn đã hiểu phần lớn. Xem lại các câu chưa đúng và ghé hiện vật liên quan nhé. |
+| 0–5 | Hãy ghé thêm bảo tàng | `ghe-bao-tang` | Quay lại Bảo tàng số, đọc các hiện vật rồi thử lại. Hiểu quyền làm chủ là bước đầu để dùng quyền ấy. |
 
-**Câu 4 — Tin đồn tham nhũng.** Bạn thấy một bài đăng lan truyền tố một cán bộ tham nhũng.
-- A: Kiểm tra nguồn chính thống; nếu có bằng chứng thật thì tố cáo đúng kênh.
-- B: Lướt qua, không liên quan đến mình.
-- C: Biết một vụ tương tự ở địa phương nhưng im lặng vì sợ liên lụy.
-- D: Chia sẻ ngay, kèm bình luận gay gắt.
-- *Giải thích:* Phòng chống tiêu cực bằng dân chủ và pháp luật nghiêm minh, "không có vùng cấm", nhưng phải đúng người, đúng tội (GT tr. 94; HV-06, HV-10).
+Mọi mức đều kết bằng câu "Chủ nhân không đứng ngoài".
 
-**Câu 5 — Con đường hỏng.** Đoạn đường trước khu trọ bị hỏng nhiều tháng.
-- A: Gửi phản ánh tới phường qua kênh tiếp nhận chính thức, rủ hàng xóm cùng kiến nghị.
-- B: Đi đường khác cho nhanh.
-- C: Nghĩ chắc đã có ai phản ánh rồi.
-- D: Đăng bài công kích chính quyền phường trên nhóm cư dân.
-- *Giải thích:* "Việc gì có lợi cho dân thì làm". Dân có quyền đôn đốc để nhà nước làm tròn trách nhiệm (GT tr. 85, 87).
-
-**Câu 6 — Buổi đối thoại.** Địa phương hoặc nhà trường tổ chức buổi đối thoại, tiếp xúc với sinh viên.
-- A: Chuẩn bị câu hỏi cụ thể, đến dự và phát biểu.
-- B: Không đi vì mất thời gian.
-- C: Đến dự, có điều muốn hỏi nhưng không dám phát biểu.
-- D: Đến để "bắt lỗi", đặt câu hỏi gay gắt dựa trên tin chưa kiểm chứng.
-- *Giải thích:* Dân chủ trực tiếp là hình thức dân chủ hoàn bị nhất (GT tr. 85; HV-08).
-
-**Câu 7 — Tài sản chung.** Bạn thấy vài bạn viết vẽ, làm hỏng bàn ghế thư viện trường.
-- A: Nhắc nhở nhẹ nhàng; nếu tiếp diễn thì báo người quản lý.
-- B: Không phải đồ của mình nên kệ.
-- C: Thấy không đúng nhưng sợ mất lòng nên thôi.
-- D: Chụp ảnh đăng lên nhóm lớp, bêu tên các bạn đó.
-- *Giải thích:* Làm chủ đi đôi với nghĩa vụ, trong đó có bảo vệ tài sản công cộng (GT tr. 86).
-
-**Câu 8 — Ngày Pháp luật.** Trường tổ chức cuộc thi tìm hiểu pháp luật.
-- A: Tham gia và rủ bạn cùng tìm hiểu quyền, nghĩa vụ công dân.
-- B: Nghĩ pháp luật là việc của sinh viên ngành luật.
-- C: Muốn tham gia nhưng ngại bị cho là "làm màu".
-- D: Cho rằng xem vài clip ngắn trên mạng là đủ, không cần học.
-- *Giải thích:* Bác coi trọng giáo dục pháp luật, nâng cao dân trí, nhất là với thế hệ trẻ (GT tr. 89; HV-09).
-
-### 5.3 Cách tính điểm
-- Mỗi lựa chọn cộng 1 điểm cho kiểu tương ứng (A, B, C hoặc D).
-- Kiểu có điểm cao nhất là kết quả.
-- Nếu hòa điểm, chọn theo thứ tự ưu tiên **C → D → B → A** để người chơi nhận lời khuyên hữu ích hơn.
-- Hiển thị thêm biểu đồ thanh tỉ lệ 4 kiểu, ví dụ "A 50% · C 25% · D 25%".
+### 5.4 Cách tính điểm
+- Mỗi câu đúng được 1 điểm, tổng 0–10.
+- Mức xếp loại lấy theo `levels` trong `quiz.json` (khoảng min–max, phủ kín 0–10, không chồng lấn); không viết cứng ngưỡng trong code.
 - Không lưu câu trả lời lên máy chủ; mọi xử lý chạy trên trình duyệt.
 
 ---
 
 ## 6. Lan tỏa và chia sẻ
-- **Thẻ kết quả**: tạo ảnh PNG khổ 1080×1920 (vừa story) và 1080×1080 bằng `html-to-image`. Thẻ gồm tên kiểu, câu nói của Bác, thông điệp "Chủ nhân không đứng ngoài", tên web và mã QR dẫn về web.
-- **Link theo kết quả**: `?kq=A|B|C|D`. Khi mở link này, web hiện trang kết quả tương ứng kèm nút "Làm quiz của bạn".
+- **Thẻ kết quả**: tạo ảnh PNG khổ 1080×1920 (vừa story) và 1080×1080 bằng `html-to-image`. Thẻ gồm tiêu đề quiz, điểm x/10, tên mức, thông điệp "Chủ nhân không đứng ngoài", tên web và mã QR dẫn về web.
+- **Link theo kết quả**: `?kq=<id mức>` (`am-hieu`, `dang-hoc`, `ghe-bao-tang`). Khi mở link này, web hiện thẻ của mức đó (không có điểm cụ thể) kèm nút "Làm quiz của bạn". Giá trị `?kq` không hợp lệ bị bỏ qua.
 - **Nút chia sẻ**: dùng Web Share API trên điện thoại; trên máy tính thì sao chép link.
 - **Thẻ xem trước khi chia sẻ link**: thêm thẻ Open Graph (tiêu đề, mô tả, ảnh 1200×630).
-- **Đếm lượt truy cập** (để làm minh chứng lan tỏa): tích hợp một dịch vụ thống kê miễn phí, không dùng cookie, ví dụ GoatCounter. Chỉ đếm lượt xem trang và lượt hoàn thành quiz. Nhóm tự đăng ký tài khoản.
+- **Đếm lượt truy cập**: không gắn dịch vụ thống kê (thay đổi ở M5: bản online không liệt kê công khai, bản offline không có request mạng).
 
 ---
 
@@ -251,7 +216,7 @@ Không dùng hình ảnh nhân vật có bản quyền. Không tự vẽ chân d
 - **Nền tảng**: Vite + React + TypeScript + Tailwind CSS. Web tĩnh, không có backend.
 - **Dữ liệu tách khỏi code**, để nhóm sửa nội dung không cần động vào code:
   - `src/data/artifacts.json` — hiện vật
-  - `src/data/quiz.json` — câu hỏi và các kiểu công dân
+  - `src/data/quiz.json` — 10 câu hỏi kiến thức và các mức xếp loại
   - `src/data/sources.json` — nguồn APA7
   - `src/data/team.json` — thành viên
 - **Triển khai**: GitHub Pages qua GitHub Actions (repo `HCM202` đã có sẵn trên GitHub). Phương án dự phòng: Vercel.
@@ -271,7 +236,7 @@ San-pham-sang-tao/
         ├── components/
         │   ├── Hero.tsx
         │   ├── Museum/ (Timeline.tsx, ArtifactCard.tsx, ArtifactModal.tsx, PillarFilter.tsx)
-        │   ├── Quiz/ (Quiz.tsx, QuestionCard.tsx, Result.tsx, ShareCard.tsx, Review.tsx)
+        │   ├── Quiz/ (Quiz.tsx, QuestionCard.tsx, Result.tsx, Review.tsx, RelatedChips.tsx, ShareActions.tsx, ShareCard.tsx)
         │   ├── MindMap.tsx
         │   ├── Sources.tsx
         │   └── Team.tsx
@@ -306,10 +271,10 @@ Trường tùy chọn `hidden` (phương án dự phòng khi nộp): đặt `"hi
 `quiz.json`:
 ```json
 {
-  "types": [{ "id": "A", "name": "…", "desc": "…", "quote": {…}, "actions": ["…","…","…"], "relatedArtifacts": ["HV-05"] }],
-  "questions": [{ "id": "q1", "title": "Lá phiếu đầu tiên", "prompt": "…",
-    "options": [{ "type": "A", "text": "…" }], "explain": "…" }],
-  "tieBreak": ["C", "D", "B", "A"]
+  "closing": "Chủ nhân không đứng ngoài",
+  "levels": [{ "id": "am-hieu", "min": 9, "max": 10, "name": "…", "message": "…" }],
+  "questions": [{ "id": "q1", "pillar": "dan-chu", "title": "…", "prompt": "…",
+    "options": ["…", "…", "…", "…"], "correctIndex": 0, "explain": "…", "relatedArtifacts": ["HV-12"] }]
 }
 ```
 
@@ -353,17 +318,17 @@ Trích dẫn trong bài viết vẫn ghi số tập và số trang, theo dạng:
 |---|---|---|
 | M1 | Khởi tạo Vite + React + TS + Tailwind; tạo 4 file JSON từ mục 4, 5, 9; màu và font theo mục 7 | Chạy được local, có dữ liệu |
 | M2 | Hero, bộ lọc, dòng thời gian, phiếu và cửa sổ chi tiết hiện vật, thanh tiến độ | Bảo tàng hoạt động đầy đủ |
-| M3 | Quiz 8 câu, tính điểm (`scoring.ts` có unit test), trang kết quả, phần xem lại giải thích | Quiz hoạt động đầy đủ |
-| M4 | Thẻ kết quả PNG, link `?kq=`, Web Share, Open Graph, sơ đồ tư duy, trang nguồn và nhóm | Chia sẻ được |
+| M3 | Quiz 10 câu kiến thức (ban đầu là quiz tính cách 8 câu, đổi ngày 2/10/2026 — xem mục 5), tính điểm và xếp mức (`scoring.ts` có unit test), trang kết quả, xem lại câu chưa đúng và toàn bộ | Quiz hoạt động đầy đủ |
+| M4 | Thẻ kết quả PNG (điểm, mức), link `?kq=<id mức>`, Web Share, Open Graph, sơ đồ tư duy, trang nguồn và nhóm | Chia sẻ được |
 | M5 | GitHub Actions để deploy lên Pages; tích hợp thống kê; kiểm tra trên điện thoại | Có link công khai |
 
 ### Tiêu chí nghiệm thu
 - [ ] Hiển thị đúng ở màn hình 360px và 1440px; không cuộn ngang
 - [ ] Bộ lọc 3 trụ cột lọc đúng hiện vật
 - [ ] Mọi trích dẫn hiển thị kèm số tập và số trang
-- [ ] Quiz tính đúng kết quả, kể cả trường hợp hòa (có unit test)
+- [ ] Quiz tính đúng điểm và mức xếp loại, levels phủ kín 0–10 (có unit test)
 - [ ] Thẻ kết quả tải về hiển thị đúng dấu tiếng Việt
-- [ ] Link `?kq=C` mở đúng trang kết quả kiểu C
+- [ ] Link `?kq=dang-hoc` mở đúng thẻ mức "Chủ nhân đang học"
 - [ ] Không có nội dung nào do Claude Code tự thêm ngoài tài liệu; chỗ thiếu ghi `TODO`
 - [ ] Lighthouse trên điện thoại: Performance ≥ 85, Accessibility ≥ 90
 
