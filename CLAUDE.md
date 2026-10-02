@@ -109,7 +109,7 @@ Kiểm tra trước khi commit: `npm run test && npm run build && npm run packag
   - `correctIndex` theo thứ tự gốc (trong file mọi đáp án đúng đều là A, nên việc trộn thứ tự mỗi lượt là bắt buộc). Lựa chọn hiển thị không đánh chữ A–D.
   - Mức: `am-hieu` 9–10, `dang-hoc` 6–8, `ghe-bao-tang` 0–5; `levelFor` đọc ngưỡng từ `levels`, không viết cứng. Test: các mốc 0/5/6/8/9/10, levels phủ kín 0–10 không chồng lấn, 4 lựa chọn + `correctIndex` hợp lệ, `relatedArtifacts` tồn tại.
 - Font tự host trong `src/assets/fonts` (không dùng Google Fonts) để html-to-image nhúng được font vào thẻ PNG. Noto Serif: 400, 400 nghiêng, 600, 700, 700 nghiêng, 800. Be Vietnam Pro: 400, 400 nghiêng, 500, 600, 700. Thêm weight mới thì cập nhật `fonts.css`.
-- Ảnh hiện vật: đặt trong `public/images/…`, `image.src` ghi đường dẫn tương đối (vd. `images/artifacts/HV-07.jpg`). Khi build, mọi ảnh trong `public/images` được nhúng base64 vào `dist/index.html`.
+- Ảnh hiện vật: đặt trong `public/images/…`, `image.src` ghi đường dẫn tương đối (vd. `images/artifacts/HV-07.jpg`). Khi build, mọi ảnh trong `public/images` được nhúng base64 vào `dist/index.html`. Chỉ file ảnh (jpg, jpeg, png, webp, gif, avif, svg) được nhúng; file khác như `.gitkeep` bị bỏ qua. **Thêm ảnh mới vào `public/images` khi đang chạy `npm run dev` thì phải khởi động lại `npm run dev`** để ảnh được nạp.
 - Màu chữ vàng đồng dùng `#7A5A17` (nền sáng) để đạt WCAG AA; `#B8892B` giữ cho nền nhãn, đường kẻ.
 
 ## TODO còn lại (nội dung — nhóm cung cấp)

@@ -1,5 +1,5 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs'
-import { extname, join, relative, sep } from 'node:path'
+import { extname, join, relative, resolve, sep } from 'node:path'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig, type Plugin } from 'vite'
@@ -48,8 +48,10 @@ function embedAssets(): Plugin {
       const map: Record<string, string> = {}
       for (const file of listFiles(join(PUBLIC_DIR, 'images'))) {
         const uri = dataUri(file)
-        if (uri) map[relative(PUBLIC_DIR, file).split(sep).join('/')] = uri
-        this.addWatchFile(file)
+        // Bỏ qua file không phải ảnh (vd. .gitkeep)
+        if (!uri) continue
+        map[relative(PUBLIC_DIR, file).split(sep).join('/')] = uri
+        this.addWatchFile(resolve(file))
       }
       return `export default ${JSON.stringify(map)}`
     },
