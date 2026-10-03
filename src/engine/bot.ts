@@ -2,10 +2,10 @@
 // dùng power-up theo luật đơn giản. Mọi quyết định ngẫu nhiên lấy từ RNG trong
 // state nên cùng seed → cùng kết quả.
 
-import { geometry, remainingSteps } from './board'
-import { poolKey } from './data'
-import { nextFloat, pick } from './rng'
-import type { GameData, GameState, PlayerState, PowerupId } from './types'
+import { geometry, remainingSteps } from './board.js'
+import { poolKey } from './data.js'
+import { nextFloat, pick } from './rng.js'
+import type { GameData, GameState, PlayerState, PowerupId } from './types.js'
 
 export type BotDecision =
   | { kind: 'roll' }

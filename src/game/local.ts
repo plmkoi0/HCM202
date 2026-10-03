@@ -85,7 +85,7 @@ export function isUsableSave(data: GameData, s: unknown): s is LocalSave {
     if (!x || x.v !== 1 || !x.present || x.present.schema !== 1 || !Array.isArray(x.past) || !x.setup) return false
     const all = [x.present, ...x.past]
     for (const g of all) {
-      if (!data.board.layouts[g.config?.layout] || !Array.isArray(g.players) || g.players.length === 0) return false
+      if (typeof g.config?.layout !== 'string' || !Object.hasOwn(data.board.layouts, g.config.layout) || !Array.isArray(g.players) || g.players.length === 0) return false
       if (!Array.isArray(g.order) || g.order.length !== g.players.length) return false
       if (g.turn?.question && !data.questionById.has(g.turn.question.id)) return false
       if (g.turn?.outcome?.kind === 'answered' && !data.questionById.has(g.turn.outcome.questionId)) return false

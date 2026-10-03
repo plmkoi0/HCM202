@@ -537,6 +537,79 @@ Reducer thuần, không phụ thuộc trình duyệt hay Node. Hành động:
 - **Bí mật:** thông tin Redis chỉ ở biến môi trường phía server; có `.env.example`; không commit `.env`.
 - **Chạy cục bộ:** server Node + Redis giả lập trong bộ nhớ (hoặc Redis thật qua `REDIS_URL`), không cần tài khoản Vercel.
 
+**Đã làm ở G3 (03/10/2026):**
+
+*Lõi server — thư mục `server/`, chạy và test được không cần Vercel.*
+- `rooms.ts` xử lý: tạo phòng, xem phòng, vào phòng, phòng chờ, hành động trong ván (gọi engine sẵn có), polling, mở/đóng kết nối.
+- Mỗi lần thay đổi đi theo trình tự:
+  1. Đọc phòng (bộ nhớ đệm của instance, hoặc kho).
+  2. Rà trạng thái kết nối.
+  3. Chạy hành động.
+  4. Ghi có kiểm tra `version`.
+  5. Có người ghi trước thì đọc lại và thử lại (tối đa 12 lần).
+- Lỗi phát hiện trên bản đệm cũ được đọc lại từ kho trước khi báo.
+
+*Kho phòng — `store.ts`: một giao diện chung.*
+- Bản giả lập trong bộ nhớ: `memoryStore.ts`.
+- Redis thật: `redisStore.ts`, thư viện `redis`, giao thức TCP `rediss://`. Đổi kho không phải sửa lõi.
+- Khóa của mỗi phòng:
+  - `r:{CODE}`: phòng (JSON);
+  - `r:{CODE}:v`: version;
+  - `r:{CODE}:s`: lần poll gần nhất;
+  - kênh pub/sub `room:CODE`.
+- Mỗi lần ghi là **một lệnh EVAL** (Lua) làm cùng lúc các việc: kiểm version, ghi phòng và version, đặt hạn, publish.
+
+*API — `http.ts`, kiểu Web Request/Response, dùng chung cho Node và Vercel.*
+- Các đường:
+  - `GET /api/health`
+  - `POST /api/rooms`
+  - `GET /api/rooms/:code` (xem trước: màu đã chọn, còn chỗ không)
+  - `POST /api/rooms/:code/join`
+  - `POST /api/rooms/:code/actions` (`{actionId, action}`)
+  - `GET /api/rooms/:code/state?since=N`
+- Polling khi không đổi trả **204** (không có nội dung), kèm header `x-server-now`, thay cho 304.
+- Xác thực: `Authorization: Bearer <playerId>.<token>`. Server chỉ giữ mã băm SHA-256 của token.
+
+*WebSocket — `socket.ts`, `hub.ts`.*
+- Đường `GET /api/ws`.
+- Máy gửi `{t:"hello", code, playerId, token}`; server đẩy ảnh chụp trạng thái riêng cho từng người.
+- Có `ping`/`pong` để đo đồng hồ. Hành động vẫn đi qua HTTP.
+- Mỗi instance theo dõi kênh pub/sub của phòng chỉ khi có kết nối của phòng đó.
+
+*Lớp mỏng Vercel — `api/[...path].ts`.*
+- Gọi `experimental_upgradeWebSocket` (khóa `@vercel/functions` 3.9.11).
+- Vercel biên dịch từng file TypeScript sang Node ESM mà **không** sửa đường dẫn import. Vì vậy mọi import tương đối trong `server/`, `api/`, `src/engine/` ghi đuôi `.js`; JSON nạp bằng `with { type: 'json' }`.
+- Test `tests/vercel-api.test.ts` làm lại đúng cách biên dịch đó rồi gọi thử API.
+
+*Server Node cục bộ — `node.ts`, `dev.ts`.*
+- `npm run server`: API + WebSocket ở cổng 8787.
+- `npm run serve`: thêm trang tĩnh `dist/`.
+- Server tự đóng mỗi kết nối WebSocket sau 300 s, như Vercel.
+- `npm run dev` chuyển `/api` (cả WebSocket) sang server cục bộ.
+
+*Client mạng — `src/net/` (G4 dùng).*
+- WebSocket trước. Không nối được thì polling 1,5 s/lần, thử lại WebSocket lùi dần (1 → 30 s).
+- Ở ~280 s mở kết nối mới; nhận trạng thái từ kết nối mới rồi mới đóng kết nối cũ. Nếu mình đang trả lời câu hỏi thì hoãn, chậm nhất ~290 s.
+- Đang dùng WebSocket vẫn hỏi lại 30 s/lần, phòng khi lỡ tin.
+- Quá hạn thì gửi `TICK`. Người đến lượt gửi trước, các máy khác chờ thêm 0,7 s mỗi bậc. Server tự chọn hành động tự động đang chờ.
+- Mất mạng thì gửi lại hành động với cùng `actionId`.
+- Bản offline không nạp `src/net/`: `npm run build:offline` kiểm không còn `/api`, `WebSocket`, `fetch` trong file.
+
+*Biến môi trường (`.env.example`).*
+- URL Redis TCP lấy theo thứ tự `REDIS_URL` → `KV_URL` → `UPSTASH_REDIS_URL`.
+- Chạy cục bộ không có biến nào → kho trong bộ nhớ.
+- Trên Vercel (`VERCEL` có giá trị) mà chưa có biến nào:
+  - API phòng trả 503 "Server chưa sẵn sàng";
+  - `/api/health` liệt kê biến còn thiếu.
+
+*Kiểm bản deploy thật:* `npm run check:deploy -- <địa chỉ> [--long]` kiểm health, WebSocket, polling và đóng/nối lại ở 300 s. Hướng dẫn tạo project cho nhóm: `docs/HUONG-DAN-VERCEL.md`.
+
+**Kiểm trên bản deploy thật** (chờ nhóm tạo project, xem `docs/HUONG-DAN-VERCEL.md`):
+- [ ] WebSocket chạy được qua `experimental_upgradeWebSocket`.
+- [ ] Đường `api/[...path].ts` bắt được mọi `/api/*`.
+- [ ] Kết nối bị đóng sau 300 giây và client tự nối lại.
+- [ ] Polling dự phòng hoạt động.
+
 ### 15.5 Quyền riêng tư và chi phí
 - Chỉ lưu biệt danh và thao tác trong ván; không đăng nhập, không thống kê, không lưu gì sau khi phòng hết hạn.
 - **Tình huống ước lượng:**
@@ -564,6 +637,14 @@ Reducer thuần, không phụ thuộc trình duyệt hay Node. Hành động:
   - **Rủi ro:** gói Hobby vượt hạn mức thì **project bị tạm dừng tới khi hết chu kỳ 30 ngày** (không trả thêm được). Chưa xác nhận được Upstash có tính mỗi tin pub/sub nhận được là một lệnh hay không — bảng trên đã tính trường hợp có. Gói Hobby chỉ dùng cho mục đích cá nhân, phi thương mại (bài tập môn học phù hợp).
   - **Cách giữ an toàn (áp dụng khi làm G3):** một function chung `api/[...path].ts`; polling chỉ đọc khóa `version` (1 lệnh) và trả `304` khi không đổi, có bộ đệm ~1 s trong instance cho mỗi phòng; chỉ publish `version` + diff; không ghi nhịp tim (heartbeat) vào Redis, trạng thái kết nối lấy từ sự kiện mở/đóng WebSocket và lần gọi gần nhất; buổi tập dùng ít máy; xem trang Usage của Vercel và Upstash trước buổi chơi; luôn có "Chơi trên một máy" và bản offline làm dự phòng.
 - **Phương án thay nếu vượt hạn mức:** nhà cung cấp realtime trên Vercel Marketplace (Ably, Pusher, Supabase Realtime…) với một function cấp token.
+- **Đo bằng mô phỏng tải (G3, `npm run sim:load`).**
+  - Thiết lập: 30 phòng (10 × 5 người + 20 phòng 1 người), 70 máy, 3 instance dùng chung một kho, cả kho bộ nhớ lẫn redis-server thật. Hạn từng pha rút còn 3%; polling 0,3 s.
+  - **Mỗi lần ghi phòng ≈ 1,1 lệnh EVAL.** Phần 0,1 là khoảng 10% lần ghi bị người khác ghi trước, phải ghi lại.
+  - **Mỗi lần poll:** 1 lệnh GET khóa version, cộng 1 GET phòng khi có thay đổi (instance có bản đệm mới thì không cần).
+  - **Mỗi kết nối WebSocket:** 2 lần ghi (mở và đóng); không có nhịp tim vào Redis.
+  - **Máy đang polling:** ghi "lần poll gần nhất" tối đa 1 lệnh mỗi 10 s.
+  - **Cả mô phỏng:** khoảng 2,7–3,1 lệnh trên mỗi lần ghi phòng, kể cả polling dày gấp 5 lần thực tế.
+  - **Kết luận:** thấp hơn mức ~10 lệnh/hành động đã giả định ở G0. Bảng ước lượng trên **vẫn giữ trường hợp xấu** (tính cả tin pub/sub nhận được) cho tới khi xác minh được cách Upstash tính tin pub/sub (mục 20).
 
 ### 15.6 Bản build
 
@@ -681,8 +762,36 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 - Giả lập 10 phòng × 5 người + 20 phòng 1 người chơi cùng lúc → không mất hành động, mọi máy cập nhật đúng. Chạy thêm một lượt có bật Đoán cùng để thử tải nặng nhất.
 - Ép đóng WebSocket giữa lúc trả lời (mô phỏng giới hạn 300 s) → client tự nối lại, câu trả lời không mất.
 
+**Đã có ở G3:**
+- `tests/server.test.ts`: các ý "Server (Redis giả lập)" ở trên, gồm:
+  - sức chứa khi vào đồng thời;
+  - màu trùng;
+  - máy chơi cùng;
+  - chủ phòng;
+  - từ chối sai quyền;
+  - `actionId` trùng;
+  - Đoán cùng đồng thời;
+  - TICK trước hạn;
+  - state không lộ đáp án;
+  - mất kết nối và nối lại;
+  - hết hạn;
+  - chơi lại;
+  - bộ nhớ đệm cũ giữa hai instance.
+- `tests/store.test.ts`: cùng bộ kiểm tra cho kho bộ nhớ và **redis-server thật** (bật tự động nếu máy có), gồm cả hai instance dùng chung Redis qua pub/sub.
+- `tests/server-net.test.ts`: HTTP + WebSocket thật, gồm:
+  - WebSocket và polling cho cùng trạng thái cuối;
+  - thay kết nối trước khi bị đóng;
+  - cắt WebSocket ngay lúc trả lời → câu trả lời không mất, client nối lại;
+  - bị mời ra.
+- `tests/vercel-api.test.ts`: lớp `api/` chạy được bằng Node ESM như trên Vercel.
+- `npm run sim:load [-- --guess] [-- --redis]`:
+  - 10 × 5 + 20 × 1 phòng, 3 instance;
+  - một nửa số máy chỉ dùng polling;
+  - WebSocket bị đóng mỗi 1,5 s.
+  - Kiểm: mọi ván kết thúc; mọi máy hội tụ đúng trạng thái trong kho; không lỗi server.
+
 ### Lệnh kiểm tra cuối
-`npm run test && npm run build && npm run build:offline && npm run lint` ở gốc nhánh `game`.
+`npm run test && npm run build && npm run build:offline && npm run lint` ở gốc nhánh `game`, cộng `npm run e2e` (từ G2) và `npm run sim:load` khi đổi server (từ G3).
 
 ## 18. Lộ trình
 
@@ -691,7 +800,7 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 | **G0 — Nhánh và rà soát** | Tạo nhánh mồ côi `game`; chép dữ liệu khởi đầu, nguồn tham chiếu và font từ nhánh web (ghi `NGUON.md`); tạo `CLAUDE.md` của nhánh; đối chiếu tài liệu này với dữ liệu; xác nhận nền tảng Vercel; ước lượng chi phí (15.5); tạo mẫu `docs/CAU-HOI-GAME.mau.md` để nhóm bắt đầu soạn câu hỏi; cập nhật mục 20. **Dừng chờ duyệt** | ☑ Xong và được nhóm duyệt 03/10/2026 — quyết định ghi ở mục 20. Nhánh `game` đẩy được với đúng tên `game` |
 | **G1 — Nền móng** | Khởi tạo dự án ở gốc nhánh, JSON + kiểu dữ liệu, **12 câu khởi đầu** từ `QUIZ-KIEN-THUC.md` (13.1) + **câu hỏi thử** lấp chỗ thiếu (13.3), script nhập câu hỏi, test dữ liệu, engine + bot + unit test, mô phỏng cân bằng ở 20 s và 25 s/lượt (điền mục 11) | ☑ Xong 03/10/2026 — 120 test; mô phỏng đạt mục tiêu mục 11; chi tiết tự chọn ghi ở mục 20 |
 | **G2 — Chơi trên một máy** | Bàn cờ SVG, xúc xắc, ngựa đi từng ô, các loại ô, túi power-up, thẻ bẫy, bot, thử thách cá nhân + kỷ lục, lưu/tiếp tục ván, hoàn tác — chơi trọn ván | ☑ Xong 03/10/2026 — 131 test; chạy thử trong Chromium (360 × 780 sáng, 1366 × 768 tối, có và không có hiệu ứng): chơi trọn ván, 2 ngựa, thử thách cá nhân, tải lại, hoàn tác, axe không lỗi; chi tiết tự chọn ghi ở mục 20 |
-| **G3 — Server** | Tạo/vào phòng, sức chứa, chọn màu, hành động, bước bot, Redis, pub/sub, WebSocket + polling, nối lại, chuyển chủ phòng, `/api/health`; test server, mô phỏng tải, chạy cục bộ | ☐ |
+| **G3 — Server** | Tạo/vào phòng, sức chứa, chọn màu, hành động, bước bot, Redis, pub/sub, WebSocket + polling, nối lại, chuyển chủ phòng, `/api/health`; test server, mô phỏng tải, chạy cục bộ | ☑ Xong 03/10/2026 — 170 test; mô phỏng tải đạt với kho bộ nhớ và redis-server thật, có và không Đoán cùng; rà soát 6 sub agent, đã sửa các lỗi xác nhận. Chờ nhóm tạo project để kiểm trên Vercel (`docs/HUONG-DAN-VERCEL.md`) |
 | **G4 — Chơi qua phòng** | Trang chủ, tạo phòng, vào bằng mã / QR / link, phòng chờ, chơi qua mạng, trạng thái kết nối, mất kết nối, kết thúc + chơi lại, tùy chọn Đoán cùng | ☐ |
 | **G5 — Hoàn thiện** | Ôn câu sai, thống kê, Kho câu hỏi, Luật chơi minh họa, Cài đặt, âm thanh, phím tắt, chỉnh giao diện, reduced motion | ☐ |
 | **G6 — Phát hành** | Hướng dẫn tạo project Vercel (Production Branch = `game`) + gắn Redis (nhóm làm phần cần tài khoản), deploy preview, diễn tập, `npm run check:release` (không còn câu hỏi thử), bản offline, README, cập nhật `CLAUDE.md` | ☐ |
@@ -798,6 +907,58 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 - Mở thẻ hiện vật hoặc hộp "Thoát ván?" thì tạm dừng đồng hồ ván và hạn pha (chỉ ở "Chơi trên một máy").
 - 50:50 với câu 2 đáp án: nút mờ kèm ghi chú, không mất power-up (L2).
 
+**Chi tiết server G3 tự chọn trong phạm vi thiết kế (nhóm xem lại; không chặn các mốc):**
+- **Sang lượt sớm (chơi qua phòng):** chỉ người đến lượt bấm "Tiếp tục" để đi sớm được. Trong lượt của máy chơi cùng, mọi người chờ hết 8 giây hiện giải thích để ai cũng kịp đọc. "Chơi trên một máy" vẫn cho người ngồi cùng bấm sớm.
+- **Hành động tự động khi quá hạn:**
+  - Máy gửi `TICK`; server tự chọn hành động đang chờ theo giờ server (tự tung, hết giờ, bỏ lượt, bước của máy).
+  - Máy của người đến lượt gửi trước; các máy khác chờ thêm 0,7 s mỗi bậc để không gửi trùng nhiều.
+- **Trạng thái kết nối:**
+  - Có kết nối WebSocket đang mở, hoặc có gọi server (hành động, poll) trong 20 s gần nhất → còn kết nối.
+  - Kết nối WebSocket rớt được chờ 20 s để tự nối lại hoặc chuyển polling.
+  - Cờ "mất kết nối" chỉ đổi ở lần ghi phòng kế tiếp. Trong ván, lần ghi xảy ra liên tục; ở phòng chờ yên lặng, danh sách có thể chậm cập nhật.
+  - Mất kết nối đúng lúc tới lượt → engine tự bỏ lượt sau 20 s (mục 9).
+- **Chuyển chủ phòng:**
+  - Khi chủ phòng bấm rời, hoặc bị coi là mất kết nối → chuyển cho người vào sớm nhất còn kết nối.
+  - Chủ phòng cũ quay lại **không** lấy lại quyền.
+- **Rời phòng:**
+  - Ở phòng chờ: bỏ khỏi danh sách.
+  - Trong ván: đánh dấu đã rời và mất kết nối (lượt tự bỏ qua). Người đó vẫn quay lại được bằng phiên cũ.
+  - Mọi người đều rời → phòng đóng.
+- **Mời ra:** chỉ ở phòng chờ. Phiên của người bị mời ra không dùng được nữa ("Bạn đã được mời ra khỏi phòng"); người đó vẫn vào lại được như người mới.
+- **Chơi lại:** chủ phòng bấm sau ván → **về phòng chờ** với cùng người và máy chơi cùng (bỏ người đã rời). Ở đó chỉnh được cài đặt, người mới vào được, rồi bấm Bắt đầu.
+- **Kết thúc sớm:** chủ phòng kết thúc được ván đang chơi; engine ghi lý do "host" và xếp hạng như hết giờ.
+- **Phòng 1 chỗ:**
+  - Vào ván ngay khi tạo, với 0–4 máy chơi cùng do người tạo chọn. Máy chơi cùng không tính vào "1 chỗ".
+  - Người khác vào thì nhận "phòng đã đủ người".
+- **Đổi màu ở phòng chờ:** được, nếu màu mới chưa ai chọn.
+- **Mã phòng:** không phân biệt chữ hoa/thường, bỏ qua khoảng trắng và dấu gạch.
+- **Phòng hết hạn:** sau 6 giờ báo "Phòng đã hết hạn" thêm 10 phút, sau đó báo "Không tìm thấy phòng".
+- **Giới hạn tần suất:**
+  - Tạo phòng: 120 phòng / 10 phút mỗi địa chỉ IP, đếm chung qua Redis. Cả lớp có thể chung một IP Wi-Fi.
+  - Xem / vào phòng: 240 lần / phút mỗi IP, đếm trong từng instance.
+  - Hành động: 60 lần / 10 s mỗi người, đếm trong từng instance.
+- **Polling không đổi:** trả 204 (không có nội dung) thay cho 304, để trình duyệt nào cũng xử lý giống nhau.
+- **Sau rà soát G3 (6 sub agent):**
+  - **Đã sửa:**
+    - giới hạn tần suất hành động chỉ đếm sau khi xác thực;
+    - token sai trên bản đệm bị từ chối mà không tốn lệnh Redis;
+    - mã phòng không tồn tại được nhớ 10 s;
+    - TICK, poll và thay kết nối không còn hủy việc "Rời phòng";
+    - client dừng sau khi rời;
+    - ghi "đã nối lại" trước khi chạy hành động;
+    - chuyển chủ phòng khi mở kết nối, và khi người khác poll lúc chủ phòng đã đi ở phòng chờ;
+    - Redis: hạn 4 s cho mỗi lệnh, báo lỗi thay vì treo khi sai URL hoặc mất kết nối;
+    - WebSocket im lặng quá 70 s thì server cắt, để phát hiện kết nối nửa mở;
+    - bỏ qua hello trùng;
+    - máy dùng WebSocket không ghi "lần poll gần nhất";
+    - mã `%` hỏng không làm sập server cục bộ;
+    - `layout` không nhận khóa prototype;
+    - client gửi lại hành động trong ~15 s, hẹn lại TICK sau mọi lỗi, thử lại kết nối thay thế bị hỏng.
+  - **Còn lại (rủi ro thấp, ghi nhận):**
+    - Người lạ dò mã phòng bừa vẫn tốn 1 lệnh Redis cho mỗi mã mới.
+    - Seed / RNG của engine 31 bit; người rành kỹ thuật về lý thuyết đoán được xúc xắc. Đây là game ôn tập, chấp nhận như L5.
+    - Vào phòng chưa chống gửi trùng khi mất phản hồi: có thể sinh một người "ma" ở phòng chờ, chủ phòng mời ra được. G4 sẽ xử lý phía giao diện.
+
 **Nhóm cần quyết:**
 - [ ] Tên chính thức của game — để sau, không chặn các mốc.
 
@@ -808,8 +969,8 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
   - Nhớ phần giáo trình tr. 92–93.
 
 **Hạ tầng (cần tài khoản nhóm):**
-- [ ] Tạo project Vercel thứ hai, nối repo `HCM202`, Production Branch = `game`, Root Directory = gốc nhánh, Fluid Compute bật (mặc định).
-- [ ] Gắn **Upstash for Redis** (gói Free) từ Vercel Marketplace (15.4, 15.5).
+- [ ] Tạo project Vercel thứ hai, nối repo `HCM202`, Production Branch = `game`, Root Directory = gốc nhánh, Fluid Compute bật (mặc định) — làm theo `docs/HUONG-DAN-VERCEL.md`.
+- [ ] Gắn **Upstash for Redis** (gói Free) từ Vercel Marketplace (15.4, 15.5) — cùng hướng dẫn; xong thì `/api/health` trả `"store":"redis"`.
 - [ ] Điền `siteUrl` của game.
 - [ ] Đề xuất: deploy preview ngay sau G3 để thử WebSocket thật sớm, không đợi G6.
 - [ ] Kiểm tra Deployment Protection (mục 15.6): khi thử trên điện thoại dùng Shareable Links; trước buổi học, tên miền chính phải mở được mà không cần đăng nhập Vercel.
@@ -817,8 +978,20 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 **Cần xác minh:**
 - [x] Trạng thái WebSocket trên Vercel và cách chạy với Vite + `api/` — đã xác minh ở G0 (15.4).
 - [x] Hạn mức miễn phí hiện hành của Vercel Hobby và gói Redis — đã ước lượng ở G0 (15.5).
-- [ ] Trước G3: Upstash có tính mỗi tin pub/sub nhận được là một lệnh không; tên biến môi trường Marketplace đặt cho Redis (`REDIS_URL` / `KV_URL`…).
-- [ ] Trên deploy preview: WebSocket qua `experimental_upgradeWebSocket` chạy được, đóng sau 300 giây, client tự nối lại.
+- [ ] **Upstash có tính mỗi tin pub/sub nhận được là một lệnh không — chưa xác minh được (G3, 03/10/2026).**
+  - Đã thử: môi trường làm việc vẫn bị chặn truy cập `upstash.com`. Trang giá Redis trong mã nguồn tài liệu Upstash (GitHub `upstash/docs`, `redis/overall/pricing.mdx`) chỉ trỏ sang upstash.com/pricing/redis.
+  - Bằng chứng gián tiếp: bảng lệnh của **Upstash Realtime** (cùng tài liệu, `realtime/overall/pricing.mdx`) liệt kê lệnh được tính khi nối, nối lại, ping, phát tin (SUBSCRIBE, UNSUBSCRIBE, PUBLISH, XADD, XRANGE), **không** có dòng nào cho tin nhận được. Điều này gợi ý tin nhận không bị tính.
+  - Chưa có câu nói thẳng, nên ước lượng chi phí (mục 15.5) **giữ trường hợp xấu**: có tính.
+  - Nhóm có thể xem câu hỏi thường gặp ở upstash.com/pricing/redis khi tạo database.
+- [x] **Tên biến môi trường Redis — xác minh một phần (G3).**
+  - Mã nguồn gói `@upstash/redis` 1.39.0 (`Redis.fromEnv`) đọc `UPSTASH_REDIS_REST_URL` hoặc `KV_REST_API_URL`, cùng `…_TOKEN` tương ứng. Đây là các biến REST.
+  - Kết quả tìm kiếm cho biết Marketplace thêm `KV_URL`, `KV_REST_API_URL`, `KV_REST_API_TOKEN`, `KV_REST_API_READ_ONLY_TOKEN`, có khi thêm `REDIS_URL`.
+  - Server dùng giao thức TCP (cần cho pub/sub), đọc lần lượt `REDIS_URL` → `KV_URL` → `UPSTASH_REDIS_URL` (`.env.example`).
+  - Chỉ có biến REST thì `/api/health` báo thiếu; hướng dẫn chỉ cách thêm `REDIS_URL` bằng tay (`docs/HUONG-DAN-VERCEL.md`).
+- [ ] **Trên bản deploy thật** (chờ nhóm tạo project): kiểm bằng `npm run check:deploy -- <địa chỉ> --long`, ghi kết quả vào mục 15.4.
+  - WebSocket qua `experimental_upgradeWebSocket` chạy được.
+  - Kết nối đóng sau 300 giây, client tự nối lại; polling dự phòng hoạt động.
+  - File `api/[...path].ts` (catch-all ngoài Next.js) bắt được mọi `/api/*`. Tài liệu thứ cấp nói được hỗ trợ; nếu không, thêm `rewrites` `/api/(.*)` trong `vercel.json`.
 
 ---
 

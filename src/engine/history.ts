@@ -2,7 +2,7 @@
 // tuần tự hóa được nên lưu nguyên bản). Hoàn tác khôi phục cả RNG, nên tung lại
 // sẽ ra đúng kết quả cũ — không "tung lại cho tới khi đẹp".
 
-import type { GameState } from './types'
+import type { GameState } from './types.js'
 
 export interface History {
   past: GameState[]

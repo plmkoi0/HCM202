@@ -4,7 +4,7 @@
 // - khi đang trả lời, mỗi máy chỉ thấy lựa chọn Đoán cùng của chính mình — người đang
 //   trả lời không thấy người khác đoán gì.
 
-import type { GameState } from './types'
+import type { GameState } from './types.js'
 
 export type ClientState = Omit<GameState, 'seed' | 'rng'>
 

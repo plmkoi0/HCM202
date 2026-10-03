@@ -3,7 +3,7 @@
 // ngay trước cổng của mình → H ô về đích → Đích (bước R + H).
 // Bố cục Ngắn: R = 18, H = 4 → 22 bước; bố cục Dài: R = 24, H = 5 → 29 bước.
 
-import type { CellKind, GameData, LayoutData } from './types'
+import type { CellKind, GameData, LayoutData } from './types.js'
 
 export interface Geometry {
   layoutId: string

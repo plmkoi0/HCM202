@@ -62,31 +62,43 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 
 ## Cấu trúc thư mục
 
-**Hiện tại (sau G2):**
+**Hiện tại (sau G3):**
 ```
 /
-├── CLAUDE.md, README.md, .gitignore, .oxlintrc.json
+├── CLAUDE.md, README.md, .gitignore, .oxlintrc.json, .env.example (biến Redis), vercel.json
 ├── package.json, package-lock.json      ← Vite 8 + React 19 + TS 6 + Tailwind 4 + Vitest 5 + oxlint; tsx chạy script TS;
 │                                          lucide-react (biểu tượng SVG); playwright-core + axe-core (chỉ để chạy thử)
 ├── vite.config.ts                       ← mode "offline": vite-plugin-singlefile → dist-offline/index.html, define __OFFLINE__
-├── tsconfig.json, tsconfig.app.json (src), tsconfig.node.json (vite.config, scripts, tests; allowJs)
+├── tsconfig.json, tsconfig.app.json (src), tsconfig.node.json (vite.config, scripts, tests; allowJs),
+│   tsconfig.server.json (server, api, src/net)
+├── api/[...path].ts                     ← lớp mỏng Vercel Functions: mọi /api/* → server/; WebSocket bằng experimental_upgradeWebSocket
+├── server/                              ← lõi server (test được không cần Vercel): rooms (phòng, hành động, polling, kết nối),
+│                                          store (giao diện kho) + memoryStore + redisStore (Lua, pub/sub), presence (trạng thái
+│                                          kết nối, chuyển chủ phòng), auth (mã phòng, token), http (API kiểu Web), socket + hub
+│                                          (WebSocket), context (chọn kho theo biến môi trường), node + dev (server Node cục bộ), data, errors
 ├── index.html                           ← favicon SVG nhúng sẵn, meta robots noindex
 ├── docs/
 │   ├── THIET-KE-GAME.md                 ← tài liệu thiết kế (bản 1.5 + kết quả G1)
 │   ├── CAU-HOI-GAME.md                  ← bộ câu hỏi của nhóm: 12 câu khởi đầu Q-01 → Q-12
 │   ├── CAU-HOI-GAME.mau.md              ← mẫu + hướng dẫn điền (mục 13.4)
+│   ├── HUONG-DAN-VERCEL.md              ← từng bước tạo project Vercel thứ hai + gắn Upstash (nhóm làm)
 │   └── nguon/THIET-KE-WEB-APP.md, nguon/QUIZ-KIEN-THUC.md   ← bản sao nguồn tham chiếu (không sửa; mã băm trong NGUON.md)
-├── public/                              ← (trống; robots.txt ở G3/G6)
+├── public/robots.txt                    ← chặn máy tìm kiếm (kèm meta robots, header X-Robots-Tag trong vercel.json)
 ├── scripts/
 │   ├── import-questions.mjs             ← CAU-HOI-GAME.md → questions.json; báo dòng sai, không ghi đè khi lỗi; lấp câu hỏi thử
 │   ├── simulate.ts                      ← mô phỏng cân bằng (npm run simulate)
 │   ├── e2e-local.mjs                    ← chạy thử "Chơi trên một máy" trong Chromium (npm run e2e, sau build:offline)
+│   ├── load-sim.ts                      ← mô phỏng tải 10 × 5 + 20 × 1 qua HTTP/WebSocket thật (npm run sim:load [-- --guess] [-- --redis])
+│   ├── check-deploy.ts                  ← kiểm bản deploy thật: health, WebSocket, polling, đóng/nối lại 300 s (npm run check:deploy -- <url> --long)
+│   ├── check-offline.mjs                ← bản offline không chứa mã mạng (chạy trong build:offline)
 │   └── lib/question-table.mjs, lib/quiz-source.mjs   ← đọc bảng câu hỏi, mẫu chữ cái phương án; đọc QUIZ-KIEN-THUC.md
 ├── src/
 │   ├── data/                            ← board, rules, powerups, traps, bots, tokens, site, questions (sinh từ script),
 │   │                                      test-questions (kho câu hỏi thử), artifacts, mindmap, pillars, NGUON.md
 │   ├── engine/                          ← types, rng (mulberry32), data, board (hình học, đường đi), questions (chọn câu),
 │   │                                      reducer (luật), bot, ranking, history (hoàn tác), view (state gửi client), index
+│   ├── net/                             ← client phòng chơi (G4 dùng): api (fetch), clock (lệch đồng hồ), connection (WebSocket →
+│   │                                      polling, thay kết nối ~280 s, TICK khi quá hạn) — bản offline không nạp
 │   ├── game/                            ← local.ts (lưu / tiếp tục / hoàn tác / kỷ lục), useLocalGame (hành động, tạm dừng,
 │   │                                      tự động khi quá hạn), useBoardAnimation (xúc xắc lăn, ngựa đi từng ô)
 │   ├── components/                      ← Board (+ BoardLegend), Dice, Countdown, Sheet (giữ tiêu điểm), QuestionPanel,
@@ -98,7 +110,8 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 │   ├── assets/fonts.css, assets/fonts/  ← Be Vietnam Pro 400/400i/600/700, Noto Serif 700/400i + OFL
 │   ├── index.css, main.tsx, App.tsx     ← token màu sáng/tối, lớp nút/thẻ; App chuyển màn + ErrorBoundary
 │   └── vite-env.d.ts
-└── tests/                               ← helpers, data, questions, engine, local (Vitest, môi trường node)
+└── tests/                               ← helpers, data, questions, engine, local, server (lõi), server-net (HTTP + WebSocket thật),
+                                           store (kho bộ nhớ + redis-server cục bộ), vercel-api (Node ESM như Vercel), netHelpers
 ```
 
 **Đích (mục 15.1):**
@@ -133,8 +146,8 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 | **G0 — Nhánh và rà soát** | Nhánh mồ côi, chép dữ liệu + `NGUON.md`, `CLAUDE.md`, đối chiếu thiết kế với dữ liệu, xác minh Vercel, ước lượng chi phí, mẫu câu hỏi, cập nhật mục 20 | ☑ Xong, nhóm duyệt 03/10/2026 (bản thiết kế 1.5) |
 | **G1 — Nền móng** | Dự án Vite, JSON + kiểu, 12 câu khởi đầu + câu hỏi thử lấp chỗ thiếu, script nhập câu hỏi, test dữ liệu, engine + bot + unit test, mô phỏng cân bằng ở 20 s và 25 s/lượt | ☑ Xong 03/10/2026 — 120 test; mô phỏng đạt mục tiêu (mục 11) |
 | **G2 — Chơi trên một máy** | Bàn cờ SVG, xúc xắc, ngựa, ô, power-up, bẫy, bot, thử thách cá nhân, lưu/tiếp tục, hoàn tác | ☑ Xong 03/10/2026 — 131 test; `npm run e2e` đạt ở 360 × 780 sáng và 1366 × 768 tối (axe không lỗi) |
-| **G3 — Server** | Phòng, sức chứa, màu, hành động, bot, Redis, pub/sub, WebSocket + polling, nối lại, chủ phòng, `/api/health`, test, mô phỏng tải | ☐ Tiếp theo |
-| **G4 — Chơi qua phòng** | Trang chủ, tạo/vào phòng (mã, QR, link), phòng chờ, chơi qua mạng, trạng thái kết nối, kết thúc, chơi lại, Đoán cùng | ☐ |
+| **G3 — Server** | Phòng, sức chứa, màu, hành động, bot, Redis, pub/sub, WebSocket + polling, nối lại, chủ phòng, `/api/health`, test, mô phỏng tải | ☑ Xong 03/10/2026 — 170 test; mô phỏng tải đạt (kho bộ nhớ và redis-server thật, có/không Đoán cùng); chờ nhóm tạo project để kiểm trên Vercel |
+| **G4 — Chơi qua phòng** | Trang chủ, tạo/vào phòng (mã, QR, link), phòng chờ, chơi qua mạng, trạng thái kết nối, kết thúc, chơi lại, Đoán cùng | ☐ Tiếp theo |
 | **G5 — Hoàn thiện** | Ôn câu sai, thống kê, Kho câu hỏi, Luật chơi, Cài đặt, âm thanh, phím tắt, giao diện, reduced motion | ☐ |
 | **G6 — Phát hành** | Hướng dẫn tạo project Vercel + Redis (nhóm làm), deploy preview, diễn tập, `check:release`, bản offline, README | ☐ |
 
@@ -153,6 +166,16 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - Chọn câu: không lặp tới hết kho, trộn lại vòng mới (câu vừa hỏi không ra ngay), ưu tiên câu chưa gặp; thiếu tổ hợp thì mượn (mục 8).
 - Kết quả mô phỏng và các chi tiết tự chọn ở G1 (mặc định "dừng ngay", hiện giải thích 8 s, Đổi câu đặt lại đồng hồ…) ghi ở mục 11 và 20 tài liệu thiết kế.
 - `npm audit` báo `braces` (qua `vite-plugin-singlefile` → `micromatch`): chỉ là công cụ build, không vào mã chạy.
+
+## Ghi chú server (G3, chi tiết ở mục 15.4, 20)
+- Lệnh: `npm run server` (cổng 8787, kho bộ nhớ; có `REDIS_URL` thì Redis thật) · `npm run dev` (Vite chuyển `/api` sang 8787) · `npm run serve` (build + phục vụ `dist/`) · `npm run sim:load` · `npm run check:deploy -- <url>`.
+- Mọi import tương đối trong `server/`, `api/`, `src/engine/` **phải ghi đuôi `.js`**; JSON trong server nạp bằng `with { type: 'json' }` (`server/data.ts`). Vercel biên dịch từng file sang Node ESM, không sửa đường dẫn — `tests/vercel-api.test.ts` kiểm điều này. `src/net/` và giao diện dùng import không đuôi như cũ (Vite).
+- Phòng = một khối JSON `Room` (server/types.ts), có `game: GameState`. Ghi qua `mutate()`: đọc (đệm/kho) → rà kết nối → sửa → `store.put(room, version cũ)` (Lua: kiểm version + ghi + hạn + publish) → xung đột thì đọc lại, thử lại. Lỗi phát hiện trên bản đệm có thể cũ → đọc lại kho trước khi báo (lỗi tìm ra nhờ mô phỏng tải).
+- Hành động tự động: máy gửi `TICK`, server chạy `pendingAutoAction(game, giờ server)`. Hạn luôn theo giờ server; client đo lệch đồng hồ.
+- Trạng thái kết nối: `links` (WebSocket đang mở, quá 320 s coi là chết) + `lastSeen` (lần ghi do chính người đó) + hash poll (tối đa 10 s/lần) → vắng 20 s thì `connected = false` (đồng bộ SET_CONNECTED sang engine) ở lần ghi kế tiếp; chủ phòng mất kết nối / rời → chuyển cho người vào sớm nhất còn kết nối.
+- **Tiến độ phiên:** G3 xong và đã commit. Việc tiếp theo là **G4** (màn hình mục 9, 12 trên server cục bộ, dùng `src/net/`); song song chờ nhóm làm `docs/HUONG-DAN-VERCEL.md` rồi chạy `npm run check:deploy -- <url> --long`, ghi kết quả vào mục 15.4.
+- Sub agent rà soát phải được dặn rõ CHỈ ĐỌC; ở G3 một sub agent vẫn sửa mã sau khi bị ngắt giữa chừng (đã đọc lại và kiểm toàn bộ trước khi commit).
+- Test Redis thật: `tests/store.test.ts` tự bật `redis-server` cục bộ ở cổng trống (bỏ qua nếu máy không có).
 
 ## Ghi chú giao diện (G2)
 - Mọi chữ giao diện ở `site.json` (kể cả nhãn nút, lỗi, nhật ký); component chỉ ghép dấu câu.

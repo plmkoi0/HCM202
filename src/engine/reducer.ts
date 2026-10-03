@@ -2,11 +2,11 @@
 // (giờ server khi chơi qua phòng, giờ máy khi chơi trên một máy) — engine không
 // đọc đồng hồ, không chạy timer; hạn thời gian lưu trong state (`deadline`).
 
-import { cellAtStep, geometry, remainingSteps, stepBack, type Geometry } from './board'
-import { botAction } from './bot'
-import { answerOrder, pickQuestion } from './questions'
-import { rank } from './ranking'
-import { nextInt, normalizeSeed, pick, pickWeighted, shuffle } from './rng'
+import { cellAtStep, geometry, remainingSteps, stepBack, type Geometry } from './board.js'
+import { botAction } from './bot.js'
+import { answerOrder, pickQuestion } from './questions.js'
+import { rank } from './ranking.js'
+import { nextInt, normalizeSeed, pick, pickWeighted, shuffle } from './rng.js'
 import type {
   Action,
   ActionResult,
@@ -21,7 +21,7 @@ import type {
   PlayerState,
   PowerupId,
   TurnState,
-} from './types'
+} from './types.js'
 
 const LOG_SIZE = 40
 
@@ -51,7 +51,7 @@ export function resolveConfig(data: GameData, input: GameConfigInput = {}): Game
     afterFirstFinish: input.afterFirstFinish ?? d.afterFirstFinish ?? 'stop',
     timers: { ...data.rules.timers, ...input.timers },
   }
-  if (!data.board.layouts[cfg.layout]) throw new Error(`Bố cục không hợp lệ: ${cfg.layout}`)
+  if (!Object.hasOwn(data.board.layouts, cfg.layout)) throw new Error(`Bố cục không hợp lệ: ${cfg.layout}`)
   if (!data.rules.timeLimitOptions.includes(cfg.timeLimitMin)) throw new Error(`Giới hạn thời gian không hợp lệ: ${cfg.timeLimitMin}`)
   if (!data.rules.options.horsesPerPlayer.includes(cfg.horsesPerPlayer)) throw new Error(`Số ngựa không hợp lệ: ${cfg.horsesPerPlayer}`)
   if (!data.rules.options.afterFirstFinish.includes(cfg.afterFirstFinish)) throw new Error(`Tùy chọn kết thúc không hợp lệ: ${cfg.afterFirstFinish}`)

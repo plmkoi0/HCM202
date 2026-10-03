@@ -19,10 +19,17 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: offline ? 'dist-offline' : 'dist',
       emptyOutDir: true,
+      // bản offline một file: không cần polyfill tải trước module (có dùng fetch)
+      modulePreload: offline ? false : { polyfill: true },
+    },
+    // `npm run dev` + `npm run server`: chuyển /api (cả WebSocket) sang server cục bộ
+    server: {
+      proxy: { '/api': { target: 'http://127.0.0.1:8787', ws: true } },
     },
     test: {
       environment: 'node',
       include: ['tests/**/*.test.ts', 'src/**/*.test.ts'],
+      testTimeout: 20_000,
     },
   }
 })

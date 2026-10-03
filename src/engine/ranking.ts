@@ -2,8 +2,8 @@
 // xếp theo số ô còn lại tới Đích (ít hơn xếp trên); hòa thì so số câu trả lời đúng;
 // vẫn bằng nhau thì cùng hạng.
 
-import { geometry, remainingSteps } from './board'
-import type { GameData, GameState, RankEntry } from './types'
+import { geometry, remainingSteps } from './board.js'
+import type { GameData, GameState, RankEntry } from './types.js'
 
 export function rank(data: GameData, s: GameState): RankEntry[] {
   const geo = geometry(data, s.config.layout)

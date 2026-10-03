@@ -5,9 +5,9 @@
 //   (bằng khoảng cách thì lấy độ khó thấp hơn); vẫn không có thì lấy trụ cột khác,
 //   cùng độ khó, rồi trụ cột khác ở độ khó gần nhất.
 
-import { poolKey } from './data'
-import { pick, shuffle, type RngHolder } from './rng'
-import type { GameData, PlayerState, Question } from './types'
+import { poolKey } from './data.js'
+import { pick, shuffle, type RngHolder } from './rng.js'
+import type { GameData, PlayerState, Question } from './types.js'
 
 const DIFFICULTIES = [1, 2, 3]
 

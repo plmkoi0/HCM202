@@ -7,7 +7,7 @@ import type {
   Question,
   RulesData,
   TrapsData,
-} from './types'
+} from './types.js'
 
 export interface RawGameData {
   board: BoardData
