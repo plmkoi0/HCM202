@@ -25,9 +25,13 @@ interface Props {
   onArtifact: (id: string) => void
   /** lúc tự sang lượt sau khi hiện giải thích (đồng hồ trên nút Tiếp tục) */
   autoAt: number | null
+  /** chơi qua phòng: chỉ người đến lượt bấm Tiếp tục */
+  canContinue?: boolean
+  /** ghi chú dưới đáp án (vd. Đoán cùng) */
+  note?: string
 }
 
-export function QuestionPanel({ data, state, playerName, canAnswer, bag, onAnswer, onPowerup, onContinue, onArtifact, autoAt }: Props) {
+export function QuestionPanel({ data, state, playerName, canAnswer, bag, onAnswer, onPowerup, onContinue, onArtifact, autoAt, canContinue = true, note }: Props) {
   const t = site.game.question
   const aq = state.turn.question
   if (!aq) return null
@@ -69,6 +73,7 @@ export function QuestionPanel({ data, state, playerName, canAnswer, bag, onAnswe
           <Countdown deadline={state.deadline} total={state.config.timers.answerMs} label={(s) => fill(t.timeLeft, { s })} />
         )}
         {!revealed && !canAnswer && <p className="text-ink-soft" aria-live="polite">{fill(t.botAnswering, { name: playerName })}</p>}
+        {!revealed && note && <p className="text-sm font-semibold text-accent-text">{note}</p>}
         <div role="group" aria-label={t.answersLabel} className="flex flex-col gap-2">
           {aq.order.map((orig, pos) => {
             const eliminated = aq.eliminated.includes(orig)
@@ -149,9 +154,11 @@ export function QuestionPanel({ data, state, playerName, canAnswer, bag, onAnswe
               </button>
             )}
             <Countdown deadline={autoAt} total={state.config.timers.revealMs} label={(s) => fill(site.game.autoContinueIn, { s })} />
-            <button type="button" className="btn-primary" data-autofocus onClick={onContinue}>
-              {site.game.continue}
-            </button>
+            {canContinue && (
+              <button type="button" className="btn-primary" data-autofocus onClick={onContinue}>
+                {site.game.continue}
+              </button>
+            )}
           </div>
         )}
       </div>

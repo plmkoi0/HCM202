@@ -19,12 +19,15 @@
     "import:questions": "node scripts/import-questions.mjs",
     "simulate": "tsx scripts/simulate.ts",
     "sim:load": "tsx scripts/load-sim.ts",
-    "e2e": "node scripts/e2e-local.mjs",
-    "check:deploy": "tsx scripts/check-deploy.ts"
+    "e2e": "node scripts/e2e-local.mjs && npm run build && tsx scripts/e2e-online.ts",
+    "check:deploy": "tsx scripts/check-deploy.ts",
+    "e2e:local": "node scripts/e2e-local.mjs",
+    "e2e:online": "tsx scripts/e2e-online.ts"
   },
   "dependencies": {
     "@vercel/functions": "3.9.11",
     "lucide-react": "1.50.0",
+    "qrcode": "1.5.4",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "redis": "6.3.0",
@@ -33,6 +36,7 @@
   "devDependencies": {
     "@tailwindcss/vite": "4.3.3",
     "@types/node": "24.19.1",
+    "@types/qrcode": "1.5.6",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@types/ws": "8.18.2",

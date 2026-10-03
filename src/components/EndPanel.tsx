@@ -7,7 +7,26 @@ import { site, tokens } from '../lib/gameData'
 import { fill } from '../lib/text'
 import { SymbolShape } from './icons'
 
-export function EndPanel({ data, state, record, onAgain, onHome }: { data: GameData; state: GameState; record: RecordResult | null; onAgain: () => void; onHome: () => void }) {
+export function EndPanel({
+  data,
+  state,
+  record,
+  onAgain,
+  onHome,
+  againLabel,
+  againDisabled = false,
+  note,
+}: {
+  data: GameData
+  state: GameState
+  record: RecordResult | null
+  onAgain: () => void
+  onHome: () => void
+  /** chơi qua phòng: "Chơi lại (về phòng chờ)"; chỉ chủ phòng bấm được */
+  againLabel?: string
+  againDisabled?: boolean
+  note?: string
+}) {
   const t = site.end
   const end = state.ended!
   const ranking = end.ranking
@@ -138,9 +157,10 @@ export function EndPanel({ data, state, record, onAgain, onHome }: { data: GameD
           ))}
       </section>
 
+      {note && <p className="text-center text-ink-soft">{note}</p>}
       <div className="flex flex-col gap-2 sm:flex-row">
-        <button type="button" className="btn-primary flex-1" onClick={onAgain}>
-          {t.playAgain}
+        <button type="button" className="btn-primary flex-1" onClick={onAgain} disabled={againDisabled}>
+          {againLabel ?? t.playAgain}
         </button>
         <button type="button" className="btn-secondary flex-1" onClick={onHome}>
           {t.home}

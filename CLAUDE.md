@@ -90,6 +90,7 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 │   ├── import-questions.mjs             ← CAU-HOI-GAME.md → questions.json; báo dòng sai, không ghi đè khi lỗi; lấp câu hỏi thử
 │   ├── simulate.ts                      ← mô phỏng cân bằng (npm run simulate)
 │   ├── e2e-local.mjs                    ← chạy thử "Chơi trên một máy" trong Chromium (npm run e2e, sau build:offline)
+│   ├── e2e-online.ts                    ← chạy thử 3 máy chơi qua phòng (npm run e2e:online, sau npm run build)
 │   ├── load-sim.ts                      ← mô phỏng tải 10 × 5 + 20 × 1 qua HTTP/WebSocket thật (npm run sim:load [-- --guess] [-- --redis])
 │   ├── check-deploy.ts                  ← kiểm bản deploy thật: health, WebSocket, polling, đóng/nối lại 300 s (npm run check:deploy -- <url> --long)
 │   ├── check-offline.mjs                ← bản offline không chứa mã mạng (chạy trong build:offline)
@@ -99,7 +100,9 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 │   │                                      test-questions (kho câu hỏi thử), artifacts, mindmap, pillars, NGUON.md
 │   ├── engine/                          ← types, rng (mulberry32), data, board (hình học, đường đi), questions (chọn câu),
 │   │                                      reducer (luật), bot, ranking, history (hoàn tác), view (state gửi client), index
-│   ├── net/                             ← client phòng chơi (G4 dùng): api (fetch), clock (lệch đồng hồ), connection (WebSocket →
+│   ├── online/                          ← session (phiên phòng, biệt danh), useRoom
+│   ├── screens/online/                  ← màn chơi qua phòng (chỉ bản online)
+│   ├── net/                             ← client phòng chơi: api (fetch), clock (lệch đồng hồ), connection (WebSocket →
 │   │                                      polling, thay kết nối ~280 s, TICK khi quá hạn) — bản offline không nạp
 │   ├── game/                            ← local.ts (lưu / tiếp tục / hoàn tác / kỷ lục), useLocalGame (hành động, tạm dừng,
 │   │                                      tự động khi quá hạn), useBoardAnimation (xúc xắc lăn, ngựa đi từng ô)
@@ -149,7 +152,7 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 | **G1 — Nền móng** | Dự án Vite, JSON + kiểu, 12 câu khởi đầu + câu hỏi thử lấp chỗ thiếu, script nhập câu hỏi, test dữ liệu, engine + bot + unit test, mô phỏng cân bằng ở 20 s và 25 s/lượt | ☑ Xong 03/10/2026 — 120 test; mô phỏng đạt mục tiêu (mục 11) |
 | **G2 — Chơi trên một máy** | Bàn cờ SVG, xúc xắc, ngựa, ô, power-up, bẫy, bot, thử thách cá nhân, lưu/tiếp tục, hoàn tác | ☑ Xong 03/10/2026 — 131 test; `npm run e2e` đạt ở 360 × 780 sáng và 1366 × 768 tối (axe không lỗi) |
 | **G3 — Server** | Phòng, sức chứa, màu, hành động, bot, Redis, pub/sub, WebSocket + polling, nối lại, chủ phòng, `/api/health`, test, mô phỏng tải | ☑ Xong 03/10/2026 — 170 test; mô phỏng tải đạt (kho bộ nhớ và redis-server thật, có/không Đoán cùng); chờ nhóm tạo project để kiểm trên Vercel |
-| **G4 — Chơi qua phòng** | Trang chủ, tạo/vào phòng (mã, QR, link), phòng chờ, chơi qua mạng, trạng thái kết nối, kết thúc, chơi lại, Đoán cùng | ☐ Tiếp theo |
+| **G4 — Chơi qua phòng** | Trang chủ, tạo/vào phòng (mã, QR, link), phòng chờ, chơi qua mạng, trạng thái kết nối, kết thúc, chơi lại, Đoán cùng | ☑ Xong 03/10/2026 trên server cục bộ (e2e 3 máy đạt); chưa kiểm trên Vercel (bị chặn mạng). **Dừng — chờ nhóm cho phép G5** |
 | **G5 — Hoàn thiện** | Ôn câu sai, thống kê, Kho câu hỏi, Luật chơi, Cài đặt, âm thanh, phím tắt, giao diện, reduced motion | ☐ |
 | **G6 — Phát hành** | Hướng dẫn tạo project Vercel + Redis (nhóm làm), deploy preview, diễn tập, `check:release`, bản offline, README | ☐ |
 
@@ -170,12 +173,14 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - `npm audit` báo `braces` (qua `vite-plugin-singlefile` → `micromatch`): chỉ là công cụ build, không vào mã chạy.
 
 ## Ghi chú server (G3, chi tiết ở mục 15.4, 20)
+- G4: phần chơi qua phòng ở `src/screens/online/` (OnlineApp, CreateRoom, JoinRoom, Lobby, OnlineGame, RoomScreen, RoomSettings) + `src/online/` (session: phiên + biệt danh trong localStorage; useRoom: bọc RoomConnection). `App.tsx` nạp `OnlineApp` bằng `lazy()` trong nhánh `__OFFLINE__ ? null : …` để bản offline bỏ hẳn. Hạn giờ server đổi sang giờ máy (`localGame` trong OnlineGame) trước khi đưa vào các thành phần dùng chung với "Chơi trên một máy".
+- `npm run e2e` = e2e một máy (bản offline) + build + `e2e:online` (3 trang trình duyệt, server cục bộ hạn rút ngắn: tạo / vào bằng link và mã, mất mạng rồi nối lại, tải lại trang, kết thúc, Chơi lại, chuyển chủ phòng).
 - Lệnh: `npm run server` (cổng 8787, kho bộ nhớ; có `REDIS_URL` thì Redis thật) · `npm run dev` (Vite chuyển `/api` sang 8787) · `npm run serve` (build + phục vụ `dist/`) · `npm run sim:load` · `npm run check:deploy -- <url>`.
 - Mọi import tương đối trong `server/`, `api/`, `src/engine/` **phải ghi đuôi `.js`**; JSON trong server nạp bằng `with { type: 'json' }` (`server/data.ts`). Vercel biên dịch từng file sang Node ESM, không sửa đường dẫn — `tests/vercel-api.test.ts` kiểm điều này. `src/net/` và giao diện dùng import không đuôi như cũ (Vite).
 - Phòng = một khối JSON `Room` (server/types.ts), có `game: GameState`. Ghi qua `mutate()`: đọc (đệm/kho) → rà kết nối → sửa → `store.put(room, version cũ)` (Lua: kiểm version + ghi + hạn + publish) → xung đột thì đọc lại, thử lại. Lỗi phát hiện trên bản đệm có thể cũ → đọc lại kho trước khi báo (lỗi tìm ra nhờ mô phỏng tải).
 - Hành động tự động: máy gửi `TICK`, server chạy `pendingAutoAction(game, giờ server)`. Hạn luôn theo giờ server; client đo lệch đồng hồ.
 - Trạng thái kết nối: `links` (WebSocket đang mở, quá 320 s coi là chết) + `lastSeen` (lần ghi do chính người đó) + hash poll (tối đa 10 s/lần) → vắng 20 s thì `connected = false` (đồng bộ SET_CONNECTED sang engine) ở lần ghi kế tiếp; chủ phòng mất kết nối / rời → chuyển cho người vào sớm nhất còn kết nối.
-- **Tiến độ phiên:** G3 xong và đã commit. Việc tiếp theo là **G4** (màn hình mục 9, 12 trên server cục bộ, dùng `src/net/`); song song chờ nhóm làm `docs/HUONG-DAN-VERCEL.md` rồi chạy `npm run check:deploy -- <url> --long`, ghi kết quả vào mục 15.4.
+- **Tiến độ phiên:** G4 xong và đã commit; **dừng chờ nhóm cho phép G5**. Còn treo: kiểm bản deploy thật (môi trường bị chặn mạng tới `*.vercel.app`).
 - Sub agent rà soát phải được dặn rõ CHỈ ĐỌC; ở G3 một sub agent vẫn sửa mã sau khi bị ngắt giữa chừng (đã đọc lại và kiểm toàn bộ trước khi commit).
 - Test Redis thật: `tests/store.test.ts` tự bật `redis-server` cục bộ ở cổng trống (bỏ qua nếu máy không có).
 
@@ -204,14 +209,14 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - [ ] Soạn tiếp `docs/CAU-HOI-GAME.md` (đã có 12 câu khởi đầu) theo mẫu: mục tiêu ≥ 60 câu, mỗi câu có nguồn kèm số trang. Ưu tiên trụ cột trong sạch (mới có 2 câu) và câu độ khó 2–3; thêm vài câu `truefalse`, `fillQuote`, `situation`; nhớ giáo trình tr. 92–93.
 
 **Hạ tầng (cần tài khoản nhóm — làm theo `docs/HUONG-DAN-VERCEL.md`):**
-- [ ] Tạo project Vercel thứ hai, nối repo `HCM202`, Production Branch = `game`, Root Directory = gốc nhánh, Fluid Compute bật (mặc định).
+- [x] Tạo project Vercel thứ hai (nhóm đã tạo: https://hcm-202-web-omega.vercel.app). Còn chờ kiểm Production Branch = `game` / Root Directory qua `/api/health` và trang chủ.
 - [ ] Gắn **Upstash for Redis** (gói Free) từ Vercel Marketplace — không dùng Redis Cloud Free. Xong thì `/api/health` trả `"store":"redis"`.
-- [ ] Điền `siteUrl` của game.
+- [x] Điền `siteUrl` của game: `https://hcm-202-web-omega.vercel.app` (còn chờ xác nhận đúng project game).
 - [ ] Kiểm tra Deployment Protection: thử trên điện thoại dùng Shareable Links; trước buổi học, tên miền chính mở được mà không cần đăng nhập Vercel.
 
 **Cần xác minh:**
 - [ ] Upstash có tính mỗi tin pub/sub nhận được là một lệnh không — **chưa xác minh được** (upstash.com bị chặn; bằng chứng gián tiếp: không tính). Ước lượng chi phí đang tính **trường hợp xấu** (có tính).
 - [x] Tên biến môi trường Redis — xác minh một phần: server đọc `REDIS_URL` → `KV_URL` → `UPSTASH_REDIS_URL` (TCP `rediss://`); chỉ có biến REST thì `/api/health` báo thiếu.
-- [ ] Trên bản deploy thật: `npm run check:deploy -- <địa chỉ> --long` — WebSocket qua `experimental_upgradeWebSocket`, đóng sau 300 giây và client tự nối lại, polling dự phòng, `api/[...path].ts` bắt mọi `/api/*`. Ghi kết quả vào mục 15.4.
+- [ ] Trên bản deploy thật: `npm run check:deploy -- https://hcm-202-web-omega.vercel.app --long` — WebSocket qua `experimental_upgradeWebSocket`, đóng sau 300 giây và client tự nối lại, polling dự phòng, `api/[...path].ts` bắt mọi `/api/*`. Ghi kết quả vào mục 15.4. **Chưa chạy được (G4): môi trường bị chặn mạng tới `*.vercel.app`** — chờ nhóm mở Network access hoặc gửi kết quả `/api/health`.
 
 *Mỗi lần sửa mục 20 tài liệu thiết kế thì sửa phần TODO này cùng lúc.*
