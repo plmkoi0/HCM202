@@ -1,0 +1,70 @@
+@import 'tailwindcss';
+@import './assets/fonts.css';
+
+/*
+ * Màu giao diện game (mục 16): bàn cờ vui mắt, màu tươi; điểm nhấn đỏ son – vàng đồng.
+ * Màu trụ cột và màu ngựa nằm trong src/data (pillars.json, tokens.json), không viết cứng ở đây.
+ */
+:root {
+  --bg: #fff8ec;
+  --surface: #ffffff;
+  --ink: #1d1a16;
+  --ink-soft: #5b5246;
+  --line: #e7d8bf;
+  --accent: #b3262d;
+  --accent-ink: #ffffff;
+  --gold: #f2c14e;
+  --ok: #1f7a3a;
+  --bad: #b3261e;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #17140f;
+    --surface: #221e18;
+    --ink: #f6efe2;
+    --ink-soft: #c3b8a6;
+    --line: #3d362c;
+    --accent: #e0545a;
+    --accent-ink: #1a0f0f;
+    --gold: #f2c14e;
+    --ok: #5fcf83;
+    --bad: #ff8a80;
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-gold: var(--gold);
+  --color-ok: var(--ok);
+  --color-bad: var(--bad);
+  --font-sans: 'Be Vietnam Pro', system-ui, sans-serif;
+  --font-serif: 'Noto Serif', Georgia, serif;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

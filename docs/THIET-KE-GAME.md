@@ -89,7 +89,18 @@ Cổng (bước 0) → 17 ô vòng chung → rẽ vào đường về đích ở
 | Đích | 1 | Câu "về đích", độ khó 3 |
 
 **Bố cục Dài (tùy chọn):**
-- Mỗi nhánh 4 ô → vòng chung **24 ô** = 6 cổng + 3 power-up + 3 bẫy + 12 câu hỏi. Vị trí theo cùng nguyên tắc (trụ cột ít nội dung có ít ô câu hỏi nhất), chốt ở G1.
+- Mỗi nhánh 4 ô → vòng chung **24 ô** = 6 cổng + 3 power-up + 3 bẫy + 12 câu hỏi. Vị trí theo cùng nguyên tắc (trụ cột ít nội dung có ít ô câu hỏi nhất), chốt ở G1:
+
+| Nhánh | Trụ cột | Ô 1 | Ô 2 | Ô 3 | Ô 4 |
+|---|---|---|---|---|---|
+| 1 | Dân chủ | Cổng | Câu hỏi | Câu hỏi | **Power-up** |
+| 2 | Pháp quyền | Cổng | Câu hỏi | **Bẫy** | Câu hỏi |
+| 3 | Trong sạch | Cổng | Câu hỏi | Câu hỏi | **Bẫy** |
+| 4 | Dân chủ | Cổng | Câu hỏi | Câu hỏi | Câu hỏi |
+| 5 | Pháp quyền | Cổng | Câu hỏi | Câu hỏi | **Power-up** |
+| 6 | Trong sạch | Cổng | **Power-up** | Câu hỏi | **Bẫy** |
+
+  → 12 ô câu hỏi vòng chung: dân chủ 5, pháp quyền 4, trong sạch 3.
 - Đường về đích 5 ô, độ khó 2, 2, 3, 3, 3.
 - Quãng đường: 23 + 5 + 1 = **29 bước**.
 
@@ -231,7 +242,59 @@ Thêm một mục tiêu: không ai bị kẹt quá lâu vì bẫy hoặc trả l
 
 Ước tính thô ở G0 (chưa phải mô phỏng chính thức) ghi ở mục 20.
 
-**Kết quả mô phỏng:** `TODO` — điền ở G1.
+**Kết quả mô phỏng (G1, 03/10/2026 — `npm run simulate`, 1.000 ván mỗi cấu hình):**
+
+*Cách mô phỏng:*
+- Mọi người chơi là bot (đại diện cho người thật): đúng 70% / 50% / 35% ở độ khó 1 / 2 / 3 (`bots.json`); dùng 50:50 từ độ khó 2, Đổi câu ở độ khó 3 (không đổi sau 50:50), Xúc xắc ×2 khi còn ≥ 8 ô. Kho câu hỏi: 12 câu khởi đầu + 6 câu hỏi thử.
+- Luật mặc định (1 ngựa, xuất phát ở cổng, vượt Đích vẫn tính tới Đích); ván dừng khi có người đầu tiên về đích.
+- **Mô hình thời gian:** mỗi lần tung dẫn tới câu hỏi tính T giây; lần tung không có câu hỏi (cổng, power-up, bẫy, không đi được) tính T/2; lượt bị bỏ (thẻ mất lượt) tính 2 giây. Với T = 20 s, trung bình thực tế 18–20 s mỗi lượt; T = 25 s → 22–25 s mỗi lượt.
+- Ván "có người về đích với giới hạn L phút" gồm cả ván có người về đích trong lượt đang dở lúc hết giờ (mục 10: chơi nốt lượt).
+
+*Bố cục Ngắn (mặc định):*
+
+| s/lượt | Người | Lượt của người về đích đầu tiên (TB) | Phút tới người đầu về đích (TB · trung vị · P90) | Ván có người về đích với giới hạn 5 / 7 / 10 phút | Dính bẫy TB / người | Chuỗi đứng yên dài nhất trong ván (TB · P95 · max) |
+|---|---|---|---|---|---|---|
+| 20 | 1 | 11,7 | 3,8 · 3,7 · 5,7 | 85% / 98% / 100% | 0,91 | 3,0 · 7 · 16 |
+| 20 | 2 | 8,9 | 5,5 · 5,4 · 8,0 | 48% / 86% / 99% | 0,80 | 2,6 · 6 · 16 |
+| 20 | 3 | 7,6 | 6,8 · 6,6 · 9,4 | 26% / 63% / 94% | 0,68 | 2,4 · 5 · 8 |
+| 20 | 5 | 6,4 | 8,9 · 8,7 · 12,4 | 10% / 30% / 72% | 0,60 | 2,2 · 4 · 8 |
+| 25 | 1 | 11,7 | 4,8 · 4,6 · 7,1 | 66% / 92% / 99% | 0,91 | 3,0 · 7 · 16 |
+| 25 | 2 | 8,9 | 6,9 · 6,7 · 10,0 | 26% / 63% / 92% | 0,80 | 2,6 · 6 · 16 |
+| 25 | 3 | 7,6 | 8,4 · 8,2 · 11,7 | 12% / 39% / 79% | 0,68 | 2,4 · 5 · 8 |
+| 25 | 5 | 6,4 | 11,1 · 10,8 · 15,5 | 3% / 16% / 44% | 0,60 | 2,2 · 4 · 8 |
+
+*Bố cục Dài (tùy chọn, cho ván dài):*
+
+| s/lượt | Người | Lượt của người về đích đầu tiên (TB) | Phút tới người đầu về đích (TB · trung vị · P90) | Ván có người về đích với giới hạn 5 / 7 / 10 phút | Dính bẫy TB / người | Chuỗi đứng yên dài nhất (TB · P95 · max) |
+|---|---|---|---|---|---|---|
+| 20 | 1 | 14,0 | 4,5 · 4,3 · 6,5 | 73% / 95% / 100% | 1,38 | 3,2 · 8 · 15 |
+| 20 | 2 | 11,3 | 7,0 · 6,8 · 9,7 | 21% / 60% / 93% | 1,11 | 2,9 · 6 · 13 |
+| 20 | 3 | 9,9 | 9,0 · 8,9 · 12,2 | 6% / 26% / 71% | 1,01 | 2,8 · 5 · 12 |
+| 20 | 5 | 8,6 | 12,3 · 12,0 · 16,8 | 1% / 5% / 30% | 0,90 | 2,7 · 5 · 8 |
+| 25 | 1 | 14,0 | 5,7 · 5,4 · 8,2 | 49% / 85% / 99% | 1,38 | 3,2 · 8 · 15 |
+| 25 | 2 | 11,3 | 8,8 · 8,5 · 12,1 | 8% / 34% / 77% | 1,11 | 2,9 · 6 · 13 |
+| 25 | 3 | 9,9 | 11,2 · 11,1 · 15,3 | 2% / 11% / 42% | 1,01 | 2,8 · 5 · 12 |
+| 25 | 5 | 8,6 | 15,4 · 15,0 · 21,0 | 0% / 1% / 11% | 0,90 | 2,7 · 5 · 8 |
+
+*Kết thúc theo giờ (bố cục Ngắn):* tỉ lệ ván hết giờ mà chưa ai về đích · tỉ lệ hai người đầu bằng hạng (không phân định được người dẫn đầu) · cách biệt TB giữa người thứ nhất và thứ hai (số ô).
+
+| s/lượt | Người | 5 phút | 7 phút | 10 phút |
+|---|---|---|---|---|
+| 20 | 2 | 52% · 2% · 3,9 | 14% · 1% · 2,3 | 1% · 0% · 1,1 |
+| 20 | 3 | 74% · 3% · 3,5 | 37% · 3% · 2,3 | 6% · 5% · 1,6 |
+| 20 | 5 | 91% · 3% · 2,9 | 70% · 5% · 2,2 | 28% · 6% · 1,5 |
+| 25 | 2 | 74% · 3% · 4,5 | 37% · 2% · 3,4 | 9% · 5% · 1,8 |
+| 25 | 3 | 88% · 3% · 4,1 | 61% · 3% · 3,0 | 21% · 3% · 1,8 |
+| 25 | 5 | 97% · 2% · 3,4 | 85% · 3% · 2,7 | 56% · 6% · 1,9 |
+
+*Đối chiếu mục tiêu (bố cục Ngắn, giới hạn 10 phút) — đạt, không cần chỉnh `board.json`, `powerups.json`, `traps.json`:*
+- **1 người:** về đích trung bình 3,8 phút (20 s/lượt) – 4,8 phút (25 s/lượt) → trong khoảng 3–5 phút.
+- **3 người:** 94% (20 s) / 79% (25 s) số ván có người về đích trong 10 phút, trung bình 6,8–8,4 phút → "phần lớn ván".
+- **5 người:** 72% (20 s) / 44% (25 s) số ván có người về đích trong 10 phút → "nhiều ván"; số còn lại hết giờ với cách biệt người nhất – người nhì TB 1,5–1,9 ô.
+- **Trên lớp (5 hoặc 7 phút):** phòng 5 người 70–97% kết thúc theo giờ; chỉ 2–5% số ván đó đồng hạng đầu → xếp hạng theo khoảng cách (rồi số câu đúng) phân định được người dẫn đầu ở ~95% số ván.
+- **Không bị kẹt quá lâu:** chuỗi đứng yên dài nhất trong ván trung bình 2–3 lượt, P95 4–7 lượt. Ca dài nhất (P95 = 7 lượt, max 16 ở ván 1–2 người) chủ yếu ở đường về đích: ~64% các chuỗi ≥ 5 lượt xảy ra ở 4 ô về đích / Đích, nơi câu hỏi độ khó 2–3 (bot đúng 50% / 35%). Đây là hệ quả của độ khó đã chốt (D3), không phải bẫy; người thật trả lời tốt hơn bot thì ngắn hơn.
+- Bố cục Dài chậm hơn rõ (5 người chỉ 11–30% về đích trong 10 phút) → hợp với giới hạn 15 phút / không giới hạn, đúng vai trò "cho ván dài".
+- Ước tính thô ở G0 (5 người 42% về đích ≤ 10 phút) thấp hơn vì chưa tính power-up và lượt tung thêm.
 
 ## 12. Màn hình
 
@@ -625,7 +688,7 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 | Mốc | Nội dung | Trạng thái |
 |---|---|---|
 | **G0 — Nhánh và rà soát** | Tạo nhánh mồ côi `game`; chép dữ liệu khởi đầu, nguồn tham chiếu và font từ nhánh web (ghi `NGUON.md`); tạo `CLAUDE.md` của nhánh; đối chiếu tài liệu này với dữ liệu; xác nhận nền tảng Vercel; ước lượng chi phí (15.5); tạo mẫu `docs/CAU-HOI-GAME.mau.md` để nhóm bắt đầu soạn câu hỏi; cập nhật mục 20. **Dừng chờ duyệt** | ☑ Xong và được nhóm duyệt 03/10/2026 — quyết định ghi ở mục 20. Nhánh `game` đẩy được với đúng tên `game` |
-| **G1 — Nền móng** | Khởi tạo dự án ở gốc nhánh, JSON + kiểu dữ liệu, **12 câu khởi đầu** từ `QUIZ-KIEN-THUC.md` (13.1) + **câu hỏi thử** lấp chỗ thiếu (13.3), script nhập câu hỏi, test dữ liệu, engine + bot + unit test, mô phỏng cân bằng ở 20 s và 25 s/lượt (điền mục 11) | ☐ |
+| **G1 — Nền móng** | Khởi tạo dự án ở gốc nhánh, JSON + kiểu dữ liệu, **12 câu khởi đầu** từ `QUIZ-KIEN-THUC.md` (13.1) + **câu hỏi thử** lấp chỗ thiếu (13.3), script nhập câu hỏi, test dữ liệu, engine + bot + unit test, mô phỏng cân bằng ở 20 s và 25 s/lượt (điền mục 11) | ☑ Xong 03/10/2026 — 120 test; mô phỏng đạt mục tiêu mục 11; chi tiết tự chọn ghi ở mục 20 |
 | **G2 — Chơi trên một máy** | Bàn cờ SVG, xúc xắc, ngựa đi từng ô, các loại ô, túi power-up, thẻ bẫy, bot, thử thách cá nhân + kỷ lục, lưu/tiếp tục ván, hoàn tác — chơi trọn ván | ☐ |
 | **G3 — Server** | Tạo/vào phòng, sức chứa, chọn màu, hành động, bước bot, Redis, pub/sub, WebSocket + polling, nối lại, chuyển chủ phòng, `/api/health`; test server, mô phỏng tải, chạy cục bộ | ☐ |
 | **G4 — Chơi qua phòng** | Trang chủ, tạo phòng, vào bằng mã / QR / link, phòng chờ, chơi qua mạng, trạng thái kết nối, mất kết nối, kết thúc + chơi lại, tùy chọn Đoán cùng | ☐ |
@@ -710,6 +773,18 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 | `todo` trong `mindmap.json` | 1 mục, trụ cột `trong-sach`: giáo trình thiếu tr. 92–93 | Trụ cột này chỉ có 2 mục nội dung (dân chủ 5, pháp quyền 3) → khó đủ ~20 câu (xem N2) |
 | Nhánh web | `CLAUDE.md` nằm ở `San-pham-sang-tao/web/CLAUDE.md`; không có `web/scripts/package-offline.mjs` — web hiện chỉ còn bản offline, script là `scripts/package.mjs` | Không ảnh hưởng game; game tự viết script đóng gói riêng |
 | Cân bằng (ước tính thô) | Script tạm, **không phải mô phỏng chính thức G1**: bố cục Ngắn, xác suất đúng 70/50/35%, ~20 s/lượt, ván dừng khi người đầu tiên về đích | 1 người ~3,9 phút (trung vị 10 lượt) · 3 người ~8 phút, 84% ván xong ≤ 10 phút · 5 người ~11,7 phút, 42% xong ≤ 10 phút, **3% xong ≤ 5 phút**; dính bẫy ~0,8 lần/người; chuỗi đứng yên dài nhất ~3 lượt (xem T1) |
+
+**Chi tiết engine G1 tự chọn trong phạm vi thiết kế (nhóm xem lại; đổi được trong `rules.json`, `bots.json` hoặc mã, không chặn các mốc):**
+- Mặc định "khi có người về đích": **dừng ngay** (`afterFirstFinish: "stop"`); chủ phòng đổi sang "chơi tiếp để xếp hạng". Ở chế độ chơi tiếp, khi chỉ còn một người chưa về đích thì người đó xếp cuối và ván kết thúc.
+- Sau khi chốt câu, đáp án + giải thích hiện **8 giây** (`revealMs`); kết quả bước đi không có câu hỏi (ô nghỉ, power-up, bẫy) hiện **3 giây** (`noticeMs`); người đến lượt bấm "Tiếp tục" để đi sớm hơn. Túi đầy hoặc chọn ngựa: 15 giây, quá hạn thì bỏ món mới / đi ngựa đầu tiên.
+- Đổi câu đặt lại đồng hồ trả lời 20 giây cho câu mới.
+- Mượn câu khi thiếu (mục 8): hai độ khó cách đều thì lấy độ khó **thấp hơn**. Trộn lại khi hết kho: câu vừa hỏi gần nhất không ra ngay ở đầu vòng mới.
+- Ra 6 đi tới ô bẫy vẫn được tung thêm (đã di chuyển được); thẻ "mất lượt" bỏ lượt **kế tiếp**.
+- Nhãn "Bẫy — lùi {n} ô" dùng số ô lùi thực tế (bị chặn ở cổng thì nhỏ hơn số rút).
+- 2 ngựa: chỉ hỏi chọn ngựa khi hai ngựa ở hai vị trí khác nhau và cùng đi được.
+- Người đang trả lời không thấy lựa chọn Đoán cùng của người khác (chỉ thấy sau khi chốt, qua thống kê).
+- "Chuỗi đứng yên": lượt mà cuối lượt ngựa không tiến hơn đầu lượt (trả lời sai, không đi được, bị bỏ lượt, bị bẫy lùi về chỗ cũ).
+- Với bố cục hiện tại, bẫy chỉ nằm trên vòng chung nên trường hợp "lùi từ đường về đích ra vòng chung" không xảy ra trong ván; engine vẫn xử lý đúng nếu sau này đổi bố cục.
 
 **Nhóm cần quyết:**
 - [ ] Tên chính thức của game — để sau, không chặn các mốc.

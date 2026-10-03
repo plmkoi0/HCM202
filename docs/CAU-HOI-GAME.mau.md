@@ -1,6 +1,6 @@
 # MẪU BỘ CÂU HỎI — Con đường tư tưởng HCM
 
-> File mẫu theo mục 13.4 của `docs/THIET-KE-GAME.md`. Nhóm **chép file này thành `docs/CAU-HOI-GAME.md`**, xóa 2 dòng ví dụ, rồi điền câu hỏi của nhóm. Script `scripts/import-questions.mjs` sẽ đọc bảng ở mục "Bảng câu hỏi" và chuyển sang `src/data/questions.json`; dòng nào sai định dạng sẽ được báo rõ số dòng, và `questions.json` không bị ghi đè khi còn lỗi.
+> File mẫu theo mục 13.4 của `docs/THIET-KE-GAME.md`. File thật `docs/CAU-HOI-GAME.md` đã có sẵn 12 câu khởi đầu (Q-01 → Q-12); nhóm **thêm dòng mới vào cuối bảng của file đó** (id `Q-13` trở đi), theo đúng các cột dưới đây. Script `scripts/import-questions.mjs` sẽ đọc bảng ở mục "Bảng câu hỏi" và chuyển sang `src/data/questions.json`; dòng nào sai định dạng sẽ được báo rõ số dòng, và `questions.json` không bị ghi đè khi còn lỗi.
 
 ## 1. Cách điền (ngắn gọn)
 
@@ -9,7 +9,8 @@
 3. **Ô để trống** khi không dùng (đáp án C, D của câu đúng/sai; cột hiện vật nếu câu không gắn hiện vật).
 4. **Nội dung chỉ dựa trên** giáo trình HCM202 (Chương IV, mục II, tr. 83–95), *Hồ Chí Minh Toàn tập* (Nxb Chính trị quốc gia, 2011) và các nguồn tham chiếu ở mục 13.2 (`docs/nguon/THIET-KE-WEB-APP.md`, `src/data/artifacts.json`, `src/data/mindmap.json`). Không thêm sự kiện, năm, số liệu, trích dẫn không có nguồn.
 5. **Đáp án nhiễu không được là câu trích giả gán cho Hồ Chí Minh.** Dùng biến thể của khái niệm, đảo vai trò, nhầm trụ cột…
-6. **Xóa 2 dòng ví dụ** (`TEST-…`) trước khi gửi. Bộ câu hỏi chính thức không được có câu hỏi thử.
+6. **Giải thích không nhắc chữ cái phương án** ("phương án B", "C và D", "A hoặc B"…), vì game trộn thứ tự đáp án khi hiện — nêu thẳng nội dung phương án. Cũng tránh để giải thích của câu này lộ đáp án của câu khác. Script nhập báo lỗi khi gặp chữ cái phương án.
+7. **Không chép 2 dòng ví dụ** (`TEST-…`) sang `docs/CAU-HOI-GAME.md`. Bộ câu hỏi chính thức không được có câu hỏi thử (script nhập báo lỗi).
 
 ## 2. Ý nghĩa từng cột
 
@@ -19,10 +20,10 @@
 | **trụ cột** | Có | Một id ở mục 3 (`dan-chu`, `phap-quyen`, `trong-sach`) |
 | **độ khó** | Có | `1` (vòng chung), `2` hoặc `3` (đường về đích và câu về đích; `3` là khó nhất) |
 | **loại** | Có | `single` (trắc nghiệm một đáp án) · `truefalse` (đúng/sai) · `fillQuote` (điền từ vào trích dẫn) · `situation` (tình huống giả định) |
-| **câu hỏi** | Có | Lời câu hỏi. Câu `fillQuote`: viết trích dẫn với chỗ trống là `___` (3 dấu gạch dưới), vd. `"… ___ …"` |
+| **câu hỏi** | Có | Lời câu hỏi. Câu `fillQuote`: viết trích dẫn với **đúng một** chỗ trống là `___` (3 dấu gạch dưới), vd. `"… ___ …"` |
 | **đáp án A–D** | A, B bắt buộc | 2–4 đáp án, không trùng nhau. Câu `truefalse`: chỉ điền A = `Đúng`, B = `Sai`, để trống C, D. Câu `fillQuote`: mỗi đáp án là từ/cụm từ điền vào chỗ trống |
 | **đúng (A–D)** | Có | Một chữ `A`, `B`, `C` hoặc `D`, phải là đáp án đã điền. Game sẽ trộn thứ tự đáp án khi hiện |
-| **giải thích** | Có | 1–3 câu, hiện sau khi trả lời (vì sao đáp án đúng) |
+| **giải thích** | Có | 1–3 câu, hiện sau khi trả lời (vì sao đáp án đúng). Không nhắc chữ cái phương án |
 | **nguồn** | Có | Kèm số trang, vd. `GT tr. 85`, `t.4, tr.64–65`, `HV-07` |
 | **verified** | Có | `true` chỉ khi đã đối chiếu với giáo trình hoặc bản gốc *Toàn tập*; còn lại `false` (game hiện nhãn `[Chờ xác minh]`) |
 | **hiện vật** | Không | Một id ở mục 4 nếu câu gắn với hiện vật (game hiện chip "Hiện vật liên quan"); để trống nếu không |
@@ -31,7 +32,7 @@
 - `fillQuote` — trích dẫn phải có **nguyên văn** trong nguồn ghi ở cột nguồn (Claude Code sẽ đối chiếu).
 - `situation` — tình huống **giả định** trong đời sống sinh viên; không nêu sự kiện, số liệu thật.
 
-**Số câu:** mục tiêu **≥ 60 câu**, khoảng 20 câu mỗi trụ cột. Đề xuất (chờ nhóm duyệt, mục 20) mỗi trụ cột: **≥ 10 câu độ khó 1, ≥ 6 câu độ khó 2, ≥ 4 câu độ khó 3**. Trụ cột `trong-sach` còn thiếu giáo trình tr. 92–93 (xem `todo` trong `mindmap.json`) — nhóm bổ sung từ giáo trình.
+**Số câu:** mục tiêu **≥ 60 câu**, khoảng 20 câu mỗi trụ cột: mỗi trụ cột **≥ 10 câu độ khó 1, ≥ 6 câu độ khó 2, ≥ 4 câu độ khó 3** (mục 13.4). Trụ cột `trong-sach` ít nội dung (giáo trình còn thiếu tr. 92–93, xem `todo` trong `mindmap.json`) được phép ít hơn 20 câu.
 
 ## 3. Id trụ cột hợp lệ
 
@@ -63,7 +64,7 @@ Câu gắn hiện vật nên cùng trụ cột với hiện vật đó (không b
 
 ## 5. Bảng câu hỏi
 
-> Hai dòng dưới đây là **câu hỏi thử** (chỉ hỏi về luật chơi, không phải nội dung môn học) để minh họa cách điền. **Xóa cả hai trước khi gửi.**
+> Hai dòng dưới đây là **câu hỏi thử** (chỉ hỏi về luật chơi, không phải nội dung môn học) để minh họa cách điền. **Không chép hai dòng này sang file thật.**
 
 | id | trụ cột | độ khó | loại | câu hỏi | đáp án A | đáp án B | đáp án C | đáp án D | đúng (A–D) | giải thích | nguồn | verified | hiện vật |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|

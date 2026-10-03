@@ -1,0 +1,32 @@
+{
+  "maxPlayers": 5,
+  "timeLimitOptions": [5, 7, 10, 15, null],
+  "defaults": {
+    "layout": "ngan",
+    "timeLimitMin": 10,
+    "exactFinish": false,
+    "startFromStable": false,
+    "horsesPerPlayer": 1,
+    "guessAlong": false,
+    "afterFirstFinish": "stop"
+  },
+  "options": {
+    "horsesPerPlayer": [1, 2],
+    "afterFirstFinish": ["stop", "continue"]
+  },
+  "timers": {
+    "rollMs": 15000,
+    "answerMs": 20000,
+    "revealMs": 8000,
+    "noticeMs": 3000,
+    "disconnectMs": 20000,
+    "botStepMs": 1500
+  },
+  "dice": { "faces": 6, "bonusFace": 6, "stableExitFaces": [1, 6] },
+  "notes": {
+    "timeLimitOptions": "Mục 10 (T1): 5 / 7 / 10 / 15 phút / không giới hạn (null); mặc định 10 phút; trên lớp chọn 5 hoặc 7.",
+    "afterFirstFinish": "Mục 10: chủ phòng chọn dừng ngay khi có người về đích (stop) hoặc chơi tiếp để xếp hạng (continue).",
+    "revealMs": "Thời gian hiện đáp án + giải thích sau khi chốt câu; người đến lượt bấm Tiếp tục để đi sớm hơn.",
+    "noticeMs": "Thời gian hiện kết quả bước đi không có câu hỏi (ô nghỉ, power-up, bẫy, không đi được)."
+  }
+}

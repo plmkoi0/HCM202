@@ -1,0 +1,366 @@
+[
+  {
+    "id": "Q-01",
+    "pillar": "dan-chu",
+    "artifact": "HV-12",
+    "type": "single",
+    "difficulty": 2,
+    "question": "Theo Hồ Chí Minh, Nhà nước Việt Nam Dân chủ Cộng hòa mang bản chất của giai cấp nào?",
+    "answers": [
+      "Giai cấp công nhân",
+      "Toàn dân, không mang bản chất giai cấp nào",
+      "Giai cấp nông dân",
+      "Tầng lớp trí thức"
+    ],
+    "correct": 0,
+    "explanation": "Nhà nước Việt Nam là nhà nước dân chủ nhưng \"tuyệt nhiên nó không phải là 'Nhà nước toàn dân'\" phi giai cấp; đó là nhà nước mang bản chất giai cấp công nhân, thống nhất với tính nhân dân và tính dân tộc (GT tr. 83).",
+    "source": {
+      "ref": "GT tr. 83"
+    },
+    "verified": true
+  },
+  {
+    "id": "Q-02",
+    "pillar": "dan-chu",
+    "artifact": "HV-02",
+    "type": "single",
+    "difficulty": 3,
+    "question": "Nguyên lý \"dân là chủ\" khẳng định điều gì?",
+    "answers": [
+      "Nhân dân là chủ thể tối cao của mọi quyền lực",
+      "Quyền lợi và nghĩa vụ của nhân dân với tư cách người chủ",
+      "Nhà nước phục vụ lợi ích và nguyện vọng của nhân dân",
+      "Nhà nước do nhân dân bầu ra sau thắng lợi cách mạng"
+    ],
+    "correct": 0,
+    "explanation": "Nhà nước của dân tức là \"dân là chủ\"; nguyên lý này khẳng định địa vị chủ thể tối cao của mọi quyền lực là nhân dân (GT tr. 84).",
+    "source": {
+      "ref": "GT tr. 84"
+    },
+    "verified": true
+  },
+  {
+    "id": "Q-03",
+    "pillar": "dan-chu",
+    "artifact": "HV-07",
+    "type": "single",
+    "difficulty": 3,
+    "question": "\"Dân làm chủ\" nhấn mạnh điều gì?",
+    "answers": [
+      "Quyền lợi và nghĩa vụ của nhân dân với tư cách người chủ",
+      "Mọi quyền lực nhà nước đều thuộc về nhân dân",
+      "Cán bộ là đầy tớ của nhân dân",
+      "Nhà nước phải được lòng dân"
+    ],
+    "correct": 0,
+    "explanation": "Nếu \"dân là chủ\" xác định vị thế của nhân dân đối với quyền lực nhà nước thì \"dân làm chủ\" nhấn mạnh quyền lợi và nghĩa vụ của nhân dân với tư cách người chủ: \"nhân dân có quyền lợi làm chủ, thì phải có nghĩa vụ làm tròn bổn phận công dân\" (GT tr. 86).",
+    "source": {
+      "ref": "GT tr. 86"
+    },
+    "verified": true
+  },
+  {
+    "id": "Q-04",
+    "pillar": "dan-chu",
+    "artifact": "HV-08",
+    "type": "single",
+    "difficulty": 2,
+    "question": "Hồ Chí Minh coi hình thức dân chủ nào là \"hoàn bị nhất\"?",
+    "answers": [
+      "Dân chủ trực tiếp",
+      "Dân chủ gián tiếp",
+      "Dân chủ đại diện",
+      "Dân chủ tập trung"
+    ],
+    "correct": 0,
+    "explanation": "Dân chủ trực tiếp là hình thức nhân dân trực tiếp quyết định mọi vấn đề liên quan đến vận mệnh quốc gia; Hồ Chí Minh coi trọng hình thức này \"bởi đây là hình thức dân chủ hoàn bị nhất\" (GT tr. 85).",
+    "source": {
+      "ref": "GT tr. 85"
+    },
+    "verified": true
+  },
+  {
+    "id": "Q-05",
+    "pillar": "dan-chu",
+    "artifact": "HV-05",
+    "type": "single",
+    "difficulty": 1,
+    "question": "Trong hình thức dân chủ gián tiếp, Hồ Chí Minh xác định quyền lực nhà nước là gì?",
+    "answers": [
+      "\"Thừa ủy quyền\" của nhân dân",
+      "Quyền lực tự có của bộ máy nhà nước",
+      "Quyền lực riêng của đội ngũ cán bộ",
+      "Quyền lực do pháp luật quốc tế trao cho"
+    ],
+    "correct": 0,
+    "explanation": "\"Quyền lực nhà nước là 'thừa ủy quyền' của nhân dân. Tự bản thân nhà nước không có quyền lực\"; vì vậy cơ quan nhà nước và cán bộ đều là \"công bộc\" của nhân dân (GT tr. 85).",
+    "source": {
+      "ref": "GT tr. 85"
+    },
+    "verified": true
+  },
+  {
+    "id": "Q-06",
+    "pillar": "dan-chu",
+    "artifact": "HV-02",
+    "type": "single",
+    "difficulty": 1,
+    "question": "Theo Hồ Chí Minh, thước đo một Nhà nước vì dân là gì?",
+    "answers": [
+      "Được lòng dân",
+      "Có bộ máy đông đảo",
+      "Có nhiều đạo luật",
+      "Có nền kinh tế tăng trưởng nhanh"
+    ],
+    "correct": 0,
+    "explanation": "\"Theo Hồ Chí Minh, thước đo một Nhà nước vì dân là phải được lòng dân\"; cán bộ phải \"làm sao cho được lòng dân, dân tin, dân mến, dân yêu\" (GT tr. 87).",
+    "source": {
+      "ref": "GT tr. 87"
+    },
+    "verified": true
+  },
+  {
+    "id": "Q-07",
+    "pillar": "phap-quyen",
+    "artifact": "HV-03",
+    "type": "single",
+    "difficulty": 1,
+    "question": "Tại phiên họp đầu tiên của Chính phủ lâm thời ngày 3/9/1945, Hồ Chí Minh đề nghị việc gì?",
+    "answers": [
+      "Sớm tổ chức Tổng tuyển cử với chế độ phổ thông đầu phiếu để có hiến pháp dân chủ",
+      "Thành lập ngay Ban Thanh tra đặc biệt",
+      "Ban hành Luật Phòng, chống tham nhũng",
+      "Thông qua Hiến pháp năm 1959"
+    ],
+    "correct": 0,
+    "explanation": "Hồ Chí Minh đề nghị: \"Chúng ta phải có một hiến pháp dân chủ. Tôi đề nghị Chính phủ tổ chức càng sớm càng hay cuộc TỔNG TUYỂN CỬ với chế độ phổ thông đầu phiếu\" (Hồ Chí Minh, 2011, t.4, tr.7; GT tr. 88).",
+    "source": {
+      "ref": "t.4, tr.7; GT tr. 88"
+    },
+    "verified": true
+  },
+  {
+    "id": "Q-08",
+    "pillar": "phap-quyen",
+    "artifact": "HV-09",
+    "type": "single",
+    "difficulty": 3,
+    "question": "Ở cương vị Chủ tịch nước, Hồ Chí Minh đã ký lệnh công bố bao nhiêu đạo luật và sắc lệnh?",
+    "answers": [
+      "16 đạo luật và 613 sắc lệnh",
+      "613 đạo luật và 16 sắc lệnh",
+      "70 đạo luật và 243 sắc lệnh",
+      "243 đạo luật và 613 sắc lệnh"
+    ],
+    "correct": 0,
+    "explanation": "Hồ Chí Minh hai lần lãnh đạo soạn thảo Hiến pháp (1946, 1959), ký lệnh công bố 16 đạo luật, 613 sắc lệnh, trong đó có 243 sắc lệnh quy định về tổ chức Nhà nước và pháp luật (GT tr. 89).",
+    "source": {
+      "ref": "GT tr. 89"
+    },
+    "verified": true
+  },
+  {
+    "id": "Q-09",
+    "pillar": "phap-quyen",
+    "artifact": "HV-09",
+    "type": "single",
+    "difficulty": 1,
+    "question": "\"Pháp quyền nhân nghĩa\" theo Hồ Chí Minh trước hết là gì?",
+    "answers": [
+      "Nhà nước tôn trọng, bảo đảm đầy đủ các quyền con người, chăm lo lợi ích của mọi người",
+      "Nhà nước chỉ dùng giáo dục, không dùng hình phạt",
+      "Pháp luật chỉ áp dụng với cán bộ, không áp dụng với dân",
+      "Mọi tội phạm đều được tha thứ"
+    ],
+    "correct": 0,
+    "explanation": "\"Pháp quyền nhân nghĩa\" tức là trước hết Nhà nước phải \"tôn trọng, bảo đảm thực hiện đầy đủ các quyền con người, chăm lo đến lợi ích của mọi người\"; pháp luật có tính nhân văn, khuyến thiện nhưng vẫn nghiêm minh (GT tr. 90–91).",
+    "source": {
+      "ref": "GT tr. 90–91"
+    },
+    "verified": true
+  },
+  {
+    "id": "Q-10",
+    "pillar": "trong-sach",
+    "artifact": "HV-06",
+    "type": "single",
+    "difficulty": 2,
+    "question": "Theo Hồ Chí Minh, đâu là giải pháp căn bản và có ý nghĩa lâu dài để phòng, chống tiêu cực trong Nhà nước?",
+    "answers": [
+      "Nâng cao trình độ dân chủ, thực hành dân chủ rộng rãi, phát huy quyền làm chủ của nhân dân",
+      "Tăng số lượng cơ quan thanh tra",
+      "Xử phạt thật nặng mọi vi phạm",
+      "Giảm bớt quyền hạn của cán bộ cấp cơ sở"
+    ],
+    "correct": 0,
+    "explanation": "Trong hệ thống biện pháp, \"nâng cao trình độ dân chủ trong xã hội, thực hành dân chủ rộng rãi, phát huy quyền làm chủ của nhân dân đó là giải pháp căn bản và có ý nghĩa lâu dài\" (GT tr. 94). Hồ Chí Minh cũng cho rằng \"việc gì cũng xử phạt thì lại không đúng\", phải lấy giáo dục làm chủ yếu (GT tr. 94).",
+    "source": {
+      "ref": "GT tr. 94"
+    },
+    "verified": true
+  },
+  {
+    "id": "Q-11",
+    "pillar": "trong-sach",
+    "artifact": "HV-13",
+    "type": "single",
+    "difficulty": 1,
+    "question": "Hồ Chí Minh gọi nguyên nhân chủ quan, gốc rễ sinh ra tiêu cực trong cán bộ là \"bệnh mẹ\". Đó là gì?",
+    "answers": [
+      "Chủ nghĩa cá nhân",
+      "Thiếu kinh phí hoạt động",
+      "Âm mưu của các thế lực thù địch",
+      "Trình độ phát triển thấp của xã hội"
+    ],
+    "correct": 0,
+    "explanation": "Nguyên nhân chủ quan, bắt nguồn từ căn \"bệnh mẹ\" là chủ nghĩa cá nhân, sự thiếu tu dưỡng, rèn luyện của cán bộ; âm mưu của các thế lực thù địch và trình độ phát triển thấp của xã hội là nguyên nhân khách quan (GT tr. 94).",
+    "source": {
+      "ref": "GT tr. 94"
+    },
+    "verified": true
+  },
+  {
+    "id": "Q-12",
+    "pillar": "phap-quyen",
+    "artifact": "HV-11",
+    "type": "single",
+    "difficulty": 2,
+    "question": "Trong thư gửi Hội nghị tư pháp toàn quốc, Hồ Chí Minh yêu cầu cán bộ tư pháp nêu cao tấm gương nào cho nhân dân noi theo?",
+    "answers": [
+      "\"Phụng công, thủ pháp, chí công, vô tư\"",
+      "\"Cần, kiệm, liêm, chính\"",
+      "\"Dĩ bất biến, ứng vạn biến\"",
+      "\"Đoàn kết, đoàn kết, đại đoàn kết\""
+    ],
+    "correct": 0,
+    "explanation": "\"Các bạn là những người phụ trách thi hành pháp luật. Lẽ tất nhiên các bạn cần phải nêu cao cái gương 'phụng công, thủ pháp, chí công, vô tư' cho nhân dân noi theo\" (Hồ Chí Minh, 2011, t.5, tr.473; GT tr. 90).",
+    "source": {
+      "ref": "t.5, tr.473; GT tr. 90"
+    },
+    "verified": true
+  },
+  {
+    "id": "TEST-09",
+    "pillar": "phap-quyen",
+    "type": "truefalse",
+    "difficulty": 2,
+    "question": "Thẻ bẫy \"lùi ngẫu nhiên\" có thể đẩy ngựa của bạn lùi quá ô cổng của chính bạn.",
+    "answers": [
+      "Đúng",
+      "Sai"
+    ],
+    "correct": 1,
+    "explanation": "Bẫy lùi 1, 2 hoặc 3 ô theo đường của bạn và không bao giờ lùi quá cổng của mình.",
+    "source": {
+      "ref": "Câu hỏi thử",
+      "note": "Mục 7 tài liệu thiết kế"
+    },
+    "verified": false,
+    "test": true
+  },
+  {
+    "id": "TEST-11",
+    "pillar": "phap-quyen",
+    "type": "fillQuote",
+    "difficulty": 3,
+    "question": "Điền vào chỗ trống trong luật cốt lõi số 4 của game: \"Xúc xắc chỉ tới ô câu hỏi → trả lời đúng thì nhảy lên ô đó, sai thì ___ ở ô cũ.\"",
+    "answers": [
+      "đứng yên",
+      "lùi một ô",
+      "về chuồng",
+      "tung lại"
+    ],
+    "correct": 0,
+    "explanation": "Luật cốt lõi số 4: trả lời đúng thì nhảy lên ô đó, sai thì đứng yên ở ô cũ.",
+    "source": {
+      "ref": "Câu hỏi thử",
+      "note": "Mục 2 tài liệu thiết kế"
+    },
+    "verified": false,
+    "test": true
+  },
+  {
+    "id": "TEST-13",
+    "pillar": "trong-sach",
+    "type": "situation",
+    "difficulty": 1,
+    "question": "Bạn dừng ở ô bẫy và đang có Khiên trong túi. Điều gì xảy ra?",
+    "answers": [
+      "Khiên tự dùng và chặn thẻ bẫy đó",
+      "Bạn vẫn phải lùi 3 ô",
+      "Bạn mất Khiên và mất lượt",
+      "Bạn được chọn có dùng Khiên hay không"
+    ],
+    "correct": 0,
+    "explanation": "Khiên tự dùng khi dính bẫy và chặn được cả hai loại thẻ bẫy.",
+    "source": {
+      "ref": "Câu hỏi thử",
+      "note": "Mục 6, 7 tài liệu thiết kế"
+    },
+    "verified": false,
+    "test": true
+  },
+  {
+    "id": "TEST-15",
+    "pillar": "trong-sach",
+    "type": "single",
+    "difficulty": 2,
+    "question": "Trong chế độ Chơi trên một máy, nhiều bạn cùng ngồi quanh một chiếc điện thoại hoặc máy tính để thay phiên nhau tung xúc xắc. Khi một bạn vừa trả lời xong câu hỏi, màn hình sẽ hiện những gì trước khi chuyển lượt cho bạn kế tiếp?",
+    "answers": [
+      "Đáp án đúng, lời giải thích kèm nguồn, và chip hiện vật liên quan nếu câu hỏi có gắn với một hiện vật",
+      "Chỉ hiện chữ Đúng hoặc Sai rồi chuyển lượt ngay lập tức, không có lời giải thích nào",
+      "Bảng xếp hạng của cả lớp kèm điểm số tích lũy từ những ván chơi trước đó",
+      "Một câu hỏi mới dành cho bạn kế tiếp mà không cho biết đáp án của câu vừa rồi"
+    ],
+    "correct": 0,
+    "explanation": "Sau khi chốt câu, game luôn hiện đáp án đúng, giải thích và nguồn; câu gắn với hiện vật có thêm chip \"Hiện vật liên quan\".",
+    "source": {
+      "ref": "Câu hỏi thử",
+      "note": "Mục 3, 8 tài liệu thiết kế"
+    },
+    "verified": false,
+    "test": true
+  },
+  {
+    "id": "TEST-17",
+    "pillar": "trong-sach",
+    "type": "fillQuote",
+    "difficulty": 3,
+    "question": "Điền vào chỗ trống trong luật của game: \"khi power-up hoặc bẫy đẩy ngựa tới ô khác, ô mới ___ và không kích hoạt thêm hiệu ứng.\"",
+    "answers": [
+      "không hỏi",
+      "luôn hỏi câu khó nhất",
+      "cho tung thêm",
+      "bị khóa một lượt"
+    ],
+    "correct": 0,
+    "explanation": "Hiệu ứng không dây chuyền: ô mà power-up hoặc bẫy đẩy ngựa tới không hỏi và không kích hoạt thêm hiệu ứng.",
+    "source": {
+      "ref": "Câu hỏi thử",
+      "note": "Mục 5 tài liệu thiết kế"
+    },
+    "verified": false,
+    "test": true
+  },
+  {
+    "id": "TEST-18",
+    "pillar": "trong-sach",
+    "type": "situation",
+    "difficulty": 3,
+    "question": "Bạn đang chơi ván 5 người với giới hạn 7 phút. Đồng hồ báo hết giờ khi chưa ai về đích, trong lúc lượt của bạn vẫn đang dở dang. Theo luật, ván kết thúc như thế nào?",
+    "answers": [
+      "Chơi nốt lượt đang dở, rồi xếp hạng theo số ô còn lại tới Đích; người dẫn đầu được tôn vinh như người thắng",
+      "Dừng ngay giữa câu hỏi đang trả lời và không ai được xếp hạng",
+      "Mọi người phải tiếp tục chơi thêm cho tới khi có một người về đích",
+      "Người đang giữ nhiều power-up nhất trong túi được tính là người thắng"
+    ],
+    "correct": 0,
+    "explanation": "Hết giờ thì chơi nốt lượt đang dở, xếp hạng theo số ô còn lại tới Đích; hòa thì so số câu trả lời đúng.",
+    "source": {
+      "ref": "Câu hỏi thử",
+      "note": "Mục 10 tài liệu thiết kế"
+    },
+    "verified": false,
+    "test": true
+  }
+]

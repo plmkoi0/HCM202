@@ -61,22 +61,34 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 
 ## Cấu trúc thư mục
 
-**Hiện tại (sau G0):**
+**Hiện tại (sau G1):**
 ```
 /
-├── CLAUDE.md                     ← file này
-├── .gitignore
+├── CLAUDE.md, README.md, .gitignore, .oxlintrc.json
+├── package.json, package-lock.json      ← Vite 8 + React 19 + TS 6 + Tailwind 4 + Vitest 5 + oxlint; tsx chạy script TS
+├── vite.config.ts                       ← mode "offline": vite-plugin-singlefile → dist-offline/index.html, define __OFFLINE__
+├── tsconfig.json, tsconfig.app.json (src), tsconfig.node.json (vite.config, scripts, tests; allowJs)
+├── index.html                           ← favicon SVG nhúng sẵn, meta robots noindex
 ├── docs/
-│   ├── THIET-KE-GAME.md          ← tài liệu thiết kế (nguồn chuẩn)
-│   ├── CAU-HOI-GAME.mau.md       ← mẫu để nhóm soạn câu hỏi (mục 13.4)
-│   └── nguon/THIET-KE-WEB-APP.md ← bản sao nguồn tham chiếu (chép từ nhánh web)
-└── src/
-    ├── data/
-    │   ├── artifacts.json        ← 13 hiện vật (chép từ web)
-    │   ├── mindmap.json          ← 3 trụ cột (chép từ web)
-    │   ├── pillars.json          ← id, tên, màu trụ cột
-    │   └── NGUON.md              ← nguồn gốc dữ liệu khởi đầu
-    └── assets/fonts/             ← Be Vietnam Pro 400/400i/600/700, Noto Serif 700/400i (woff2, latin + vietnamese) + OFL
+│   ├── THIET-KE-GAME.md                 ← tài liệu thiết kế (bản 1.5 + kết quả G1)
+│   ├── CAU-HOI-GAME.md                  ← bộ câu hỏi của nhóm: 12 câu khởi đầu Q-01 → Q-12
+│   ├── CAU-HOI-GAME.mau.md              ← mẫu + hướng dẫn điền (mục 13.4)
+│   └── nguon/THIET-KE-WEB-APP.md, nguon/QUIZ-KIEN-THUC.md   ← bản sao nguồn tham chiếu (không sửa; mã băm trong NGUON.md)
+├── public/                              ← (trống; robots.txt ở G3/G6)
+├── scripts/
+│   ├── import-questions.mjs             ← CAU-HOI-GAME.md → questions.json; báo dòng sai, không ghi đè khi lỗi; lấp câu hỏi thử
+│   ├── simulate.ts                      ← mô phỏng cân bằng (npm run simulate)
+│   └── lib/question-table.mjs, lib/quiz-source.mjs   ← đọc bảng câu hỏi, mẫu chữ cái phương án; đọc QUIZ-KIEN-THUC.md
+├── src/
+│   ├── data/                            ← board, rules, powerups, traps, bots, tokens, site, questions (sinh từ script),
+│   │                                      test-questions (kho câu hỏi thử), artifacts, mindmap, pillars, NGUON.md
+│   ├── engine/                          ← types, rng (mulberry32), data, board (hình học, đường đi), questions (chọn câu),
+│   │                                      reducer (luật), bot, ranking, history (hoàn tác), view (state gửi client), index
+│   ├── lib/gameData.ts                  ← nạp JSON → GameData
+│   ├── assets/fonts.css, assets/fonts/  ← Be Vietnam Pro 400/400i/600/700, Noto Serif 700/400i + OFL
+│   ├── index.css, main.tsx, App.tsx     ← khung tối thiểu (G2 làm giao diện)
+│   └── vite-env.d.ts
+└── tests/                               ← helpers, data, questions, engine (Vitest, môi trường node)
 ```
 
 **Đích (mục 15.1):**
@@ -109,8 +121,8 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 | Mốc | Nội dung | Trạng thái |
 |---|---|---|
 | **G0 — Nhánh và rà soát** | Nhánh mồ côi, chép dữ liệu + `NGUON.md`, `CLAUDE.md`, đối chiếu thiết kế với dữ liệu, xác minh Vercel, ước lượng chi phí, mẫu câu hỏi, cập nhật mục 20 | ☑ Xong, nhóm duyệt 03/10/2026 (bản thiết kế 1.5) |
-| **G1 — Nền móng** | Dự án Vite, JSON + kiểu, 12 câu khởi đầu + câu hỏi thử lấp chỗ thiếu, script nhập câu hỏi, test dữ liệu, engine + bot + unit test, mô phỏng cân bằng ở 20 s và 25 s/lượt | ☐ Tiếp theo |
-| **G2 — Chơi trên một máy** | Bàn cờ SVG, xúc xắc, ngựa, ô, power-up, bẫy, bot, thử thách cá nhân, lưu/tiếp tục, hoàn tác | ☐ |
+| **G1 — Nền móng** | Dự án Vite, JSON + kiểu, 12 câu khởi đầu + câu hỏi thử lấp chỗ thiếu, script nhập câu hỏi, test dữ liệu, engine + bot + unit test, mô phỏng cân bằng ở 20 s và 25 s/lượt | ☑ Xong 03/10/2026 — 120 test; mô phỏng đạt mục tiêu (mục 11) |
+| **G2 — Chơi trên một máy** | Bàn cờ SVG, xúc xắc, ngựa, ô, power-up, bẫy, bot, thử thách cá nhân, lưu/tiếp tục, hoàn tác | ☐ Tiếp theo |
 | **G3 — Server** | Phòng, sức chứa, màu, hành động, bot, Redis, pub/sub, WebSocket + polling, nối lại, chủ phòng, `/api/health`, test, mô phỏng tải | ☐ |
 | **G4 — Chơi qua phòng** | Trang chủ, tạo/vào phòng (mã, QR, link), phòng chờ, chơi qua mạng, trạng thái kết nối, kết thúc, chơi lại, Đoán cùng | ☐ |
 | **G5 — Hoàn thiện** | Ôn câu sai, thống kê, Kho câu hỏi, Luật chơi, Cài đặt, âm thanh, phím tắt, giao diện, reduced motion | ☐ |
@@ -122,10 +134,22 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - Hạn mức chặt nhất là số lệnh Upstash (500.000/tháng): ~30.000 lệnh mỗi buổi bình thường, ~66.000 khi mọi máy dùng polling. Vượt hạn mức Hobby → project bị dừng tới hết chu kỳ 30 ngày.
 - Nhánh được đẩy đúng tên `game` (môi trường cho phép), không cần tên thay thế.
 
+## Ghi chú engine (G1)
+- `applyAction(data, state, action)` thuần, không sửa state cũ (structuredClone), trả `{ ok, state }` hoặc `{ ok: false, error }` (mã lỗi → chữ ở `site.json` → `errors`). Mọi hành động mang `now`; engine không đọc đồng hồ, hạn thời gian nằm ở `state.deadline`.
+- Pha: `roll` → (`chooseHorse`) → `question` | thẳng `reveal` → (`discard`) → `reveal` → NEXT_TURN → tung thêm (ra 6 / Thêm lượt) hoặc lượt sau. `ended` khi kết thúc.
+- `pendingAutoAction(state, now)`: hành động bất kỳ máy nào gửi khi quá hạn (BOT_STEP / SKIP_TURN / AUTO_ROLL / TIMEOUT / NEXT_TURN).
+- RNG trong `state.rng` (seed lưu `state.seed`); `clientView(state, viewerId)` bỏ seed/rng và lựa chọn Đoán cùng của người khác.
+- Đường đi: bước 0 = cổng, 1…17 vòng chung, 18…21 về đích, 22 = Đích (Ngắn); trụ cột nhánh / ô về đích tính từ thứ tự `mindmap.json`.
+- Chọn câu: không lặp tới hết kho, trộn lại vòng mới (câu vừa hỏi không ra ngay), ưu tiên câu chưa gặp; thiếu tổ hợp thì mượn (mục 8).
+- Kết quả mô phỏng và các chi tiết tự chọn ở G1 (mặc định "dừng ngay", hiện giải thích 8 s, Đổi câu đặt lại đồng hồ…) ghi ở mục 11 và 20 tài liệu thiết kế.
+- `npm audit` báo `braces` (qua `vite-plugin-singlefile` → `micromatch`): chỉ là công cụ build, không vào mã chạy.
+
 ## Ghi chú dữ liệu
 - 3 trụ cột: `dan-chu` (Đỏ son `#A4262C`), `phap-quyen` (Xanh mực `#23395B`), `trong-sach` (Vàng đồng `#B8892B`; chữ trên nền sáng dùng `#7A5A17` để đạt WCAG AA). Tên trụ cột đọc từ dữ liệu, không viết cứng.
 - 13 hiện vật, mọi hiện vật `verified: true`, không hiện vật nào `hidden`: dân chủ 5 (HV-02, 04, 05, 07, 12), pháp quyền 4 (HV-01, 03, 08, 09), trong sạch 4 (HV-06, 10, 11, 13). Chưa có ảnh (chỉ `image.src` trỏ tới file chưa tồn tại). `sourceIds` trỏ tới `sources.json` của web — không chép sang game; thẻ hiện vật không hiện nguồn APA (N1).
 - `mindmap.json`: trụ cột `trong-sach` có `todo` — giáo trình thiếu tr. 92–93.
+- `questions.json` **sinh bởi** `npm run import:questions` — không sửa tay. Hiện: 12 câu khởi đầu (dân chủ 6, pháp quyền 4, trong sạch 2; đều `single`, `verified: true`) + 6 câu hỏi thử TEST-09, 11, 13, 15, 17, 18 (pháp quyền độ khó 2, 3; trong sạch 1, 2, 3, 3). Trang chủ hiện dải "Đang dùng bộ câu hỏi thử" khi còn câu `test`.
+- `test-questions.json`: 18 câu hỏi thử (2 câu mỗi tổ hợp), chỉ hỏi luật chơi; script chỉ lấy câu cần lấp, ưu tiên loại câu còn thiếu.
 
 ## TODO (mục 20 tài liệu thiết kế)
 

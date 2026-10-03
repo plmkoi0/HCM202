@@ -1,0 +1,44 @@
+{
+  "branchCount": 6,
+  "defaultLayout": "ngan",
+  "layouts": {
+    "ngan": {
+      "label": "Ngắn",
+      "note": "Mục 4: mỗi nhánh [cổng, ô 2, ô 3]; power-up ô 3 nhánh 1, 5; bẫy ô 3 nhánh 3, 6 (D2). Trụ cột nhánh lặp theo mindmap.json (D1).",
+      "branches": [
+        ["gate", "question", "powerup"],
+        ["gate", "question", "question"],
+        ["gate", "question", "trap"],
+        ["gate", "question", "question"],
+        ["gate", "question", "powerup"],
+        ["gate", "question", "trap"]
+      ],
+      "ringDifficulty": 1,
+      "homeDifficulties": [2, 2, 3, 3],
+      "finishDifficulty": 3
+    },
+    "dai": {
+      "label": "Dài",
+      "note": "Mục 4 (D4): vòng 24 ô = 6 cổng + 3 power-up + 3 bẫy + 12 câu hỏi; trụ cột ít nội dung có ít ô câu hỏi nhất (dân chủ 5, pháp quyền 4, trong sạch 3) — vị trí chốt ở G1.",
+      "branches": [
+        ["gate", "question", "question", "powerup"],
+        ["gate", "question", "trap", "question"],
+        ["gate", "question", "question", "trap"],
+        ["gate", "question", "question", "question"],
+        ["gate", "question", "question", "powerup"],
+        ["gate", "powerup", "question", "trap"]
+      ],
+      "ringDifficulty": 1,
+      "homeDifficulties": [2, 2, 3, 3, 3],
+      "finishDifficulty": 3
+    }
+  },
+  "cellTypes": {
+    "gate": { "label": "Cổng", "short": "Nghỉ", "icon": "gate", "description": "Ô nghỉ, không hỏi. Cổng của màu không có người chơi là ô câu hỏi." },
+    "question": { "label": "Câu hỏi", "short": "Hỏi", "icon": "question", "description": "Trả lời đúng thì nhảy lên ô này, sai hoặc hết giờ thì đứng yên." },
+    "powerup": { "label": "Power-up", "short": "Thưởng", "icon": "star", "description": "Nhảy lên và nhận một power-up." },
+    "trap": { "label": "Bẫy", "short": "Bẫy", "icon": "trap", "description": "Nhảy lên và rút một thẻ bẫy, trừ khi có Khiên." },
+    "home": { "label": "Đường về đích", "short": "Về đích", "icon": "question", "description": "Ô câu hỏi khó dần trên đường về đích của màu mình." },
+    "finish": { "label": "Đích", "short": "Đích", "icon": "finish", "description": "Câu \"về đích\" khó nhất. Đúng thì về đích." }
+  }
+}

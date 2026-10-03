@@ -1,0 +1,11 @@
+{
+  "correctByDifficulty": { "1": 0.7, "2": 0.5, "3": 0.35 },
+  "names": ["Máy Sen", "Máy Đào", "Máy Mai", "Máy Lúa"],
+  "rules": {
+    "useDoubleWhenRemainingAtLeast": 8,
+    "useFiftyFiftyMinDifficulty": 2,
+    "useSwapMinDifficulty": 3,
+    "keepPriority": ["shield", "double", "fiftyFifty", "swap"]
+  },
+  "note": "Mục 9: bot trả lời đúng theo xác suất theo độ khó; dùng power-up theo luật đơn giản. 50:50 làm tăng xác suất đúng lên p + (1 − p) / 2."
+}

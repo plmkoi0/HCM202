@@ -1,0 +1,149 @@
+{
+  "note": "Kho câu hỏi thử (mục 13.3): chỉ hỏi về luật chơi của chính game, không chứa kiến thức về tư tưởng Hồ Chí Minh. Trụ cột và độ khó chỉ là nhãn để lấp chỗ thiếu. scripts/import-questions.mjs chỉ lấy câu từ đây cho tổ hợp trụ cột × độ khó còn dưới 2 câu chính thức, ưu tiên loại câu chưa có. Mỗi tổ hợp có 2 câu dự phòng.",
+  "questions": [
+    {
+      "id": "TEST-01", "pillar": "dan-chu", "type": "single", "difficulty": 1,
+      "question": "Mỗi lượt, người chơi tung mấy xúc xắc?",
+      "answers": ["Một xúc xắc 6 mặt", "Hai xúc xắc", "Ba xúc xắc", "Không tung, chỉ rút thẻ"],
+      "correct": 0,
+      "explanation": "Theo luật chơi, mỗi lượt người đến lượt tung 1 xúc xắc (1–6).",
+      "source": { "ref": "Câu hỏi thử", "note": "Mục 5 tài liệu thiết kế" }, "verified": false, "test": true
+    },
+    {
+      "id": "TEST-02", "pillar": "dan-chu", "type": "truefalse", "difficulty": 1,
+      "question": "Trong game này, nhiều ngựa được đứng chung một ô.",
+      "answers": ["Đúng", "Sai"],
+      "correct": 0,
+      "explanation": "Game không có luật đá ngựa; nhiều ngựa được đứng chung một ô.",
+      "source": { "ref": "Câu hỏi thử", "note": "Mục 2 tài liệu thiết kế" }, "verified": false, "test": true
+    },
+    {
+      "id": "TEST-03", "pillar": "dan-chu", "type": "single", "difficulty": 2,
+      "question": "Ô cổng của một màu đang có người chơi là loại ô gì?",
+      "answers": ["Ô nghỉ, không hỏi", "Ô câu hỏi khó nhất", "Ô bẫy", "Ô power-up"],
+      "correct": 0,
+      "explanation": "Ô cổng là ô nghỉ, không hỏi; cổng của màu không có người chơi mới thành ô câu hỏi.",
+      "source": { "ref": "Câu hỏi thử", "note": "Mục 4 tài liệu thiết kế" }, "verified": false, "test": true
+    },
+    {
+      "id": "TEST-04", "pillar": "dan-chu", "type": "situation", "difficulty": 2,
+      "question": "Bạn tung được 6 và trả lời đúng ở ô câu hỏi. Điều gì xảy ra tiếp theo?",
+      "answers": ["Bạn được tung thêm một lần trong lượt này", "Bạn mất lượt sau", "Bạn phải lùi 1 ô", "Lượt chuyển ngay cho người kế tiếp"],
+      "correct": 0,
+      "explanation": "Ra 6 mà đã di chuyển được thì tung thêm một lần; tối đa một lần mỗi lượt.",
+      "source": { "ref": "Câu hỏi thử", "note": "Mục 5 tài liệu thiết kế" }, "verified": false, "test": true
+    },
+    {
+      "id": "TEST-05", "pillar": "dan-chu", "type": "fillQuote", "difficulty": 3,
+      "question": "Điền vào chỗ trống trong luật cốt lõi số 2 của game: \"Ai về đích ___ thắng.\"",
+      "answers": ["trước", "sau cùng", "với nhiều power-up nhất", "bằng đúng số chấm"],
+      "correct": 0,
+      "explanation": "Luật cốt lõi số 2: ai về đích trước thắng.",
+      "source": { "ref": "Câu hỏi thử", "note": "Mục 2 tài liệu thiết kế" }, "verified": false, "test": true
+    },
+    {
+      "id": "TEST-06", "pillar": "dan-chu", "type": "single", "difficulty": 3,
+      "question": "Khi đang trả lời một câu có bốn đáp án mà bạn dùng power-up 50:50, game sẽ làm gì với các đáp án đang hiện trên màn hình?",
+      "answers": ["Loại bớt các đáp án sai cho tới khi chỉ còn hai đáp án để bạn chọn", "Cho bạn thêm năm mươi giây để suy nghĩ trước khi chốt", "Đổi sang một câu hỏi khác cùng trụ cột và cùng độ khó", "Tự động chọn giúp bạn đáp án đúng rồi chuyển lượt"],
+      "correct": 0,
+      "explanation": "50:50 loại đáp án sai tới khi còn 2 đáp án; câu chỉ có 2 đáp án thì không dùng được và không mất power-up.",
+      "source": { "ref": "Câu hỏi thử", "note": "Mục 6 tài liệu thiết kế" }, "verified": false, "test": true
+    },
+    {
+      "id": "TEST-07", "pillar": "phap-quyen", "type": "single", "difficulty": 1,
+      "question": "Trả lời sai ở ô câu hỏi thì ngựa của bạn đi đâu?",
+      "answers": ["Đứng yên ở ô cũ", "Lùi về cổng", "Tiến 1 ô", "Về chuồng"],
+      "correct": 0,
+      "explanation": "Theo luật chơi của game: trả lời sai hoặc hết giờ thì ngựa đứng yên ở ô cũ.",
+      "source": { "ref": "Câu hỏi thử", "note": "Mục 2 tài liệu thiết kế" }, "verified": false, "test": true
+    },
+    {
+      "id": "TEST-08", "pillar": "phap-quyen", "type": "truefalse", "difficulty": 1,
+      "question": "Quá 15 giây không tung xúc xắc thì game tự tung cho bạn.",
+      "answers": ["Đúng", "Sai"],
+      "correct": 0,
+      "explanation": "Người đến lượt có 15 giây để tung; quá thời gian thì game tự tung.",
+      "source": { "ref": "Câu hỏi thử", "note": "Mục 5 tài liệu thiết kế" }, "verified": false, "test": true
+    },
+    {
+      "id": "TEST-09", "pillar": "phap-quyen", "type": "truefalse", "difficulty": 2,
+      "question": "Thẻ bẫy \"lùi ngẫu nhiên\" có thể đẩy ngựa của bạn lùi quá ô cổng của chính bạn.",
+      "answers": ["Đúng", "Sai"],
+      "correct": 1,
+      "explanation": "Bẫy lùi 1, 2 hoặc 3 ô theo đường của bạn và không bao giờ lùi quá cổng của mình.",
+      "source": { "ref": "Câu hỏi thử", "note": "Mục 7 tài liệu thiết kế" }, "verified": false, "test": true
+    },
+    {
+      "id": "TEST-10", "pillar": "phap-quyen", "type": "single", "difficulty": 2,
+      "question": "Túi power-up chứa tối đa bao nhiêu món?",
+      "answers": ["2 món", "1 món", "3 món", "Không giới hạn"],
+      "correct": 0,
+      "explanation": "Túi chứa tối đa 2 món; khi túi đầy mà nhận thêm thì chọn bỏ món cũ hoặc bỏ món mới.",
+      "source": { "ref": "Câu hỏi thử", "note": "Mục 6 tài liệu thiết kế" }, "verified": false, "test": true
+    },
+    {
+      "id": "TEST-11", "pillar": "phap-quyen", "type": "fillQuote", "difficulty": 3,
+      "question": "Điền vào chỗ trống trong luật cốt lõi số 4 của game: \"Xúc xắc chỉ tới ô câu hỏi → trả lời đúng thì nhảy lên ô đó, sai thì ___ ở ô cũ.\"",
+      "answers": ["đứng yên", "lùi một ô", "về chuồng", "tung lại"],
+      "correct": 0,
+      "explanation": "Luật cốt lõi số 4: trả lời đúng thì nhảy lên ô đó, sai thì đứng yên ở ô cũ.",
+      "source": { "ref": "Câu hỏi thử", "note": "Mục 2 tài liệu thiết kế" }, "verified": false, "test": true
+    },
+    {
+      "id": "TEST-12", "pillar": "phap-quyen", "type": "situation", "difficulty": 3,
+      "question": "Ngựa của bạn còn 2 ô nữa là tới Đích. Bạn dùng Xúc xắc ×2 và tung được 3. Theo luật mặc định, chuyện gì xảy ra?",
+      "answers": ["Bạn tới Đích và phải trả lời câu về đích", "Bạn về đích ngay, không cần trả lời", "Bạn đứng yên vì vượt quá Đích", "Bạn lùi lại 4 ô"],
+      "correct": 0,
+      "explanation": "Mặc định, vượt quá Đích vẫn tính là tới Đích và vẫn phải trả lời câu về đích.",
+      "source": { "ref": "Câu hỏi thử", "note": "Mục 5 tài liệu thiết kế" }, "verified": false, "test": true
+    },
+    {
+      "id": "TEST-13", "pillar": "trong-sach", "type": "situation", "difficulty": 1,
+      "question": "Bạn dừng ở ô bẫy và đang có Khiên trong túi. Điều gì xảy ra?",
+      "answers": ["Khiên tự dùng và chặn thẻ bẫy đó", "Bạn vẫn phải lùi 3 ô", "Bạn mất Khiên và mất lượt", "Bạn được chọn có dùng Khiên hay không"],
+      "correct": 0,
+      "explanation": "Khiên tự dùng khi dính bẫy và chặn được cả hai loại thẻ bẫy.",
+      "source": { "ref": "Câu hỏi thử", "note": "Mục 6, 7 tài liệu thiết kế" }, "verified": false, "test": true
+    },
+    {
+      "id": "TEST-14", "pillar": "trong-sach", "type": "single", "difficulty": 1,
+      "question": "Game có mấy loại thẻ bẫy?",
+      "answers": ["Hai loại: mất lượt và lùi ngẫu nhiên", "Một loại", "Bốn loại", "Sáu loại"],
+      "correct": 0,
+      "explanation": "Chỉ có hai loại thẻ bẫy: mất lượt, hoặc lùi ngẫu nhiên 1–3 ô.",
+      "source": { "ref": "Câu hỏi thử", "note": "Mục 7 tài liệu thiết kế" }, "verified": false, "test": true
+    },
+    {
+      "id": "TEST-15", "pillar": "trong-sach", "type": "single", "difficulty": 2,
+      "question": "Trong chế độ Chơi trên một máy, nhiều bạn cùng ngồi quanh một chiếc điện thoại hoặc máy tính để thay phiên nhau tung xúc xắc. Khi một bạn vừa trả lời xong câu hỏi, màn hình sẽ hiện những gì trước khi chuyển lượt cho bạn kế tiếp?",
+      "answers": ["Đáp án đúng, lời giải thích kèm nguồn, và chip hiện vật liên quan nếu câu hỏi có gắn với một hiện vật", "Chỉ hiện chữ Đúng hoặc Sai rồi chuyển lượt ngay lập tức, không có lời giải thích nào", "Bảng xếp hạng của cả lớp kèm điểm số tích lũy từ những ván chơi trước đó", "Một câu hỏi mới dành cho bạn kế tiếp mà không cho biết đáp án của câu vừa rồi"],
+      "correct": 0,
+      "explanation": "Sau khi chốt câu, game luôn hiện đáp án đúng, giải thích và nguồn; câu gắn với hiện vật có thêm chip \"Hiện vật liên quan\".",
+      "source": { "ref": "Câu hỏi thử", "note": "Mục 3, 8 tài liệu thiết kế" }, "verified": false, "test": true
+    },
+    {
+      "id": "TEST-16", "pillar": "trong-sach", "type": "truefalse", "difficulty": 2,
+      "question": "Khi phòng bật Đoán cùng, người đang chờ lượt đoán đúng thì ngựa của họ được tiến thêm.",
+      "answers": ["Đúng", "Sai"],
+      "correct": 1,
+      "explanation": "Đoán cùng chỉ để tự kiểm tra và tính vào thống kê cá nhân cuối ván; không ảnh hưởng di chuyển.",
+      "source": { "ref": "Câu hỏi thử", "note": "Mục 8 tài liệu thiết kế" }, "verified": false, "test": true
+    },
+    {
+      "id": "TEST-17", "pillar": "trong-sach", "type": "fillQuote", "difficulty": 3,
+      "question": "Điền vào chỗ trống trong luật của game: \"khi power-up hoặc bẫy đẩy ngựa tới ô khác, ô mới ___ và không kích hoạt thêm hiệu ứng.\"",
+      "answers": ["không hỏi", "luôn hỏi câu khó nhất", "cho tung thêm", "bị khóa một lượt"],
+      "correct": 0,
+      "explanation": "Hiệu ứng không dây chuyền: ô mà power-up hoặc bẫy đẩy ngựa tới không hỏi và không kích hoạt thêm hiệu ứng.",
+      "source": { "ref": "Câu hỏi thử", "note": "Mục 5 tài liệu thiết kế" }, "verified": false, "test": true
+    },
+    {
+      "id": "TEST-18", "pillar": "trong-sach", "type": "situation", "difficulty": 3,
+      "question": "Bạn đang chơi ván 5 người với giới hạn 7 phút. Đồng hồ báo hết giờ khi chưa ai về đích, trong lúc lượt của bạn vẫn đang dở dang. Theo luật, ván kết thúc như thế nào?",
+      "answers": ["Chơi nốt lượt đang dở, rồi xếp hạng theo số ô còn lại tới Đích; người dẫn đầu được tôn vinh như người thắng", "Dừng ngay giữa câu hỏi đang trả lời và không ai được xếp hạng", "Mọi người phải tiếp tục chơi thêm cho tới khi có một người về đích", "Người đang giữ nhiều power-up nhất trong túi được tính là người thắng"],
+      "correct": 0,
+      "explanation": "Hết giờ thì chơi nốt lượt đang dở, xếp hạng theo số ô còn lại tới Đích; hòa thì so số câu trả lời đúng.",
+      "source": { "ref": "Câu hỏi thử", "note": "Mục 10 tài liệu thiết kế" }, "verified": false, "test": true
+    }
+  ]
+}
