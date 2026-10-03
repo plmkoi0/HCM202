@@ -32,7 +32,12 @@ describe('Lớp api/ chạy được bằng Node ESM thuần (như Vercel)', () 
       const created = await c.json()
       const s = await m.GET(new Request('http://x/api/rooms/' + created.code + '/state', { headers: { authorization: 'Bearer ' + created.playerId + '.' + created.token } }))
       const w = await m.GET(new Request('http://x/api/ws', { headers: { upgrade: 'websocket' } }))
-      console.log(JSON.stringify({ health: [h.status, await h.json()], create: c.status, code: created.code, state: s.status, ws: w.status }))
+      // đường nhiều cấp qua rewrite của vercel.json: Vercel đưa URL đích hoặc URL gốc, kèm __p
+      const auth = { authorization: 'Bearer ' + created.playerId + '.' + created.token }
+      const r1 = await m.GET(new Request('http://x/api/[...path]?__p=rooms/' + created.code + '/state&since=' + created.state.version, { headers: auth }))
+      const r2 = await m.GET(new Request('http://x/api/rooms/' + created.code + '?__p=rooms/' + created.code))
+      const r3 = await m.GET(new Request('http://x/api/[...path]?__p=ws', { headers: { upgrade: 'websocket' } }))
+      console.log(JSON.stringify({ health: [h.status, await h.json()], create: c.status, code: created.code, state: s.status, ws: w.status, rewritten: [r1.status, r2.status, (await r2.json()).code, r3.status] }))
     `
     const res = execFileSync(process.execPath, ['--input-type=module', '-e', script], { cwd: root, env: { ...process.env, VERCEL: '', REDIS_URL: '', KV_URL: '' }, stdio: ['ignore', 'pipe', 'pipe'] }).toString()
     const r = JSON.parse(res.trim().split('\n').pop()!)
@@ -43,6 +48,8 @@ describe('Lớp api/ chạy được bằng Node ESM thuần (như Vercel)', () 
     expect(r.state).toBe(200)
     // ngoài runtime Vercel không nâng cấp được WebSocket → báo lỗi, client tự dùng polling
     expect(r.ws).toBe(501)
+    // since = version hiện tại → 204; xem trước phòng → 200; WebSocket qua rewrite vẫn tới đúng chỗ
+    expect(r.rewritten).toEqual([204, 200, r.code, 501])
   }, 60_000)
 
   it('trên Vercel mà chưa gắn Redis: /api/health báo thiếu biến nào, API phòng trả 503', () => {

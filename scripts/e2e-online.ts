@@ -4,6 +4,8 @@
 // (nối lại bằng phiên đã lưu); cuối cùng Chơi lại → cả 3 về phòng chờ.
 //
 // Dùng: npm run build && npm run e2e:online [-- --shots <thư mục>]
+//       npm run e2e:online -- --url https://ten-du-an.vercel.app   (chạy trên bản deploy thật: hạn thật,
+//       chọn 5 phút; không cắt được WebSocket phía server nên chỉ ngắt mạng của trình duyệt)
 
 import { mkdirSync, readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
@@ -17,6 +19,7 @@ import { fastData } from '../tests/netHelpers'
 
 const args = process.argv.slice(2)
 const shots = args.includes('--shots') ? args[args.indexOf('--shots') + 1] : null
+const remote = args.includes('--url') ? args[args.indexOf('--url') + 1]!.replace(/\/$/, '') : null
 if (shots) mkdirSync(shots, { recursive: true })
 const root = join(import.meta.dirname, '..')
 const axeSource = readFileSync(createRequire(import.meta.url).resolve('axe-core/axe.min.js'), 'utf8')
@@ -57,10 +60,13 @@ async function step(p: Page): Promise<void> {
   }
 }
 
-const data = fastData(serverData, 0.2)
-const ctx = createContext(new MemoryStore(), { data })
-const server = await startLocalServer({ ctx, staticDir: join(root, 'dist'), socketMaxLifeMs: 25_000 })
-const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH ?? '/opt/pw-browsers/chromium' })
+const server = remote
+  ? { url: remote, dropSockets: () => 0, close: async () => {} }
+  : await startLocalServer({ ctx: createContext(new MemoryStore(), { data: fastData(serverData, 0.2) }), staticDir: join(root, 'dist'), socketMaxLifeMs: 25_000 })
+if (remote) console.log(`  chạy trên ${remote}`)
+// bản deploy: đi qua proxy HTTPS của môi trường (nếu có), như mọi công cụ khác
+const proxy = remote && process.env.HTTPS_PROXY ? { server: process.env.HTTPS_PROXY } : undefined
+const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH ?? '/opt/pw-browsers/chromium', proxy })
 const errors: string[] = []
 const pages: Page[] = []
 const contexts = []
@@ -89,6 +95,8 @@ await host.getByRole('button', { name: 'Tạo phòng' }).click()
 await host.getByLabel('Biệt danh').fill('Lan')
 await host.locator('label.seg', { hasText: /^3$/ }).first().click()
 await host.getByLabel(/Đoán cùng/).check()
+// bản deploy: hạn thật → chọn mốc 5 phút để ván kết thúc theo giờ nếu chưa ai về đích
+if (remote) await host.locator('label.seg', { hasText: /^5 phút$/ }).first().click()
 await axe(host, 'tạo phòng')
 await host.getByRole('button', { name: 'Tạo phòng' }).click()
 await host.locator('[data-room-code]').waitFor()
@@ -132,7 +140,7 @@ let disconnected = false
 let reloaded = false
 let sawOffline = false
 let sawRecover = false
-while (Date.now() - t0 < 300_000) {
+while (Date.now() - t0 < (remote ? 480_000 : 300_000)) {
   if ((await Promise.all(pages.map((p) => p.locator('[data-room-status="ended"]').count()))).every((n) => n > 0)) break
   await Promise.all(pages.map((p) => step(p)))
   const el = Date.now() - t0
@@ -142,12 +150,12 @@ while (Date.now() - t0 < 300_000) {
     // đóng hẳn WebSocket của máy này phía server (như mất sóng)
     server.dropSockets()
   }
-  if (disconnected && !sawRecover && el > 16_000) {
+  if (disconnected && !sawRecover && el > (remote ? 30_000 : 16_000)) {
     sawOffline = (await g2.locator('[data-conn="offline"], [data-conn="poll"]').count()) > 0
     await contexts[1]!.setOffline(false)
     sawRecover = true
   }
-  if (!reloaded && el > 24_000) {
+  if (!reloaded && el > (remote ? 40_000 : 24_000)) {
     reloaded = true
     await g3.reload()
     await g3.locator('[data-room-status]').waitFor({ timeout: 10_000 })

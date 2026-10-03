@@ -65,10 +65,10 @@ const ROOM_PATH = /^\/api\/rooms\/([^/]+)(?:\/(join|actions|state))?\/?$/
 
 /**
  * Xử lý một yêu cầu /api. `ctx` null = server chưa gắn kho (Vercel chưa có Redis) → báo rõ.
- * `missing` liệt kê biến môi trường còn thiếu (hiện ở /api/health).
+ * `missing` liệt kê biến môi trường còn thiếu (hiện ở /api/health). `url`: địa chỉ đã khôi phục
+ * (lớp `api/` dùng khi Vercel chuyển yêu cầu qua rewrite).
  */
-export async function handleApi(ctx: ApiContext | null, req: Request, ip: string, missing: string[] = []): Promise<Response> {
-  const url = new URL(req.url)
+export async function handleApi(ctx: ApiContext | null, req: Request, ip: string, missing: string[] = [], url: URL = new URL(req.url)): Promise<Response> {
   const path = url.pathname
   const method = req.method.toUpperCase()
   try {

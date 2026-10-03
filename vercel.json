@@ -8,6 +8,10 @@
   },
   "rewrites": [
     {
+      "source": "/api/(.*)",
+      "destination": "/api/[...path]?__p=$1"
+    },
+    {
       "source": "/p/:code",
       "destination": "/index.html"
     }
