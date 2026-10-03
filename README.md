@@ -2,7 +2,7 @@
 
 Board game kiểu cờ cá ngựa về Chủ đề 4 — *Tư tưởng Hồ Chí Minh về Nhà nước của nhân dân, do nhân dân, vì nhân dân* (HCM202, sản phẩm sáng tạo thứ hai). Thiết kế: [`docs/THIET-KE-GAME.md`](docs/THIET-KE-GAME.md).
 
-> Đang làm theo lộ trình mục 18 của tài liệu thiết kế. Hiện xong **G1** (engine, dữ liệu, bộ câu hỏi, mô phỏng); giao diện bàn cờ có ở G2, phòng chơi online ở G3–G4. Phần deploy Vercel và bản offline hoàn chỉnh viết ở G6.
+> Đang làm theo lộ trình mục 18 của tài liệu thiết kế. Hiện xong **G1–G5**: chơi trên một máy, chơi qua phòng (Vercel + Upstash Redis, đang chạy ở https://hcm-202-web-omega.vercel.app), Luật chơi, Kho câu hỏi, Cài đặt, âm thanh, phím tắt. Hướng dẫn deploy và bản offline hoàn chỉnh viết ở G6.
 
 ## Chạy
 
@@ -17,8 +17,12 @@ Cần Node.js ≥ 22.12. Lần đầu: `npm install`.
 | `npm run lint` | Kiểm tra mã (oxlint) |
 | `npm run import:questions` | Nhập `docs/CAU-HOI-GAME.md` → `src/data/questions.json` |
 | `npm run simulate` | Mô phỏng cân bằng 1.000 ván bot mỗi cấu hình (mục 11) |
+| `npm run server` | Server phòng chơi cục bộ ở cổng 8787 (dùng cùng `npm run dev`) |
+| `npm run e2e` | Chạy thử trong Chromium: chơi trên một máy (bản offline) + 3 máy chơi qua phòng (server cục bộ) |
+| `npm run check:deploy -- <địa chỉ> --long` | Kiểm bản deploy thật: health, WebSocket, polling, đóng/nối lại ở 300 s |
+| `npm run e2e:online -- --url <địa chỉ>` | Chạy thử 3 máy trên bản deploy thật |
 
-Kiểm tra trước khi commit: `npm run test && npm run build && npm run build:offline && npm run lint`.
+Kiểm tra trước khi commit: `npm run test && npm run build && npm run build:offline && npm run lint`, thêm `npm run e2e` khi đổi giao diện.
 
 ## Sửa bộ câu hỏi
 

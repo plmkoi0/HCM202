@@ -16,10 +16,12 @@
     "settings": "Cài đặt",
     "resumeRoom": "Vào lại phòng gần nhất",
     "resumeLocal": "Tiếp tục ván",
-    "building": "Luật chơi, Kho câu hỏi và Cài đặt đang được hoàn thiện.",
     "tagline": "Muốn tiến phải hiểu bài: mỗi bước tới ô câu hỏi là một câu hỏi. Ai về đích trước thắng.",
     "offlineNote": "Bản offline: chỉ có Chơi trên một máy (không cần mạng).",
-    "onlineSoon": "Chơi qua phòng (online) có ở bản trên Vercel."
+    "onlineSoon": "Chơi qua phòng (online) có ở bản trên Vercel.",
+    "more": "Tìm hiểu thêm",
+    "shareGame": "Chia sẻ game",
+    "wrongCount": "Sổ ôn tập: {n} câu từng trả lời sai"
   },
   "phases": {
     "roll": "Tung xúc xắc",
@@ -203,7 +205,16 @@
     "paused": "Đã tạm dừng",
     "autoContinueIn": "Tự sang lượt sau {s} giây",
     "doubledRoll": "Xúc xắc ×2: {face} → {value}",
-    "chooseHorseHint": "Bấm một nút bên dưới hoặc bấm ngựa có viền vàng trên bàn cờ."
+    "chooseHorseHint": "Bấm một nút bên dưới hoặc bấm ngựa có viền vàng trên bàn cờ.",
+    "menu": "Menu",
+    "rules": "Luật chơi",
+    "settings": "Cài đặt",
+    "soundOn": "Tắt tiếng (M)",
+    "soundOff": "Bật tiếng (M)",
+    "fullscreen": "Toàn màn hình (F)",
+    "kbdRoll": "Space",
+    "powerupKey": "Phím {key}: dùng {name}",
+    "cannotUseNow": "Không dùng được {name} lúc này."
   },
   "end": {
     "title": "Kết thúc ván",
@@ -235,7 +246,17 @@
     "reviewAnswer": "Đáp án đúng: {answer}",
     "leader": "Người dẫn đầu",
     "winner": "Người thắng",
-    "bySolo": "{name} về đích!"
+    "bySolo": "{name} về đích!",
+    "accuracy": "Tỉ lệ đúng",
+    "byPillar": "Theo trụ cột",
+    "pillarScore": "{correct}/{total} đúng",
+    "noAnswers": "chưa trả lời câu nào",
+    "practiceWrong": "Làm lại các câu sai",
+    "reviewMine": "Câu bạn trả lời sai",
+    "share": "Chia sẻ game",
+    "shareText": "Chơi thử Con đường tư tưởng HCM — board game ôn tập Chủ đề 4 (HCM202)",
+    "copied": "Đã sao chép link game",
+    "savedToReview": "Các câu sai đã được lưu vào Sổ ôn tập (Kho câu hỏi) trên máy này."
   },
   "board": {
     "label": "Bàn cờ — {n} ô vòng chung, đường về đích {h} ô",
@@ -315,5 +336,153 @@
     "serverDown": "Không kết nối được server phòng chơi. Bạn vẫn chơi được \"Chơi trên một máy\".",
     "yourTurn": "Tới lượt bạn!",
     "waitingFor": "Đang chờ {name}…"
+  },
+  "practice": {
+    "title": "Ôn tập",
+    "progress": "Câu {n}/{total}",
+    "next": "Câu tiếp",
+    "finish": "Xem kết quả",
+    "stop": "Dừng ôn tập",
+    "close": "Đóng",
+    "summary": "Bạn trả lời đúng {n}/{total} câu.",
+    "empty": "Không có câu nào để ôn."
+  },
+  "bank": {
+    "title": "Kho câu hỏi",
+    "total": "Tổng số câu hỏi: {n}",
+    "intro": "Đáp án ẩn mặc định — bấm \"Hiện đáp án\" ở từng câu. Kho câu hỏi không mở được khi đang ở trong phòng chơi.",
+    "filterPillar": "Trụ cột",
+    "filterDifficulty": "Độ khó",
+    "filterOther": "Lọc thêm",
+    "all": "Tất cả",
+    "onlyWrong": "Câu từng trả lời sai trên máy này ({n})",
+    "onlyTest": "Chỉ câu hỏi thử",
+    "search": "Tìm trong câu hỏi",
+    "shown": "Đang hiện {n} câu",
+    "none": "Không có câu nào khớp bộ lọc.",
+    "showAnswer": "Hiện đáp án",
+    "hideAnswer": "Ẩn đáp án",
+    "showAll": "Hiện mọi đáp án",
+    "hideAll": "Ẩn mọi đáp án",
+    "practice": "Ôn tập {n} câu đang lọc",
+    "practiceHint": "Ôn tập trả lời đúng thì câu đó được bỏ khỏi Sổ ôn tập.",
+    "clearWrong": "Xóa Sổ ôn tập",
+    "types": {
+      "single": "Một đáp án",
+      "truefalse": "Đúng / Sai",
+      "fillQuote": "Điền trích dẫn",
+      "situation": "Tình huống"
+    },
+    "back": "Về trang chủ"
+  },
+  "rules": {
+    "title": "Luật chơi",
+    "intro": "Board game kiểu cờ cá ngựa: muốn tiến phải hiểu bài. Mỗi bước tới ô câu hỏi là một câu hỏi về Chủ đề 4.",
+    "goalTitle": "Mục tiêu",
+    "goal": "Đưa ngựa của mình từ cổng đi hết vòng chung, rẽ vào đường về đích rồi trả lời đúng câu về đích. Ai về đích trước thắng.",
+    "pathTitle": "Đường đi của mỗi người",
+    "pathGate": "Cổng (xuất phát)",
+    "pathRing": "{n} ô vòng chung",
+    "pathHome": "{n} ô về đích",
+    "pathFinish": "Đích",
+    "pathNote": "Bố cục {name}: {steps} bước từ cổng tới Đích. Ngựa rẽ vào đường về đích ở ô ngay trước cổng của mình; đường về đích và câu về đích khó dần.",
+    "turnTitle": "Một lượt chơi",
+    "turn": [
+      "Tung xúc xắc (1–6). Quá {roll} giây không tung thì máy tự tung.",
+      "Đi đúng số ô theo đường của mình. Không có luật đá ngựa — nhiều ngựa đứng chung một ô được.",
+      "Tới ô câu hỏi: trả lời trong {answer} giây. Đúng → nhảy lên ô đó; sai hoặc hết giờ → đứng yên ở ô cũ. Sau mỗi câu luôn có giải thích và nguồn.",
+      "Ra 6 mà đã đi được thì tung thêm một lần (tối đa một lần mỗi lượt).",
+      "Vượt quá Đích vẫn tính là tới Đích và phải trả lời câu về đích (trừ khi bật \"Phải tung đúng số\")."
+    ],
+    "cellsTitle": "Các loại ô",
+    "pillarsNote": "Ô câu hỏi có viền màu, biểu tượng và chữ viết tắt của trụ cột — câu hỏi thuộc trụ cột đó:",
+    "powerupsTitle": "Power-up",
+    "instant": "Dùng ngay",
+    "bag": "Cất vào túi",
+    "bagNote": "Túi chứa tối đa {n} món. Túi đầy mà nhận thêm thì chọn bỏ món cũ hoặc món mới. Power-up đẩy ngựa tới ô khác thì ô mới không hỏi và không kích hoạt thêm.",
+    "trapsTitle": "Thẻ bẫy",
+    "trapRange": "1–3",
+    "trapsNote": "Dừng ở ô bẫy thì rút ngẫu nhiên một thẻ. Lùi theo đường của chính mình, không lùi quá cổng; ô bị lùi tới không hỏi. Khiên chặn được cả hai loại thẻ.",
+    "endTitle": "Kết thúc",
+    "end": [
+      "Người đầu tiên về đích thắng. Chủ phòng có thể chọn chơi tiếp để xếp hạng 2, 3…",
+      "Giới hạn thời gian {limits}. Hết giờ thì chơi nốt lượt đang dở, rồi xếp hạng theo số ô còn lại tới đích; người dẫn đầu được tôn vinh như người thắng.",
+      "Bằng nhau thì so số câu trả lời đúng.",
+      "Màn kết thúc có thống kê, ôn lại câu trả lời sai và thông điệp \"{message}\"."
+    ],
+    "modesTitle": "Cách chơi",
+    "modes": [
+      "Chơi qua phòng: mỗi người một máy, vào phòng bằng mã 5 ký tự, mã QR hoặc link. Phòng 1–5 người, có thể thêm máy chơi cùng.",
+      "Chơi trên một máy: 1–5 người thay phiên trên cùng thiết bị, không cần mạng. 1 người và 0 máy = thử thách cá nhân (về đích với ít lượt nhất).",
+      "Mất kết nối khi tới lượt: sau {disconnect} giây máy tự tung, câu hỏi tính là sai. Quay lại thì chơi tiếp ở vị trí cũ."
+    ],
+    "optionsTitle": "Tùy chọn của ván",
+    "options": [
+      "Phải tung đúng số mới vào Đích.",
+      "Ra chuồng khi tung 1 hoặc 6 (luật cờ cá ngựa gốc).",
+      "2 ngựa mỗi người: tung xong chọn ngựa để đi; thắng khi cả hai về đích.",
+      "Đoán cùng (chơi qua phòng): người đang chờ cũng chọn đáp án để tự kiểm tra — không ảnh hưởng di chuyển, chỉ tính vào thống kê."
+    ],
+    "keysTitle": "Phím tắt trên máy tính",
+    "keys": [
+      [
+        "Space",
+        "Tung xúc xắc / Tiếp tục"
+      ],
+      [
+        "1–4 hoặc A–D",
+        "Chọn đáp án"
+      ],
+      [
+        "Q / W",
+        "Dùng power-up thứ 1 / thứ 2 trong túi"
+      ],
+      [
+        "M",
+        "Tắt / bật tiếng"
+      ],
+      [
+        "F",
+        "Toàn màn hình"
+      ],
+      [
+        "Esc",
+        "Đóng cửa sổ"
+      ]
+    ],
+    "back": "Về trang chủ",
+    "close": "Đóng"
+  },
+  "settings": {
+    "title": "Cài đặt",
+    "sound": "Âm thanh",
+    "soundOn": "Bật",
+    "soundOff": "Tắt",
+    "soundTest": "Nghe thử",
+    "motion": "Hiệu ứng chuyển động",
+    "motionSystem": "Theo máy",
+    "motionReduce": "Giảm",
+    "motionFull": "Đầy đủ",
+    "motionHint": "Giảm: không có xúc xắc lăn, ngựa đi từng ô, pháo giấy.",
+    "theme": "Giao diện",
+    "themeSystem": "Theo máy",
+    "themeLight": "Sáng",
+    "themeDark": "Tối",
+    "textSize": "Cỡ chữ",
+    "textNormal": "Vừa",
+    "textLarge": "Lớn",
+    "fullscreen": "Toàn màn hình",
+    "fullscreenButton": "Bật / tắt toàn màn hình",
+    "data": "Dữ liệu trên máy này",
+    "dataNote": "Game không thu thập thống kê, không đăng nhập. Trên máy này chỉ lưu: cài đặt, biệt danh, ván đang chơi, kỷ lục thử thách cá nhân, Sổ ôn tập và phiên phòng gần nhất.",
+    "clear": "Xóa dữ liệu trên máy này",
+    "clearConfirm": "Xóa ván đang lưu, kỷ lục, Sổ ôn tập, biệt danh và phiên phòng trên máy này? Cài đặt được giữ lại.",
+    "clearYes": "Xóa",
+    "cleared": "Đã xóa dữ liệu trên máy này.",
+    "version": "Bản {kind}",
+    "online": "online",
+    "offline": "offline (một file, không cần mạng)",
+    "back": "Về trang chủ",
+    "close": "Đóng"
   }
 }

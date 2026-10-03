@@ -1,6 +1,7 @@
 // Trang chủ (mục 12.1). Bản offline chỉ có "Chơi trên một máy" (mục 15.6).
-import { DoorOpen, Dices, Play, PlusCircle, RotateCcw } from 'lucide-react'
+import { BookOpen, DoorOpen, Dices, Library, Play, PlusCircle, RotateCcw, Settings } from 'lucide-react'
 import { hasTestQuestions, questionList, site } from '../lib/gameData'
+import { fill } from '../lib/text'
 
 export interface OnlineEntry {
   onCreate: () => void
@@ -9,7 +10,13 @@ export interface OnlineEntry {
   onResumeRoom?: () => void
 }
 
-export function Home({ canResume, onLocal, onResume, online }: { canResume: boolean; onLocal: () => void; onResume: () => void; online?: OnlineEntry }) {
+export interface InfoEntry {
+  onRules: () => void
+  onBank: () => void
+  onSettings: () => void
+}
+
+export function Home({ canResume, onLocal, onResume, online, info }: { canResume: boolean; onLocal: () => void; onResume: () => void; online?: OnlineEntry; info: InfoEntry }) {
   const t = site.home
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-xl flex-col gap-6 px-4 py-8">
@@ -50,10 +57,22 @@ export function Home({ canResume, onLocal, onResume, online }: { canResume: bool
           <Dices size={22} aria-hidden="true" /> {t.localPlay}
         </button>
       </nav>
-      <p className="text-center text-sm text-ink-soft">{__OFFLINE__ ? t.offlineNote : t.building}</p>
-      <p className="text-center text-xs text-ink-soft">
-        {t.questionBank}: {questionList.length}
-      </p>
+      <nav className="grid grid-cols-3 gap-2" aria-label={t.more}>
+        {(
+          [
+            [t.rules, BookOpen, info.onRules],
+            [t.questionBank, Library, info.onBank],
+            [t.settings, Settings, info.onSettings],
+          ] as const
+        ).map(([label, I, on]) => (
+          <button key={label} type="button" className="btn-secondary flex-col gap-1 px-2 text-sm sm:text-base" onClick={on}>
+            <I size={22} aria-hidden="true" />
+            {label}
+          </button>
+        ))}
+      </nav>
+      {__OFFLINE__ && <p className="text-center text-sm text-ink-soft">{t.offlineNote}</p>}
+      <p className="text-center text-xs text-ink-soft">{fill(site.bank.total, { n: questionList.length })}</p>
     </main>
   )
 }

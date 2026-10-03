@@ -1,7 +1,7 @@
 # THIẾT KẾ GAME — Con đường tư tưởng HCM
 
 **Môn:** HCM202 · **Sản phẩm sáng tạo thứ hai** (độc lập với bảo tàng số) · **Chủ đề 4** — Tư tưởng Hồ Chí Minh về Nhà nước của nhân dân, do nhân dân, vì nhân dân
-**Phiên bản:** 1.5 · 03/10/2026 · **Trạng thái:** G0 đã được nhóm duyệt — các quyết định (mục 20) đã ghi vào từng mục; G1, G2 xong; làm tiếp G3
+**Phiên bản:** 1.5 · 03/10/2026 · **Trạng thái:** G0 đã được nhóm duyệt — các quyết định (mục 20) đã ghi vào từng mục; G1–G5 xong; chờ nhóm cho phép G6
 **Vị trí:** nhánh `game` của repo `HCM202`, file `docs/THIET-KE-GAME.md` — nguồn chuẩn duy nhất cho game (luật, bàn cờ, màn hình, kiến trúc, kiểm thử, lộ trình).
 
 ---
@@ -604,25 +604,30 @@ Reducer thuần, không phụ thuộc trình duyệt hay Node. Hành động:
 
 *Kiểm bản deploy thật:* `npm run check:deploy -- <địa chỉ> [--long]` kiểm health, WebSocket, polling và đóng/nối lại ở 300 s. Hướng dẫn tạo project cho nhóm: `docs/HUONG-DAN-VERCEL.md`.
 
-**Kiểm trên bản deploy thật — lần 1 (G4, 03/10/2026): chưa chạy được.**
-- Nhóm đã tạo project: https://hcm-202-web-omega.vercel.app.
-- Môi trường làm việc của Claude Code bị proxy chặn ở mức tổ chức khi kết nối tới `hcm-202-web-omega.vercel.app`. Cả `curl` lẫn WebFetch đều nhận "connect_rejected", giống `vercel.com` ở G0.
-- Vì vậy chưa xác nhận được những việc sau:
-  - đây là project của game (tên project có chữ "web");
-  - `/api/health`;
-  - WebSocket, đóng sau 300 s, polling;
-  - catch-all `api/[...path].ts`.
-- Cần nhóm chọn một trong hai cách:
-  - mở Network access của môi trường cho host này;
-  - tự mở `/api/health` trên trình duyệt và dán kết quả.
+**Kiểm trên bản deploy thật — lần 1 (G4, 03/10/2026): chưa chạy được** — môi trường làm việc bị chặn mạng tới `hcm-202-web-omega.vercel.app`.
 
-  Nếu máy có Node 22, nhóm cũng tự chạy được `npm run check:deploy -- https://hcm-202-web-omega.vercel.app --long`.
+**Kiểm trên bản deploy thật — lần 2 (G5, 03/10/2026), https://hcm-202-web-omega.vercel.app (nhóm đã mở Network access):**
+- Trang chủ là game (tiêu đề "Con đường tư tưởng HCM", có meta `noindex` và header `X-Robots-Tag`) → đúng project game, Production Branch = `game`, Root Directory = gốc nhánh.
+- `/api/health` → `{"ok":true,"store":"redis","pingMs":…}` → **đã gắn Upstash Redis**.
+- **Lỗi tìm thấy và đã sửa:** ngoài Next.js, file `api/[...path].ts` chỉ khớp **một cấp** (`/api/health`, `/api/rooms`, `/api/ws` chạy; `/api/rooms/ABCDE/join` nhận 404 `NOT_FOUND` của Vercel) — đúng rủi ro đã ghi ở mục 20.
+  - Sửa: thêm rewrite `/api/(.*)` → `/api/[...path]?__p=$1` trong `vercel.json`; lớp `api/` khôi phục đường gốc từ `__p` (chạy đúng dù Vercel đưa URL gốc hay URL đích) và bỏ `__p` khỏi truy vấn. `tests/vercel-api.test.ts` kiểm cả hai dạng.
+  - Đẩy lên `game` → Vercel deploy lại sau ~40 giây → đường nhiều cấp trả JSON của server.
+- `npm run check:deploy -- https://hcm-202-web-omega.vercel.app --long` sau khi sửa: **đạt toàn bộ**.
+  - [x] `/api/health`: kho `redis`, ping 220 ms (lần gọi đầu ~930 ms khi function khởi động lạnh).
+  - [x] WebSocket qua `experimental_upgradeWebSocket` nối được.
+  - [x] Polling dự phòng chạy; máy WebSocket và máy polling cùng trạng thái.
+  - [x] Vercel đóng kết nối WebSocket ở ~300 s; client tự nối lại (2 kết nối trong 313 s), trạng thái không đổi.
+  - [x] `api/[...path].ts` + rewrite bắt mọi `/api/*`.
+- **Phòng 3 máy trên bản deploy** (`npm run e2e:online -- --url https://hcm-202-web-omega.vercel.app`, Chromium thật, hạn thật, mốc 5 phút): tạo phòng, vào bằng link `/p/ABCDE` và bằng mã, mã sai báo lỗi, phòng chờ 3/3, chơi tới kết thúc (149 s), một máy mất mạng 22 s rồi có lại, một máy tải lại trang, 3 máy cùng trạng thái cuối, Chơi lại → phòng chờ, chủ phòng rời → chuyển quyền, axe không lỗi, không lỗi trang → **đạt**.
+  - Ghi chú: trong môi trường của Claude Code, **Chromium** đi qua proxy chặn TLS của môi trường nên không nâng cấp được WebSocket (yêu cầu tới function mất header `Upgrade` → 404 của server). Gửi đúng từng byte yêu cầu đó bằng Node hoặc curl qua cùng proxy thì Vercel trả 101 — lỗi nằm ở proxy của môi trường, không ở game. Ván trên vẫn chạy trọn nhờ polling dự phòng. Máy thật kết nối thẳng tới Vercel → **cần nhóm kiểm huy hiệu "Trực tiếp" trên điện thoại / laptop thật ở buổi diễn tập G6**.
+- Chạy lại sau mỗi lần deploy: `npm run check:deploy -- <địa chỉ> --long` và `E2E_PROXY_CA=<CA proxy, nếu có> npm run e2e:online -- --url <địa chỉ>`.
 
 **Các việc cần kiểm trên bản deploy thật:**
-- [ ] WebSocket chạy được qua `experimental_upgradeWebSocket`.
-- [ ] Đường `api/[...path].ts` bắt được mọi `/api/*`.
-- [ ] Kết nối bị đóng sau 300 giây và client tự nối lại.
-- [ ] Polling dự phòng hoạt động.
+- [x] WebSocket chạy được qua `experimental_upgradeWebSocket` (Node client, G5).
+- [x] Đường `api/[...path].ts` bắt được mọi `/api/*` (sau khi thêm rewrite, G5).
+- [x] Kết nối bị đóng sau 300 giây và client tự nối lại (G5).
+- [x] Polling dự phòng hoạt động (G5).
+- [ ] Huy hiệu "Trực tiếp" (WebSocket) trong trình duyệt trên máy thật — diễn tập G6.
 
 ### 15.5 Quyền riêng tư và chi phí
 - Chỉ lưu biệt danh và thao tác trong ván; không đăng nhập, không thống kê, không lưu gì sau khi phòng hết hạn.
@@ -817,8 +822,8 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 | **G1 — Nền móng** | Khởi tạo dự án ở gốc nhánh, JSON + kiểu dữ liệu, **12 câu khởi đầu** từ `QUIZ-KIEN-THUC.md` (13.1) + **câu hỏi thử** lấp chỗ thiếu (13.3), script nhập câu hỏi, test dữ liệu, engine + bot + unit test, mô phỏng cân bằng ở 20 s và 25 s/lượt (điền mục 11) | ☑ Xong 03/10/2026 — 120 test; mô phỏng đạt mục tiêu mục 11; chi tiết tự chọn ghi ở mục 20 |
 | **G2 — Chơi trên một máy** | Bàn cờ SVG, xúc xắc, ngựa đi từng ô, các loại ô, túi power-up, thẻ bẫy, bot, thử thách cá nhân + kỷ lục, lưu/tiếp tục ván, hoàn tác — chơi trọn ván | ☑ Xong 03/10/2026 — 131 test; chạy thử trong Chromium (360 × 780 sáng, 1366 × 768 tối, có và không có hiệu ứng): chơi trọn ván, 2 ngựa, thử thách cá nhân, tải lại, hoàn tác, axe không lỗi; chi tiết tự chọn ghi ở mục 20 |
 | **G3 — Server** | Tạo/vào phòng, sức chứa, chọn màu, hành động, bước bot, Redis, pub/sub, WebSocket + polling, nối lại, chuyển chủ phòng, `/api/health`; test server, mô phỏng tải, chạy cục bộ | ☑ Xong 03/10/2026 — 170 test; mô phỏng tải đạt với kho bộ nhớ và redis-server thật, có và không Đoán cùng; rà soát 6 sub agent, đã sửa các lỗi xác nhận. Chờ nhóm tạo project để kiểm trên Vercel (`docs/HUONG-DAN-VERCEL.md`) |
-| **G4 — Chơi qua phòng** | Trang chủ, tạo phòng, vào bằng mã / QR / link, phòng chờ, chơi qua mạng, trạng thái kết nối, mất kết nối, kết thúc + chơi lại, tùy chọn Đoán cùng | ☑ Xong 03/10/2026 trên server cục bộ — `npm run e2e` gồm chạy thử 3 máy (`e2e:online`). **Chưa kiểm trên bản deploy thật** vì môi trường bị chặn mạng tới `*.vercel.app` (mục 15.4). Dừng chờ nhóm cho phép làm G5 |
-| **G5 — Hoàn thiện** | Ôn câu sai, thống kê, Kho câu hỏi, Luật chơi minh họa, Cài đặt, âm thanh, phím tắt, chỉnh giao diện, reduced motion | ☐ |
+| **G4 — Chơi qua phòng** | Trang chủ, tạo phòng, vào bằng mã / QR / link, phòng chờ, chơi qua mạng, trạng thái kết nối, mất kết nối, kết thúc + chơi lại, tùy chọn Đoán cùng | ☑ Xong 03/10/2026 trên server cục bộ — `npm run e2e` gồm chạy thử 3 máy (`e2e:online`). Kiểm trên bản deploy thật làm ở đầu G5 (mục 15.4) |
+| **G5 — Hoàn thiện** | Ôn câu sai, thống kê, Kho câu hỏi, Luật chơi minh họa, Cài đặt, âm thanh, phím tắt, chỉnh giao diện, reduced motion | ☑ Xong 03/10/2026 — 178 test; `npm run e2e` (một máy 360 × 780 sáng + 1366 × 768 tối, có Luật chơi, Kho câu hỏi, Cài đặt, ôn tập, phím tắt; 3 máy cục bộ) đạt, axe không lỗi. Kiểm bản deploy thật (mục 15.4): sửa catch-all `/api/*`, `check:deploy --long` đạt, phòng 3 máy trên deploy đạt. Chi tiết tự chọn ở mục 20. Dừng chờ nhóm cho phép làm G6 |
 | **G6 — Phát hành** | Hướng dẫn tạo project Vercel (Production Branch = `game`) + gắn Redis (nhóm làm phần cần tài khoản), deploy preview, diễn tập, `npm run check:release` (không còn câu hỏi thử), bản offline, README, cập nhật `CLAUDE.md` | ☐ |
 
 **Nhập bộ câu hỏi của nhóm** — làm bất cứ lúc nào nhóm gửi bản mới của `docs/CAU-HOI-GAME.md`, không chờ mốc:
@@ -834,6 +839,8 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 - Quét QR bằng Zalo; mở link trong Messenger.
 - Phòng 1 người (có và không có máy chơi cùng) và phòng 5 người; thử cả mốc 5 và 7 phút.
 - Link mở được mà không cần đăng nhập Vercel (Deployment Protection, mục 15.6).
+- Huy hiệu kết nối hiện "Trực tiếp" (WebSocket) trên máy thật; tắt Wi-Fi vài giây rồi bật lại → về "Trực tiếp" (mục 15.4).
+- Âm thanh trên điện thoại (iPhone ở chế độ im lặng có thể không phát tiếng Web Audio); nút tắt tiếng.
 
 ## 19. Đối chiếu tiêu chí chấm sản phẩm sáng tạo (10 điểm)
 
@@ -1001,6 +1008,25 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
     - Seed / RNG của engine 31 bit; người rành kỹ thuật về lý thuyết đoán được xúc xắc. Đây là game ôn tập, chấp nhận như L5.
     - Vào phòng chưa chống gửi trùng khi mất phản hồi: có thể sinh một người "ma" ở phòng chờ, chủ phòng mời ra được. G4 sẽ xử lý phía giao diện.
 
+**Chi tiết G5 tự chọn trong phạm vi thiết kế (nhóm xem lại; không chặn các mốc):**
+- **Trang chủ:** hàng nút Luật chơi · Kho câu hỏi · Cài đặt dưới các nút chơi; dòng "Tổng số câu hỏi: N". Bỏ dòng "đang được hoàn thiện".
+- **Ôn câu sai (màn kết thúc):**
+  - Chơi qua phòng: chỉ ôn câu **mình** trả lời sai ("Câu bạn trả lời sai"); chơi trên một máy: câu của từng người (không phải máy).
+  - Mỗi câu sai có đáp án đúng, giải thích, nguồn, chip "Hiện vật liên quan".
+  - Nút "Làm lại các câu sai": trả lời lại từng câu (đáp án trộn lại), hiện giải thích, cuối cùng báo "đúng x/y". Không ảnh hưởng ván.
+  - **Sổ ôn tập trên máy:** câu sai ở các ván đã kết thúc được lưu id vào localStorage (`review.v1`, tối đa 300, mới nhất trước). Kho câu hỏi lọc được "Câu từng trả lời sai trên máy này"; ôn tập trả lời đúng thì câu đó được bỏ khỏi sổ. Không gửi đi đâu.
+- **Thống kê (màn kết thúc):** thêm cột "Tỉ lệ đúng" và mục "Theo trụ cột" (đúng / đã trả lời theo trụ cột của câu). Engine thêm `stats.byPillar` (tùy chọn — ván lưu cũ không có thì hiện "chưa trả lời câu nào"). Bảng thống kê trên điện thoại cuộn ngang được (vùng cuộn nhận tiêu điểm bàn phím).
+- **Chia sẻ game** ở màn kết thúc: Web Share nếu có, không thì sao chép `siteUrl` (trình duyệt nhúng Zalo/Messenger).
+- **Kho câu hỏi:** lọc theo trụ cột, độ khó, Sổ ôn tập, chỉ câu hỏi thử; tìm chữ (không phân biệt dấu); mỗi câu có id, trụ cột, độ khó, loại, nhãn `[Câu hỏi thử]` / `[Chờ xác minh]`, nguồn, chip hiện vật; đáp án + giải thích ẩn mặc định, nút "Hiện đáp án" từng câu và "Hiện mọi đáp án"; "Ôn tập N câu đang lọc". Chỉ mở từ trang chủ; Menu trong ván không có Kho câu hỏi (L5; `e2e:online` kiểm).
+- **Luật chơi minh họa:** màn riêng và tab trong Menu của ván. Gồm: mục tiêu, sơ đồ đường đi (cổng → 17 ô vòng chung → 4 ô về đích → Đích, số liệu tính từ `board.json`), một lượt chơi, các loại ô (hình mẫu giống bàn cờ + chữ viết tắt trụ cột), power-up (biểu tượng, dùng ngay / cất vào túi, hiệu ứng từ `powerups.json`), thẻ bẫy (nhãn trung tính, tỉ lệ từ `traps.json`), kết thúc, cách chơi, tùy chọn, phím tắt. Chỉ nói về luật chơi, không có nội dung tư tưởng Hồ Chí Minh.
+- **Cài đặt** (lưu `settings.v1`): Âm thanh bật/tắt + "Nghe thử"; Hiệu ứng chuyển động Theo máy / Giảm / Đầy đủ; Giao diện Theo máy / Sáng / Tối; Cỡ chữ Vừa / Lớn (112,5%); Toàn màn hình (khi trình duyệt hỗ trợ); "Xóa dữ liệu trên máy này" (ván lưu, kỷ lục, Sổ ôn tập, biệt danh, phiên phòng — giữ cài đặt; có hộp xác nhận; chỉ ở màn Cài đặt từ trang chủ). Ghi rõ game không thu thập thống kê.
+- **Menu trong ván** (nút ☰ cạnh đồng hồ): tab Luật chơi / Cài đặt + nút toàn màn hình. "Chơi trên một máy": mở Menu thì tạm dừng đồng hồ như thẻ hiện vật. Chơi qua phòng: không tạm dừng (ván chung).
+- **Âm thanh** (Web Audio, mặc định bật): xúc xắc, bước đi từng ô (tắt khi giảm hiệu ứng), đúng, sai/hết giờ, nhận power-up, dính bẫy, về đích; chơi qua phòng thêm tiếng báo "Tới lượt bạn" (phòng ≥ 2 người). Âm phát đúng lúc diễn hoạt tới sự kiện. AudioContext chỉ tạo sau thao tác đầu tiên; máy không hỗ trợ thì im lặng. Nút loa trên thanh đầu + phím M.
+- **Phím tắt** (mục 16): Space = tung / tiếp tục (Space trên một nút đang có tiêu điểm thì để trình duyệt bấm nút đó) · 1–4 hoặc A–D = đáp án (cả Đoán cùng; lúc chọn ngựa: 1 / 2 = ngựa 1 / 2) · Q/W = power-up thứ 1/2 trong túi (không dùng được lúc đó thì báo toast; Khiên tự dùng) · M · F · Esc đóng cửa sổ. Không bắt phím khi đang gõ chữ hay có Ctrl/Alt/⌘, hoặc khi đang mở hộp thoại khác. Nhãn phím (Space, Q, W) chỉ hiện trên máy có chuột.
+- **Pháo giấy:** canvas tự vẽ ~2,6 giây khi có người về đích (không chạy lại khi sang màn kết thúc); tắt khi giảm hiệu ứng.
+- **Giảm hiệu ứng:** "Theo máy" = `prefers-reduced-motion`; "Giảm" tắt xúc xắc lăn, ngựa đi từng ô, nhấp nháy, cửa sổ trượt, pháo giấy; "Đầy đủ" bật hiệu ứng kể cả khi máy đặt giảm.
+- **Giao diện điện thoại:** mục "Chú thích" chuyển xuống dưới khu điều khiển (trên máy tính vẫn dưới bàn cờ) để nút Tung xúc xắc không phải cuộn ở 360 × 780. Thanh đầu: đồng hồ, loa, Menu, hoàn tác, thoát.
+
 **Nhóm cần quyết:**
 - [ ] Tên chính thức của game — để sau, không chặn các mốc.
 
@@ -1011,10 +1037,10 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
   - Nhớ phần giáo trình tr. 92–93.
 
 **Hạ tầng (cần tài khoản nhóm):**
-- [x] Tạo project Vercel thứ hai (nhóm đã tạo: https://hcm-202-web-omega.vercel.app). Còn chờ kiểm Production Branch = `game` / Root Directory qua `/api/health` và trang chủ.
-- [ ] Gắn **Upstash for Redis** (gói Free) từ Vercel Marketplace (15.4, 15.5) — cùng hướng dẫn; xong thì `/api/health` trả `"store":"redis"`.
-- [x] Điền `siteUrl` của game: `https://hcm-202-web-omega.vercel.app` (G4). Còn chờ xác nhận đây đúng là project game, mục 15.4.
-- [ ] Đề xuất: deploy preview ngay sau G3 để thử WebSocket thật sớm, không đợi G6.
+- [x] Tạo project Vercel thứ hai (nhóm đã tạo: https://hcm-202-web-omega.vercel.app). Đã kiểm ở G5: trang chủ là game, Production Branch = `game`, Root Directory = gốc nhánh.
+- [x] Gắn **Upstash for Redis** (gói Free) từ Vercel Marketplace (15.4, 15.5) — G5: `/api/health` trả `"store":"redis"`.
+- [x] Điền `siteUrl` của game: `https://hcm-202-web-omega.vercel.app` (G4); đã xác nhận đúng project game (G5, mục 15.4).
+- [x] Thử WebSocket thật trên bản deploy (G5, mục 15.4).
 - [ ] Kiểm tra Deployment Protection (mục 15.6): khi thử trên điện thoại dùng Shareable Links; trước buổi học, tên miền chính phải mở được mà không cần đăng nhập Vercel.
 
 **Cần xác minh:**
@@ -1030,12 +1056,11 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
   - Kết quả tìm kiếm cho biết Marketplace thêm `KV_URL`, `KV_REST_API_URL`, `KV_REST_API_TOKEN`, `KV_REST_API_READ_ONLY_TOKEN`, có khi thêm `REDIS_URL`.
   - Server dùng giao thức TCP (cần cho pub/sub), đọc lần lượt `REDIS_URL` → `KV_URL` → `UPSTASH_REDIS_URL` (`.env.example`).
   - Chỉ có biến REST thì `/api/health` báo thiếu; hướng dẫn chỉ cách thêm `REDIS_URL` bằng tay (`docs/HUONG-DAN-VERCEL.md`).
-- [ ] **Trên bản deploy thật** (https://hcm-202-web-omega.vercel.app): kiểm bằng `npm run check:deploy -- <địa chỉ> --long`, ghi kết quả vào mục 15.4.
-  - **Chưa chạy được ở G4:** môi trường bị chặn mạng tới host này.
-  - Chờ nhóm mở Network access, hoặc gửi kết quả `/api/health`.
-  - WebSocket qua `experimental_upgradeWebSocket` chạy được.
-  - Kết nối đóng sau 300 giây, client tự nối lại; polling dự phòng hoạt động.
-  - File `api/[...path].ts` (catch-all ngoài Next.js) bắt được mọi `/api/*`. Tài liệu thứ cấp nói được hỗ trợ; nếu không, thêm `rewrites` `/api/(.*)` trong `vercel.json`.
+- [x] **Trên bản deploy thật** (https://hcm-202-web-omega.vercel.app) — G5, kết quả ở mục 15.4:
+  - `npm run check:deploy -- <địa chỉ> --long` đạt sau khi sửa catch-all: WebSocket, đóng ở 300 s và tự nối lại, polling, mọi `/api/*`.
+  - Catch-all `api/[...path].ts` ngoài Next.js chỉ khớp một cấp → đã thêm rewrite `/api/(.*)` trong `vercel.json`.
+  - Phòng 3 máy trên bản deploy (`npm run e2e:online -- --url …`) đạt.
+- [ ] **Huy hiệu "Trực tiếp" trong trình duyệt trên máy thật** — Chromium trong môi trường của Claude Code đi qua proxy chặn TLS nên WebSocket bị mất header `Upgrade` (proxy của môi trường, không phải game; Node/curl qua cùng proxy vẫn nhận 101). Kiểm ở buổi diễn tập G6 (danh sách mục 18).
 
 ---
 

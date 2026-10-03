@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // Chạy thử "Chơi trên một máy" trong Chromium thật (playwright-core): chơi trọn ván qua giao
 // diện, ở 360 × 780 và 1366 × 768. Kiểm: không lỗi console, không request mạng ra ngoài,
-// không cuộn ngang, tải lại → "Tiếp tục ván", hoàn tác.
+// không cuộn ngang, tải lại → "Tiếp tục ván", hoàn tác; G5: ôn câu sai, Luật chơi, Kho câu hỏi,
+// Cài đặt (giao diện, cỡ chữ, hiệu ứng), Menu trong ván, phím tắt (Space, 1–4, M).
 //
 // Dùng: npm run build:offline && node scripts/e2e-local.mjs [--url <địa chỉ>] [--shots <thư mục>] [--motion]
 //   --motion  bật hiệu ứng (mặc định giả lập prefers-reduced-motion để chạy nhanh)
@@ -47,6 +48,77 @@ async function visible(loc) {
   return (await loc.count()) > 0 && (await loc.first().isVisible())
 }
 
+async function noHScroll(page, name) {
+  const sw = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)
+  check(sw <= 0, `${name}: không cuộn ngang`)
+}
+
+/** Luật chơi, Kho câu hỏi, Cài đặt từ trang chủ (mục 12.1, 12.8, 12.9) */
+async function infoScreens(page, label) {
+  await page.getByRole('button', { name: 'Luật chơi' }).click()
+  check(await visible(page.getByRole('heading', { name: 'Power-up' })), `${label}: Luật chơi có mục power-up`)
+  check(await visible(page.getByRole('heading', { name: 'Thẻ bẫy' })), `${label}: Luật chơi có mục thẻ bẫy`)
+  await axeCheck(page, `${label} luật chơi`)
+  await noHScroll(page, `${label} luật chơi`)
+  if (shots) await page.screenshot({ path: join(shots, `${label}-rules.png`), fullPage: true })
+  await page.getByRole('button', { name: /Về trang chủ/ }).first().click()
+
+  await page.getByRole('button', { name: 'Kho câu hỏi' }).click()
+  const total = await page.getByText(/^Tổng số câu hỏi: \d+$/).textContent()
+  const n = Number(total.match(/\d+/)[0])
+  check(n > 0 && (await page.locator('[data-question]').count()) === n, `${label}: Kho câu hỏi hiện đủ ${n} câu`)
+  check(!(await visible(page.getByText('Đáp án đúng', { exact: true }))), `${label}: đáp án ẩn mặc định`)
+  await page.locator('[data-question]').first().getByRole('button', { name: 'Hiện đáp án' }).click()
+  check(await visible(page.locator('[data-question]').first().getByText('Đáp án đúng', { exact: true })), `${label}: bấm "Hiện đáp án" thì hiện`)
+  await page.locator('label.seg', { hasText: 'Trong sạch' }).first().click()
+  const pillarCount = await page.locator('[data-question]').count()
+  check(pillarCount > 0 && pillarCount < n, `${label}: lọc theo trụ cột (${pillarCount}/${n})`)
+  await page.locator('label.seg', { hasText: 'Tất cả' }).first().click()
+  const wrong = page.getByLabel(/Câu từng trả lời sai trên máy này/)
+  check(await wrong.isEnabled(), `${label}: Sổ ôn tập có câu sai từ ván vừa chơi`)
+  await wrong.check()
+  const nWrong = await page.locator('[data-question]').count()
+  await axeCheck(page, `${label} kho câu hỏi`)
+  await noHScroll(page, `${label} kho câu hỏi`)
+  if (shots) await page.screenshot({ path: join(shots, `${label}-bank.png`) })
+  // ôn tập các câu đang lọc bằng bàn phím: 1 = đáp án đầu, Space = câu tiếp
+  await page.getByRole('button', { name: /^Ôn tập \d+ câu đang lọc$/ }).click()
+  await page.keyboard.press('1')
+  check(await visible(page.getByRole('dialog').getByText('Giải thích', { exact: true })), `${label}: ôn tập — phím 1 chọn đáp án, hiện giải thích`)
+  await axeCheck(page, `${label} ôn tập`)
+  // Space (hoặc nút đang có tiêu điểm) sang câu tiếp; phần còn lại bấm nút trực tiếp
+  await page.keyboard.press('Space')
+  const dlg = page.getByRole('dialog')
+  if (nWrong > 1) check(await visible(dlg.getByText(/^Câu 2\/\d+$/)), `${label}: ôn tập — phím Space sang câu tiếp`)
+  for (let i = 0; i < nWrong * 2 + 4 && !(await visible(page.getByText(/^Bạn trả lời đúng/))); i++) {
+    const nextBtn = dlg.getByRole('button', { name: /^(Câu tiếp|Xem kết quả)$/ })
+    if (await visible(nextBtn)) await nextBtn.click()
+    else if (await visible(dlg.locator('button[data-practice-answer]:enabled'))) await dlg.locator('button[data-practice-answer]:enabled').first().click()
+  }
+  check(await visible(page.getByText(/^Bạn trả lời đúng \d+\/\d+ câu\.$/)), `${label}: ôn tập tới hết, có tổng kết`)
+  await dlg.getByRole('button', { name: 'Đóng' }).click()
+  await page.getByRole('button', { name: /Về trang chủ/ }).first().click()
+
+  await page.getByRole('button', { name: 'Cài đặt' }).click()
+  const flip = scheme === 'dark' ? 'Sáng' : 'Tối'
+  await page.locator('label.seg', { hasText: new RegExp(`^${flip}$`) }).click()
+  check((await page.evaluate(() => document.documentElement.dataset.theme)) === (scheme === 'dark' ? 'light' : 'dark'), `${label}: Cài đặt đổi giao diện ${flip.toLowerCase()}`)
+  await page.locator('label.seg', { hasText: /^Lớn$/ }).click()
+  check((await page.evaluate(() => document.documentElement.dataset.text)) === 'large', `${label}: Cài đặt cỡ chữ lớn`)
+  await axeCheck(page, `${label} cài đặt (giao diện ${flip.toLowerCase()}, chữ lớn)`)
+  if (shots) await page.screenshot({ path: join(shots, `${label}-settings.png`), fullPage: true })
+  await page.getByRole('button', { name: /Về trang chủ/ }).first().click()
+  await axeCheck(page, `${label} trang chủ (giao diện ${flip.toLowerCase()}, chữ lớn)`)
+  await noHScroll(page, `${label} trang chủ chữ lớn`)
+  // tải lại vẫn nhớ cài đặt; rồi trả về mặc định
+  await page.reload()
+  check((await page.evaluate(() => document.documentElement.dataset.theme)) !== undefined, `${label}: tải lại vẫn nhớ cài đặt`)
+  await page.getByRole('button', { name: 'Cài đặt' }).click()
+  await page.locator('label.seg', { hasText: /^Theo máy$/ }).nth(1).click()
+  await page.locator('label.seg', { hasText: /^Vừa$/ }).click()
+  await page.getByRole('button', { name: /Về trang chủ/ }).first().click()
+}
+
 async function play(page, { maxSteps = 4000, pick = 'random', label, axe = false }) {
   let answered = 0
   let chose = 0
@@ -75,7 +147,7 @@ async function play(page, { maxSteps = 4000, pick = 'random', label, axe = false
       await roll.click()
       continue
     }
-    if (!axedR && (await visible(page.getByText('Giải thích')))) {
+    if (!axedR && (await visible(page.getByText('Giải thích', { exact: true })))) {
       await axeCheck(page, `${label} giải thích`)
       axedR = true
     }
@@ -97,12 +169,14 @@ async function play(page, { maxSteps = 4000, pick = 'random', label, axe = false
 }
 
 const browser = await chromium.launch({ executablePath })
-for (const [w, h, scheme] of [
+let scheme = 'light'
+for (const [w, h, sch] of [
   [360, 780, 'light'],
   [1366, 768, 'dark'],
 ]) {
+  scheme = sch
   const label = `${w}x${h}-${scheme}`
-  const context = await browser.newContext({ viewport: { width: w, height: h }, colorScheme: scheme, reducedMotion: args.includes('--motion') ? 'no-preference' : 'reduce' })
+  const context = await browser.newContext({ viewport: { width: w, height: h }, colorScheme: sch, reducedMotion: args.includes('--motion') ? 'no-preference' : 'reduce' })
   const page = await context.newPage()
   const errors = []
   const external = []
@@ -146,16 +220,47 @@ for (const [w, h, scheme] of [
   check(res.done, `${label}: chơi trọn ván tới màn kết thúc (${res.answered} câu trả lời)`)
   await axeCheck(page, `${label} kết thúc`)
   if (shots) await page.screenshot({ path: join(shots, `${label}-end.png`), fullPage: true })
-  const sw = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)
-  check(sw <= 0, `${label}: không cuộn ngang`)
+  await noHScroll(page, label)
+  check((await page.locator('[data-pillar-stat]').count()) > 0, `${label}: kết thúc có thống kê theo trụ cột`)
+  const redo = page.getByRole('button', { name: 'Làm lại các câu sai' })
+  if (await visible(redo)) {
+    await redo.click()
+    await page.locator('button[data-practice-answer]').first().click()
+    check(await visible(page.getByRole('dialog').getByText('Giải thích', { exact: true })), `${label}: làm lại câu sai — hiện giải thích`)
+    await page.getByRole('dialog').getByRole('button', { name: /^(Câu tiếp|Xem kết quả)$/ }).click()
+    await page.keyboard.press('Escape')
+  }
   // sau khi kết thúc, về trang chủ không còn "Tiếp tục ván"
   await page.getByRole('button', { name: 'Về trang chủ' }).click()
   check(!(await visible(page.getByRole('button', { name: 'Tiếp tục ván' }))), `${label}: ván đã kết thúc không còn "Tiếp tục ván"`)
+  await infoScreens(page, label)
   // thử thách cá nhân
   await page.getByRole('button', { name: 'Chơi trên một máy' }).click()
   while (await visible(page.getByRole('button', { name: 'Bỏ người này' }))) await page.getByRole('button', { name: 'Bỏ người này' }).first().click()
   while (await page.getByRole('button', { name: 'Máy chơi cùng −' }).isEnabled()) await page.getByRole('button', { name: 'Máy chơi cùng −' }).click()
   await page.getByRole('button', { name: 'Bắt đầu' }).click()
+  // Menu trong ván: Luật chơi + Cài đặt, không có Kho câu hỏi
+  await page.getByRole('button', { name: 'Menu' }).click()
+  check(await visible(page.getByRole('dialog').getByRole('heading', { name: 'Các loại ô' })), `${label}: Menu trong ván mở Luật chơi`)
+  check(!(await visible(page.getByRole('button', { name: 'Kho câu hỏi' }))), `${label}: không có Kho câu hỏi trong ván`)
+  await axeCheck(page, `${label} menu trong ván`)
+  await page.getByRole('dialog').getByRole('button', { name: 'Đóng' }).click()
+  // phím tắt: M tắt tiếng, Space tung, 1 chọn đáp án, Space tiếp tục
+  await page.keyboard.press('m')
+  check(await visible(page.getByRole('button', { name: 'Bật tiếng (M)' })), `${label}: phím M tắt tiếng`)
+  await page.keyboard.press('m')
+  let keyAnswered = false
+  for (let i = 0; i < 12 && !keyAnswered; i++) {
+    if (await visible(page.getByRole('button', { name: 'Tung xúc xắc' }))) await page.keyboard.press('Space')
+    await page.clock.runFor(1500)
+    if ((await page.locator('button[data-answer]:enabled').count()) > 0) {
+      await page.keyboard.press('1')
+      keyAnswered = await visible(page.getByRole('dialog').getByText('Giải thích', { exact: true }))
+      await page.keyboard.press('Space')
+    } else if (await visible(page.getByRole('button', { name: /^Tiếp tục$/ }))) await page.keyboard.press('Space')
+    await page.clock.runFor(1500)
+  }
+  check(keyAnswered, `${label}: phím Space tung xúc xắc, phím 1 trả lời`)
   const solo = await play(page, { label: `${label}-solo`, pick: 'first' })
   check(solo.done, `${label}: thử thách cá nhân chơi tới kết thúc`)
   const soloBox = await page

@@ -1,7 +1,14 @@
 import { useEffect, useState } from 'react'
+import { resolveReduced, useSettings } from './settings'
 
-/** prefers-reduced-motion (mục 16) */
+/** Giảm hiệu ứng (mục 16): cài đặt "Hiệu ứng chuyển động", "Theo máy" = prefers-reduced-motion */
 export function useReducedMotion(): boolean {
+  const { motion } = useSettings()
+  return resolveReduced(motion, useSystemReducedMotion())
+}
+
+/** prefers-reduced-motion của máy */
+export function useSystemReducedMotion(): boolean {
   const [reduced, setReduced] = useState(() => {
     try {
       return globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false

@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import type { GameEvent, GameState } from '../engine/types'
+import { playSound, type SoundName } from '../lib/sound'
 
 // Diễn hoạt tuần tự theo danh sách sự kiện của state (mục 15.3, 16): xúc xắc lăn, ngựa đi
-// từng ô, trượt lùi khi dính bẫy. Tắt khi prefers-reduced-motion.
+// từng ô, trượt lùi khi dính bẫy, âm thanh đúng lúc (mục 15.7), pháo giấy khi về đích.
+// Giảm hiệu ứng: không chờ giữa các bước, không có tiếng bước đi.
 
 export type Positions = Record<string, number>
 
@@ -14,14 +16,26 @@ export function positionsOf(s: GameState): Positions {
   return out
 }
 
-type Segment = { kind: 'dice'; face: number; value: number } | { kind: 'move'; key: string; from: number; to: number }
+type Segment = { kind: 'dice'; face: number; value: number } | { kind: 'move'; key: string; from: number; to: number } | { kind: 'cue'; sound: SoundName }
 
 const MOVE_EVENTS = new Set(['answeredCorrect', 'rested', 'moved', 'advanced', 'movedBack'])
 
-function segmentsOf(events: GameEvent[]): Segment[] {
+/** sự kiện → âm thanh (phát khi diễn tới sự kiện đó) */
+const CUES: Record<string, SoundName> = {
+  answeredCorrect: 'correct',
+  answeredWrong: 'wrong',
+  timedOut: 'wrong',
+  powerupGained: 'powerup',
+  trapDrawn: 'trap',
+  finished: 'finish',
+}
+
+export function segmentsOf(events: GameEvent[]): Segment[] {
   const out: Segment[] = []
   for (const e of events) {
     const d = (e.data ?? {}) as Record<string, number>
+    const cue = CUES[e.type]
+    if (cue) out.push({ kind: 'cue', sound: cue })
     if (e.type === 'rolled') out.push({ kind: 'dice', face: d.face, value: d.value })
     else if (MOVE_EVENTS.has(e.type) && e.playerId && d.from !== d.to && typeof d.to === 'number')
       out.push({ kind: 'move', key: horseKey(e.playerId, d.horse ?? 0), from: d.from, to: d.to })
@@ -46,6 +60,8 @@ export function useBoardAnimation(state: GameState, reduced: boolean) {
   const [shownSeq, setShownSeq] = useState(state.eventSeq)
   // lúc diễn hoạt xong gần nhất — cửa sổ kết quả được hiện đủ thời gian tính từ đây
   const [idleAt, setIdleAt] = useState(0)
+  // tăng mỗi lần có người về đích → pháo giấy
+  const [burst, setBurst] = useState(0)
   const seqRef = useRef(state.eventSeq)
   const queue = useRef<Segment[]>([])
   const runningRef = useRef(false)
@@ -86,7 +102,11 @@ export function useBoardAnimation(state: GameState, reduced: boolean) {
     void (async () => {
       while (alive.current && queue.current.length > 0) {
         const seg = queue.current.shift()!
-        if (seg.kind === 'dice') {
+        if (seg.kind === 'cue') {
+          playSound(seg.sound)
+          if (seg.sound === 'finish') setBurst((b) => b + 1)
+        } else if (seg.kind === 'dice') {
+          playSound('dice')
           setDice((d) => ({ ...d, rolling: !reducedRef.current }))
           await sleep(DICE_MS)
           setDice({ face: seg.face, value: seg.value, rolling: false })
@@ -101,6 +121,7 @@ export function useBoardAnimation(state: GameState, reduced: boolean) {
           for (let st = seg.from + dir; dir > 0 ? st <= seg.to : st >= seg.to; st += dir) {
             pos.current = { ...pos.current, [seg.key]: st }
             setPositions(pos.current)
+            playSound('step')
             await sleep(STEP_MS)
           }
         }
@@ -117,5 +138,5 @@ export function useBoardAnimation(state: GameState, reduced: boolean) {
   }, [state])
 
   const busy = running || shownSeq < state.eventSeq
-  return { positions, dice, busy, idleAt }
+  return { positions, dice, busy, idleAt, burst }
 }

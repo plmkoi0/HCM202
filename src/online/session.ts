@@ -42,3 +42,8 @@ export function codeFromPath(path: string): string | null {
 export function inviteLink(code: string): string {
   return `${location.origin}/p/${code}`
 }
+
+/** Xóa biệt danh + màu đã nhớ (Cài đặt → Xóa dữ liệu trên máy này) */
+export function clearProfile(): void {
+  remove(PROFILE_KEY)
+}

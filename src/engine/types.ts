@@ -184,6 +184,8 @@ export interface PlayerStats {
   guessTotal: number
   /** id các câu trả lời sai (ôn lại ở màn kết thúc) */
   wrongIds: string[]
+  /** theo trụ cột của câu đã trả lời: [số câu đúng, số câu đã trả lời] (thống kê cuối ván; ván lưu cũ không có) */
+  byPillar?: Record<string, [number, number]>
   /** số lượt liên tiếp hiện tại chưa tiến được */
   stall: number
   maxStall: number

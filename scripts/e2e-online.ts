@@ -7,6 +7,7 @@
 //       npm run e2e:online -- --url https://ten-du-an.vercel.app   (chạy trên bản deploy thật: hạn thật,
 //       chọn 5 phút; không cắt được WebSocket phía server nên chỉ ngắt mạng của trình duyệt)
 
+import { createHash, X509Certificate } from 'node:crypto'
 import { mkdirSync, readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { join } from 'node:path'
@@ -64,9 +65,16 @@ const server = remote
   ? { url: remote, dropSockets: () => 0, close: async () => {} }
   : await startLocalServer({ ctx: createContext(new MemoryStore(), { data: fastData(serverData, 0.2) }), staticDir: join(root, 'dist'), socketMaxLifeMs: 25_000 })
 if (remote) console.log(`  chạy trên ${remote}`)
-// bản deploy: đi qua proxy HTTPS của môi trường (nếu có), như mọi công cụ khác
+// bản deploy: đi qua proxy HTTPS của môi trường (nếu có), như mọi công cụ khác. Proxy giải mã lại
+// TLS bằng CA riêng → E2E_PROXY_CA = đường dẫn chứng chỉ CA đó; Chromium chỉ tin thêm đúng khóa CA này.
 const proxy = remote && process.env.HTTPS_PROXY ? { server: process.env.HTTPS_PROXY } : undefined
-const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH ?? '/opt/pw-browsers/chromium', proxy })
+const caPath = remote ? process.env.E2E_PROXY_CA : undefined
+const spki = caPath ? createHash('sha256').update(new X509Certificate(readFileSync(caPath)).publicKey.export({ type: 'spki', format: 'der' })).digest('base64') : null
+const browser = await chromium.launch({
+  executablePath: process.env.CHROMIUM_PATH ?? '/opt/pw-browsers/chromium',
+  proxy,
+  args: spki ? [`--ignore-certificate-errors-spki-list=${spki}`] : [],
+})
 const errors: string[] = []
 const pages: Page[] = []
 const contexts = []
@@ -134,6 +142,11 @@ if (shots) await host.screenshot({ path: join(shots, 'lobby.png'), fullPage: tru
 await host.getByRole('button', { name: 'Bắt đầu' }).click()
 await Promise.all(pages.map((p) => p.locator('[data-room-status="playing"]').waitFor()))
 check(true, 'cả 3 máy vào ván')
+// L5: không mở được Kho câu hỏi khi đang ở trong phòng; Menu chỉ có Luật chơi + Cài đặt
+check((await host.getByRole('button', { name: 'Kho câu hỏi' }).count()) === 0, 'trong phòng không có nút Kho câu hỏi')
+await host.getByRole('button', { name: 'Menu' }).click()
+check(await visible(host, host.getByRole('dialog').getByRole('tab', { name: 'Cài đặt' })), 'Menu trong ván có Luật chơi + Cài đặt')
+await host.getByRole('dialog').getByRole('button', { name: 'Đóng' }).click()
 await axe(host, 'bàn cờ (chơi qua phòng)')
 const t0 = Date.now()
 let disconnected = false
@@ -168,7 +181,11 @@ check(ended, `chơi tới kết thúc trên cả 3 máy (${Math.round((Date.now(
 await sleep(1500)
 const versions = await Promise.all(pages.map((p) => p.locator('[data-room-version]').getAttribute('data-room-version')))
 check(new Set(versions).size === 1, `3 máy cùng trạng thái cuối (version ${versions.join(', ')})`)
-check(await visible(g2, g2.locator('[data-conn="ws"]')), 'máy từng mất mạng đã nối lại WebSocket ("Trực tiếp")')
+if (remote) {
+  // Chromium trong môi trường có proxy chặn TLS không nâng cấp được WebSocket (proxy bỏ header Upgrade);
+  // WebSocket thật được check:deploy kiểm bằng Node → ở đây chỉ đòi máy đã có kết nối lại
+  check(await visible(g2, g2.locator('[data-conn="ws"], [data-conn="poll"]')), `máy từng mất mạng đã có kết nối lại (${await g2.locator('[data-conn]').first().getAttribute('data-conn')})`)
+} else check(await visible(g2, g2.locator('[data-conn="ws"]')), 'máy từng mất mạng đã nối lại WebSocket ("Trực tiếp")')
 check(await visible(g3, g3.locator('[data-room-status="ended"]')), 'máy tải lại trang vẫn về đúng phòng (phiên đã lưu)')
 await axe(host, 'kết thúc (chơi qua phòng)')
 if (shots) await g2.screenshot({ path: join(shots, 'end-mobile.png'), fullPage: true })

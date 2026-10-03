@@ -205,6 +205,7 @@ export function createGame(data: GameData, setup: GameSetup): GameState {
         guessCorrect: 0,
         guessTotal: 0,
         wrongIds: [],
+        byPillar: {},
         stall: 0,
         maxStall: 0,
       },
@@ -517,6 +518,10 @@ function resolveAnswer(data: GameData, s: GameState, now: number, choice: number
     if (timedOut) p.stats.timeouts += 1
     if (!p.stats.wrongIds.includes(q.id)) p.stats.wrongIds.push(q.id)
   }
+  const bp = (p.stats.byPillar ??= {})
+  const cell = (bp[q.pillar] ??= [0, 0])
+  cell[1] += 1
+  if (correct) cell[0] += 1
   // Đoán cùng: chỉ tính vào thống kê, không ảnh hưởng di chuyển (mục 8)
   for (const [pid, g] of Object.entries(t.guesses)) {
     const gp = playerById(s, pid)

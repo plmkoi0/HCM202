@@ -301,7 +301,7 @@ export const Board = memo(function Board({ data, state, positions, target, curre
 })
 
 
-function Swatch({ bg, stroke, icon, iconColor, strokeWidth = 3 }: { bg: string; stroke: string; icon: string; iconColor: string; strokeWidth?: number }) {
+export function Swatch({ bg, stroke, icon, iconColor, strokeWidth = 3 }: { bg: string; stroke: string; icon: string; iconColor: string; strokeWidth?: number }) {
   return (
     <svg width={30} height={30} viewBox="-15 -15 30 30" aria-hidden="true" className="shrink-0">
       <circle r={12.5} style={{ fill: bg }} stroke={stroke} strokeWidth={strokeWidth} />
@@ -310,11 +310,10 @@ function Swatch({ bg, stroke, icon, iconColor, strokeWidth = 3 }: { bg: string; 
   )
 }
 
-/** Chú thích bàn cờ (mục 12.4): loại ô, màu + chữ viết tắt trụ cột, ô đích của bước đi */
-export function BoardLegend({ data }: { data: GameData }) {
-  const t = site.board
+/** Các loại ô kèm hình mẫu (chú thích bàn cờ, Luật chơi) */
+export function cellLegendItems(data: GameData): { key: string; swatch: React.ReactNode; label: string; text?: string }[] {
   const ct = data.board.cellTypes
-  const items: { key: string; swatch: React.ReactNode; label: string; text?: string }[] = [
+  return [
     { key: 'gate', swatch: <Swatch bg={tokens.colors[0].color} stroke="var(--ink)" icon="gate" iconColor="#fff" />, label: ct.gate?.label ?? '', text: ct.gate?.description },
     {
       key: 'question',
@@ -332,6 +331,12 @@ export function BoardLegend({ data }: { data: GameData }) {
     },
     { key: 'finish', swatch: <Swatch bg={POWERUP_FILL} stroke="var(--ink)" icon="finish" iconColor="#5A3B00" />, label: ct.finish?.label ?? '', text: ct.finish?.description },
   ]
+}
+
+/** Chú thích bàn cờ (mục 12.4): loại ô, màu + chữ viết tắt trụ cột, ô đích của bước đi */
+export function BoardLegend({ data }: { data: GameData }) {
+  const t = site.board
+  const items = cellLegendItems(data)
   return (
     <details className="card board-light text-sm">
       <summary className="cursor-pointer font-bold">{t.legend}</summary>
