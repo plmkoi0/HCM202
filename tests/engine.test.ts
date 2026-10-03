@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { branchPillar, cellAtStep, geometry, homeCellPillar, ringCellInfo, stepBack, stepToCell } from '../src/engine/board'
 import { canUndo, pushHistory, startHistory, undo } from '../src/engine/history'
 import { pickQuestion, resolvePool } from '../src/engine/questions'
-import { applyAction, createGame, currentPlayer, pendingAutoAction, resolveConfig } from '../src/engine/reducer'
+import { applyAction, createGame, currentPlayer, pendingAutoAction, resolveConfig, restartDeadline, shiftTime } from '../src/engine/reducer'
 import { buildGameData } from '../src/engine/data'
 import { clientView } from '../src/engine/view'
 import type { GameState, Question } from '../src/engine/types'
@@ -364,7 +364,10 @@ describe('power-up (mục 6)', () => {
         (x) => act(x, { type: 'ROLL', actor: P1, now: T0 }),
         (r) => r.turn.roll?.face === 2 && r.turn.outcome?.kind === 'trap' && r.turn.outcome.card === card,
       )
-      expect(s.turn.outcome).toMatchObject({ kind: 'trap', blocked: true })
+      expect(s.turn.outcome).toMatchObject({ kind: 'trap', blocked: true, back: 0 })
+      // thẻ lùi bị chặn vẫn rút số ô (để nhãn thẻ đầy đủ); thẻ mất lượt không có số
+      const drawn = (s.turn.outcome as { drawn?: number }).drawn
+      expect(card === 'back' ? [1, 2, 3].includes(drawn ?? 0) : drawn === undefined).toBe(true)
       expect(step(s)).toBe(8)
       expect(player(s).skipNext).toBe(false)
       expect(player(s).bag).toEqual([])
@@ -839,6 +842,23 @@ describe('khác', () => {
     expect(clientView(s, P2).turn.guesses).toEqual({ [P2]: 1 })
     expect(clientView(s).turn.guesses).toEqual({})
     expect(s.turn.guesses).toEqual({ [P2]: 1, p3: 2 })
+  })
+
+  it('lượt của máy: người ngồi cùng bấm Tiếp tục được trước hạn; máy và người lạ thì không', () => {
+    let s = forceFirst(newGame({ n: 2, bots: [0] }))
+    s = act(s, { type: 'BOT_STEP', now: s.deadline! })
+    while (s.phase !== 'reveal') s = act(s, { type: 'BOT_STEP', now: s.deadline! })
+    expect(tryAct(s, { type: 'NEXT_TURN', actor: P1, now: T0 })).toEqual({ ok: false, error: 'TOO_EARLY' })
+    expect(tryAct(s, { type: 'NEXT_TURN', actor: 'x', now: T0 })).toEqual({ ok: false, error: 'TOO_EARLY' })
+    expect(tryAct(s, { type: 'NEXT_TURN', actor: P2, now: T0 }).ok).toBe(true)
+  })
+
+  it('restartDeadline / shiftTime: đặt lại hạn theo pha, dời mốc thời gian', () => {
+    const s = rollFace(game(), 1)
+    const r = restartDeadline(s, T0 + 50_000)
+    expect(r.deadline).toBe(T0 + 50_000 + 20_000)
+    const sh = shiftTime(s, 1000)
+    expect([sh.startedAt, sh.endsAt, sh.deadline]).toEqual([s.startedAt + 1000, s.endsAt! + 1000, s.deadline! + 1000])
   })
 
   it('tạo ván: 1–5 người, không trùng màu', () => {

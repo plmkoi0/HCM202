@@ -89,6 +89,11 @@ export interface Pillar {
   label: string
   name: string
   color: string
+  /** chữ viết tắt và biểu tượng hiện trên ô câu hỏi (D6) */
+  abbr?: string
+  icon?: string
+  /** màu chữ đủ tương phản trên nền sáng (màu trụ cột vàng đồng quá nhạt cho chữ nhỏ) */
+  textColor?: string
 }
 
 export interface Question {
@@ -219,7 +224,8 @@ export type Outcome =
   | { kind: 'answered'; correct: boolean; timedOut: boolean; chosen: number | null; correctIndex: number; questionId: string; moved: number; finished: boolean }
   | { kind: 'rest'; moved: number }
   | { kind: 'powerup'; moved: number; powerup: PowerupId; extra?: number; kept: boolean }
-  /** back = số ô lùi thực tế (nhãn "lùi {n} ô"); drawn = số rút được (1–3), có thể lớn hơn khi bị chặn ở cổng */
+  /** back = số ô lùi thực tế (nhãn "lùi {n} ô"); drawn = số rút được (1–3), có thể lớn hơn khi bị chặn ở cổng;
+   *  bị Khiên chặn: back = 0, drawn = số trên thẻ bị chặn */
   | { kind: 'trap'; moved: number; card: string; back?: number; drawn?: number; blocked: boolean }
   | { kind: 'blocked' }
   | { kind: 'stable'; left: boolean }

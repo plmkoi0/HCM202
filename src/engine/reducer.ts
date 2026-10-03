@@ -355,7 +355,8 @@ function computeTarget(data: GameData, s: GameState, geo: Geometry, step: number
   return t
 }
 
-function movableHorses(data: GameData, s: GameState, p: PlayerState, face: number, value: number): number[] {
+/** Các ngựa đi được với lần tung này */
+export function movableHorses(data: GameData, s: GameState, p: PlayerState, face: number, value: number): number[] {
   const geo = geometryOf(data, s)
   const res: number[] = []
   p.horses.forEach((h, i) => {
@@ -610,8 +611,10 @@ function drawTrap(data: GameData, s: GameState, now: number, moved: number): voi
     p.bag.splice(shieldIdx, 1)
     p.stats.powerupsUsed += 1
     p.stats.shieldBlocks += 1
-    t.outcome = { kind: 'trap', moved, card: card.id, blocked: true }
-    emit(s, 'trapDrawn', p.id, { card: card.id, blocked: true })
+    // thẻ "lùi" vẫn rút số ô để hiện đúng thẻ bị chặn ("Bẫy — lùi 2 ô" + "Khiên đã chặn")
+    const drawn = card.kind === 'back' ? nextInt(s, card.min ?? 1, card.max ?? 3) : undefined
+    t.outcome = { kind: 'trap', moved, card: card.id, back: 0, drawn, blocked: true }
+    emit(s, 'trapDrawn', p.id, { card: card.id, blocked: true, n: drawn })
     emit(s, 'shieldBlocked', p.id, { card: card.id })
     toReveal(s, p, now, 'notice')
     return
@@ -847,7 +850,10 @@ function dispatch(data: GameData, s: GameState, action: Action): void {
     case 'NEXT_TURN': {
       requirePhase(s, 'reveal')
       const p = currentPlayer(s)
-      const early = action.actor === p.id && !p.isBot
+      // Đi sớm hơn hạn: người đến lượt; hoặc bất kỳ người (không phải máy) khi đang là lượt của máy
+      // (chơi trên một máy: người ngồi cùng bấm "Tiếp tục"; server có thể giới hạn thêm).
+      const actor = action.actor ? playerById(s, action.actor) : undefined
+      const early = !!actor && !actor.isBot && (actor.id === p.id || p.isBot)
       if (!early) requireDeadline(s, now)
       continueTurn(data, s, now)
       return
@@ -895,6 +901,29 @@ export function pendingAutoAction(s: GameState, now: number): Action | null {
   if (s.phase === 'roll') return { type: 'AUTO_ROLL', now }
   if (s.phase === 'reveal') return { type: 'NEXT_TURN', now }
   return { type: 'TIMEOUT', now }
+}
+
+/**
+ * Đặt lại hạn của pha hiện tại tính từ `now` (dùng khi hoàn tác hoặc tiếp tục ván đã lưu
+ * ở "Chơi trên một máy" — không để hạn cũ đã trôi qua kích hoạt hành động tự động ngay).
+ */
+export function restartDeadline(s: GameState, now: number): GameState {
+  if (s.phase === 'ended') return s
+  const c = structuredClone(s)
+  const p = currentPlayer(c)
+  const kind: DeadlineKind =
+    c.phase === 'roll' ? 'roll' : c.phase === 'question' ? 'answer' : c.phase === 'reveal' ? (c.turn.outcome?.kind === 'answered' ? 'reveal' : 'notice') : 'choose'
+  setDeadline(c, p, kind, now)
+  return c
+}
+
+/** Dời mọi mốc thời gian của ván đi `delta` ms (tiếp tục ván đã lưu sau một khoảng nghỉ) */
+export function shiftTime(s: GameState, delta: number): GameState {
+  const c = structuredClone(s)
+  c.startedAt += delta
+  if (c.endsAt !== null) c.endsAt += delta
+  if (c.deadline !== null) c.deadline += delta
+  return c
 }
 
 /** Số bước còn lại tới Đích của một người (tổng các ngựa) */

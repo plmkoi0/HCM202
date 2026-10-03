@@ -10,7 +10,9 @@
       "color": "#A4262C",
       "onColor": "#F4EDE0",
       "textColor": "#A4262C",
-      "textColorDark": "#E88A8E"
+      "textColorDark": "#E88A8E",
+      "abbr": "DC",
+      "icon": "vote"
     },
     {
       "id": "phap-quyen",
@@ -21,7 +23,9 @@
       "color": "#23395B",
       "onColor": "#F4EDE0",
       "textColor": "#23395B",
-      "textColorDark": "#9DB4DB"
+      "textColorDark": "#9DB4DB",
+      "abbr": "PQ",
+      "icon": "scale"
     },
     {
       "id": "trong-sach",
@@ -32,7 +36,10 @@
       "color": "#B8892B",
       "onColor": "#1F1B16",
       "textColor": "#7A5A17",
-      "textColorDark": "#D9AE55"
+      "textColorDark": "#D9AE55",
+      "abbr": "TS",
+      "icon": "shield"
     }
-  ]
+  ],
+  "note": "abbr, icon: chữ viết tắt và biểu tượng trụ cột hiện trên ô câu hỏi (D6, mục 12) — thêm ở G2; không phải dữ liệu chép từ web."
 }

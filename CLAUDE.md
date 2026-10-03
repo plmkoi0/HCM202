@@ -57,15 +57,16 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - **Không commit lên nhánh web**; không import mã hay dữ liệu từ nhánh web; không đồng bộ dữ liệu lại với web.
 - Không sao chép mã, giao diện, tên, đồ họa, âm thanh của game tham khảo (Phụ lục A).
 - Cập nhật `CLAUDE.md` này và mục 18 tài liệu thiết kế sau mỗi mốc.
-- Kiểm tra trước khi commit (từ G1): `npm run test && npm run build && npm run build:offline && npm run lint` ở gốc nhánh.
+- Kiểm tra trước khi commit (từ G1): `npm run test && npm run build && npm run build:offline && npm run lint` ở gốc nhánh. Từ G2, khi đổi giao diện: thêm `npm run e2e` (Chromium thật ở `/opt/pw-browsers/chromium` hoặc `CHROMIUM_PATH`; `--motion` để bật hiệu ứng, `--shots <thư mục>` để chụp màn hình).
 
 ## Cấu trúc thư mục
 
-**Hiện tại (sau G1):**
+**Hiện tại (sau G2):**
 ```
 /
 ├── CLAUDE.md, README.md, .gitignore, .oxlintrc.json
-├── package.json, package-lock.json      ← Vite 8 + React 19 + TS 6 + Tailwind 4 + Vitest 5 + oxlint; tsx chạy script TS
+├── package.json, package-lock.json      ← Vite 8 + React 19 + TS 6 + Tailwind 4 + Vitest 5 + oxlint; tsx chạy script TS;
+│                                          lucide-react (biểu tượng SVG); playwright-core + axe-core (chỉ để chạy thử)
 ├── vite.config.ts                       ← mode "offline": vite-plugin-singlefile → dist-offline/index.html, define __OFFLINE__
 ├── tsconfig.json, tsconfig.app.json (src), tsconfig.node.json (vite.config, scripts, tests; allowJs)
 ├── index.html                           ← favicon SVG nhúng sẵn, meta robots noindex
@@ -78,17 +79,25 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 ├── scripts/
 │   ├── import-questions.mjs             ← CAU-HOI-GAME.md → questions.json; báo dòng sai, không ghi đè khi lỗi; lấp câu hỏi thử
 │   ├── simulate.ts                      ← mô phỏng cân bằng (npm run simulate)
+│   ├── e2e-local.mjs                    ← chạy thử "Chơi trên một máy" trong Chromium (npm run e2e, sau build:offline)
 │   └── lib/question-table.mjs, lib/quiz-source.mjs   ← đọc bảng câu hỏi, mẫu chữ cái phương án; đọc QUIZ-KIEN-THUC.md
 ├── src/
 │   ├── data/                            ← board, rules, powerups, traps, bots, tokens, site, questions (sinh từ script),
 │   │                                      test-questions (kho câu hỏi thử), artifacts, mindmap, pillars, NGUON.md
 │   ├── engine/                          ← types, rng (mulberry32), data, board (hình học, đường đi), questions (chọn câu),
 │   │                                      reducer (luật), bot, ranking, history (hoàn tác), view (state gửi client), index
-│   ├── lib/gameData.ts                  ← nạp JSON → GameData
+│   ├── game/                            ← local.ts (lưu / tiếp tục / hoàn tác / kỷ lục), useLocalGame (hành động, tạm dừng,
+│   │                                      tự động khi quá hạn), useBoardAnimation (xúc xắc lăn, ngựa đi từng ô)
+│   ├── components/                      ← Board (+ BoardLegend), Dice, Countdown, Sheet (giữ tiêu điểm), QuestionPanel,
+│   │                                      TurnPanels (kết quả, túi đầy, chọn ngựa), PlayerStrip, EndPanel, ArtifactCard,
+│   │                                      PillarChip, RichText, ErrorBoundary, icons
+│   ├── screens/                         ← Home, LocalSetup, LocalGame
+│   ├── lib/                             ← gameData (nạp JSON → GameData), boardLayout (toạ độ SVG), eventText (nhật ký),
+│   │                                      storage (localStorage có try/catch), text (fill, clock, biệt danh), hooks
 │   ├── assets/fonts.css, assets/fonts/  ← Be Vietnam Pro 400/400i/600/700, Noto Serif 700/400i + OFL
-│   ├── index.css, main.tsx, App.tsx     ← khung tối thiểu (G2 làm giao diện)
+│   ├── index.css, main.tsx, App.tsx     ← token màu sáng/tối, lớp nút/thẻ; App chuyển màn + ErrorBoundary
 │   └── vite-env.d.ts
-└── tests/                               ← helpers, data, questions, engine (Vitest, môi trường node)
+└── tests/                               ← helpers, data, questions, engine, local (Vitest, môi trường node)
 ```
 
 **Đích (mục 15.1):**
@@ -122,8 +131,8 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 |---|---|---|
 | **G0 — Nhánh và rà soát** | Nhánh mồ côi, chép dữ liệu + `NGUON.md`, `CLAUDE.md`, đối chiếu thiết kế với dữ liệu, xác minh Vercel, ước lượng chi phí, mẫu câu hỏi, cập nhật mục 20 | ☑ Xong, nhóm duyệt 03/10/2026 (bản thiết kế 1.5) |
 | **G1 — Nền móng** | Dự án Vite, JSON + kiểu, 12 câu khởi đầu + câu hỏi thử lấp chỗ thiếu, script nhập câu hỏi, test dữ liệu, engine + bot + unit test, mô phỏng cân bằng ở 20 s và 25 s/lượt | ☑ Xong 03/10/2026 — 120 test; mô phỏng đạt mục tiêu (mục 11) |
-| **G2 — Chơi trên một máy** | Bàn cờ SVG, xúc xắc, ngựa, ô, power-up, bẫy, bot, thử thách cá nhân, lưu/tiếp tục, hoàn tác | ☐ Tiếp theo |
-| **G3 — Server** | Phòng, sức chứa, màu, hành động, bot, Redis, pub/sub, WebSocket + polling, nối lại, chủ phòng, `/api/health`, test, mô phỏng tải | ☐ |
+| **G2 — Chơi trên một máy** | Bàn cờ SVG, xúc xắc, ngựa, ô, power-up, bẫy, bot, thử thách cá nhân, lưu/tiếp tục, hoàn tác | ☑ Xong 03/10/2026 — 131 test; `npm run e2e` đạt ở 360 × 780 sáng và 1366 × 768 tối (axe không lỗi) |
+| **G3 — Server** | Phòng, sức chứa, màu, hành động, bot, Redis, pub/sub, WebSocket + polling, nối lại, chủ phòng, `/api/health`, test, mô phỏng tải | ☐ Tiếp theo |
 | **G4 — Chơi qua phòng** | Trang chủ, tạo/vào phòng (mã, QR, link), phòng chờ, chơi qua mạng, trạng thái kết nối, kết thúc, chơi lại, Đoán cùng | ☐ |
 | **G5 — Hoàn thiện** | Ôn câu sai, thống kê, Kho câu hỏi, Luật chơi, Cài đặt, âm thanh, phím tắt, giao diện, reduced motion | ☐ |
 | **G6 — Phát hành** | Hướng dẫn tạo project Vercel + Redis (nhóm làm), deploy preview, diễn tập, `check:release`, bản offline, README | ☐ |
@@ -143,6 +152,15 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - Chọn câu: không lặp tới hết kho, trộn lại vòng mới (câu vừa hỏi không ra ngay), ưu tiên câu chưa gặp; thiếu tổ hợp thì mượn (mục 8).
 - Kết quả mô phỏng và các chi tiết tự chọn ở G1 (mặc định "dừng ngay", hiện giải thích 8 s, Đổi câu đặt lại đồng hồ…) ghi ở mục 11 và 20 tài liệu thiết kế.
 - `npm audit` báo `braces` (qua `vite-plugin-singlefile` → `micromatch`): chỉ là công cụ build, không vào mã chạy.
+
+## Ghi chú giao diện (G2)
+- Mọi chữ giao diện ở `site.json` (kể cả nhãn nút, lỗi, nhật ký); component chỉ ghép dấu câu.
+- Bàn cờ luôn nền sáng (lớp `.board-light` đặt lại biến màu); trang theo chế độ sáng/tối của máy. Màu chữ trên nền vàng: `--on-gold`; chữ nhấn: `--accent-text`.
+- `useBoardAnimation` diễn tuần tự theo `state.log` (seq > seq đã diễn); `busy` = đang diễn hoặc còn sự kiện chưa diễn → cửa sổ chưa mở, hành động tự động chờ. `idleAt` = lúc diễn xong; `autoActionAt(state, idleAt)` = lúc tự gửi hành động (cửa sổ kết quả hiện đủ `revealMs` / `noticeMs` sau khi diễn xong).
+- `useLocalGame`: `apply(action, human)`; `act(make)` chọn người thao tác (lượt của máy → người ngồi cùng); `setPaused` dời hạn pha + giới hạn ván khi chạy tiếp; ghi dấu "lần cuối thấy" mỗi 2 giây (`SEEN_KEY`) để `resumeLocal` không hoàn giờ khi tải lại.
+- Khóa localStorage: `local.v1` (ván), `local.seen.v1`, `local.setup.v1` (thiết lập lần trước — đọc lại qua `sanitize`), `records.v1` (kỷ lục thử thách cá nhân). Đọc/ghi luôn trong try/catch; ván lưu hỏng / không hợp lệ (`isUsableSave`) thì bỏ.
+- Sheet: `data-autofocus` được ưu tiên, Tab vòng trong cửa sổ, đóng thì trả tiêu điểm; nội dung đổi (câu hỏi → giải thích) thì tiêu điểm sang nút `data-autofocus` mới.
+- Chạy thử: `page.clock` giả lập giờ (chạy nhanh); axe chờ hiệu ứng có hạn chạy xong mới kiểm.
 
 ## Ghi chú dữ liệu
 - 3 trụ cột: `dan-chu` (Đỏ son `#A4262C`), `phap-quyen` (Xanh mực `#23395B`), `trong-sach` (Vàng đồng `#B8892B`; chữ trên nền sáng dùng `#7A5A17` để đạt WCAG AA). Tên trụ cột đọc từ dữ liệu, không viết cứng.

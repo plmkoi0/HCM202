@@ -1,24 +1,60 @@
-import { hasTestQuestions, questionList, site } from './lib/gameData'
+import { useState } from 'react'
+import { ErrorBoundary } from './components/ErrorBoundary'
+import { clearSave, loadLastSeen, loadSave, newLocalGame, resumeLocal, type LocalSave, type LocalSetup as Setup } from './game/local'
+import { gameData } from './lib/gameData'
+import { Home } from './screens/Home'
+import { LocalGame } from './screens/LocalGame'
+import { LocalSetup } from './screens/LocalSetup'
 
-// G1: khung tối thiểu để build được; giao diện bàn cờ làm ở G2 (mục 18).
+type Screen = { name: 'home' } | { name: 'setup' } | { name: 'game'; save: LocalSave; key: number }
+
+function randomSeed(): number {
+  try {
+    return crypto.getRandomValues(new Uint32Array(1))[0]
+  } catch {
+    return Math.floor(Math.random() * 2 ** 32)
+  }
+}
+
 export default function App() {
+  const [screen, setScreenState] = useState<Screen>({ name: 'home' })
+  // đổi màn → về đầu trang (vd. từ thiết lập dài sang bàn cờ trên điện thoại)
+  const setScreen = (next: Screen) => {
+    setScreenState(next)
+    window.scrollTo(0, 0)
+  }
+  const saved = screen.name === 'home' ? loadSave(gameData) : null
+  const canResume = !!saved && saved.present.phase !== 'ended'
+
+  const start = (setup: Setup) => setScreen({ name: 'game', save: newLocalGame(gameData, setup, Date.now(), randomSeed()), key: Date.now() })
+  const home = () => setScreen({ name: 'home' })
+
+  let view
+  switch (screen.name) {
+    case 'home':
+      view = (
+        <Home
+          canResume={canResume}
+          onLocal={() => setScreen({ name: 'setup' })}
+          onResume={() => saved && setScreen({ name: 'game', save: resumeLocal(saved, Date.now(), loadLastSeen()), key: Date.now() })}
+        />
+      )
+      break
+    case 'setup':
+      view = <LocalSetup onStart={start} onBack={home} />
+      break
+    case 'game':
+      view = <LocalGame key={screen.key} initial={screen.save} onHome={home} onAgain={start} />
+      break
+  }
   return (
-    <main className="mx-auto flex min-h-dvh max-w-xl flex-col gap-6 px-4 py-10">
-      {hasTestQuestions && (
-        <p role="status" className="rounded-lg bg-gold px-4 py-2 text-center font-semibold text-ink">
-          {site.testBanner}
-        </p>
-      )}
-      <header className="flex flex-col gap-2">
-        <p className="text-sm font-semibold text-accent">{site.course}</p>
-        <h1 className="font-serif text-4xl font-bold">{site.title}</h1>
-        <p className="text-ink-soft">{site.subtitle}</p>
-      </header>
-      <p className="rounded-xl border border-line bg-surface p-4">{site.home.building}</p>
-      <p className="text-sm text-ink-soft">
-        {site.home.questionBank}: {questionList.length}
-      </p>
-      <p className="font-serif text-xl italic">“{site.message}”</p>
-    </main>
+    <ErrorBoundary
+      onReset={() => {
+        clearSave()
+        home()
+      }}
+    >
+      {view}
+    </ErrorBoundary>
   )
 }

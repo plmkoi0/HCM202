@@ -1,7 +1,7 @@
 # THIẾT KẾ GAME — Con đường tư tưởng HCM
 
 **Môn:** HCM202 · **Sản phẩm sáng tạo thứ hai** (độc lập với bảo tàng số) · **Chủ đề 4** — Tư tưởng Hồ Chí Minh về Nhà nước của nhân dân, do nhân dân, vì nhân dân
-**Phiên bản:** 1.5 · 03/10/2026 · **Trạng thái:** G0 đã được nhóm duyệt — các quyết định (mục 20) đã ghi vào từng mục; làm tiếp G1
+**Phiên bản:** 1.5 · 03/10/2026 · **Trạng thái:** G0 đã được nhóm duyệt — các quyết định (mục 20) đã ghi vào từng mục; G1, G2 xong; làm tiếp G3
 **Vị trí:** nhánh `game` của repo `HCM202`, file `docs/THIET-KE-GAME.md` — nguồn chuẩn duy nhất cho game (luật, bàn cờ, màn hình, kiến trúc, kiểm thử, lộ trình).
 
 ---
@@ -689,7 +689,7 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 |---|---|---|
 | **G0 — Nhánh và rà soát** | Tạo nhánh mồ côi `game`; chép dữ liệu khởi đầu, nguồn tham chiếu và font từ nhánh web (ghi `NGUON.md`); tạo `CLAUDE.md` của nhánh; đối chiếu tài liệu này với dữ liệu; xác nhận nền tảng Vercel; ước lượng chi phí (15.5); tạo mẫu `docs/CAU-HOI-GAME.mau.md` để nhóm bắt đầu soạn câu hỏi; cập nhật mục 20. **Dừng chờ duyệt** | ☑ Xong và được nhóm duyệt 03/10/2026 — quyết định ghi ở mục 20. Nhánh `game` đẩy được với đúng tên `game` |
 | **G1 — Nền móng** | Khởi tạo dự án ở gốc nhánh, JSON + kiểu dữ liệu, **12 câu khởi đầu** từ `QUIZ-KIEN-THUC.md` (13.1) + **câu hỏi thử** lấp chỗ thiếu (13.3), script nhập câu hỏi, test dữ liệu, engine + bot + unit test, mô phỏng cân bằng ở 20 s và 25 s/lượt (điền mục 11) | ☑ Xong 03/10/2026 — 120 test; mô phỏng đạt mục tiêu mục 11; chi tiết tự chọn ghi ở mục 20 |
-| **G2 — Chơi trên một máy** | Bàn cờ SVG, xúc xắc, ngựa đi từng ô, các loại ô, túi power-up, thẻ bẫy, bot, thử thách cá nhân + kỷ lục, lưu/tiếp tục ván, hoàn tác — chơi trọn ván | ☐ |
+| **G2 — Chơi trên một máy** | Bàn cờ SVG, xúc xắc, ngựa đi từng ô, các loại ô, túi power-up, thẻ bẫy, bot, thử thách cá nhân + kỷ lục, lưu/tiếp tục ván, hoàn tác — chơi trọn ván | ☑ Xong 03/10/2026 — 131 test; chạy thử trong Chromium (360 × 780 sáng, 1366 × 768 tối, có và không có hiệu ứng): chơi trọn ván, 2 ngựa, thử thách cá nhân, tải lại, hoàn tác, axe không lỗi; chi tiết tự chọn ghi ở mục 20 |
 | **G3 — Server** | Tạo/vào phòng, sức chứa, chọn màu, hành động, bước bot, Redis, pub/sub, WebSocket + polling, nối lại, chuyển chủ phòng, `/api/health`; test server, mô phỏng tải, chạy cục bộ | ☐ |
 | **G4 — Chơi qua phòng** | Trang chủ, tạo phòng, vào bằng mã / QR / link, phòng chờ, chơi qua mạng, trạng thái kết nối, mất kết nối, kết thúc + chơi lại, tùy chọn Đoán cùng | ☐ |
 | **G5 — Hoàn thiện** | Ôn câu sai, thống kê, Kho câu hỏi, Luật chơi minh họa, Cài đặt, âm thanh, phím tắt, chỉnh giao diện, reduced motion | ☐ |
@@ -780,11 +780,21 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 - Đổi câu đặt lại đồng hồ trả lời 20 giây cho câu mới.
 - Mượn câu khi thiếu (mục 8): hai độ khó cách đều thì lấy độ khó **thấp hơn**. Trộn lại khi hết kho: câu vừa hỏi gần nhất không ra ngay ở đầu vòng mới.
 - Ra 6 đi tới ô bẫy vẫn được tung thêm (đã di chuyển được); thẻ "mất lượt" bỏ lượt **kế tiếp**.
-- Nhãn "Bẫy — lùi {n} ô" dùng số ô lùi thực tế (bị chặn ở cổng thì nhỏ hơn số rút).
+- Nhãn "Bẫy — lùi {n} ô" dùng số ô lùi thực tế (bị chặn ở cổng thì nhỏ hơn số rút); khi Khiên chặn thẻ lùi, nhãn dùng số đã rút.
 - 2 ngựa: chỉ hỏi chọn ngựa khi hai ngựa ở hai vị trí khác nhau và cùng đi được.
 - Người đang trả lời không thấy lựa chọn Đoán cùng của người khác (chỉ thấy sau khi chốt, qua thống kê).
 - "Chuỗi đứng yên": lượt mà cuối lượt ngựa không tiến hơn đầu lượt (trả lời sai, không đi được, bị bỏ lượt, bị bẫy lùi về chỗ cũ).
 - Với bố cục hiện tại, bẫy chỉ nằm trên vòng chung nên trường hợp "lùi từ đường về đích ra vòng chung" không xảy ra trong ván; engine vẫn xử lý đúng nếu sau này đổi bố cục.
+
+**Chi tiết giao diện G2 tự chọn trong phạm vi thiết kế (nhóm xem lại; không chặn các mốc):**
+- Bàn cờ luôn nền sáng (như bàn cờ thật), kể cả khi máy bật chế độ tối, để màu trụ cột và màu ngựa giữ đủ tương phản. Chữ viết tắt trụ cột trong sạch dùng màu chữ `#7A5A17` thay cho vàng đồng. Có mục "Chú thích" thu gọn dưới bàn cờ.
+- Cửa sổ câu hỏi mở sau khi xúc xắc lăn xong (không che xúc xắc); khi bật hiệu ứng, người trả lời mất khoảng 0,9 giây của 20 giây vì đồng hồ tính từ lúc tung. Giải thích hiện ngay khi chốt; ngựa đi phía sau cửa sổ.
+- Cửa sổ kết quả luôn hiện đủ 8 giây (giải thích) / 3 giây (bước đi) tính từ lúc diễn hoạt xong, có đồng hồ "Tự sang lượt sau … giây"; trong lượt của máy, người ngồi cùng bấm "Tiếp tục" được để đi sớm.
+- 2 ngựa: chọn ngựa ngay trong khu điều khiển (không che bàn cờ), bấm nút hoặc bấm ngựa có viền vàng trên bàn cờ; mỗi ngựa có số 1 / 2.
+- Hoàn tác: tối đa 10 bước, chỉ lùi về trước thao tác của người (bỏ luôn các bước tự động sau đó); **khi đáp án một câu đã hiện thì xóa lịch sử hoàn tác** để không trả lời lại câu đã lộ đáp án.
+- Lưu ván trên máy sau mỗi thay đổi; tải lại → "Tiếp tục ván", đồng hồ ván và hạn pha dời đúng bằng khoảng thời gian màn chơi bị đóng (không được hoàn giờ khi tải lại). Ván lưu không còn hợp lệ với dữ liệu mới (câu hỏi bị bỏ, bố cục đổi) thì bị bỏ. Rời trang khi đang chơi: trình duyệt hỏi lại.
+- Mở thẻ hiện vật hoặc hộp "Thoát ván?" thì tạm dừng đồng hồ ván và hạn pha (chỉ ở "Chơi trên một máy").
+- 50:50 với câu 2 đáp án: nút mờ kèm ghi chú, không mất power-up (L2).
 
 **Nhóm cần quyết:**
 - [ ] Tên chính thức của game — để sau, không chặn các mốc.
