@@ -4,7 +4,8 @@
 // ---------- Dữ liệu (src/data/*.json) ----------
 
 export type CellKind = 'gate' | 'question' | 'powerup' | 'trap'
-export type QuestionType = 'single' | 'truefalse' | 'fillQuote' | 'situation'
+/** loại câu do script nhập tự suy ra (mục 13.4) */
+export type QuestionType = 'single' | 'truefalse' | 'fillQuote'
 export type Difficulty = 1 | 2 | 3
 export type PowerupId = 'advance3' | 'extraRoll' | 'fiftyFifty' | 'swap' | 'shield' | 'double'
 export type TrapKind = 'loseTurn' | 'back'
@@ -14,9 +15,8 @@ export interface LayoutData {
   note?: string
   /** Mỗi nhánh một mảng ô theo chiều đi; ô đầu tiên luôn là cổng */
   branches: CellKind[][]
-  ringDifficulty: number
-  homeDifficulties: number[]
-  finishDifficulty: number
+  /** số ô đường về đích (bản 1.6: ô không gắn trụ cột hay độ khó) */
+  homeLength: number
 }
 
 export interface BoardData {
@@ -84,30 +84,15 @@ export interface BotsData {
   }
 }
 
-export interface Pillar {
-  id: string
-  label: string
-  name: string
-  color: string
-  /** chữ viết tắt và biểu tượng hiện trên ô câu hỏi (D6) */
-  abbr?: string
-  icon?: string
-  /** màu chữ đủ tương phản trên nền sáng (màu trụ cột vàng đồng quá nhạt cho chữ nhỏ) */
-  textColor?: string
-}
-
+/** Câu hỏi (mục 13.4, bản 1.6): không có trụ cột, giải thích, nguồn, xác minh, hiện vật */
 export interface Question {
   id: string
-  pillar: string
-  artifact?: string
-  type: QuestionType
+  /** chỉ dùng cho nhãn "Độ khó n", lọc Kho câu hỏi và xác suất đúng của máy chơi cùng (mục 5) */
   difficulty: Difficulty
+  type: QuestionType
   question: string
   answers: string[]
   correct: number
-  explanation: string
-  source: { ref: string; note?: string }
-  verified: boolean
   test?: boolean
 }
 
@@ -118,11 +103,8 @@ export interface GameData {
   powerups: PowerupsData
   traps: TrapsData
   bots: BotsData
-  pillars: Pillar[]
   questions: Question[]
   questionById: Map<string, Question>
-  /** khóa `${pillar}|${difficulty}` → danh sách câu */
-  questionPools: Map<string, Question[]>
 }
 
 // ---------- Cấu hình ván ----------
@@ -184,8 +166,6 @@ export interface PlayerStats {
   guessTotal: number
   /** id các câu trả lời sai (ôn lại ở màn kết thúc) */
   wrongIds: string[]
-  /** theo trụ cột của câu đã trả lời: [số câu đúng, số câu đã trả lời] (thống kê cuối ván; ván lưu cũ không có) */
-  byPillar?: Record<string, [number, number]>
   /** số lượt liên tiếp hiện tại chưa tiến được */
   stall: number
   maxStall: number
@@ -208,11 +188,8 @@ export interface PlayerState {
 
 export interface ActiveQuestion {
   id: string
-  pillar: string
+  /** độ khó của câu (nhãn hiển thị, máy chơi cùng) — câu rút ngẫu nhiên từ toàn bộ kho (mục 5) */
   difficulty: number
-  /** độ khó / trụ cột mà ô yêu cầu (có thể khác câu thật khi phải mượn — mục 8) */
-  wantPillar: string
-  wantDifficulty: number
   isFinish: boolean
   /** thứ tự hiển thị: order[i] = chỉ số đáp án gốc ở vị trí i */
   order: number[]
@@ -277,7 +254,8 @@ export interface GameEnd {
 }
 
 export interface GameState {
-  schema: 1
+  /** 2 = bản 1.6 (câu hỏi không có trụ cột); ván lưu / phòng theo định dạng cũ bị bỏ */
+  schema: 2
   version: number
   seed: number
   rng: number

@@ -1,9 +1,6 @@
 // Nạp toàn bộ dữ liệu JSON cho engine (dùng chung cho giao diện, test, mô phỏng, server).
-import artifacts from '../data/artifacts.json'
 import board from '../data/board.json'
 import bots from '../data/bots.json'
-import mindmap from '../data/mindmap.json'
-import pillars from '../data/pillars.json'
 import powerups from '../data/powerups.json'
 import questions from '../data/questions.json'
 import rules from '../data/rules.json'
@@ -19,14 +16,12 @@ export const rawGameData = {
   powerups,
   traps,
   bots,
-  pillars,
-  mindmap,
   questions,
 } as unknown as RawGameData
 
 export const gameData: GameData = buildGameData(rawGameData)
 
-export { artifacts, mindmap, site, tokens }
+export { site, tokens }
 
 export const questionList = questions as Question[]
 

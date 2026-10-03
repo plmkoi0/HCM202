@@ -52,7 +52,7 @@ let roomN = 0
 function room(version = 1): Room {
   roomN += 1
   return {
-    schema: 1,
+    schema: 2,
     code: `S${roomN}-${process.pid}`,
     version,
     createdAt: Date.now(),

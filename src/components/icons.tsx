@@ -4,13 +4,10 @@ import {
   DoorOpen,
   Flag,
   type LucideIcon,
-  Scale,
   Shield,
-  ShieldCheck,
   Sparkles,
   Star,
   Swords,
-  Vote,
   Zap,
   Repeat,
   ChevronsUp,
@@ -20,9 +17,6 @@ import {
   Undo2,
 } from 'lucide-react'
 import type { PowerupId } from '../engine/types'
-
-/** Biểu tượng trụ cột (pillars.json → icon) */
-export const PILLAR_ICONS: Record<string, LucideIcon> = { vote: Vote, scale: Scale, shield: ShieldCheck }
 
 /** Biểu tượng loại ô (board.json → cellTypes.icon) */
 export const CELL_ICONS: Record<string, LucideIcon> = { gate: DoorOpen, question: CircleHelp, star: Star, trap: Zap, finish: Flag }

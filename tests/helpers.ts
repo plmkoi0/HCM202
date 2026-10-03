@@ -124,18 +124,14 @@ export function dataWithQuestions(questions: Question[]): GameData {
   return buildGameData({ ...rawGameData, questions })
 }
 
-export function q(id: string, pillar: string, difficulty: 1 | 2 | 3, answers = 4): Question {
+export function q(id: string, difficulty: 1 | 2 | 3, answers = 4): Question {
   return {
     id,
-    pillar,
-    type: answers === 2 ? 'truefalse' : 'single',
     difficulty,
+    type: answers === 2 ? 'truefalse' : 'single',
     question: `Câu ${id}`,
     answers: answers === 2 ? ['Đúng', 'Sai'] : Array.from({ length: answers }, (_, i) => `Đáp án ${i + 1}`),
     correct: 0,
-    explanation: 'Giải thích',
-    source: { ref: 'Câu hỏi thử' },
-    verified: false,
     test: true,
   }
 }

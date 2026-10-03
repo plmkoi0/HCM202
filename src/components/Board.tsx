@@ -1,18 +1,20 @@
 // Bàn cờ 6 nhánh vẽ bằng SVG (mục 12.4, 15.2): mỗi loại ô có biểu tượng + màu; ô câu hỏi
-// hiện trụ cột bằng viền màu + biểu tượng + chữ viết tắt (D6); ngựa có cả màu lẫn ký hiệu.
+// đồng nhất (bản 1.6: không trụ cột, không độ khó); ngựa có cả màu lẫn ký hiệu.
 
 import { memo } from 'react'
-import { geometry, homeCellPillar, ringCellInfo, stepToCell, type CellInfo } from '../engine/board'
-import type { GameData, GameState, Pillar } from '../engine/types'
+import { geometry, ringCellInfo, stepToCell, type CellInfo } from '../engine/board'
+import type { GameData, GameState } from '../engine/types'
 import { horseKey, type Positions } from '../game/useBoardAnimation'
 import { boardLayout, CENTER, stackOffset, VIEW_H, VIEW_W, type BoardLayout, type Point } from '../lib/boardLayout'
 import { site, tokens } from '../lib/gameData'
 import { fill } from '../lib/text'
-import { CELL_ICONS, HORSE_PATH, PILLAR_ICONS, SymbolShape } from './icons'
+import { CELL_ICONS, HORSE_PATH, SymbolShape } from './icons'
 
 export const POWERUP_FILL = '#F2C14E'
 export const TRAP_FILL = '#2E2A26'
 export const TRAP_ICON = '#FFB238'
+/** viền + biểu tượng ô câu hỏi (một màu cho mọi ô câu hỏi) */
+export const QUESTION_STROKE = '#5B5246'
 
 interface Props {
   data: GameData
@@ -42,31 +44,15 @@ function pointOf(layout: BoardLayout, geoStep: ReturnType<typeof stepToCell>): P
 }
 
 function Icon({ name, x, y, size, color }: { name: string; x: number; y: number; size: number; color: string }) {
-  const C = CELL_ICONS[name] ?? PILLAR_ICONS[name]
+  const C = CELL_ICONS[name]
   if (!C) return null
   return <C x={x - size / 2} y={y - size / 2} width={size} height={size} color={color} strokeWidth={2.4} aria-hidden="true" />
-}
-
-/** Biểu tượng + chữ viết tắt trụ cột trong ô câu hỏi (D6), r = bán kính ô */
-function PillarMark({ pillar, x, y, r }: { pillar: Pillar; x: number; y: number; r: number }) {
-  const P = PILLAR_ICONS[pillar.icon ?? '']
-  const icon = r * 0.78
-  const ink = pillar.textColor ?? pillar.color
-  return (
-    <g aria-hidden="true">
-      {P && <P x={x - icon / 2} y={y - r * 0.72} width={icon} height={icon} color={ink} strokeWidth={2.4} />}
-      <text x={x} y={y + r * 0.62} fontSize={r * 0.56} fontWeight={800} fill={ink} textAnchor="middle">
-        {pillar.abbr}
-      </text>
-    </g>
-  )
 }
 
 function CellShape({
   info,
   at,
   r,
-  data,
   dim,
   homeColor,
   labels,
@@ -74,14 +60,12 @@ function CellShape({
   info: CellInfo
   at: Point
   r: number
-  data: GameData
   dim: boolean
   homeColor?: string
   labels: Props['labels']
 }) {
-  const pillar = info.pillar ? data.pillars.find((p) => p.id === info.pillar) : undefined
   const opacity = dim ? 0.45 : 1
-  const title = info.kind === 'question' && pillar ? `${labels.cell.question} · ${pillar.label}` : labels.cell[info.kind] ?? ''
+  const title = labels.cell[info.kind] ?? ''
   if (info.kind === 'gate') {
     const c = tokens.colors[info.gateColor!].color
     return (
@@ -102,7 +86,7 @@ function CellShape({
       </g>
     )
   }
-  // ô câu hỏi (vòng chung, cổng màu trống, đường về đích)
+  // ô câu hỏi (vòng chung, cổng màu trống, đường về đích) — đồng nhất, câu rút ngẫu nhiên (mục 5)
   return (
     <g opacity={opacity}>
       <title>{title}</title>
@@ -111,13 +95,13 @@ function CellShape({
         cy={at.y}
         r={r}
         style={{ fill: homeColor ? `color-mix(in srgb, ${homeColor} 20%, var(--surface))` : 'var(--surface)' }}
-        stroke={pillar?.color ?? 'var(--line)'}
-        strokeWidth={Math.max(4, r * 0.14)}
+        stroke={QUESTION_STROKE}
+        strokeWidth={Math.max(3, r * 0.1)}
       />
       {info.gateColor !== null && (
         <circle cx={at.x} cy={at.y} r={r * 0.86} fill="none" stroke={tokens.colors[info.gateColor].color} strokeWidth={2.5} strokeDasharray="6 5" opacity={0.7} />
       )}
-      {pillar && <PillarMark pillar={pillar} x={at.x} y={at.y} r={r} />}
+      <Icon name="question" x={at.x} y={at.y} size={r * 1.05} color={QUESTION_STROKE} />
     </g>
   )
 }
@@ -217,11 +201,10 @@ export const Board = memo(function Board({ data, state, positions, target, curre
     <svg viewBox={`0 0 ${VIEW_W} ${VIEW_H}`} className="block h-auto w-full select-none" role="group" aria-label={labels.board}>
       {/* nền lục giác */}
       <polygon points={layout.corners.map((c) => `${c.x},${c.y}`).join(' ')} fill="var(--surface)" stroke="var(--line)" strokeWidth={6} strokeLinejoin="round" />
-      {/* dải màu trụ cột theo nhánh */}
+      {/* dải đường vòng chung */}
       {layout.corners.map((a, b) => {
         const z = layout.corners[(b + 1) % layout.corners.length]
-        const pillar = data.pillars[b % data.pillars.length]
-        return <line key={`band${b}`} x1={a.x} y1={a.y} x2={z.x} y2={z.y} stroke={pillar.color} strokeOpacity={0.16} strokeWidth={layout.ringCellR * 2.6} strokeLinecap="round" />
+        return <line key={`band${b}`} x1={a.x} y1={a.y} x2={z.x} y2={z.y} stroke="var(--line)" strokeOpacity={0.7} strokeWidth={layout.ringCellR * 2.6} strokeLinecap="round" />
       })}
       {/* nan hoa đường về đích */}
       {layout.corners.map((cn, c) => (
@@ -239,17 +222,16 @@ export const Board = memo(function Board({ data, state, positions, target, curre
       ))}
       {/* ô vòng chung */}
       {layout.ring.map((pt, i) => (
-        <CellShape key={`ring${i}`} info={ringCellInfo(data, geo, active, i)} at={pt} r={layout.ringCellR} data={data} dim={false} labels={labels} />
+        <CellShape key={`ring${i}`} info={ringCellInfo(geo, active, i)} at={pt} r={layout.ringCellR} dim={false} labels={labels} />
       ))}
       {/* ô đường về đích */}
       {layout.home.map((cells, c) =>
         cells.map((pt, i) => (
           <CellShape
             key={`home${c}-${i}`}
-            info={{ kind: 'question', pillar: homeCellPillar(data, c, i), difficulty: geo.layout.homeDifficulties[i], ref: { area: 'home', color: c, index: i }, gateColor: null, branch: null }}
+            info={{ kind: 'question', ref: { area: 'home', color: c, index: i }, gateColor: null, branch: null }}
             at={pt}
             r={layout.homeCellR}
-            data={data}
             dim={!active.has(c)}
             homeColor={tokens.colors[c].color}
             labels={labels}
@@ -317,7 +299,7 @@ export function cellLegendItems(data: GameData): { key: string; swatch: React.Re
     { key: 'gate', swatch: <Swatch bg={tokens.colors[0].color} stroke="var(--ink)" icon="gate" iconColor="#fff" />, label: ct.gate?.label ?? '', text: ct.gate?.description },
     {
       key: 'question',
-      swatch: <Swatch bg="var(--surface)" stroke={data.pillars[0].color} icon="question" iconColor="var(--ink-soft)" strokeWidth={3.5} />,
+      swatch: <Swatch bg="var(--surface)" stroke={QUESTION_STROKE} icon="question" iconColor={QUESTION_STROKE} strokeWidth={2.5} />,
       label: ct.question?.label ?? '',
       text: ct.question?.description,
     },
@@ -325,7 +307,7 @@ export function cellLegendItems(data: GameData): { key: string; swatch: React.Re
     { key: 'trap', swatch: <Swatch bg={TRAP_FILL} stroke="var(--ink)" icon="trap" iconColor={TRAP_ICON} />, label: ct.trap?.label ?? '', text: ct.trap?.description },
     {
       key: 'home',
-      swatch: <Swatch bg={`color-mix(in srgb, ${tokens.colors[0].color} 20%, var(--surface))`} stroke={data.pillars[1].color} icon="question" iconColor="var(--ink-soft)" strokeWidth={3.5} />,
+      swatch: <Swatch bg={`color-mix(in srgb, ${tokens.colors[0].color} 20%, var(--surface))`} stroke={QUESTION_STROKE} icon="question" iconColor={QUESTION_STROKE} strokeWidth={2.5} />,
       label: ct.home?.label ?? '',
       text: ct.home?.description,
     },
@@ -356,23 +338,6 @@ export function BoardLegend({ data }: { data: GameData }) {
           </svg>
           <span className="font-semibold">{t.target}</span>
         </li>
-      </ul>
-      <p className="mt-3 font-semibold">{t.pillars}</p>
-      <ul className="mt-1 flex flex-wrap gap-x-4 gap-y-1">
-        {data.pillars.map((p) => {
-          const P = PILLAR_ICONS[p.icon ?? '']
-          const ink = p.textColor ?? p.color
-          return (
-            <li key={p.id} className="flex items-center gap-1.5">
-              <span className="inline-block h-4 w-4 rounded-full border-4" style={{ borderColor: p.color }} aria-hidden="true" />
-              {P && <P size={16} color={ink} aria-hidden="true" />}
-              <span className="font-bold" style={{ color: ink }}>
-                {p.abbr}
-              </span>
-              <span>{p.label}</span>
-            </li>
-          )
-        })}
       </ul>
     </details>
   )

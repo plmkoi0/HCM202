@@ -1,12 +1,12 @@
 // Kiểm thử engine (mục 17 — "Engine").
 import { describe, expect, it } from 'vitest'
-import { branchPillar, cellAtStep, geometry, homeCellPillar, ringCellInfo, stepBack, stepToCell } from '../src/engine/board'
+import { cellAtStep, geometry, ringCellInfo, stepBack, stepToCell } from '../src/engine/board'
 import { canUndo, pushHistory, startHistory, undo } from '../src/engine/history'
-import { pickQuestion, resolvePool } from '../src/engine/questions'
+import { pickQuestion } from '../src/engine/questions'
 import { applyAction, createGame, currentPlayer, pendingAutoAction, resolveConfig, restartDeadline, shiftTime } from '../src/engine/reducer'
 import { buildGameData } from '../src/engine/data'
 import { clientView } from '../src/engine/view'
-import type { GameState, Question } from '../src/engine/types'
+import type { GameState } from '../src/engine/types'
 import { rawGameData } from '../src/lib/gameData'
 import {
   act,
@@ -79,17 +79,13 @@ describe('đường đi (mục 4, D5)', () => {
   }
 })
 
-describe('bàn cờ (mục 4, D1–D4)', () => {
-  it('trụ cột của nhánh tính từ dữ liệu: nhánh i → trụ cột ((i − 1) mod số trụ cột) + 1', () => {
-    expect([0, 1, 2, 3, 4, 5].map((b) => branchPillar(data, b))).toEqual(['dan-chu', 'phap-quyen', 'trong-sach', 'dan-chu', 'phap-quyen', 'trong-sach'])
-    const two = buildGameData({ ...rawGameData, mindmap: { pillars: rawGameData.mindmap.pillars.slice(0, 2) } })
-    expect([0, 1, 2, 3, 4, 5].map((b) => branchPillar(two, b))).toEqual(['dan-chu', 'phap-quyen', 'dan-chu', 'phap-quyen', 'dan-chu', 'phap-quyen'])
-  })
+const finishQuestion = (seed: number) => rollFace(setStep(game(1, {}, seed), P1, 20), 2).turn.question!.id
 
+describe('bàn cờ (mục 4 — bản 1.6)', () => {
   it('power-up ô 3 nhánh 1, 5; bẫy ô 3 nhánh 3, 6 (bố cục Ngắn)', () => {
     const geo = geometry(data, 'ngan')
     const all = new Set([0, 1, 2, 3, 4, 5])
-    const kinds = Array.from({ length: 18 }, (_, i) => ringCellInfo(data, geo, all, i).kind)
+    const kinds = Array.from({ length: 18 }, (_, i) => ringCellInfo(geo, all, i).kind)
     expect(kinds).toEqual([
       'gate', 'question', 'powerup',
       'gate', 'question', 'question',
@@ -100,40 +96,47 @@ describe('bàn cờ (mục 4, D1–D4)', () => {
     ])
   })
 
-  it('cổng của màu trống là ô câu hỏi độ khó 1 thuộc trụ cột nhánh; cổng có người là ô nghỉ', () => {
+  it('cổng của màu trống là ô câu hỏi; cổng có người là ô nghỉ; ô không gắn trụ cột hay độ khó', () => {
     const geo = geometry(data, 'ngan')
     const active = new Set([0, 2])
-    expect(ringCellInfo(data, geo, active, 0).kind).toBe('gate')
-    expect(ringCellInfo(data, geo, active, 6).kind).toBe('gate')
-    const empty = ringCellInfo(data, geo, active, 3)
-    expect(empty).toMatchObject({ kind: 'question', pillar: 'phap-quyen', difficulty: 1, gateColor: 1 })
+    expect(ringCellInfo(geo, active, 0).kind).toBe('gate')
+    expect(ringCellInfo(geo, active, 6).kind).toBe('gate')
+    const empty = ringCellInfo(geo, active, 3)
+    expect(empty).toEqual({ kind: 'question', ref: { area: 'ring', index: 3 }, gateColor: 1, branch: 1 })
   })
 
-  it('đường về đích: độ khó 2, 2, 3, 3 (Dài 2, 2, 3, 3, 3), trụ cột xoay vòng từ nhánh có cổng', () => {
-    expect([0, 1, 2, 3].map((i) => homeCellPillar(data, 1, i))).toEqual(['phap-quyen', 'trong-sach', 'dan-chu', 'phap-quyen'])
-    expect([0, 1, 2, 3].map((i) => homeCellPillar(data, 0, i))).toEqual(['dan-chu', 'phap-quyen', 'trong-sach', 'dan-chu'])
-    for (const [layout, diffs] of [
-      ['ngan', [2, 2, 3, 3]],
-      ['dai', [2, 2, 3, 3, 3]],
+  it('đường về đích: 4 ô câu hỏi (Dài 5), rồi Đích', () => {
+    for (const [layout, n] of [
+      ['ngan', 4],
+      ['dai', 5],
     ] as const) {
       const geo = geometry(data, layout)
-      const got = diffs.map((_, i) => cellAtStep(data, geo, new Set([0]), 0, geo.ringLength + i).difficulty)
-      expect(got).toEqual(diffs)
+      expect(geo.homeLength).toBe(n)
+      const kinds = Array.from({ length: n + 1 }, (_, i) => cellAtStep(geo, new Set([0]), 0, geo.ringLength + i).kind)
+      expect(kinds).toEqual([...Array(n).fill('question'), 'finish'])
     }
   })
 
-  it('trụ cột câu về đích theo seed: cùng seed cùng trụ cột, đủ ba trụ cột trên nhiều seed', () => {
-    const seen = new Set<string>()
-    for (let seed = 1; seed <= 60; seed++) {
-      const run = () => {
-        let s = setStep(game(1, {}, seed), P1, 20)
-        s = rollFace(s, 2)
-        return s.turn.question!.wantPillar
-      }
-      expect(run()).toBe(run())
-      seen.add(run())
+  it('mọi ô câu hỏi (kể cả Đích) rút câu từ toàn bộ kho: qua nhiều ván, tỉ lệ các mức xấp xỉ tỉ lệ trong kho', () => {
+    const byDiff = { 1: 0, 2: 0, 3: 0 } as Record<number, number>
+    const finish = { 1: 0, 2: 0, 3: 0 } as Record<number, number>
+    for (let seed = 1; seed <= 600; seed++) {
+      const ring = rollFace(game(1, {}, seed), 1)
+      byDiff[ring.turn.question!.difficulty]++
+      const fin = rollFace(setStep(game(1, {}, seed), P1, 20), 2)
+      expect(fin.turn.question!.isFinish).toBe(true)
+      finish[fin.turn.question!.difficulty]++
     }
-    expect(seen).toEqual(new Set(['dan-chu', 'phap-quyen', 'trong-sach']))
+    const total = data.questions.length
+    for (const d of [1, 2, 3]) {
+      const share = data.questions.filter((x) => x.difficulty === d).length / total
+      expect(Math.abs(byDiff[d] / 600 - share), `vòng chung mức ${d}`).toBeLessThan(0.08)
+      expect(Math.abs(finish[d] / 600 - share), `Đích mức ${d}`).toBeLessThan(0.08)
+    }
+  })
+
+  it('cùng seed → cùng câu ở Đích', () => {
+    for (let seed = 1; seed <= 20; seed++) expect(finishQuestion(seed)).toBe(finishQuestion(seed))
   })
 })
 
@@ -185,12 +188,13 @@ describe('luật cốt lõi (mục 2, 5)', () => {
   it('cổng của màu trống thành ô câu hỏi', () => {
     const s = rollFace(game(1), 3)
     expect(s.phase).toBe('question')
-    expect(s.turn.question!.wantPillar).toBe('phap-quyen')
+    expect(s.turn.question!.isFinish).toBe(false)
   })
 
-  it('Đích: câu về đích độ khó 3; đúng → về đích và thắng', () => {
+  it('Đích: câu về đích (rút ngẫu nhiên như mọi ô); đúng → về đích và thắng', () => {
     let s = rollFace(setStep(game(2), P1, 20), 2)
-    expect(s.turn.question).toMatchObject({ isFinish: true, wantDifficulty: 3, difficulty: 3 })
+    expect(s.turn.question).toMatchObject({ isFinish: true })
+    expect(s.turn.question!.difficulty).toBe(data.questionById.get(s.turn.question!.id)!.difficulty)
     s = answerCorrect(s)
     expect(player(s).horses[0]).toEqual({ step: 22, done: true })
     expect(player(s).finishRank).toBe(1)
@@ -292,9 +296,7 @@ describe('power-up (mục 6)', () => {
     const layout = {
       label: 'Thử',
       branches: Array.from({ length: 6 }, () => ['gate', 'question', 'powerup']),
-      ringDifficulty: 1,
-      homeDifficulties: [2],
-      finishDifficulty: 3,
+      homeLength: 1,
     }
     const d = buildGameData({ ...rawGameData, board: { ...rawGameData.board, layouts: { ...rawGameData.board.layouts, thu: layout as never } } })
     const base = forceFirst(createGame(d, { players: [{ id: P1, name: 'A', color: 0 }], config: { layout: 'thu' }, seed: 3, now: T0 }))
@@ -322,38 +324,42 @@ describe('power-up (mục 6)', () => {
   })
 
   it('50:50: 4 → 2 đáp án, giữ đáp án đúng; câu 2 đáp án thì không dùng được và không mất power-up', () => {
-    const d = dataWithQuestions([q('A', 'dan-chu', 1, 4), q('B', 'phap-quyen', 1, 2), q('C', 'trong-sach', 1, 3), q('D', 'dan-chu', 2), q('E', 'dan-chu', 3)])
-    const mk = () => forceFirst(createGame(d, { players: [{ id: P1, name: 'A', color: 0 }], seed: 5, now: T0 }))
-    let s = act(rigFace(setBag(mk(), P1, ['fiftyFifty']), 1), { type: 'ROLL', actor: P1, now: T0 }, d)
+    const mk = (d: ReturnType<typeof dataWithQuestions>) => forceFirst(createGame(d, { players: [{ id: P1, name: 'A', color: 0 }], seed: 5, now: T0 }))
+    const roll1 = (d: ReturnType<typeof dataWithQuestions>) => act(rigFace(setBag(mk(d), P1, ['fiftyFifty']), 1), { type: 'ROLL', actor: P1, now: T0 }, d)
+    const d4 = dataWithQuestions([q('A', 1, 4)])
+    let s = roll1(d4)
     expect(s.turn.question!.id).toBe('A')
-    s = act(s, { type: 'USE_POWERUP', actor: P1, powerup: 'fiftyFifty', now: T0 }, d)
+    s = act(s, { type: 'USE_POWERUP', actor: P1, powerup: 'fiftyFifty', now: T0 }, d4)
     expect(s.turn.question!.eliminated.length).toBe(2)
     expect(s.turn.question!.eliminated).not.toContain(0)
     expect(player(s).bag).toEqual([])
-    expect(applyAction(d, s, { type: 'ANSWER', actor: P1, choice: s.turn.question!.eliminated[0], now: T0 })).toEqual({ ok: false, error: 'INVALID_CHOICE' })
-    // câu 2 đáp án (bước 4: pháp quyền)
-    let t = act(rigFace(setBag(mk(), P1, ['fiftyFifty']), 4), { type: 'ROLL', actor: P1, now: T0 }, d)
+    expect(applyAction(d4, s, { type: 'ANSWER', actor: P1, choice: s.turn.question!.eliminated[0], now: T0 })).toEqual({ ok: false, error: 'INVALID_CHOICE' })
+    // câu 2 đáp án
+    const d2 = dataWithQuestions([q('B', 1, 2)])
+    const t = roll1(d2)
     expect(t.turn.question!.id).toBe('B')
-    expect(applyAction(d, t, { type: 'USE_POWERUP', actor: P1, powerup: 'fiftyFifty', now: T0 })).toEqual({ ok: false, error: 'POWERUP_NOT_USABLE' })
+    expect(applyAction(d2, t, { type: 'USE_POWERUP', actor: P1, powerup: 'fiftyFifty', now: T0 })).toEqual({ ok: false, error: 'POWERUP_NOT_USABLE' })
     expect(player(t).bag).toEqual(['fiftyFifty'])
-    // câu 3 đáp án (bước 7: trong sạch) → còn 2
-    t = act(rigFace(setStep(setBag(mk(), P1, ['fiftyFifty']), P1, 6), 1), { type: 'ROLL', actor: P1, now: T0 }, d)
-    expect(t.turn.question!.id).toBe('C')
-    t = act(t, { type: 'USE_POWERUP', actor: P1, powerup: 'fiftyFifty', now: T0 }, d)
-    expect(t.turn.question!.eliminated.length).toBe(1)
+    // câu 3 đáp án → còn 2
+    const d3 = dataWithQuestions([q('C', 1, 3)])
+    const u = act(roll1(d3), { type: 'USE_POWERUP', actor: P1, powerup: 'fiftyFifty', now: T0 }, d3)
+    expect(u.turn.question!.eliminated.length).toBe(1)
   })
 
-  it('Đổi câu: sang câu khác cùng trụ cột, cùng độ khó; không còn câu khác thì không mất power-up', () => {
-    const d = dataWithQuestions([q('A1', 'dan-chu', 1), q('A2', 'dan-chu', 1), q('B', 'phap-quyen', 1), q('C', 'trong-sach', 1), q('D', 'dan-chu', 2), q('E', 'dan-chu', 3)])
-    const mk = () => forceFirst(createGame(d, { players: [{ id: P1, name: 'A', color: 0 }], seed: 5, now: T0 }))
-    let s = act(rigFace(setBag(mk(), P1, ['swap']), 1), { type: 'ROLL', actor: P1, now: T0 }, d)
+  it('Đổi câu: sang một câu ngẫu nhiên khác chưa hỏi (độ khó theo câu mới); kho chỉ 1 câu thì không mất power-up', () => {
+    const d = dataWithQuestions([q('A1', 1), q('A2', 2), q('B', 3)])
+    const mk = (dd: ReturnType<typeof dataWithQuestions>) => forceFirst(createGame(dd, { players: [{ id: P1, name: 'A', color: 0 }], seed: 5, now: T0 }))
+    let s = act(rigFace(setBag(mk(d), P1, ['swap']), 1), { type: 'ROLL', actor: P1, now: T0 }, d)
     const before = s.turn.question!.id
     s = act(s, { type: 'USE_POWERUP', actor: P1, powerup: 'swap', now: T0 + 5000 }, d)
-    expect(s.turn.question!.id).not.toBe(before)
-    expect(['A1', 'A2']).toContain(s.turn.question!.id)
+    const after = s.turn.question!.id
+    expect(after).not.toBe(before)
+    expect(s.usedQuestions).toEqual([before, after])
+    expect(s.turn.question!.difficulty).toBe(d.questionById.get(after)!.difficulty)
     expect(s.deadline).toBe(T0 + 5000 + s.config.timers.answerMs)
-    const t = act(rigFace(setBag(mk(), P1, ['swap']), 4), { type: 'ROLL', actor: P1, now: T0 }, d)
-    expect(applyAction(d, t, { type: 'USE_POWERUP', actor: P1, powerup: 'swap', now: T0 })).toEqual({ ok: false, error: 'NO_ALTERNATIVE' })
+    const one = dataWithQuestions([q('X', 2)])
+    const t = act(rigFace(setBag(mk(one), P1, ['swap']), 1), { type: 'ROLL', actor: P1, now: T0 }, one)
+    expect(applyAction(one, t, { type: 'USE_POWERUP', actor: P1, powerup: 'swap', now: T0 })).toEqual({ ok: false, error: 'NO_ALTERNATIVE' })
     expect(player(t).bag).toEqual(['swap'])
   })
 
@@ -619,40 +625,32 @@ describe('kết thúc (mục 10)', () => {
 
 describe('câu hỏi (mục 8)', () => {
   it('không lặp cho tới khi dùng hết kho; sau đó trộn lại vòng mới, câu vừa hỏi không ra ngay', () => {
-    const d = dataWithQuestions([q('A', 'dan-chu', 1), q('B', 'dan-chu', 1), q('C', 'dan-chu', 1)])
+    const d = dataWithQuestions([q('A', 1), q('B', 1), q('C', 1)])
     for (let seed = 1; seed <= 50; seed++) {
       const ctx = { rng: seed, usedQuestions: [] as string[] }
       const me = structuredClone(player(game()))
-      const picks = Array.from({ length: 9 }, () => pickQuestion(d, ctx, me, 'dan-chu', 1)!.id)
+      const picks = Array.from({ length: 9 }, () => pickQuestion(d, ctx, me)!.id)
       expect(new Set(picks.slice(0, 3)).size, `seed ${seed}`).toBe(3)
       for (let i = 1; i < picks.length; i++) expect(picks[i], `seed ${seed}: ${picks.join(' ')}`).not.toBe(picks[i - 1])
       // vòng sau khi trộn lại vẫn không lặp trong vòng (vòng 2 có 2 câu vì câu cuối vòng 1 đứng ngoài)
       expect(new Set(picks.slice(3, 5)).size, `seed ${seed}`).toBe(2)
     }
     // kho 2 câu: luân phiên, không bao giờ lặp liền
-    const d2 = dataWithQuestions([q('A', 'dan-chu', 1), q('B', 'dan-chu', 1)])
+    const d2 = dataWithQuestions([q('A', 1), q('B', 1)])
     const ctx2 = { rng: 3, usedQuestions: [] as string[] }
     const me2 = structuredClone(player(game()))
-    const seq = Array.from({ length: 8 }, () => pickQuestion(d2, ctx2, me2, 'dan-chu', 1)!.id).join('')
+    const seq = Array.from({ length: 8 }, () => pickQuestion(d2, ctx2, me2)!.id).join('')
     expect(['ABABABAB', 'BABABABA']).toContain(seq)
   })
 
   it('trong vòng, ưu tiên câu người đó chưa gặp', () => {
-    const d = dataWithQuestions([q('A', 'dan-chu', 1), q('B', 'dan-chu', 1), q('C', 'dan-chu', 1)])
+    const d = dataWithQuestions([q('A', 1), q('B', 1), q('C', 1)])
     const other = structuredClone(player(game()))
     other.seen = ['A', 'B']
     for (let seed = 1; seed <= 20; seed++) {
       const ctx = { rng: seed, usedQuestions: [] as string[] }
-      expect(pickQuestion(d, ctx, structuredClone(other), 'dan-chu', 1)!.id).toBe('C')
+      expect(pickQuestion(d, ctx, structuredClone(other))!.id).toBe('C')
     }
-  })
-
-  it('tổ hợp không có câu: lấy cùng trụ cột ở độ khó gần nhất, rồi trụ cột khác cùng độ khó', () => {
-    const d = dataWithQuestions([q('D3', 'dan-chu', 3), q('D1', 'dan-chu', 1), q('P2', 'phap-quyen', 2)])
-    expect(resolvePool(d, 'dan-chu', 2).map((x) => x.id)).toEqual(['D1']) // cách đều → lấy độ khó thấp hơn
-    expect(resolvePool(d, 'dan-chu', 3).map((x) => x.id)).toEqual(['D3'])
-    expect(resolvePool(d, 'trong-sach', 2).map((x) => x.id)).toEqual(['P2'])
-    expect(resolvePool(d, 'trong-sach', 1).map((x) => x.id)).toEqual(['D1'])
   })
 
   it('đáp án trộn khi hiện; state không chứa đáp án đúng trước khi chốt', () => {
@@ -865,16 +863,5 @@ describe('khác', () => {
     expect(() => newGame({ n: 6 })).toThrow(/Số người chơi/)
     expect(() => newGame({ n: 2, colors: [1, 1] })).toThrow(/Trùng màu/)
     expect(newGame({ n: 5 }).players.length).toBe(5)
-  })
-})
-
-describe('dữ liệu mượn câu hỏi', () => {
-  it('kho thật: mọi ô của bàn cờ đều tìm được câu đúng trụ cột và độ khó (không phải mượn)', () => {
-    for (const p of data.pillars) {
-      for (const d of [1, 2, 3]) {
-        const pool = resolvePool(data, p.id, d) as Question[]
-        expect(pool.every((x) => x.pillar === p.id && x.difficulty === d), `${p.id}/${d}`).toBe(true)
-      }
-    }
   })
 })

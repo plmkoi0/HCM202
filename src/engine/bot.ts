@@ -3,7 +3,6 @@
 // state nên cùng seed → cùng kết quả.
 
 import { geometry, remainingSteps } from './board.js'
-import { poolKey } from './data.js'
 import { nextFloat, pick } from './rng.js'
 import type { GameData, GameState, PlayerState, PowerupId } from './types.js'
 
@@ -54,9 +53,8 @@ export function botAction(data: GameData, s: GameState, p: PlayerState): BotDeci
       if (p.bag.includes('fiftyFifty') && !aq.fiftyFiftyUsed && remaining > 2 && aq.difficulty >= rules.useFiftyFiftyMinDifficulty) {
         return { kind: 'use', powerup: 'fiftyFifty' }
       }
-      const pool = data.questionPools.get(poolKey(aq.pillar, aq.difficulty)) ?? []
       // Đổi câu sau khi 50:50 đã loại đáp án sẽ mất tác dụng của 50:50 → không đổi nữa
-      if (p.bag.includes('swap') && !aq.swapUsed && aq.eliminated.length === 0 && aq.difficulty >= rules.useSwapMinDifficulty && pool.length > 1) {
+      if (p.bag.includes('swap') && !aq.swapUsed && aq.eliminated.length === 0 && aq.difficulty >= rules.useSwapMinDifficulty && data.questions.length > 1) {
         return { kind: 'use', powerup: 'swap' }
       }
       const prob = botCorrectProbability(data, aq.difficulty, aq.eliminated.length > 0)

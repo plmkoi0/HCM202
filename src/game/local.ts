@@ -82,7 +82,7 @@ export function resumeLocal(s: LocalSave, now: number, lastSeen: number = s.save
 export function isUsableSave(data: GameData, s: unknown): s is LocalSave {
   try {
     const x = s as LocalSave
-    if (!x || x.v !== 1 || !x.present || x.present.schema !== 1 || !Array.isArray(x.past) || !x.setup) return false
+    if (!x || x.v !== 1 || !x.present || x.present.schema !== 2 || !Array.isArray(x.past) || !x.setup) return false
     const all = [x.present, ...x.past]
     for (const g of all) {
       if (typeof g.config?.layout !== 'string' || !Object.hasOwn(data.board.layouts, g.config.layout) || !Array.isArray(g.players) || g.players.length === 0) return false

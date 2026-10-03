@@ -1,90 +1,8 @@
 [
   {
-    "id": "Q-01",
-    "pillar": "dan-chu",
-    "artifact": "HV-12",
-    "type": "single",
-    "difficulty": 2,
-    "question": "Theo Hồ Chí Minh, Nhà nước Việt Nam Dân chủ Cộng hòa mang bản chất của giai cấp nào?",
-    "answers": [
-      "Giai cấp công nhân",
-      "Toàn dân, không mang bản chất giai cấp nào",
-      "Giai cấp nông dân",
-      "Tầng lớp trí thức"
-    ],
-    "correct": 0,
-    "explanation": "Nhà nước Việt Nam là nhà nước dân chủ nhưng \"tuyệt nhiên nó không phải là 'Nhà nước toàn dân'\" phi giai cấp; đó là nhà nước mang bản chất giai cấp công nhân, thống nhất với tính nhân dân và tính dân tộc (GT tr. 83).",
-    "source": {
-      "ref": "GT tr. 83"
-    },
-    "verified": true
-  },
-  {
-    "id": "Q-02",
-    "pillar": "dan-chu",
-    "artifact": "HV-02",
-    "type": "single",
-    "difficulty": 3,
-    "question": "Nguyên lý \"dân là chủ\" khẳng định điều gì?",
-    "answers": [
-      "Nhân dân là chủ thể tối cao của mọi quyền lực",
-      "Quyền lợi và nghĩa vụ của nhân dân với tư cách người chủ",
-      "Nhà nước phục vụ lợi ích và nguyện vọng của nhân dân",
-      "Nhà nước do nhân dân bầu ra sau thắng lợi cách mạng"
-    ],
-    "correct": 0,
-    "explanation": "Nhà nước của dân tức là \"dân là chủ\"; nguyên lý này khẳng định địa vị chủ thể tối cao của mọi quyền lực là nhân dân (GT tr. 84).",
-    "source": {
-      "ref": "GT tr. 84"
-    },
-    "verified": true
-  },
-  {
-    "id": "Q-03",
-    "pillar": "dan-chu",
-    "artifact": "HV-07",
-    "type": "single",
-    "difficulty": 3,
-    "question": "\"Dân làm chủ\" nhấn mạnh điều gì?",
-    "answers": [
-      "Quyền lợi và nghĩa vụ của nhân dân với tư cách người chủ",
-      "Mọi quyền lực nhà nước đều thuộc về nhân dân",
-      "Cán bộ là đầy tớ của nhân dân",
-      "Nhà nước phải được lòng dân"
-    ],
-    "correct": 0,
-    "explanation": "Nếu \"dân là chủ\" xác định vị thế của nhân dân đối với quyền lực nhà nước thì \"dân làm chủ\" nhấn mạnh quyền lợi và nghĩa vụ của nhân dân với tư cách người chủ: \"nhân dân có quyền lợi làm chủ, thì phải có nghĩa vụ làm tròn bổn phận công dân\" (GT tr. 86).",
-    "source": {
-      "ref": "GT tr. 86"
-    },
-    "verified": true
-  },
-  {
-    "id": "Q-04",
-    "pillar": "dan-chu",
-    "artifact": "HV-08",
-    "type": "single",
-    "difficulty": 2,
-    "question": "Hồ Chí Minh coi hình thức dân chủ nào là \"hoàn bị nhất\"?",
-    "answers": [
-      "Dân chủ trực tiếp",
-      "Dân chủ gián tiếp",
-      "Dân chủ đại diện",
-      "Dân chủ tập trung"
-    ],
-    "correct": 0,
-    "explanation": "Dân chủ trực tiếp là hình thức nhân dân trực tiếp quyết định mọi vấn đề liên quan đến vận mệnh quốc gia; Hồ Chí Minh coi trọng hình thức này \"bởi đây là hình thức dân chủ hoàn bị nhất\" (GT tr. 85).",
-    "source": {
-      "ref": "GT tr. 85"
-    },
-    "verified": true
-  },
-  {
     "id": "Q-05",
-    "pillar": "dan-chu",
-    "artifact": "HV-05",
-    "type": "single",
     "difficulty": 1,
+    "type": "single",
     "question": "Trong hình thức dân chủ gián tiếp, Hồ Chí Minh xác định quyền lực nhà nước là gì?",
     "answers": [
       "\"Thừa ủy quyền\" của nhân dân",
@@ -92,19 +10,12 @@
       "Quyền lực riêng của đội ngũ cán bộ",
       "Quyền lực do pháp luật quốc tế trao cho"
     ],
-    "correct": 0,
-    "explanation": "\"Quyền lực nhà nước là 'thừa ủy quyền' của nhân dân. Tự bản thân nhà nước không có quyền lực\"; vì vậy cơ quan nhà nước và cán bộ đều là \"công bộc\" của nhân dân (GT tr. 85).",
-    "source": {
-      "ref": "GT tr. 85"
-    },
-    "verified": true
+    "correct": 0
   },
   {
     "id": "Q-06",
-    "pillar": "dan-chu",
-    "artifact": "HV-02",
-    "type": "single",
     "difficulty": 1,
+    "type": "single",
     "question": "Theo Hồ Chí Minh, thước đo một Nhà nước vì dân là gì?",
     "answers": [
       "Được lòng dân",
@@ -112,19 +23,12 @@
       "Có nhiều đạo luật",
       "Có nền kinh tế tăng trưởng nhanh"
     ],
-    "correct": 0,
-    "explanation": "\"Theo Hồ Chí Minh, thước đo một Nhà nước vì dân là phải được lòng dân\"; cán bộ phải \"làm sao cho được lòng dân, dân tin, dân mến, dân yêu\" (GT tr. 87).",
-    "source": {
-      "ref": "GT tr. 87"
-    },
-    "verified": true
+    "correct": 0
   },
   {
     "id": "Q-07",
-    "pillar": "phap-quyen",
-    "artifact": "HV-03",
-    "type": "single",
     "difficulty": 1,
+    "type": "single",
     "question": "Tại phiên họp đầu tiên của Chính phủ lâm thời ngày 3/9/1945, Hồ Chí Minh đề nghị việc gì?",
     "answers": [
       "Sớm tổ chức Tổng tuyển cử với chế độ phổ thông đầu phiếu để có hiến pháp dân chủ",
@@ -132,39 +36,12 @@
       "Ban hành Luật Phòng, chống tham nhũng",
       "Thông qua Hiến pháp năm 1959"
     ],
-    "correct": 0,
-    "explanation": "Hồ Chí Minh đề nghị: \"Chúng ta phải có một hiến pháp dân chủ. Tôi đề nghị Chính phủ tổ chức càng sớm càng hay cuộc TỔNG TUYỂN CỬ với chế độ phổ thông đầu phiếu\" (Hồ Chí Minh, 2011, t.4, tr.7; GT tr. 88).",
-    "source": {
-      "ref": "t.4, tr.7; GT tr. 88"
-    },
-    "verified": true
-  },
-  {
-    "id": "Q-08",
-    "pillar": "phap-quyen",
-    "artifact": "HV-09",
-    "type": "single",
-    "difficulty": 3,
-    "question": "Ở cương vị Chủ tịch nước, Hồ Chí Minh đã ký lệnh công bố bao nhiêu đạo luật và sắc lệnh?",
-    "answers": [
-      "16 đạo luật và 613 sắc lệnh",
-      "613 đạo luật và 16 sắc lệnh",
-      "70 đạo luật và 243 sắc lệnh",
-      "243 đạo luật và 613 sắc lệnh"
-    ],
-    "correct": 0,
-    "explanation": "Hồ Chí Minh hai lần lãnh đạo soạn thảo Hiến pháp (1946, 1959), ký lệnh công bố 16 đạo luật, 613 sắc lệnh, trong đó có 243 sắc lệnh quy định về tổ chức Nhà nước và pháp luật (GT tr. 89).",
-    "source": {
-      "ref": "GT tr. 89"
-    },
-    "verified": true
+    "correct": 0
   },
   {
     "id": "Q-09",
-    "pillar": "phap-quyen",
-    "artifact": "HV-09",
-    "type": "single",
     "difficulty": 1,
+    "type": "single",
     "question": "\"Pháp quyền nhân nghĩa\" theo Hồ Chí Minh trước hết là gì?",
     "answers": [
       "Nhà nước tôn trọng, bảo đảm đầy đủ các quyền con người, chăm lo lợi ích của mọi người",
@@ -172,39 +49,12 @@
       "Pháp luật chỉ áp dụng với cán bộ, không áp dụng với dân",
       "Mọi tội phạm đều được tha thứ"
     ],
-    "correct": 0,
-    "explanation": "\"Pháp quyền nhân nghĩa\" tức là trước hết Nhà nước phải \"tôn trọng, bảo đảm thực hiện đầy đủ các quyền con người, chăm lo đến lợi ích của mọi người\"; pháp luật có tính nhân văn, khuyến thiện nhưng vẫn nghiêm minh (GT tr. 90–91).",
-    "source": {
-      "ref": "GT tr. 90–91"
-    },
-    "verified": true
-  },
-  {
-    "id": "Q-10",
-    "pillar": "trong-sach",
-    "artifact": "HV-06",
-    "type": "single",
-    "difficulty": 2,
-    "question": "Theo Hồ Chí Minh, đâu là giải pháp căn bản và có ý nghĩa lâu dài để phòng, chống tiêu cực trong Nhà nước?",
-    "answers": [
-      "Nâng cao trình độ dân chủ, thực hành dân chủ rộng rãi, phát huy quyền làm chủ của nhân dân",
-      "Tăng số lượng cơ quan thanh tra",
-      "Xử phạt thật nặng mọi vi phạm",
-      "Giảm bớt quyền hạn của cán bộ cấp cơ sở"
-    ],
-    "correct": 0,
-    "explanation": "Trong hệ thống biện pháp, \"nâng cao trình độ dân chủ trong xã hội, thực hành dân chủ rộng rãi, phát huy quyền làm chủ của nhân dân đó là giải pháp căn bản và có ý nghĩa lâu dài\" (GT tr. 94). Hồ Chí Minh cũng cho rằng \"việc gì cũng xử phạt thì lại không đúng\", phải lấy giáo dục làm chủ yếu (GT tr. 94).",
-    "source": {
-      "ref": "GT tr. 94"
-    },
-    "verified": true
+    "correct": 0
   },
   {
     "id": "Q-11",
-    "pillar": "trong-sach",
-    "artifact": "HV-13",
-    "type": "single",
     "difficulty": 1,
+    "type": "single",
     "question": "Hồ Chí Minh gọi nguyên nhân chủ quan, gốc rễ sinh ra tiêu cực trong cán bộ là \"bệnh mẹ\". Đó là gì?",
     "answers": [
       "Chủ nghĩa cá nhân",
@@ -212,19 +62,220 @@
       "Âm mưu của các thế lực thù địch",
       "Trình độ phát triển thấp của xã hội"
     ],
-    "correct": 0,
-    "explanation": "Nguyên nhân chủ quan, bắt nguồn từ căn \"bệnh mẹ\" là chủ nghĩa cá nhân, sự thiếu tu dưỡng, rèn luyện của cán bộ; âm mưu của các thế lực thù địch và trình độ phát triển thấp của xã hội là nguyên nhân khách quan (GT tr. 94).",
-    "source": {
-      "ref": "GT tr. 94"
-    },
-    "verified": true
+    "correct": 0
+  },
+  {
+    "id": "Q-13",
+    "difficulty": 1,
+    "type": "single",
+    "question": "Theo Hồ Chí Minh, cán bộ nhà nước là \"công bộc\" của nhân dân, nghĩa là:",
+    "answers": [
+      "Người thay mặt nhân dân quyết định mọi việc mà không cần hỏi ý kiến dân",
+      "Người đứng trên nhân dân để quản lý xã hội",
+      "Người chỉ làm việc theo mệnh lệnh của cấp trên",
+      "Người \"gánh vác việc chung cho dân, chứ không phải để đè đầu dân\""
+    ],
+    "correct": 3
+  },
+  {
+    "id": "Q-14",
+    "difficulty": 1,
+    "type": "fillQuote",
+    "question": "Điền vào chỗ trống: \"Dân làm chủ thì Chủ tịch, Bộ trưởng, thứ trưởng, uỷ viên này uỷ viên khác là làm gì? … Làm ___ cho nhân dân, chứ không phải là làm quan cách mạng.\"",
+    "answers": [
+      "đầy tớ",
+      "người lãnh đạo",
+      "người đại diện",
+      "người quản lý"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "Q-15",
+    "difficulty": 1,
+    "type": "single",
+    "question": "Tình huống giả định: Một cán bộ phường nói với sinh viên đến làm thủ tục: \"Tôi bận, muốn xong thì cứ ngồi đó chờ, khi nào tôi rảnh thì làm\". Theo Hồ Chí Minh, thái độ này là biểu hiện của điều gì?",
+    "answers": [
+      "Tác phong làm việc nghiêm túc, đúng quy trình",
+      "Quyền hợp pháp của cán bộ trong việc tự sắp xếp công việc",
+      "Tinh thần tự chủ trong công việc của người cán bộ",
+      "Sự thoái hóa từ công bộc thành \"quan cách mạng\": đứng trên nhân dân, \"cậy thế\" với dân"
+    ],
+    "correct": 3
+  },
+  {
+    "id": "Q-16",
+    "difficulty": 1,
+    "type": "single",
+    "question": "Tình huống giả định: Một nhóm sinh viên gửi phản ánh lên cổng thông tin của phường về việc đèn đường trước ký túc xá hỏng nhiều tuần. Theo tư tưởng Hồ Chí Minh về Nhà nước của nhân dân, cách ứng xử nào của chính quyền là đúng?",
+    "answers": [
+      "Bỏ qua vì sinh viên chỉ tạm trú, không phải cử tri của phường",
+      "Coi phản ánh là sự giúp đỡ, đôn đốc, kiểm soát của dân; tiếp nhận, xử lý và trả lời công khai",
+      "Yêu cầu sinh viên tự sửa đèn vì họ là người sử dụng",
+      "Nhắc nhở sinh viên không được phê bình chính quyền"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "Q-17",
+    "difficulty": 1,
+    "type": "single",
+    "question": "Theo Hồ Chí Minh, sự khác biệt căn bản giữa luật pháp của Nhà nước Việt Nam mới với luật pháp của chế độ tư sản, phong kiến là gì?",
+    "answers": [
+      "Phản ánh được ý nguyện và bảo vệ quyền lợi của dân chúng",
+      "Có số lượng văn bản pháp luật nhiều hơn",
+      "Có hình phạt nghiêm khắc hơn",
+      "Do chuyên gia nước ngoài soạn thảo"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "Q-18",
+    "difficulty": 1,
+    "type": "single",
+    "question": "Một sinh viên phát hiện dấu hiệu tiêu cực của cán bộ nhưng chưa có đầy đủ bằng chứng. Cách xử lý nào phù hợp nhất với việc thực hiện quyền làm chủ có trách nhiệm?",
+    "answers": [
+      "Đăng ngay thông tin lên mạng xã hội và khẳng định cán bộ vi phạm",
+      "Tạo tài khoản ẩn danh để lan truyền thông tin",
+      "Kiểm chứng thông tin, lưu giữ bằng chứng và phản ánh qua kênh phù hợp theo pháp luật",
+      "Không được phản ánh vì sinh viên không phải cán bộ nhà nước"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "Q-19",
+    "difficulty": 1,
+    "type": "single",
+    "question": "Một địa phương triển khai dịch vụ công trực tuyến nhưng nhiều người cao tuổi không thể sử dụng. Giải pháp nào phù hợp nhất với tư tưởng vì nhân dân?",
+    "answers": [
+      "Bắt buộc tất cả mọi người chỉ được sử dụng hình thức trực tuyến",
+      "Ngừng hoàn toàn chuyển đổi số",
+      "Tiếp tục số hóa nhưng đồng thời bố trí hướng dẫn và hình thức hỗ trợ phù hợp cho người gặp khó khăn",
+      "Yêu cầu người cao tuổi tự nhờ người thân thực hiện"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "Q-20",
+    "difficulty": 1,
+    "type": "single",
+    "question": "Người dân tại một khu vực phản ánh nhiều lần về tình trạng ô nhiễm môi trường. Cách xử lý nào phù hợp nhất với tinh thần Nhà nước vì nhân dân?",
+    "answers": [
+      "Chỉ ghi nhận ý kiến nhưng không cần kiểm tra",
+      "Chờ đến khi có hậu quả nghiêm trọng mới xử lý",
+      "Xác minh, xác định nguyên nhân và trách nhiệm, yêu cầu khắc phục và kiểm tra kết quả xử lý",
+      "Đề nghị người dân tự thương lượng với đơn vị gây ô nhiễm"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "Q-21",
+    "difficulty": 1,
+    "type": "single",
+    "question": "Nếu một cán bộ sử dụng quyền hạn được giao để đem lại lợi ích riêng cho bản thân thay vì phục vụ lợi ích chung, điều đó trái trực tiếp nhất với nguyên tắc nào?",
+    "answers": [
+      "Quyền lực nhà nước phải phục vụ nhân dân",
+      "Mọi cán bộ đều phải có cùng chức vụ",
+      "Nhân dân không được giám sát cán bộ",
+      "Cán bộ được tự quyết định cách sử dụng quyền lực"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "Q-22",
+    "difficulty": 1,
+    "type": "single",
+    "question": "Biểu hiện nào dưới đây phù hợp nhất với tư tưởng “lấy dân làm gốc”?",
+    "answers": [
+      "Ban hành chính sách chủ yếu dựa trên mong muốn chủ quan của cán bộ",
+      "Coi phản ánh của người dân là hoạt động gây khó khăn cho quản lý",
+      "Khi xây dựng và thực hiện chính sách, quan tâm thực tiễn đời sống và quyền, lợi ích chính đáng của nhân dân",
+      "Chỉ tiếp nhận ý kiến của người có chuyên môn cao"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "Q-23",
+    "difficulty": 1,
+    "type": "single",
+    "question": "Một phường tổ chức lấy ý kiến người dân về việc cải tạo công viên. Là sinh viên đang sinh sống tại địa phương, hành động nào thể hiện rõ nhất tinh thần “dân làm chủ”?",
+    "answers": [
+      "Không quan tâm vì đây là việc của chính quyền",
+      "Tham gia góp ý trên cơ sở nhu cầu thực tế và lợi ích chung của cộng đồng",
+      "Chỉ góp ý nếu bản thân được hưởng lợi trực tiếp",
+      "Yêu cầu chính quyền phải làm đúng hoàn toàn theo ý kiến cá nhân mình"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "Q-24",
+    "difficulty": 1,
+    "type": "single",
+    "question": "Một người đến làm thủ tục hành chính nhưng chưa hiểu quy trình. Cách ứng xử nào của cán bộ phù hợp nhất với tư tưởng Hồ Chí Minh về Nhà nước vì nhân dân?",
+    "answers": [
+      "Yêu cầu người dân tự về tìm hiểu rồi quay lại",
+      "Hướng dẫn rõ ràng, đúng quy định và hỗ trợ người dân hoàn thiện thủ tục cần thiết",
+      "Chỉ hướng dẫn những người quen biết",
+      "Đề nghị người dân trả thêm chi phí để được hướng dẫn nhanh"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "Q-25",
+    "difficulty": 1,
+    "type": "single",
+    "question": "Theo tư tưởng Hồ Chí Minh, Nhà nước Việt Nam là Nhà nước của ai?",
+    "answers": [
+      "Riêng giai cấp công nhân",
+      "Riêng giai cấp nông dân",
+      "Của nhân dân, do nhân dân, vì nhân dân",
+      "Của các tầng lớp trí thức"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "Q-01",
+    "difficulty": 2,
+    "type": "single",
+    "question": "Theo Hồ Chí Minh, Nhà nước Việt Nam Dân chủ Cộng hòa mang bản chất của giai cấp nào?",
+    "answers": [
+      "Giai cấp công nhân",
+      "Toàn dân, không mang bản chất giai cấp nào",
+      "Giai cấp nông dân",
+      "Tầng lớp trí thức"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "Q-04",
+    "difficulty": 2,
+    "type": "single",
+    "question": "Hồ Chí Minh coi hình thức dân chủ nào là \"hoàn bị nhất\"?",
+    "answers": [
+      "Dân chủ trực tiếp",
+      "Dân chủ gián tiếp",
+      "Dân chủ đại diện",
+      "Dân chủ tập trung"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "Q-10",
+    "difficulty": 2,
+    "type": "single",
+    "question": "Theo Hồ Chí Minh, đâu là giải pháp căn bản và có ý nghĩa lâu dài để phòng, chống tiêu cực trong Nhà nước?",
+    "answers": [
+      "Nâng cao trình độ dân chủ, thực hành dân chủ rộng rãi, phát huy quyền làm chủ của nhân dân",
+      "Tăng số lượng cơ quan thanh tra",
+      "Xử phạt thật nặng mọi vi phạm",
+      "Giảm bớt quyền hạn của cán bộ cấp cơ sở"
+    ],
+    "correct": 0
   },
   {
     "id": "Q-12",
-    "pillar": "phap-quyen",
-    "artifact": "HV-11",
-    "type": "single",
     "difficulty": 2,
+    "type": "single",
     "question": "Trong thư gửi Hội nghị tư pháp toàn quốc, Hồ Chí Minh yêu cầu cán bộ tư pháp nêu cao tấm gương nào cho nhân dân noi theo?",
     "answers": [
       "\"Phụng công, thủ pháp, chí công, vô tư\"",
@@ -232,135 +283,435 @@
       "\"Dĩ bất biến, ứng vạn biến\"",
       "\"Đoàn kết, đoàn kết, đại đoàn kết\""
     ],
-    "correct": 0,
-    "explanation": "\"Các bạn là những người phụ trách thi hành pháp luật. Lẽ tất nhiên các bạn cần phải nêu cao cái gương 'phụng công, thủ pháp, chí công, vô tư' cho nhân dân noi theo\" (Hồ Chí Minh, 2011, t.5, tr.473; GT tr. 90).",
-    "source": {
-      "ref": "t.5, tr.473; GT tr. 90"
-    },
-    "verified": true
+    "correct": 0
   },
   {
-    "id": "TEST-09",
-    "pillar": "phap-quyen",
-    "type": "truefalse",
+    "id": "Q-26",
     "difficulty": 2,
-    "question": "Thẻ bẫy \"lùi ngẫu nhiên\" có thể đẩy ngựa của bạn lùi quá ô cổng của chính bạn.",
-    "answers": [
-      "Đúng",
-      "Sai"
-    ],
-    "correct": 1,
-    "explanation": "Bẫy lùi 1, 2 hoặc 3 ô theo đường của bạn và không bao giờ lùi quá cổng của mình.",
-    "source": {
-      "ref": "Câu hỏi thử",
-      "note": "Mục 7 tài liệu thiết kế"
-    },
-    "verified": false,
-    "test": true
-  },
-  {
-    "id": "TEST-11",
-    "pillar": "phap-quyen",
-    "type": "fillQuote",
-    "difficulty": 3,
-    "question": "Điền vào chỗ trống trong luật cốt lõi số 4 của game: \"Xúc xắc chỉ tới ô câu hỏi → trả lời đúng thì nhảy lên ô đó, sai thì ___ ở ô cũ.\"",
-    "answers": [
-      "đứng yên",
-      "lùi một ô",
-      "về chuồng",
-      "tung lại"
-    ],
-    "correct": 0,
-    "explanation": "Luật cốt lõi số 4: trả lời đúng thì nhảy lên ô đó, sai thì đứng yên ở ô cũ.",
-    "source": {
-      "ref": "Câu hỏi thử",
-      "note": "Mục 2 tài liệu thiết kế"
-    },
-    "verified": false,
-    "test": true
-  },
-  {
-    "id": "TEST-13",
-    "pillar": "trong-sach",
-    "type": "situation",
-    "difficulty": 1,
-    "question": "Bạn dừng ở ô bẫy và đang có Khiên trong túi. Điều gì xảy ra?",
-    "answers": [
-      "Khiên tự dùng và chặn thẻ bẫy đó",
-      "Bạn vẫn phải lùi 3 ô",
-      "Bạn mất Khiên và mất lượt",
-      "Bạn được chọn có dùng Khiên hay không"
-    ],
-    "correct": 0,
-    "explanation": "Khiên tự dùng khi dính bẫy và chặn được cả hai loại thẻ bẫy.",
-    "source": {
-      "ref": "Câu hỏi thử",
-      "note": "Mục 6, 7 tài liệu thiết kế"
-    },
-    "verified": false,
-    "test": true
-  },
-  {
-    "id": "TEST-15",
-    "pillar": "trong-sach",
     "type": "single",
+    "question": "Theo Hồ Chí Minh, \"nhà nước của nhân dân\" là nhà nước như thế nào?",
+    "answers": [
+      "Nhà nước mà quyền lực thuộc về những người được nhân dân bầu ra",
+      "Nhà nước mà tất cả mọi quyền lực trong nhà nước và trong xã hội đều thuộc về nhân dân",
+      "Nhà nước mà nhân dân chỉ có quyền trong lĩnh vực kinh tế",
+      "Nhà nước mà quyền lực trong nhà nước thuộc về nhân dân, còn quyền lực trong xã hội thuộc về các đoàn thể"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "Q-27",
     "difficulty": 2,
-    "question": "Trong chế độ Chơi trên một máy, nhiều bạn cùng ngồi quanh một chiếc điện thoại hoặc máy tính để thay phiên nhau tung xúc xắc. Khi một bạn vừa trả lời xong câu hỏi, màn hình sẽ hiện những gì trước khi chuyển lượt cho bạn kế tiếp?",
-    "answers": [
-      "Đáp án đúng, lời giải thích kèm nguồn, và chip hiện vật liên quan nếu câu hỏi có gắn với một hiện vật",
-      "Chỉ hiện chữ Đúng hoặc Sai rồi chuyển lượt ngay lập tức, không có lời giải thích nào",
-      "Bảng xếp hạng của cả lớp kèm điểm số tích lũy từ những ván chơi trước đó",
-      "Một câu hỏi mới dành cho bạn kế tiếp mà không cho biết đáp án của câu vừa rồi"
-    ],
-    "correct": 0,
-    "explanation": "Sau khi chốt câu, game luôn hiện đáp án đúng, giải thích và nguồn; câu gắn với hiện vật có thêm chip \"Hiện vật liên quan\".",
-    "source": {
-      "ref": "Câu hỏi thử",
-      "note": "Mục 3, 8 tài liệu thiết kế"
-    },
-    "verified": false,
-    "test": true
-  },
-  {
-    "id": "TEST-17",
-    "pillar": "trong-sach",
     "type": "fillQuote",
-    "difficulty": 3,
-    "question": "Điền vào chỗ trống trong luật của game: \"khi power-up hoặc bẫy đẩy ngựa tới ô khác, ô mới ___ và không kích hoạt thêm hiệu ứng.\"",
+    "question": "(Liên hệ) Điều thứ 1 Hiến pháp năm 1946 viết: \"Tất cả quyền binh trong nước là của ___, không phân biệt nòi giống, gái trai, giàu nghèo, giai cấp, tôn giáo.\" Cụm từ còn thiếu là:",
     "answers": [
-      "không hỏi",
-      "luôn hỏi câu khó nhất",
-      "cho tung thêm",
-      "bị khóa một lượt"
+      "toàn thể nhân dân Việt Nam",
+      "Nghị viện nhân dân",
+      "Chính phủ Việt Nam dân chủ cộng hòa",
+      "những công dân từ 18 tuổi trở lên"
     ],
-    "correct": 0,
-    "explanation": "Hiệu ứng không dây chuyền: ô mà power-up hoặc bẫy đẩy ngựa tới không hỏi và không kích hoạt thêm hiệu ứng.",
-    "source": {
-      "ref": "Câu hỏi thử",
-      "note": "Mục 5 tài liệu thiết kế"
-    },
-    "verified": false,
-    "test": true
+    "correct": 0
   },
   {
-    "id": "TEST-18",
-    "pillar": "trong-sach",
-    "type": "situation",
-    "difficulty": 3,
-    "question": "Bạn đang chơi ván 5 người với giới hạn 7 phút. Đồng hồ báo hết giờ khi chưa ai về đích, trong lúc lượt của bạn vẫn đang dở dang. Theo luật, ván kết thúc như thế nào?",
+    "id": "Q-28",
+    "difficulty": 2,
+    "type": "single",
+    "question": "Theo giáo trình, trong Nhà nước dân chủ, nhân dân thực thi quyền lực thông qua hai hình thức nào?",
     "answers": [
-      "Chơi nốt lượt đang dở, rồi xếp hạng theo số ô còn lại tới Đích; người dẫn đầu được tôn vinh như người thắng",
-      "Dừng ngay giữa câu hỏi đang trả lời và không ai được xếp hạng",
-      "Mọi người phải tiếp tục chơi thêm cho tới khi có một người về đích",
-      "Người đang giữ nhiều power-up nhất trong túi được tính là người thắng"
+      "Dân chủ tập trung và dân chủ cơ sở",
+      "Dân chủ đại diện và dân chủ ủy quyền",
+      "Dân chủ chính trị và dân chủ kinh tế",
+      "Dân chủ trực tiếp và dân chủ gián tiếp"
     ],
-    "correct": 0,
-    "explanation": "Hết giờ thì chơi nốt lượt đang dở, xếp hạng theo số ô còn lại tới Đích; hòa thì so số câu trả lời đúng.",
-    "source": {
-      "ref": "Câu hỏi thử",
-      "note": "Mục 10 tài liệu thiết kế"
-    },
-    "verified": false,
-    "test": true
+    "correct": 3
+  },
+  {
+    "id": "Q-29",
+    "difficulty": 2,
+    "type": "single",
+    "question": "(Liên hệ) Điều thứ 21 Hiến pháp 1946 quy định: \"Nhân dân có quyền phúc quyết về Hiến pháp và những việc quan hệ đến vận mệnh quốc gia\". Quy định này thể hiện hình thức dân chủ nào?",
+    "answers": [
+      "Dân chủ trực tiếp",
+      "Dân chủ gián tiếp",
+      "Dân chủ đại diện thông qua Nghị viện",
+      "Dân chủ thông qua các đoàn thể"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "Q-30",
+    "difficulty": 2,
+    "type": "single",
+    "question": "Theo giáo trình, trong dân chủ gián tiếp (dân chủ đại diện), nhân dân thực thi quyền lực của mình bằng cách nào?",
+    "answers": [
+      "Tự mình biểu quyết mọi vấn đề hệ trọng của quốc gia",
+      "Giao toàn quyền cho Nhà nước và không tham gia công việc chung nữa",
+      "Thông qua các đại diện mà họ lựa chọn, bầu ra và những thiết chế quyền lực mà họ lập nên",
+      "Thông qua ý kiến của người đứng đầu địa phương"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "Q-31",
+    "difficulty": 2,
+    "type": "single",
+    "question": "Hồ Chí Minh viết: \"Nước ta là nước dân chủ, địa vị cao nhất là dân, vì dân là chủ. Trong bộ máy cách mạng, từ người quét nhà, nấu ăn cho đến Chủ tịch một nước đều là phân công làm đầy tớ cho dân\". Câu nói này nhấn mạnh điều gì?",
+    "answers": [
+      "Mọi công việc trong bộ máy nhà nước phải được trả lương ngang nhau",
+      "Mọi vị trí trong bộ máy, dù thấp hay cao, đều là sự phân công để phục vụ nhân dân; không vị trí nào đứng trên dân",
+      "Chỉ cán bộ cấp thấp mới phải phục vụ nhân dân",
+      "Chủ tịch nước có địa vị cao nhất trong xã hội"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "Q-32",
+    "difficulty": 2,
+    "type": "single",
+    "question": "Trong Nhà nước của nhân dân, luật pháp có vai trò gì?",
+    "answers": [
+      "Là công cụ để nhà nước cai trị nhân dân",
+      "Là công cụ thực thi quyền lực của nhân dân và là phương tiện để kiểm soát quyền lực nhà nước",
+      "Chỉ ràng buộc nhân dân, không ràng buộc cơ quan nhà nước",
+      "Chỉ là văn bản định hướng, không bắt buộc thi hành"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "Q-33",
+    "difficulty": 2,
+    "type": "single",
+    "question": "Nội dung nào thể hiện rõ nhất tư tưởng về Nhà nước do nhân dân?",
+    "answers": [
+      "Nhà nước tự quyết định mọi công việc mà không cần nhân dân tham gia",
+      "Nhà nước chỉ chịu trách nhiệm trước các cơ quan cấp trên",
+      "Nhân dân tham gia xây dựng, tổ chức và giám sát hoạt động của Nhà nước",
+      "Nhân dân chỉ có nghĩa vụ tuân thủ các quyết định của Nhà nước"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "Q-34",
+    "difficulty": 2,
+    "type": "single",
+    "question": "Một cơ quan giải quyết hồ sơ của người dân quá thời hạn nhưng không thông báo lý do. Giải pháp nào phù hợp nhất với tinh thần Nhà nước vì nhân dân?",
+    "answers": [
+      "Yêu cầu người dân tiếp tục chờ mà không cần giải thích",
+      "Hủy hồ sơ để giảm khối lượng công việc",
+      "Công khai tiến độ, giải thích nguyên nhân, xác định trách nhiệm và nhanh chóng khắc phục",
+      "Chỉ giải quyết nếu người dân nhiều lần đến trực tiếp phản ánh"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "Q-35",
+    "difficulty": 2,
+    "type": "single",
+    "question": "Chính quyền địa phương chuẩn bị xây dựng một công trình ảnh hưởng trực tiếp đến đời sống của nhiều hộ dân. Cách làm nào thể hiện tốt nhất tinh thần phát huy quyền làm chủ của nhân dân?",
+    "answers": [
+      "Chỉ thông báo sau khi công trình đã hoàn thành",
+      "Cung cấp thông tin theo quy định, tiếp nhận ý kiến và giải trình những vấn đề thuộc trách nhiệm của cơ quan có thẩm quyền",
+      "Để đơn vị thi công tự quyết định mọi vấn đề",
+      "Chỉ lấy ý kiến của cán bộ địa phương"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "Q-36",
+    "difficulty": 2,
+    "type": "single",
+    "question": "Một sinh viên cho rằng: “Nhà nước của nhân dân nghĩa là người dân có thể làm bất cứ điều gì mình muốn.” Nhận định nào đúng nhất?",
+    "answers": [
+      "Đúng hoàn toàn vì nhân dân là chủ",
+      "Đúng nếu có nhiều người cùng thực hiện",
+      "Sai, vì quyền làm chủ phải được thực hiện trong khuôn khổ Hiến pháp và pháp luật",
+      "Sai vì người dân không có quyền tham gia quản lý Nhà nước"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "Q-37",
+    "difficulty": 2,
+    "type": "single",
+    "question": "Theo tinh thần tư tưởng Hồ Chí Minh, công khai và minh bạch trong hoạt động của cơ quan nhà nước có ý nghĩa quan trọng nhất nào sau đây?",
+    "answers": [
+      "Giúp cơ quan nhà nước không cần chịu trách nhiệm về quyết định của mình",
+      "Tạo điều kiện để nhân dân biết, tham gia và giám sát hoạt động công quyền",
+      "Giúp mọi thông tin của Nhà nước đều phải được công bố vô điều kiện",
+      "Thay thế hoàn toàn hoạt động kiểm tra của cơ quan có thẩm quyền"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "Q-38",
+    "difficulty": 2,
+    "type": "single",
+    "question": "Một địa phương nhận được nhiều phản ánh rằng thủ tục hành chính còn phức tạp, thời gian xử lý kéo dài và cán bộ ít giải thích cho người dân. Phương án nào dưới đây vận dụng đầy đủ nhất tư tưởng Hồ Chí Minh về Nhà nước của nhân dân, do nhân dân, vì nhân dân?",
+    "answers": [
+      "Tăng thêm nhiều thủ tục kiểm tra để hạn chế sai sót",
+      "Yêu cầu người dân tự tìm hiểu quy trình trước khi đến cơ quan nhà nước",
+      "Đơn giản hóa thủ tục hợp lý, công khai quy trình và thời hạn, nâng cao trách nhiệm cán bộ, tiếp nhận phản ánh và tạo điều kiện để người dân giám sát",
+      "Chỉ tăng số lượng cán bộ tiếp nhận hồ sơ mà không thay đổi cách thức hoạt động"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "Q-39",
+    "difficulty": 2,
+    "type": "single",
+    "question": "Sự ra đời của Nhà nước ta đánh dấu sự xuất hiện của nhà nước dân chủ nhân dân đầu tiên ở khu vực nào?",
+    "answers": [
+      "Châu Á",
+      "Đông Bắc Á",
+      "Đông Nam Á",
+      "Nam Á"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "Q-40",
+    "difficulty": 2,
+    "type": "single",
+    "question": "Việc Bác Hồ mời nhân sĩ, trí thức ngoài Đảng tham gia Chính phủ chứng minh điều gì?",
+    "answers": [
+      "Nhà nước không còn mang bản chất của giai cấp công nhân nữa",
+      "Đảng Cộng sản đã chia sẻ toàn bộ quyền lãnh đạo cho các đảng phái khác",
+      "Nhà nước đặt lợi ích dân tộc lên trên hết, quy tụ sức mạnh toàn dân nhưng vẫn giữ vững bản chất của giai cấp công nhân",
+      "Bộ máy chính quyền thời kỳ này chưa có định hướng xã hội chủ nghĩa"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "Q-02",
+    "difficulty": 3,
+    "type": "single",
+    "question": "Nguyên lý \"dân là chủ\" khẳng định điều gì?",
+    "answers": [
+      "Nhân dân là chủ thể tối cao của mọi quyền lực",
+      "Quyền lợi và nghĩa vụ của nhân dân với tư cách người chủ",
+      "Nhà nước phục vụ lợi ích và nguyện vọng của nhân dân",
+      "Nhà nước do nhân dân bầu ra sau thắng lợi cách mạng"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "Q-03",
+    "difficulty": 3,
+    "type": "single",
+    "question": "\"Dân làm chủ\" nhấn mạnh điều gì?",
+    "answers": [
+      "Quyền lợi và nghĩa vụ của nhân dân với tư cách người chủ",
+      "Mọi quyền lực nhà nước đều thuộc về nhân dân",
+      "Cán bộ là đầy tớ của nhân dân",
+      "Nhà nước phải được lòng dân"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "Q-08",
+    "difficulty": 3,
+    "type": "single",
+    "question": "Ở cương vị Chủ tịch nước, Hồ Chí Minh đã ký lệnh công bố bao nhiêu đạo luật và sắc lệnh?",
+    "answers": [
+      "16 đạo luật và 613 sắc lệnh",
+      "613 đạo luật và 16 sắc lệnh",
+      "70 đạo luật và 243 sắc lệnh",
+      "243 đạo luật và 613 sắc lệnh"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "Q-41",
+    "difficulty": 3,
+    "type": "single",
+    "question": "Tình huống giả định: Trường hợp nào sau đây là ví dụ của dân chủ gián tiếp?",
+    "answers": [
+      "Cử tri một khu phố họp và trực tiếp biểu quyết việc góp tiền làm đường",
+      "Toàn dân bỏ phiếu phúc quyết một bản Hiến pháp",
+      "Người dân trực tiếp gửi góp ý vào một dự thảo luật",
+      "Hội đồng nhân dân do cử tri bầu ra thông qua nghị quyết về ngân sách địa phương"
+    ],
+    "correct": 3
+  },
+  {
+    "id": "Q-42",
+    "difficulty": 3,
+    "type": "fillQuote",
+    "question": "(Liên hệ) Điều 6 Hiến pháp 2013 quy định: \"Nhân dân thực hiện quyền lực nhà nước bằng dân chủ trực tiếp, bằng dân chủ đại diện thông qua ___\". Phần còn thiếu là:",
+    "answers": [
+      "Quốc hội và Chính phủ",
+      "Quốc hội, Hội đồng nhân dân và thông qua các cơ quan khác của Nhà nước",
+      "Mặt trận Tổ quốc Việt Nam và các tổ chức chính trị – xã hội",
+      "Hội đồng nhân dân và Ủy ban nhân dân các cấp"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "Q-43",
+    "difficulty": 3,
+    "type": "single",
+    "question": "Theo Hồ Chí Minh, trong dân chủ gián tiếp, nhân dân có những quyền nào đối với nhà nước?",
+    "answers": [
+      "Chỉ có quyền bầu cử; việc giám sát giao cho các cơ quan nhà nước",
+      "Có quyền góp ý, nhưng không có quyền bãi miễn đại biểu",
+      "Có quyền kiểm soát, phê bình nhà nước; bãi miễn đại biểu đã bầu ra; giải tán thiết chế quyền lực đã lập nên",
+      "Có quyền bãi miễn đại biểu Hội đồng nhân dân, nhưng không có quyền đối với đại biểu Quốc hội"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "Q-44",
+    "difficulty": 3,
+    "type": "fillQuote",
+    "question": "Điền vào chỗ trống: Hồ Chí Minh khẳng định \"nếu Chính phủ làm hại dân thì dân có quyền ___\".",
+    "answers": [
+      "đuổi Chính phủ",
+      "góp ý với Chính phủ",
+      "kiến nghị lên cấp trên",
+      "chờ Chính phủ tự sửa"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "Q-45",
+    "difficulty": 3,
+    "type": "single",
+    "question": "(Liên hệ) Khoản 2 Điều 7 Hiến pháp 2013 quy định đại biểu Quốc hội, đại biểu Hội đồng nhân dân bị cử tri hoặc Quốc hội, Hội đồng nhân dân bãi nhiệm khi không còn xứng đáng với sự tín nhiệm của Nhân dân. Quy định này kế thừa quan điểm nào của Hồ Chí Minh?",
+    "answers": [
+      "Đại biểu đã trúng cử thì giữ nhiệm kỳ đến hết, nhân dân không thể thay đổi",
+      "Chỉ cấp trên mới có quyền cách chức đại biểu dân cử",
+      "Nhân dân có quyền bãi miễn những đại biểu mình bầu ra khi họ tỏ ra không xứng đáng với sự tín nhiệm của nhân dân",
+      "Nhân dân chỉ có quyền phê bình đại biểu, không có quyền bãi miễn"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "Q-46",
+    "difficulty": 3,
+    "type": "single",
+    "question": "Cách hiểu nào đúng nhất về mối quan hệ giữa “của nhân dân – do nhân dân – vì nhân dân”?",
+    "answers": [
+      "Ba nội dung hoàn toàn độc lập với nhau",
+      "“Của nhân dân” quan trọng, hai nội dung còn lại chỉ mang tính bổ sung",
+      "Ba nội dung thống nhất, thể hiện chủ thể, nguồn gốc và mục tiêu của quyền lực nhà nước",
+      "“Vì nhân dân” có thể thay thế cho hai nội dung còn lại"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "Q-47",
+    "difficulty": 3,
+    "type": "single",
+    "question": "Một chính sách mang lại lợi ích cho phần lớn người dân nhưng gây tác động bất lợi đáng kể đến một nhóm nhỏ. Cách tiếp cận nào phù hợp nhất với tinh thần Nhà nước vì nhân dân?",
+    "answers": [
+      "Bỏ qua hoàn toàn nhóm thiểu số vì họ ít người",
+      "Hủy ngay chính sách dù chưa đánh giá tác động",
+      "Đánh giá tác động đối với các nhóm, bảo đảm quyền hợp pháp và có biện pháp phù hợp để hạn chế tác động bất lợi",
+      "Chỉ căn cứ vào số lượng người đồng tình"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "Q-48",
+    "difficulty": 3,
+    "type": "single",
+    "question": "Bản chất giai cấp công nhân của Nhà nước ta được biểu hiện cụ thể qua bao nhiêu điểm cốt lõi?",
+    "answers": [
+      "2 điểm",
+      "3 điểm",
+      "4 điểm",
+      "5 điểm"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "Q-49",
+    "difficulty": 3,
+    "type": "single",
+    "question": "Điểm cốt lõi thứ nhất thể hiện bản chất giai cấp công nhân của Nhà nước là gì?",
+    "answers": [
+      "Sự tham gia đông đảo của giai cấp nông dân",
+      "Quyền lực tập trung vào Quốc hội",
+      "Sự lãnh đạo của Đảng Cộng sản Việt Nam",
+      "Sự phát triển mạnh mẽ của nền kinh tế thị trường"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "Q-50",
+    "difficulty": 3,
+    "type": "single",
+    "question": "Văn bản nào khẳng định: \"Nhà nước ta là Nhà nước dân chủ nhân dân, dựa trên nền tảng liên minh công nông, do giai cấp công nhân lãnh đạo\"?",
+    "answers": [
+      "Tuyên ngôn Độc lập năm 1945",
+      "Lời nói đầu của Hiến pháp năm 1946",
+      "Lời nói đầu của Hiến pháp năm 1959",
+      "Cương lĩnh chính trị năm 1930"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "Q-51",
+    "difficulty": 3,
+    "type": "single",
+    "question": "Điểm cốt lõi thứ hai biểu hiện bản chất giai cấp công nhân của Nhà nước là gì?",
+    "answers": [
+      "Tính hội nhập quốc tế sâu rộng",
+      "Tính định hướng xã hội chủ nghĩa",
+      "Tính nhân đạo sâu sắc",
+      "Tính kế thừa truyền thống yêu nước"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "Q-52",
+    "difficulty": 3,
+    "type": "single",
+    "question": "Điểm cốt lõi thứ ba biểu hiện bản chất giai cấp công nhân trong tổ chức và hoạt động của Nhà nước là nguyên tắc nào?",
+    "answers": [
+      "Nguyên tắc tam quyền phân lập",
+      "Nguyên tắc tự do - bình đẳng - bác ái",
+      "Nguyên tắc phân quyền và kiểm soát quyền lực",
+      "Nguyên tắc tập trung dân chủ"
+    ],
+    "correct": 3
+  },
+  {
+    "id": "Q-53",
+    "difficulty": 3,
+    "type": "single",
+    "question": "Nguyên tắc tập trung dân chủ trong Nhà nước bảo đảm điều gì?",
+    "answers": [
+      "Quyền lực tối cao thuộc về Chính phủ và quân đội",
+      "Quyền lực thuộc về nhân dân nhưng có sự lãnh đạo tập trung, thống nhất",
+      "Mọi quyết định đều phải lấy ý kiến toàn dân một cách tuyệt đối",
+      "Quyền lực nhà nước được phân chia độc lập giữa các nhánh quyền lực"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "Q-54",
+    "difficulty": 3,
+    "type": "single",
+    "question": "Bản chất giai cấp công nhân trong Nhà nước ta thống nhất sâu sắc với những tính chất nào?",
+    "answers": [
+      "Tính giai cấp và tính quốc tế",
+      "Tính nhân dân và tính dân tộc",
+      "Tính nhân văn và tính toàn cầu",
+      "Tính pháp lý và tính xã hội"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "Q-55",
+    "difficulty": 3,
+    "type": "single",
+    "question": "Luận điểm nào sau đây thể hiện mối quan hệ giữa lợi ích của giai cấp công nhân với lợi ích của nhân dân và dân tộc?",
+    "answers": [
+      "Giai cấp công nhân chỉ bảo vệ quyền lợi đặc quyền của công nhân nhà máy",
+      "Giai cấp công nhân không có lợi ích nào khác ngoài lợi ích của nhân dân và dân tộc",
+      "Lợi ích của giai cấp công nhân đối lập với tầng lớp trí thức yêu nước",
+      "Lợi ích dân tộc chỉ là phụ, lợi ích giai cấp công nhân là tối thượng"
+    ],
+    "correct": 1
   }
 ]

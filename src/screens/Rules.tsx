@@ -1,7 +1,7 @@
 // Luật chơi có minh họa (mục 12.9): đường đi, các loại ô, power-up, thẻ bẫy, kết thúc, cách chơi,
 // tùy chọn, phím tắt. Số liệu đọc từ dữ liệu (board, rules, powerups, traps), chữ ở site.json.
 import { ArrowRight } from 'lucide-react'
-import { cellLegendItems, POWERUP_FILL, Swatch, TRAP_FILL, TRAP_ICON } from '../components/Board'
+import { cellLegendItems, POWERUP_FILL, QUESTION_STROKE, Swatch, TRAP_FILL, TRAP_ICON } from '../components/Board'
 import { POWERUP_ICONS, TRAP_ICONS } from '../components/icons'
 import { geometry } from '../engine/board'
 import { gameData, site, tokens } from '../lib/gameData'
@@ -9,6 +9,8 @@ import { fill } from '../lib/text'
 
 const data = gameData
 const sec = (ms: number) => Math.round(ms / 1000)
+/** số câu theo độ khó trong kho → {d1, d2, d3} */
+const difficultyCounts = () => Object.fromEntries([1, 2, 3].map((d) => [`d${d}`, data.questions.filter((q) => q.difficulty === d).length]))
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -30,10 +32,10 @@ export function RulesContent() {
   const color = tokens.colors[0].color
   const path = [
     { key: 'gate', swatch: <Swatch bg={color} stroke="var(--ink)" icon="gate" iconColor="#fff" />, label: t.pathGate },
-    { key: 'ring', swatch: <Swatch bg="var(--surface)" stroke={data.pillars[0].color} icon="question" iconColor="var(--ink-soft)" strokeWidth={3.5} />, label: fill(t.pathRing, { n: ringSteps }) },
+    { key: 'ring', swatch: <Swatch bg="var(--surface)" stroke={QUESTION_STROKE} icon="question" iconColor={QUESTION_STROKE} strokeWidth={2.5} />, label: fill(t.pathRing, { n: ringSteps }) },
     {
       key: 'home',
-      swatch: <Swatch bg={`color-mix(in srgb, ${color} 20%, var(--surface))`} stroke={data.pillars[1].color} icon="question" iconColor="var(--ink-soft)" strokeWidth={3.5} />,
+      swatch: <Swatch bg={`color-mix(in srgb, ${color} 20%, var(--surface))`} stroke={QUESTION_STROKE} icon="question" iconColor={QUESTION_STROKE} strokeWidth={2.5} />,
       label: fill(t.pathHome, { n: main.geo.homeLength }),
     },
     { key: 'finish', swatch: <Swatch bg={POWERUP_FILL} stroke="var(--ink)" icon="finish" iconColor="#5A3B00" />, label: t.pathFinish },
@@ -83,16 +85,7 @@ export function RulesContent() {
             </li>
           ))}
         </ul>
-        <p className="text-sm">{t.pillarsNote}</p>
-        <ul className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-          {data.pillars.map((p) => (
-            <li key={p.id} className="flex items-center gap-1.5">
-              <span className="inline-block h-4 w-4 rounded-full border-4" style={{ borderColor: p.color }} aria-hidden="true" />
-              <span className="font-bold">{p.abbr}</span>
-              <span>{p.label}</span>
-            </li>
-          ))}
-        </ul>
+        <p className="text-sm">{fill(t.questionsNote, { n: data.questions.length, ...difficultyCounts() })}</p>
       </Section>
 
       <Section title={t.powerupsTitle}>

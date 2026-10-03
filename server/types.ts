@@ -45,7 +45,8 @@ export interface RecentAction {
 }
 
 export interface Room {
-  schema: 1
+  /** 2 = bản 1.6 (game không còn trụ cột / giải thích); phòng định dạng cũ coi như không có */
+  schema: 2
   code: string
   /** tăng 1 mỗi lần ghi */
   version: number

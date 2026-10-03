@@ -70,9 +70,10 @@ async function infoScreens(page, label) {
   check(!(await visible(page.getByText('Đáp án đúng', { exact: true }))), `${label}: đáp án ẩn mặc định`)
   await page.locator('[data-question]').first().getByRole('button', { name: 'Hiện đáp án' }).click()
   check(await visible(page.locator('[data-question]').first().getByText('Đáp án đúng', { exact: true })), `${label}: bấm "Hiện đáp án" thì hiện`)
-  await page.locator('label.seg', { hasText: 'Trong sạch' }).first().click()
-  const pillarCount = await page.locator('[data-question]').count()
-  check(pillarCount > 0 && pillarCount < n, `${label}: lọc theo trụ cột (${pillarCount}/${n})`)
+  await page.locator('fieldset', { hasText: 'Độ khó' }).locator('label.seg', { hasText: /^3$/ }).click()
+  const hardCount = await page.locator('[data-question]').count()
+  check(hardCount > 0 && hardCount < n, `${label}: lọc theo độ khó (${hardCount}/${n})`)
+  check((await page.getByText(/Trụ cột|Nguồn:|Chờ xác minh|Hiện vật liên quan/).count()) === 0, `${label}: Kho câu hỏi không còn trụ cột, nguồn, [Chờ xác minh], hiện vật`)
   await page.locator('label.seg', { hasText: 'Tất cả' }).first().click()
   const wrong = page.getByLabel(/Câu từng trả lời sai trên máy này/)
   check(await wrong.isEnabled(), `${label}: Sổ ôn tập có câu sai từ ván vừa chơi`)
@@ -84,7 +85,7 @@ async function infoScreens(page, label) {
   // ôn tập các câu đang lọc bằng bàn phím: 1 = đáp án đầu, Space = câu tiếp
   await page.getByRole('button', { name: /^Ôn tập \d+ câu đang lọc$/ }).click()
   await page.keyboard.press('1')
-  check(await visible(page.getByRole('dialog').getByText('Giải thích', { exact: true })), `${label}: ôn tập — phím 1 chọn đáp án, hiện giải thích`)
+  check(await visible(page.getByRole('dialog').locator('[data-correct-answer]')), `${label}: ôn tập — phím 1 chọn đáp án, hiện đáp án đúng`)
   await axeCheck(page, `${label} ôn tập`)
   // Space (hoặc nút đang có tiêu điểm) sang câu tiếp; phần còn lại bấm nút trực tiếp
   await page.keyboard.press('Space')
@@ -147,8 +148,10 @@ async function play(page, { maxSteps = 4000, pick = 'random', label, axe = false
       await roll.click()
       continue
     }
-    if (!axedR && (await visible(page.getByText('Giải thích', { exact: true })))) {
-      await axeCheck(page, `${label} giải thích`)
+    if (!axedR && (await visible(page.locator('[data-correct-answer]')))) {
+      // bản 1.6: sau khi chốt chỉ có Đúng / Sai và đáp án đúng
+      check((await page.getByRole('dialog').getByText(/Giải thích|Nguồn:|Hiện vật liên quan/).count()) === 0, `${label}: sau khi chốt không có giải thích, nguồn, hiện vật`)
+      await axeCheck(page, `${label} đáp án đúng`)
       axedR = true
     }
     for (const name of [/^Tiếp tục$/, /^Bỏ món mới/]) {
@@ -221,12 +224,12 @@ for (const [w, h, sch] of [
   await axeCheck(page, `${label} kết thúc`)
   if (shots) await page.screenshot({ path: join(shots, `${label}-end.png`), fullPage: true })
   await noHScroll(page, label)
-  check((await page.locator('[data-pillar-stat]').count()) > 0, `${label}: kết thúc có thống kê theo trụ cột`)
+  check((await page.getByText('Theo trụ cột').count()) === 0 && (await visible(page.getByRole('region', { name: 'Thống kê' }))), `${label}: kết thúc có thống kê, không còn mục theo trụ cột`)
   const redo = page.getByRole('button', { name: 'Làm lại các câu sai' })
   if (await visible(redo)) {
     await redo.click()
     await page.locator('button[data-practice-answer]').first().click()
-    check(await visible(page.getByRole('dialog').getByText('Giải thích', { exact: true })), `${label}: làm lại câu sai — hiện giải thích`)
+    check(await visible(page.getByRole('dialog').locator('[data-correct-answer]')), `${label}: làm lại câu sai — hiện đáp án đúng`)
     await page.getByRole('dialog').getByRole('button', { name: /^(Câu tiếp|Xem kết quả)$/ }).click()
     await page.keyboard.press('Escape')
   }
@@ -255,7 +258,7 @@ for (const [w, h, sch] of [
     await page.clock.runFor(1500)
     if ((await page.locator('button[data-answer]:enabled').count()) > 0) {
       await page.keyboard.press('1')
-      keyAnswered = await visible(page.getByRole('dialog').getByText('Giải thích', { exact: true }))
+      keyAnswered = await visible(page.getByRole('dialog').locator('[data-correct-answer]'))
       await page.keyboard.press('Space')
     } else if (await visible(page.getByRole('button', { name: /^Tiếp tục$/ }))) await page.keyboard.press('Space')
     await page.clock.runFor(1500)

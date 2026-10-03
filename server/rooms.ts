@@ -117,7 +117,9 @@ export class RoomService {
       const c = this.cache.get(code)
       if (c) return c
     }
-    const r = await this.store.get(code)
+    const got = await this.store.get(code)
+    // phòng tạo trước bản 1.6 (định dạng ván cũ) → coi như không còn
+    const r = got && got.schema === 2 && (!got.game || got.game.schema === 2) ? got : null
     if (r) this.remember(r)
     else this.cache.delete(code)
     return r
@@ -323,7 +325,7 @@ export class RoomService {
       const now = this.now()
       const token = newToken()
       const room: Room = {
-        schema: 1,
+        schema: 2,
         code: newRoomCode(),
         version: 1,
         createdAt: now,

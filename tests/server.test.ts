@@ -378,7 +378,7 @@ describe('Server — hạn thời gian, trạng thái, nối lại, hết hạn'
     expect(text).not.toContain('correctIndex')
     expect(text).not.toContain('tokenHash')
     expect(v.game!.turn.outcome).toBeNull()
-    expect(Object.keys(v.game!.turn.question!).sort()).toEqual(['difficulty', 'eliminated', 'fiftyFiftyUsed', 'id', 'isFinish', 'order', 'pillar', 'swapUsed', 'wantDifficulty', 'wantPillar'])
+    expect(Object.keys(v.game!.turn.question!).sort()).toEqual(['difficulty', 'eliminated', 'fiftyFiftyUsed', 'id', 'isFinish', 'order', 'swapUsed'])
   })
 
   it('polling: không đổi → null (204); nối lại nhận đúng ảnh chụp mới nhất', async () => {

@@ -21,11 +21,10 @@ export type CellRef =
   | { area: 'home'; color: number; index: number }
   | { area: 'finish' }
 
+/** Ô không gắn trụ cột hay độ khó (bản 1.6) — câu hỏi rút ngẫu nhiên từ toàn bộ kho (mục 5) */
 export interface CellInfo {
   /** 'gate' chỉ khi cổng đó có người chơi; cổng của màu trống là 'question' */
   kind: CellKind | 'finish' | 'stable'
-  pillar: string | null
-  difficulty: number | null
   ref: CellRef
   /** màu của cổng nếu ô là cổng (dù có người chơi hay không) */
   gateColor: number | null
@@ -46,7 +45,8 @@ export function geometry(data: GameData, layoutId: string): Geometry {
     if (b[0] !== 'gate') throw new Error(`Bố cục ${layoutId}: ô đầu mỗi nhánh phải là cổng`)
   }
   const ringLength = branchCount * cellsPerBranch
-  const homeLength = layout.homeDifficulties.length
+  const homeLength = layout.homeLength
+  if (!Number.isInteger(homeLength) || homeLength < 1) throw new Error(`Bố cục ${layoutId}: homeLength phải là số nguyên ≥ 1`)
   const geo: Geometry = {
     layoutId,
     layout,
@@ -58,11 +58,6 @@ export function geometry(data: GameData, layoutId: string): Geometry {
   }
   geoCache.set(layout, geo)
   return geo
-}
-
-/** D1: nhánh i (0-based) → trụ cột thứ (i mod số trụ cột) theo thứ tự mindmap.json */
-export function branchPillar(data: GameData, branch: number): string {
-  return data.pillars[branch % data.pillars.length].id
 }
 
 /** Chỉ số ô vòng chung của cổng màu c (màu c gắn với cổng nhánh c) */
@@ -77,38 +72,20 @@ export function stepToCell(geo: Geometry, color: number, step: number): CellRef 
   return { area: 'finish' }
 }
 
-export function ringCellInfo(data: GameData, geo: Geometry, activeColors: ReadonlySet<number>, index: number): CellInfo {
+export function ringCellInfo(geo: Geometry, activeColors: ReadonlySet<number>, index: number): CellInfo {
   const branch = Math.floor(index / geo.cellsPerBranch)
   const pos = index % geo.cellsPerBranch
   const raw = geo.layout.branches[branch][pos]
-  const pillar = branchPillar(data, branch)
   const ref: CellRef = { area: 'ring', index }
   if (raw === 'gate') {
     const gateColor = branch
-    if (activeColors.has(gateColor)) {
-      return { kind: 'gate', pillar, difficulty: null, ref, gateColor, branch }
-    }
-    // Cổng của màu không có người chơi thành ô câu hỏi độ khó 1 thuộc trụ cột nhánh (mục 4)
-    return { kind: 'question', pillar, difficulty: geo.layout.ringDifficulty, ref, gateColor, branch }
+    // Cổng của màu không có người chơi thành ô câu hỏi (mục 4)
+    return { kind: activeColors.has(gateColor) ? 'gate' : 'question', ref, gateColor, branch }
   }
-  return {
-    kind: raw,
-    pillar,
-    difficulty: raw === 'question' ? geo.layout.ringDifficulty : null,
-    ref,
-    gateColor: null,
-    branch,
-  }
-}
-
-/** D3: đường về đích — trụ cột xoay vòng bắt đầu từ trụ cột nhánh có cổng người đó */
-export function homeCellPillar(data: GameData, color: number, index: number): string {
-  const start = color % data.pillars.length
-  return data.pillars[(start + index) % data.pillars.length].id
+  return { kind: raw, ref, gateColor: null, branch }
 }
 
 export function cellAtStep(
-  data: GameData,
   geo: Geometry,
   activeColors: ReadonlySet<number>,
   color: number,
@@ -117,21 +94,13 @@ export function cellAtStep(
   const ref = stepToCell(geo, color, step)
   switch (ref.area) {
     case 'stable':
-      return { kind: 'stable', pillar: null, difficulty: null, ref, gateColor: null, branch: null }
+      return { kind: 'stable', ref, gateColor: null, branch: null }
     case 'ring':
-      return ringCellInfo(data, geo, activeColors, ref.index)
+      return ringCellInfo(geo, activeColors, ref.index)
     case 'home':
-      return {
-        kind: 'question',
-        pillar: homeCellPillar(data, color, ref.index),
-        difficulty: geo.layout.homeDifficulties[ref.index],
-        ref,
-        gateColor: null,
-        branch: null,
-      }
+      return { kind: 'question', ref, gateColor: null, branch: null }
     case 'finish':
-      // trụ cột câu về đích chọn theo seed lúc hỏi (D3)
-      return { kind: 'finish', pillar: null, difficulty: geo.layout.finishDifficulty, ref, gateColor: null, branch: null }
+      return { kind: 'finish', ref, gateColor: null, branch: null }
   }
 }
 

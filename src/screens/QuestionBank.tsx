@@ -1,10 +1,8 @@
-// Kho câu hỏi (mục 12.8): "Tổng số câu hỏi: N", lọc theo trụ cột / độ khó / Sổ ôn tập / câu hỏi thử,
-// nhãn [Chờ xác minh] và [Câu hỏi thử], nguồn từng câu, đáp án ẩn mặc định (nút hiện), ôn tập các câu
-// đang lọc. Chỉ mở được từ trang chủ — không có khi đang ở trong phòng chơi (L5, mục 15.4).
+// Kho câu hỏi (mục 12.8, bản 1.6): "Tổng số câu hỏi: N", lọc theo độ khó / Sổ ôn tập / câu hỏi
+// thử, nhãn [Câu hỏi thử] (nếu có), đáp án ẩn mặc định (nút hiện), ôn tập các câu đang lọc. Không
+// có trụ cột, nguồn, [Chờ xác minh]. Chỉ mở được từ trang chủ — không có khi đang ở trong phòng (L5).
 import { Check, Eye, EyeOff, GraduationCap } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { ArtifactCard, findArtifact } from '../components/ArtifactCard'
-import { PillarChip } from '../components/PillarChip'
 import { Practice } from '../components/Practice'
 import { clearReview, loadReview, removeFromReview } from '../game/review'
 import { gameData, questionList, site } from '../lib/gameData'
@@ -12,7 +10,7 @@ import { fill } from '../lib/text'
 
 const LETTERS = ['A', 'B', 'C', 'D']
 
-type Filter = { pillar: string; difficulty: number | 'all'; wrong: boolean; test: boolean; text: string }
+type Filter = { difficulty: number | 'all'; wrong: boolean; test: boolean; text: string }
 
 /** bỏ dấu tiếng Việt để tìm không phân biệt dấu */
 function fold(s: string): string {
@@ -21,11 +19,10 @@ function fold(s: string): string {
 
 export function QuestionBank({ onBack }: { onBack: () => void }) {
   const t = site.bank
-  const [f, setF] = useState<Filter>({ pillar: 'all', difficulty: 'all', wrong: false, test: false, text: '' })
+  const [f, setF] = useState<Filter>({ difficulty: 'all', wrong: false, test: false, text: '' })
   const [shown, setShown] = useState<Set<string>>(new Set())
   const [review, setReview] = useState(() => loadReview((id) => gameData.questionById.has(id)))
   const [practice, setPractice] = useState<string[] | null>(null)
-  const [artifact, setArtifact] = useState<string | null>(null)
   const set = (patch: Partial<Filter>) => setF((x) => ({ ...x, ...patch }))
   const hasTest = questionList.some((q) => q.test)
   const difficulties = [...new Set(questionList.map((q) => q.difficulty))].sort()
@@ -35,7 +32,6 @@ export function QuestionBank({ onBack }: { onBack: () => void }) {
     const wrongSet = new Set(review)
     const out = questionList.filter(
       (q) =>
-        (f.pillar === 'all' || q.pillar === f.pillar) &&
         (f.difficulty === 'all' || q.difficulty === f.difficulty) &&
         (!f.wrong || wrongSet.has(q.id)) &&
         (!f.test || q.test) &&
@@ -67,17 +63,6 @@ export function QuestionBank({ onBack }: { onBack: () => void }) {
       </header>
 
       <section className="card flex flex-col gap-4" aria-label={t.filterOther}>
-        <fieldset>
-          <legend className="mb-1 font-semibold">{t.filterPillar}</legend>
-          <div className="flex flex-wrap gap-2">
-            {[{ id: 'all', label: t.all }, ...gameData.pillars].map((p) => (
-              <label key={p.id} className={`seg ${f.pillar === p.id ? 'seg-on' : ''}`}>
-                <input type="radio" name="bank-pillar" className="sr-only" checked={f.pillar === p.id} onChange={() => set({ pillar: p.id })} />
-                {p.label}
-              </label>
-            ))}
-          </div>
-        </fieldset>
         <fieldset>
           <legend className="mb-1 font-semibold">{t.filterDifficulty}</legend>
           <div className="flex flex-wrap gap-2">
@@ -128,18 +113,14 @@ export function QuestionBank({ onBack }: { onBack: () => void }) {
       {list.length === 0 && <p className="text-ink-soft">{t.none}</p>}
       <ol className="flex flex-col gap-3">
         {list.map((q) => {
-          const pillar = gameData.pillars.find((p) => p.id === q.pillar)
           const open = shown.has(q.id)
-          const art = findArtifact(q.artifact)
           return (
             <li key={q.id} className="card flex flex-col gap-2" data-question={q.id}>
               <div className="flex flex-wrap items-center gap-2 text-sm">
                 <span className="font-mono font-semibold">{q.id}</span>
-                {pillar && <PillarChip pillar={pillar} />}
                 <span className="rounded-full bg-line px-2.5 py-0.5 font-semibold">{fill(site.game.question.difficulty, { n: q.difficulty })}</span>
                 <span className="text-ink-soft">{(t.types as Record<string, string>)[q.type] ?? q.type}</span>
                 {q.test && <span className="rounded-full border border-ink-soft px-2 py-0.5 text-ink-soft">{site.testLabel}</span>}
-                {!q.verified && !q.test && <span className="rounded-full border border-ink-soft px-2 py-0.5 text-ink-soft">{site.unverifiedLabel}</span>}
               </div>
               <p className="font-semibold leading-snug">{q.question}</p>
               <ul className="flex flex-col gap-1">
@@ -160,21 +141,7 @@ export function QuestionBank({ onBack }: { onBack: () => void }) {
                   )
                 })}
               </ul>
-              {open && (
-                <div className="rounded-2xl bg-bg p-3">
-                  <p className="mb-1 text-sm font-bold text-ink-soft">{site.game.question.explanation}</p>
-                  <p className="leading-relaxed">{q.explanation}</p>
-                </div>
-              )}
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="mr-auto text-sm text-ink-soft">
-                  {site.game.question.source}: {q.source.ref}
-                </span>
-                {art && (
-                  <button type="button" className="btn-chip" onClick={() => setArtifact(art.id)}>
-                    {site.game.question.artifact}: {art.id}
-                  </button>
-                )}
+              <div className="flex flex-wrap items-center justify-end gap-2">
                 <button type="button" className="btn-secondary" aria-expanded={open} onClick={() => toggle(q.id)}>
                   {open ? t.hideAnswer : t.showAnswer}
                 </button>
@@ -201,10 +168,8 @@ export function QuestionBank({ onBack }: { onBack: () => void }) {
           ids={practice}
           onClose={() => setPractice(null)}
           onCorrect={(id) => setReview(removeFromReview(id))}
-          onArtifact={setArtifact}
         />
       )}
-      {artifact && <ArtifactCard id={artifact} onClose={() => setArtifact(null)} />}
     </main>
   )
 }

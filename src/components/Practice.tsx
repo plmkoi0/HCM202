@@ -1,5 +1,5 @@
-// Ôn tập (mục 12.6, 12.8): trả lời lại từng câu, không ảnh hưởng ván; sau khi chọn hiện đáp án
-// đúng, giải thích, nguồn, chip hiện vật. Dùng cho "Làm lại câu sai" (màn kết thúc) và Kho câu hỏi.
+// Ôn tập (mục 12.6, 12.8): trả lời lại từng câu, không ảnh hưởng ván; sau khi chọn chỉ hiện
+// Đúng / Sai và đáp án đúng (bản 1.6). Dùng cho "Làm lại câu sai" (màn kết thúc) và Kho câu hỏi.
 import { Check, X } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { answerOrder } from '../engine/questions'
@@ -7,13 +7,11 @@ import { shortcutOf } from '../game/useShortcuts'
 import { gameData, site } from '../lib/gameData'
 import { playSound } from '../lib/sound'
 import { fill } from '../lib/text'
-import { findArtifact } from './ArtifactCard'
-import { PillarChip } from './PillarChip'
 import { Sheet } from './Sheet'
 
 const LETTERS = ['A', 'B', 'C', 'D']
 
-export function Practice({ ids, onClose, onCorrect, onArtifact }: { ids: string[]; onClose: () => void; onCorrect?: (id: string) => void; onArtifact?: (id: string) => void }) {
+export function Practice({ ids, onClose, onCorrect }: { ids: string[]; onClose: () => void; onCorrect?: (id: string) => void }) {
   const t = site.practice
   const qt = site.game.question
   const questions = useMemo(() => ids.map((id) => gameData.questionById.get(id)).filter((q) => q !== undefined), [ids])
@@ -69,15 +67,12 @@ export function Practice({ ids, onClose, onCorrect, onArtifact }: { ids: string[
       </Sheet>
     )
   }
-  const pillar = gameData.pillars.find((p) => p.id === q.pillar)
-  const artifact = findArtifact(q.artifact)
   return (
     <Sheet labelledBy="practice-q" onClose={onClose} tone={revealed ? (correct ? 'good' : 'bad') : 'default'}>
       <div className="flex flex-col gap-3">
         <div className="flex flex-wrap items-center gap-2 text-sm">
           <span className="font-bold">{t.title}</span>
           <span className="text-ink-soft">{fill(t.progress, { n: index + 1, total: questions.length })}</span>
-          {pillar && <PillarChip pillar={pillar} />}
           <span className="rounded-full bg-line px-2.5 py-0.5 font-semibold">{fill(qt.difficulty, { n: q.difficulty })}</span>
           {q.test && <span className="rounded-full border border-ink-soft px-2 py-0.5 text-ink-soft">{site.testLabel}</span>}
         </div>
@@ -121,18 +116,9 @@ export function Practice({ ids, onClose, onCorrect, onArtifact }: { ids: string[
         {revealed && (
           <>
             <p className={`text-xl font-bold ${correct ? 'text-ok' : 'text-bad'}`}>{correct ? qt.correct : qt.wrong}</p>
-            <div className="rounded-2xl bg-bg p-3">
-              <p className="mb-1 text-sm font-bold text-ink-soft">{qt.explanation}</p>
-              <p className="leading-relaxed">{q.explanation}</p>
-              <p className="mt-2 text-sm text-ink-soft">
-                {qt.source}: {q.source.ref}
-              </p>
-            </div>
-            {artifact && onArtifact && (
-              <button type="button" className="btn-chip self-start" onClick={() => onArtifact(artifact.id)}>
-                {qt.artifact}: {artifact.id} · {artifact.title}
-              </button>
-            )}
+            <p className="rounded-2xl bg-bg p-3" data-correct-answer>
+              <span className="font-bold text-ink-soft">{qt.correctAnswer}:</span> {q.answers[q.correct]}
+            </p>
             <button type="button" className="btn-primary" data-autofocus onClick={next}>
               {index + 1 < questions.length ? t.next : t.finish}
             </button>

@@ -4,7 +4,7 @@
   "layouts": {
     "ngan": {
       "label": "Ngắn",
-      "note": "Mục 4: mỗi nhánh [cổng, ô 2, ô 3]; power-up ô 3 nhánh 1, 5; bẫy ô 3 nhánh 3, 6 (D2). Trụ cột nhánh lặp theo mindmap.json (D1).",
+      "note": "Mục 4: mỗi nhánh [cổng, ô 2, ô 3]; power-up ô 3 nhánh 1, 5; bẫy ô 3 nhánh 3, 6. Bản 1.6: ô không gắn trụ cột hay độ khó — câu hỏi rút ngẫu nhiên từ toàn bộ kho (mục 5).",
       "branches": [
         ["gate", "question", "powerup"],
         ["gate", "question", "question"],
@@ -13,13 +13,11 @@
         ["gate", "question", "powerup"],
         ["gate", "question", "trap"]
       ],
-      "ringDifficulty": 1,
-      "homeDifficulties": [2, 2, 3, 3],
-      "finishDifficulty": 3
+      "homeLength": 4
     },
     "dai": {
       "label": "Dài",
-      "note": "Mục 4 (D4): vòng 24 ô = 6 cổng + 3 power-up + 3 bẫy + 12 câu hỏi; trụ cột ít nội dung có ít ô câu hỏi nhất (dân chủ 5, pháp quyền 4, trong sạch 3) — vị trí chốt ở G1.",
+      "note": "Mục 4 (D4): vòng 24 ô = 6 cổng + 3 power-up + 3 bẫy + 12 câu hỏi; đường về đích 5 ô. Bản 1.6: ô không gắn trụ cột hay độ khó.",
       "branches": [
         ["gate", "question", "question", "powerup"],
         ["gate", "question", "trap", "question"],
@@ -28,9 +26,7 @@
         ["gate", "question", "question", "powerup"],
         ["gate", "powerup", "question", "trap"]
       ],
-      "ringDifficulty": 1,
-      "homeDifficulties": [2, 2, 3, 3, 3],
-      "finishDifficulty": 3
+      "homeLength": 5
     }
   },
   "cellTypes": {
@@ -38,7 +34,7 @@
     "question": { "label": "Câu hỏi", "short": "Hỏi", "icon": "question", "description": "Trả lời đúng thì nhảy lên ô này, sai hoặc hết giờ thì đứng yên." },
     "powerup": { "label": "Power-up", "short": "Thưởng", "icon": "star", "description": "Nhảy lên và nhận một power-up." },
     "trap": { "label": "Bẫy", "short": "Bẫy", "icon": "trap", "description": "Nhảy lên và rút một thẻ bẫy, trừ khi có Khiên." },
-    "home": { "label": "Đường về đích", "short": "Về đích", "icon": "question", "description": "Ô câu hỏi khó dần trên đường về đích của màu mình." },
-    "finish": { "label": "Đích", "short": "Đích", "icon": "finish", "description": "Câu \"về đích\" khó nhất. Đúng thì về đích." }
+    "home": { "label": "Đường về đích", "short": "Về đích", "icon": "question", "description": "Ô câu hỏi trên đường về đích của màu mình." },
+    "finish": { "label": "Đích", "short": "Đích", "icon": "finish", "description": "Câu \"về đích\" (rút ngẫu nhiên như mọi ô câu hỏi). Đúng thì về đích." }
   }
 }

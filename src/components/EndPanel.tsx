@@ -1,14 +1,13 @@
 // Màn kết thúc (mục 10, 12.6): thứ tự về đích hoặc xếp hạng theo khoảng cách (người dẫn đầu
-// được tôn vinh như người thắng), thống kê, ôn lại câu sai, thông điệp kết, kỷ lục cá nhân.
+// được tôn vinh như người thắng), thống kê, ôn lại câu sai (câu hỏi + đáp án đúng), thông điệp
+// kết, kỷ lục cá nhân.
 import { Crown, GraduationCap, Share2, Trophy } from 'lucide-react'
 import { useState } from 'react'
 import type { GameData, GameState } from '../engine/types'
 import type { RecordResult } from '../game/local'
 import { site, tokens } from '../lib/gameData'
 import { fill } from '../lib/text'
-import { ArtifactCard, findArtifact } from './ArtifactCard'
 import { SymbolShape } from './icons'
-import { PillarChip } from './PillarChip'
 import { Practice } from './Practice'
 
 /** Chia sẻ link game: Web Share nếu có, không thì sao chép (trình duyệt nhúng Zalo/Messenger — mục 16) */
@@ -56,7 +55,6 @@ export function EndPanel({
   reviewFor?: string[]
 }) {
   const [practice, setPractice] = useState<string[] | null>(null)
-  const [artifact, setArtifact] = useState<string | null>(null)
   const [shareNote, setShareNote] = useState<string | null>(null)
   const t = site.end
   const end = state.ended!
@@ -74,7 +72,6 @@ export function EndPanel({
         : fill(state.players.length === 1 ? t.bySolo : t.byFinish, { name: leader.name })
   const humans = state.players.filter((p) => !p.isBot && (!reviewFor || reviewFor.includes(p.id)))
   const allWrong = [...new Set(humans.flatMap((p) => p.stats.wrongIds))].filter((id) => data.questionById.has(id))
-  const statPlayers = state.players.filter((p) => !p.isBot || p.stats.correct + p.stats.wrong > 0)
   return (
     <div className="flex flex-col gap-5">
       <header className="text-center">
@@ -169,28 +166,6 @@ export function EndPanel({
       </section>
 
       <section>
-        <h2 className="mb-2 text-lg font-bold">{t.byPillar}</h2>
-        <ul className="flex flex-col gap-3">
-          {(humans.length > 0 ? humans : statPlayers).map((p) => (
-            <li key={p.id} className="flex flex-col gap-1.5">
-              {(humans.length !== 1 || state.players.length > 1) && <span className="font-semibold">{p.name}</span>}
-              <div className="flex flex-wrap gap-x-4 gap-y-2">
-                {data.pillars.map((pl) => {
-                  const [c, n] = p.stats.byPillar?.[pl.id] ?? [0, 0]
-                  return (
-                    <span key={pl.id} className="flex items-center gap-2 text-sm" data-pillar-stat={pl.id}>
-                      <PillarChip pillar={pl} />
-                      <span className="tabular-nums">{n > 0 ? `${fill(t.pillarScore, { correct: c, total: n })} (${pct(c, n)})` : t.noAnswers}</span>
-                    </span>
-                  )
-                })}
-              </div>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section>
         <h2 className="mb-2 text-lg font-bold">{reviewFor ? t.reviewMine : t.review}</h2>
         {humans.every((p) => p.stats.wrongIds.length === 0) && <p className="text-ink-soft">{t.noWrong}</p>}
         {allWrong.length > 0 && (
@@ -210,21 +185,14 @@ export function EndPanel({
                 {p.stats.wrongIds.map((qid) => {
                   const q = data.questionById.get(qid)
                   if (!q) return null
-                  const art = findArtifact(q.artifact)
                   return (
                     <li key={qid} className="rounded-2xl border border-line bg-surface p-3">
                       <p className="font-semibold">{q.question}</p>
                       <p className="mt-1 text-ok">{fill(t.reviewAnswer, { answer: q.answers[q.correct] })}</p>
-                      <p className="mt-1 text-sm leading-relaxed">{q.explanation}</p>
                       <p className="mt-1 text-xs text-ink-soft">
-                        {site.game.question.source}: {q.source.ref}
+                        {fill(site.game.question.difficulty, { n: q.difficulty })}
                         {q.test ? ` · ${site.testLabel}` : ''}
                       </p>
-                      {art && (
-                        <button type="button" className="btn-chip mt-2" onClick={() => setArtifact(art.id)}>
-                          {site.game.question.artifact}: {art.id} · {art.title}
-                        </button>
-                      )}
                     </li>
                   )
                 })}
@@ -252,8 +220,7 @@ export function EndPanel({
       <p role="status" className={shareNote ? 'text-center text-sm' : 'sr-only'}>
         {shareNote}
       </p>
-      {practice && <Practice ids={practice} onClose={() => setPractice(null)} onArtifact={setArtifact} />}
-      {artifact && <ArtifactCard id={artifact} onClose={() => setArtifact(null)} />}
+      {practice && <Practice ids={practice} onClose={() => setPractice(null)} />}
     </div>
   )
 }

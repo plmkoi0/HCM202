@@ -3,7 +3,7 @@
 // (dùng làm đại diện cho người chơi) và dùng power-up theo luật đơn giản.
 //
 // Mô hình thời gian (giả định, ghi ở mục 11):
-//   - mỗi lần tung dẫn tới câu hỏi: T giây (tung + đọc + trả lời + xem giải thích)
+//   - mỗi lần tung dẫn tới câu hỏi: T giây (tung + đọc + trả lời + xem đáp án đúng)
 //   - mỗi lần tung không dẫn tới câu hỏi (cổng, power-up, bẫy, không đi được): T/2 giây
 //   - lượt bị bỏ (thẻ "mất lượt"): 2 giây
 //

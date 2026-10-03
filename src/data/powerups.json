@@ -4,7 +4,7 @@
     { "id": "advance3", "label": "Tiến 3 ô", "kind": "instant", "weight": 1, "steps": 3, "effect": "Đi thêm 3 ô, không kích hoạt ô mới; dừng tối đa ở ô cuối đường về đích, không vào thẳng Đích." },
     { "id": "extraRoll", "label": "Thêm lượt", "kind": "instant", "weight": 1, "effect": "Được tung thêm một lần sau lượt này." },
     { "id": "fiftyFifty", "label": "50:50", "kind": "bag", "weight": 1, "effect": "Khi đang trả lời: loại đáp án sai tới khi còn 2 đáp án. Câu chỉ có 2 đáp án thì không dùng được." },
-    { "id": "swap", "label": "Đổi câu", "kind": "bag", "weight": 1, "effect": "Khi đang trả lời: đổi sang câu khác cùng trụ cột, cùng độ khó." },
+    { "id": "swap", "label": "Đổi câu", "kind": "bag", "weight": 1, "effect": "Khi đang trả lời: đổi sang một câu ngẫu nhiên khác chưa hỏi." },
     { "id": "shield", "label": "Khiên", "kind": "bag", "weight": 1, "effect": "Tự dùng khi dính bẫy, chặn thẻ bẫy đó." },
     { "id": "double", "label": "Xúc xắc ×2", "kind": "bag", "weight": 1, "multiplier": 2, "effect": "Dùng trước khi tung: số chấm nhân đôi. Luật ra 6 xét mặt xúc xắc trước khi nhân." }
   ]

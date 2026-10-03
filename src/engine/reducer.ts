@@ -6,7 +6,7 @@ import { cellAtStep, geometry, remainingSteps, stepBack, type Geometry } from '.
 import { botAction } from './bot.js'
 import { answerOrder, pickQuestion } from './questions.js'
 import { rank } from './ranking.js'
-import { nextInt, normalizeSeed, pick, pickWeighted, shuffle } from './rng.js'
+import { nextInt, normalizeSeed, pickWeighted, shuffle } from './rng.js'
 import type {
   Action,
   ActionResult,
@@ -177,7 +177,7 @@ export function createGame(data: GameData, setup: GameSetup): GameState {
   }
   const seed = normalizeSeed(setup.seed)
   const s: GameState = {
-    schema: 1,
+    schema: 2,
     version: 0,
     seed,
     rng: seed,
@@ -205,7 +205,6 @@ export function createGame(data: GameData, setup: GameSetup): GameState {
         guessCorrect: 0,
         guessTotal: 0,
         wrongIds: [],
-        byPillar: {},
         stall: 0,
         maxStall: 0,
       },
@@ -419,15 +418,14 @@ function resolveHorse(data: GameData, s: GameState, now: number, horse: number):
     return
   }
 
-  const cell = cellAtStep(data, geo, activeColors(s), p.color, target)
+  const cell = cellAtStep(geo, activeColors(s), p.color, target)
   switch (cell.kind) {
-    case 'finish': {
-      const pillar = pick(s, data.pillars).id
-      ask(data, s, now, pillar, cell.difficulty ?? 3, true)
+    // mọi ô câu hỏi, kể cả Đích, rút câu ngẫu nhiên như nhau (mục 5)
+    case 'finish':
+      ask(data, s, now, true)
       return
-    }
     case 'question':
-      ask(data, s, now, cell.pillar!, cell.difficulty ?? 1, false)
+      ask(data, s, now, false)
       return
     case 'gate': {
       const moved = moveTo(s, p, horse, target)
@@ -467,23 +465,20 @@ function moveTo(s: GameState, p: PlayerState, horse: number, target: number): nu
 
 // ---------- Câu hỏi ----------
 
-function ask(data: GameData, s: GameState, now: number, pillar: string, difficulty: number, isFinish: boolean): void {
+function ask(data: GameData, s: GameState, now: number, isFinish: boolean): void {
   const p = currentPlayer(s)
-  const q = pickQuestion(data, s, p, pillar, difficulty)
+  const q = pickQuestion(data, s, p)
   if (!q) throw new Error('Kho câu hỏi rỗng')
   s.turn.question = {
     id: q.id,
-    pillar: q.pillar,
     difficulty: q.difficulty,
-    wantPillar: pillar,
-    wantDifficulty: difficulty,
     isFinish,
     order: answerOrder(s, q),
     eliminated: [],
     fiftyFiftyUsed: false,
     swapUsed: false,
   }
-  emit(s, 'asked', p.id, { questionId: q.id, pillar: q.pillar, difficulty: q.difficulty, isFinish })
+  emit(s, 'asked', p.id, { questionId: q.id, difficulty: q.difficulty, isFinish })
   if (s.turn.auto) {
     // Người mất kết nối: câu hỏi tính là sai, đứng yên (mục 9)
     resolveAnswer(data, s, now, null, true)
@@ -518,10 +513,6 @@ function resolveAnswer(data: GameData, s: GameState, now: number, choice: number
     if (timedOut) p.stats.timeouts += 1
     if (!p.stats.wrongIds.includes(q.id)) p.stats.wrongIds.push(q.id)
   }
-  const bp = (p.stats.byPillar ??= {})
-  const cell = (bp[q.pillar] ??= [0, 0])
-  cell[1] += 1
-  if (correct) cell[0] += 1
   // Đoán cùng: chỉ tính vào thống kê, không ảnh hưởng di chuyển (mục 8)
   for (const [pid, g] of Object.entries(t.guesses)) {
     const gp = playerById(s, pid)
@@ -691,11 +682,13 @@ function usePowerup(data: GameData, s: GameState, p: PlayerState, id: PowerupId,
     case 'swap': {
       if (s.phase !== 'question' || !t.question || t.question.swapUsed) fail('POWERUP_NOT_USABLE')
       const cur = t.question
-      const q = pickQuestion(data, s, p, cur.pillar, cur.difficulty, cur.id)
-      if (!q || q.pillar !== cur.pillar || q.difficulty !== cur.difficulty) fail('NO_ALTERNATIVE')
+      // một câu ngẫu nhiên khác chưa hỏi (mục 6)
+      const q = pickQuestion(data, s, p, cur.id)
+      if (!q) fail('NO_ALTERNATIVE')
       t.question = {
         ...cur,
         id: q.id,
+        difficulty: q.difficulty,
         order: answerOrder(s, q),
         eliminated: [],
         fiftyFiftyUsed: cur.fiftyFiftyUsed,

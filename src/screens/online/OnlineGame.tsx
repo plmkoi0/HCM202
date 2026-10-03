@@ -3,7 +3,6 @@
 import { LogOut, Wifi, WifiOff } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ClientAction, StateView } from '../../../server/types'
-import { ArtifactCard } from '../../components/ArtifactCard'
 import { Board, BoardLegend } from '../../components/Board'
 import { Confetti } from '../../components/Confetti'
 import { GameMenu, MenuButton, SoundButton } from '../../components/GameMenu'
@@ -61,7 +60,6 @@ export function OnlineGame({ view, offset, mode, act, onLeave, report }: { view:
   const reduced = useReducedMotion()
   const state = useMemo(() => localGame(view, offset), [view, offset])
   const anim = useBoardAnimation(state, reduced)
-  const [artifact, setArtifact] = useState<string | null>(null)
   const [menu, setMenu] = useState(false)
   const t = site.game
   const me = view.you
@@ -123,7 +121,7 @@ export function OnlineGame({ view, offset, mode, act, onLeave, report }: { view:
         else report(fill(t.cannotUseNow, { name: powerLabel(item) }))
       },
     },
-    !artifact && !menu,
+    !menu,
   )
   const confetti = <Confetti burst={anim.burst} reduced={reduced} />
 
@@ -283,7 +281,6 @@ export function OnlineGame({ view, offset, mode, act, onLeave, report }: { view:
             onAnswer={(c) => void send(mine ? { type: 'ANSWER', choice: c } : { type: 'GUESS', choice: c })}
             onPowerup={usePower}
             onContinue={() => void send({ type: 'NEXT_TURN' })}
-            onArtifact={setArtifact}
             autoAt={state.deadline}
             canContinue={mine}
             note={canGuess ? site.online.guessTitle : guessed ? site.online.guessed : undefined}
@@ -293,7 +290,6 @@ export function OnlineGame({ view, offset, mode, act, onLeave, report }: { view:
         {state.phase === 'discard' && mine && !anim.busy && state.turn.pendingPowerup && (
           <DiscardPanel data={data} bag={cur!.bag} incoming={state.turn.pendingPowerup} onDiscard={(d) => void send({ type: 'DISCARD_POWERUP', discard: d })} />
         )}
-        {artifact && <ArtifactCard id={artifact} onClose={() => setArtifact(null)} />}
         {menu && <GameMenu onClose={() => setMenu(false)} />}
       </div>
       {confetti}

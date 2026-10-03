@@ -2,7 +2,6 @@
 // cửa sổ câu hỏi / kết quả / túi đầy / chọn ngựa, hoàn tác, lưu ván, màn kết thúc.
 import { Clock, LogOut, Undo2 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { ArtifactCard } from '../components/ArtifactCard'
 import { Board, BoardLegend } from '../components/Board'
 import { Confetti } from '../components/Confetti'
 import { GameMenu, MenuButton, SoundButton } from '../components/GameMenu'
@@ -61,19 +60,10 @@ export function LocalGame({ initial, onHome, onAgain }: { initial: LocalSave; on
   const anim = useBoardAnimation(state, reduced)
   const autoAt = autoActionAt(state, anim.idleAt)
   useAutoActions(state, autoAt, anim.busy || paused, apply)
-  const [artifact, setArtifact] = useState<string | null>(null)
   const [confirmQuit, setConfirmQuit] = useState(false)
   const [menu, setMenu] = useState(false)
   const [toast, setToast] = useState<string | null>(null)
-  // mở thẻ hiện vật / hộp xác nhận thoát → tạm dừng đồng hồ ván và hạn pha
-  const openArtifact = (id: string) => {
-    setArtifact(id)
-    setPaused(true)
-  }
-  const closeArtifact = useCallback(() => {
-    setArtifact(null)
-    setPaused(false)
-  }, [setPaused])
+  // mở hộp xác nhận thoát / Menu → tạm dừng đồng hồ ván và hạn pha
   const openQuit = () => {
     setConfirmQuit(true)
     setPaused(true)
@@ -160,7 +150,7 @@ export function LocalGame({ initial, onHome, onAgain }: { initial: LocalSave; on
         else setToast(fill(t.cannotUseNow, { name: powerLabel(item) }))
       },
     },
-    !artifact && !confirmQuit && !menu && !paused,
+    !confirmQuit && !menu && !paused,
   )
 
   // pháo giấy luôn là phần tử thứ hai của Fragment ở cả hai nhánh → không chạy lại khi sang màn kết thúc
@@ -302,14 +292,12 @@ export function LocalGame({ initial, onHome, onAgain }: { initial: LocalSave; on
             onAnswer={answer}
             onPowerup={applyPowerup}
             onContinue={next}
-            onArtifact={openArtifact}
             autoAt={autoAt}
           />
         )}
         {showOutcome && cur && <OutcomePanel data={data} state={state} playerName={cur.name} onContinue={next} canContinue autoAt={autoAt} />}
         {state.phase === 'discard' && human && !anim.busy && state.turn.pendingPowerup && <DiscardPanel data={data} bag={cur!.bag} incoming={state.turn.pendingPowerup} onDiscard={discard} />}
         {state.phase === 'chooseHorse' && human && !anim.busy && <ChooseHorsePanel data={data} state={state} movable={movable} onChoose={choose} />}
-        {artifact && <ArtifactCard id={artifact} onClose={closeArtifact} />}
         {menu && <GameMenu onClose={closeMenu} />}
         {confirmQuit && (
           <Sheet title={t.quit} labelledBy="quit-title" onClose={closeQuit}>

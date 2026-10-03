@@ -1,13 +1,11 @@
-// Cửa sổ câu hỏi (mục 8, 12.5): đồng hồ, nút 50:50 / Đổi câu nếu có; sau khi chốt: đáp án
-// đúng, giải thích, nguồn, chip "Hiện vật liên quan". Đáp án trộn theo state.turn.question.order.
+// Cửa sổ câu hỏi (mục 8, 12.5): nhãn "Độ khó n", đồng hồ, nút 50:50 / Đổi câu nếu có; sau khi
+// chốt chỉ hiện Đúng / Sai và đáp án đúng (bản 1.6). Đáp án trộn theo state.turn.question.order.
 import { Check, X } from 'lucide-react'
 import type { GameData, GameState, PowerupId } from '../engine/types'
 import { site } from '../lib/gameData'
 import { fill } from '../lib/text'
-import { findArtifact } from './ArtifactCard'
 import { Countdown } from './Countdown'
 import { POWERUP_ICONS } from './icons'
-import { PillarChip } from './PillarChip'
 import { Sheet } from './Sheet'
 
 const LETTERS = ['A', 'B', 'C', 'D']
@@ -22,7 +20,6 @@ interface Props {
   onAnswer: (choice: number) => void
   onPowerup: (id: PowerupId) => void
   onContinue: () => void
-  onArtifact: (id: string) => void
   /** lúc tự sang lượt sau khi hiện giải thích (đồng hồ trên nút Tiếp tục) */
   autoAt: number | null
   /** chơi qua phòng: chỉ người đến lượt bấm Tiếp tục */
@@ -31,21 +28,18 @@ interface Props {
   note?: string
 }
 
-export function QuestionPanel({ data, state, playerName, canAnswer, bag, onAnswer, onPowerup, onContinue, onArtifact, autoAt, canContinue = true, note }: Props) {
+export function QuestionPanel({ data, state, playerName, canAnswer, bag, onAnswer, onPowerup, onContinue, autoAt, canContinue = true, note }: Props) {
   const t = site.game.question
   const aq = state.turn.question
   if (!aq) return null
   const q = data.questionById.get(aq.id)
   if (!q) return null
-  const pillar = data.pillars.find((p) => p.id === q.pillar)
   const outcome = state.turn.outcome?.kind === 'answered' ? state.turn.outcome : null
   const revealed = state.phase === 'reveal' && outcome !== null
-  const borrowed = aq.pillar !== aq.wantPillar || aq.difficulty !== aq.wantDifficulty
   const remaining = q.answers.length - aq.eliminated.length
   const hasFifty = canAnswer && bag.includes('fiftyFifty') && !aq.fiftyFiftyUsed
   const canFifty = hasFifty && remaining > 2
   const canSwap = canAnswer && bag.includes('swap') && !aq.swapUsed
-  const artifact = findArtifact(q.artifact)
   const tone = revealed ? (outcome.correct ? 'good' : 'bad') : 'default'
   const FiftyIcon = POWERUP_ICONS.fiftyFifty
   const SwapIcon = POWERUP_ICONS.swap
@@ -59,13 +53,10 @@ export function QuestionPanel({ data, state, playerName, canAnswer, bag, onAnswe
           {result}
         </p>
         <div className="flex flex-wrap items-center gap-2 text-sm">
-          {pillar && <PillarChip pillar={pillar} />}
           <span className="rounded-full bg-line px-2.5 py-0.5 font-semibold">{fill(t.difficulty, { n: q.difficulty })}</span>
           {aq.isFinish && <span className="rounded-full bg-gold px-2.5 py-0.5 font-bold text-on-gold">{t.finish}</span>}
           {q.test && <span className="rounded-full border border-ink-soft px-2 py-0.5 text-ink-soft">{site.testLabel}</span>}
-          {!q.verified && !q.test && <span className="rounded-full border border-ink-soft px-2 py-0.5 text-ink-soft">{site.unverifiedLabel}</span>}
         </div>
-        {borrowed && <p className="text-xs text-ink-soft">{t.borrowed}</p>}
         <h2 id="q-title" className="text-base font-semibold leading-snug sm:text-xl">
           {q.question}
         </h2>
@@ -141,18 +132,10 @@ export function QuestionPanel({ data, state, playerName, canAnswer, bag, onAnswe
                 — {outcome.correct ? (outcome.finished ? t.reachedFinish : fill(t.moveOn, { n: outcome.moved })) : t.stay}
               </span>
             </p>
-            <div className="rounded-2xl bg-bg p-3">
-              <p className="mb-1 text-sm font-bold text-ink-soft">{t.explanation}</p>
-              <p className="leading-relaxed">{q.explanation}</p>
-              <p className="mt-2 text-sm text-ink-soft">
-                {t.source}: {q.source.ref}
-              </p>
-            </div>
-            {artifact && (
-              <button type="button" className="btn-chip self-start" onClick={() => onArtifact(artifact.id)}>
-                {t.artifact}: {artifact.id} · {artifact.title}
-              </button>
-            )}
+            {/* bản 1.6: không có giải thích, nguồn, chip hiện vật — chỉ đáp án đúng */}
+            <p className="rounded-2xl bg-bg p-3" data-correct-answer>
+              <span className="font-bold text-ink-soft">{t.correctAnswer}:</span> {q.answers[outcome.correctIndex]}
+            </p>
             <Countdown deadline={autoAt} total={state.config.timers.revealMs} label={(s) => fill(site.game.autoContinueIn, { s })} />
             {canContinue && (
               <button type="button" className="btn-primary" data-autofocus onClick={onContinue}>

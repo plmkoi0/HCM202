@@ -1,10 +1,10 @@
-// G5 — hoàn thiện: cài đặt trên máy, Sổ ôn tập, phím tắt, thống kê theo trụ cột, âm thanh theo sự kiện.
+// G5 — hoàn thiện: cài đặt trên máy, Sổ ôn tập, phím tắt, thống kê, âm thanh theo sự kiện.
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { addToReview, clearReview, loadReview, removeFromReview } from '../src/game/review'
 import { segmentsOf } from '../src/game/useBoardAnimation'
 import { shortcutOf } from '../src/game/useShortcuts'
 import { DEFAULT_SETTINGS, resolveReduced, sanitizeSettings } from '../src/lib/settings'
-import { answerCorrect, answerWrong, gameData, newGame, rollFace } from './helpers'
+import { answerCorrect, answerWrong, newGame, rollFace } from './helpers'
 import type { GameState } from '../src/engine/types'
 
 class MemoryStorage {
@@ -96,16 +96,14 @@ function toQuestion(s: GameState): GameState {
   throw new Error('không gặp ô câu hỏi')
 }
 
-describe('Thống kê theo trụ cột (màn kết thúc)', () => {
-  it('đếm đúng / đã trả lời theo trụ cột của câu', () => {
-    const s0 = newGame()
-    const q1 = toQuestion(s0)
-    const pillar = gameData.questionById.get(q1.turn.question!.id)!.pillar
+describe('Thống kê và ôn câu sai (bản 1.6: không còn thống kê theo trụ cột)', () => {
+  it('đếm câu đúng / sai, ghi câu sai để ôn; không có byPillar', () => {
+    const q1 = toQuestion(newGame())
     const a = answerCorrect(q1)
-    expect(a.players[0].stats.byPillar).toEqual({ [pillar]: [1, 1] })
+    expect(a.players[0].stats).toMatchObject({ correct: 1, wrong: 0, wrongIds: [] })
     const b = answerWrong(q1)
-    expect(b.players[0].stats.byPillar).toEqual({ [pillar]: [0, 1] })
-    expect(b.players[0].stats.wrongIds).toEqual([q1.turn.question!.id])
+    expect(b.players[0].stats).toMatchObject({ correct: 0, wrong: 1, wrongIds: [q1.turn.question!.id] })
+    expect('byPillar' in b.players[0].stats).toBe(false)
   })
 })
 
