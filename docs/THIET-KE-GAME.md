@@ -1,7 +1,7 @@
 # THIẾT KẾ GAME — Con đường tư tưởng HCM
 
 **Môn:** HCM202 · **Sản phẩm sáng tạo thứ hai** (độc lập với bảo tàng số) · **Chủ đề 4** — Tư tưởng Hồ Chí Minh về Nhà nước của nhân dân, do nhân dân, vì nhân dân
-**Phiên bản:** 1.3 · 03/10/2026 · **Trạng thái:** G0 xong (rà soát, xác minh nền tảng, ước lượng chi phí) — **chờ nhóm duyệt các đề xuất ở mục 20** trước khi làm G1
+**Phiên bản:** 1.5 · 03/10/2026 · **Trạng thái:** G0 đã được nhóm duyệt — các quyết định (mục 20) đã ghi vào từng mục; làm tiếp G1
 **Vị trí:** nhánh `game` của repo `HCM202`, file `docs/THIET-KE-GAME.md` — nguồn chuẩn duy nhất cho game (luật, bàn cờ, màn hình, kiến trúc, kiểm thử, lộ trình).
 
 ---
@@ -10,7 +10,7 @@
 
 | Mục | Nội dung |
 |---|---|
-| Tên tạm | **Con đường tư tưởng HCM** (trong `site.json`, đổi được) |
+| Tên tạm | **Con đường tư tưởng HCM** (trong `site.json`, đổi được; tên chính thức để sau) |
 | Thể loại | Board game đua **kiểu cờ cá ngựa**, theo lượt, tung xúc xắc |
 | Người chơi | **Chơi đơn**, mỗi người trên máy tính hoặc điện thoại của mình |
 | Phòng | **1–5 người**; chơi một mình được (phòng 1 người) |
@@ -18,11 +18,11 @@
 | Chế độ | **Chơi qua phòng** (online, server trên Vercel) · **Chơi trên một máy** (1–5 người thay phiên, không cần mạng — dự phòng và bản offline) |
 | Thông điệp | **"Chủ nhân không đứng ngoài"** |
 | Đối tượng | Sinh viên đại học |
-| Nguồn nội dung | Giáo trình HCM202, Chương IV, mục II (tr. 83–95) và *Hồ Chí Minh Toàn tập* (Nxb Chính trị quốc gia, 2011). **Bộ câu hỏi do nhóm biên soạn và cung cấp sau** (`docs/CAU-HOI-GAME.md`); trong lúc chờ, game dùng câu hỏi thử (mục 13) |
+| Nguồn nội dung | Giáo trình HCM202, Chương IV, mục II (tr. 83–95) và *Hồ Chí Minh Toàn tập* (Nxb Chính trị quốc gia, 2011). **Bộ câu hỏi do nhóm biên soạn** (`docs/CAU-HOI-GAME.md`), bắt đầu bằng 12 câu kiến thức nhóm đã duyệt (mục 13.1); chỗ còn thiếu tạm dùng câu hỏi thử (mục 13.3) |
 | Mã nguồn | **Nhánh `game` riêng** trong repo `HCM202` — nhánh mồ côi, không chung lịch sử, không chung mã với web; app nằm ở gốc nhánh |
 | Triển khai | Project Vercel riêng, Production Branch = `game` |
 | Quan hệ với bảo tàng số | **Sản phẩm độc lập.** Lúc tạo nhánh chỉ chép một lần dữ liệu khởi đầu (hiện vật, sơ đồ tư duy, màu trụ cột); từ đó dữ liệu thuộc về game, không đồng bộ lại với web. Không import mã hay dữ liệu từ nhánh web khi chạy hoặc build |
-| Dùng trên lớp | Mini game kết thúc buổi thuyết trình: lớp chia nhiều phòng ≤ 5 người, quét QR, chơi 5–7 phút |
+| Dùng trên lớp | Mini game kết thúc buổi thuyết trình: lớp chia nhiều phòng ≤ 5 người, quét QR, chủ phòng chọn mốc **5 hoặc 7 phút** |
 
 ## 2. Luật cốt lõi (nhóm đã chốt — không đổi)
 
@@ -48,31 +48,50 @@
 - Bàn cờ cá ngựa **6 nhánh** (hình sao/lục giác), đủ chỗ cho tối đa 5 người.
 - Nhánh không có người chơi để trống, làm mờ.
 
-**Đường chung:**
-- Vòng khép kín qua cả 6 nhánh, mặc định 6 nhánh × 3 ô = **18 ô**.
+**Đường chung (bố cục Ngắn, mặc định):**
+- Vòng khép kín qua cả 6 nhánh; mỗi nhánh 3 ô theo chiều đi: [cổng, ô 2, ô 3] → **18 ô**.
+- **Trụ cột của nhánh** lặp theo thứ tự trong `mindmap.json`: nhánh *i* → trụ cột thứ ((*i* − 1) mod số trụ cột) + 1. Với 3 trụ cột: nhánh 1–6 = dân chủ, pháp quyền, trong sạch, dân chủ, pháp quyền, trong sạch. Tính từ dữ liệu, không viết cứng.
+
+| Nhánh | Trụ cột | Ô 1 | Ô 2 | Ô 3 |
+|---|---|---|---|---|
+| 1 | Dân chủ | Cổng | Câu hỏi | **Power-up** |
+| 2 | Pháp quyền | Cổng | Câu hỏi | Câu hỏi |
+| 3 | Trong sạch | Cổng | Câu hỏi | **Bẫy** |
+| 4 | Dân chủ | Cổng | Câu hỏi | Câu hỏi |
+| 5 | Pháp quyền | Cổng | Câu hỏi | **Power-up** |
+| 6 | Trong sạch | Cổng | Câu hỏi | **Bẫy** |
+
+- 8 ô câu hỏi trên vòng chung, đều độ khó 1: dân chủ 3, pháp quyền 3, trong sạch 2 — trụ cột ít nội dung nhất có ít ô câu hỏi nhất.
+- Vị trí power-up và bẫy có thể chỉnh theo kết quả mô phỏng G1; thay đổi nào cũng ghi lại ở mục 11.
 
 **Cổng:**
-- Mỗi màu có một **ô cổng** trên vòng chung — là ô nghỉ, không hỏi.
-- Cổng của màu không có người chơi trở thành ô câu hỏi.
+- Mỗi màu người chơi gắn với cổng của một nhánh; ô cổng là ô nghỉ, không hỏi.
+- Cổng của màu không có người chơi trở thành ô câu hỏi độ khó 1 thuộc trụ cột của nhánh đó.
 
-**Đường của mỗi người:**
+**Đường của mỗi người — 22 bước:**
 
 ```
-Cổng (màu mình) → đi gần trọn vòng chung → rẽ vào đường về đích (màu mình) → Đích (giữa bàn)
+Cổng (bước 0) → 17 ô vòng chung → rẽ vào đường về đích ở ô ngay trước cổng của mình → 4 ô về đích → Đích (bước 22)
 ```
 
-Mặc định đường về đích có 4 ô; tổng quãng đường mỗi người khoảng 21–22 ô.
+**Đường về đích và Đích:**
+- 4 ô câu hỏi, độ khó **2, 2, 3, 3**.
+- Trụ cột xoay vòng, bắt đầu từ trụ cột của nhánh có cổng người đó (vd. cổng ở nhánh pháp quyền → pháp quyền, trong sạch, dân chủ, pháp quyền).
+- **Đích:** câu "về đích" độ khó 3, trụ cột chọn ngẫu nhiên theo seed.
 
-**Phân bổ ô (bố cục Ngắn, mặc định):**
+**Phân bổ ô (bố cục Ngắn):**
 
 | Vị trí | Số ô | Loại |
 |---|---|---|
 | Vòng chung — cổng | 6 | Ô nghỉ (cổng không có người chơi → ô câu hỏi) |
 | Vòng chung — còn lại | 12 | 2 power-up · 2 bẫy · 8 câu hỏi (độ khó 1) |
-| Đường về đích (mỗi màu) | 4 | Câu hỏi, độ khó 2 → 3 |
+| Đường về đích (mỗi màu) | 4 | Câu hỏi, độ khó 2, 2, 3, 3 |
 | Đích | 1 | Câu "về đích", độ khó 3 |
 
-**Bố cục Dài** (tùy chọn): nhánh 4 ô (vòng chung 24 ô), đường về đích 5 ô; tỉ lệ ô giữ tương tự.
+**Bố cục Dài (tùy chọn):**
+- Mỗi nhánh 4 ô → vòng chung **24 ô** = 6 cổng + 3 power-up + 3 bẫy + 12 câu hỏi. Vị trí theo cùng nguyên tắc (trụ cột ít nội dung có ít ô câu hỏi nhất), chốt ở G1.
+- Đường về đích 5 ô, độ khó 2, 2, 3, 3, 3.
+- Quãng đường: 23 + 5 + 1 = **29 bước**.
 
 Tên hiển thị, màu và biểu tượng từng loại ô nằm trong `board.json` và `site.json`.
 
@@ -92,8 +111,9 @@ Tên hiển thị, màu và biểu tượng từng loại ô nằm trong `board.
 
 4. **Vượt quá Đích:** mặc định vẫn tính là tới Đích (vẫn phải trả lời câu về đích).
    - Tùy chọn **"Phải tung đúng số"** (luật gốc): không đúng số thì đứng yên.
-5. **Ra 6:** nếu đã di chuyển được thì tung thêm một lần; tối đa một lần mỗi lượt.
+5. **Ra 6:** nếu đã di chuyển được thì tung thêm một lần; tối đa một lần mỗi lượt. Khi dùng Xúc xắc ×2, xét mặt xúc xắc **trước** khi nhân đôi.
 6. **Hiệu ứng không dây chuyền:** khi power-up hoặc bẫy đẩy ngựa tới ô khác, ô mới không hỏi và không kích hoạt thêm hiệu ứng.
+   - Hiệu ứng đẩy **không bao giờ đưa ngựa vào Đích**: Tiến 3 ô dừng tối đa ở ô cuối đường về đích; vào Đích luôn phải trả lời câu về đích.
 7. **Chuồng xuất phát:** mặc định mọi ngựa bắt đầu ngay ở cổng.
    - Tùy chọn **"Ra chuồng khi tung 1 hoặc 6"** (luật gốc).
 8. **Số ngựa mỗi người:** mặc định **1**.
@@ -105,12 +125,12 @@ Các tùy chọn luật và giá trị mặc định nằm trong `rules.json`; c
 
 | Power-up | Kiểu | Hiệu ứng |
 |---|---|---|
-| Tiến 3 ô | Dùng ngay | Đi thêm 3 ô (không dây chuyền) |
+| Tiến 3 ô | Dùng ngay | Đi thêm 3 ô (không dây chuyền); dừng tối đa ở ô cuối đường về đích, không vào thẳng Đích |
 | Thêm lượt | Dùng ngay | Được tung thêm một lần sau lượt này |
-| 50:50 | Cất vào túi | Khi đang trả lời: loại 2 đáp án sai (server chọn) |
+| 50:50 | Cất vào túi | Khi đang trả lời: loại đáp án sai (server chọn) tới khi còn 2 đáp án (4 → 2, 3 → 2). Câu chỉ có 2 đáp án: nút mờ, không mất power-up |
 | Đổi câu | Cất vào túi | Khi đang trả lời: đổi sang câu khác cùng trụ cột, cùng độ khó |
 | Khiên | Cất vào túi | Tự dùng khi dính bẫy, chặn thẻ bẫy đó |
-| Xúc xắc ×2 | Cất vào túi | Dùng trước khi tung: số chấm nhân đôi |
+| Xúc xắc ×2 | Cất vào túi | Dùng trước khi tung: số chấm nhân đôi. Luật ra 6 xét mặt xúc xắc trước khi nhân |
 
 **Túi:** tối đa 2 món. Khi túi đầy mà nhận thêm, chọn bỏ món cũ hoặc bỏ món mới.
 
@@ -125,18 +145,19 @@ Dừng ở ô bẫy → rút ngẫu nhiên một thẻ bẫy. Chỉ có **hai lo
 
 **Quy tắc:**
 - Lùi không dây chuyền: ô bị lùi tới không hỏi và không kích hoạt hiệu ứng.
-- Không lùi quá ô cổng của chính người đó.
+- Lùi theo đường của chính người đó — có thể từ đường về đích lùi ra vòng chung — và không lùi quá ô cổng của mình.
 - Khiên chặn được cả hai loại thẻ.
 - Tỉ lệ giữa hai loại thẻ và khoảng lùi chỉnh trong `traps.json`.
 
-**Nhãn thẻ:** mặc định trung tính (vd. "Bẫy — mất lượt", "Bẫy — lùi 2 ô"). Có thể gắn với nội dung môn học nếu có trích dẫn và số trang — xem mục 20.
+**Nhãn thẻ (đã chốt — trung tính):** "Bẫy — mất lượt" · "Bẫy — lùi {n} ô", với {n} là số ô lùi thực tế (vd. "Bẫy — lùi 2 ô").
 
 ## 8. Câu hỏi trong ván
 
 - Mọi người trong phòng đều thấy câu hỏi và đồng hồ; chỉ người đến lượt có nút đáp án.
 - Đáp án trộn khi hiện.
 - **Không lặp** câu trong một ván cho tới khi dùng hết kho của trụ cột và độ khó đó; sau đó trộn lại, ưu tiên câu người đó chưa gặp.
-- Sau khi chốt: hiện đáp án đúng, giải thích, nguồn, chip "Hiện vật liên quan" (nếu có).
+- **Tổ hợp trụ cột × độ khó không có câu nào:** lấy câu cùng trụ cột ở độ khó gần nhất; vẫn không có thì lấy trụ cột khác, cùng độ khó.
+- Sau khi chốt: hiện đáp án đúng, giải thích, nguồn, chip "Hiện vật liên quan" (nếu có; nội dung thẻ ở mục 12).
 - **Đoán cùng — tắt mặc định (đã chốt).** Là tùy chọn trong cài đặt phòng. Khi bật: người đang chờ lượt bấm chọn đáp án để tự kiểm tra, **không ảnh hưởng di chuyển**, chỉ tính vào thống kê cá nhân cuối ván.
 
 ## 9. Phòng chơi và người chơi
@@ -167,7 +188,8 @@ Dừng ở ô bẫy → rút ngẫu nhiên một thẻ bẫy. Chỉ có **hai lo
 
 **Chơi một mình:**
 - Phòng 1 người chọn 0–4 máy.
-- Mặc định 0 máy = **thử thách cá nhân**: về đích với ít lượt nhất; lưu **kỷ lục cá nhân** trên máy.
+- Mặc định 0 máy = **thử thách cá nhân**: về đích với ít lượt nhất; giới hạn thời gian vẫn mặc định 10 phút.
+- **Kỷ lục cá nhân** (ít lượt nhất) lưu trên máy, **chỉ lưu khi về đích**; hết giờ thì báo số ô còn lại.
 
 **Mất kết nối:**
 - Đến lượt người đang mất kết nối → sau 20 s tự tung, câu hỏi tính là sai (đứng yên), không dùng power-up.
@@ -180,31 +202,34 @@ Dừng ở ô bẫy → rút ngẫu nhiên một thẻ bẫy. Chỉ có **hai lo
 ## 10. Kết thúc
 
 - **Người đầu tiên về đích thắng.** Chủ phòng chọn trước: dừng ngay, hoặc chơi tiếp để xếp hạng 2, 3…
-- **Giới hạn thời gian:** 5 / 10 / 15 phút / không giới hạn — **mặc định 10 phút (đã chốt)**.
+- **Giới hạn thời gian:** 5 / 7 / 10 / 15 phút / không giới hạn — **mặc định 10 phút (đã chốt)**. Trên lớp, chủ phòng chọn 5 hoặc 7 phút.
   - Hết giờ thì chơi nốt lượt đang dở.
-  - Xếp hạng theo số ô còn lại tới đích.
+  - Xếp hạng theo số ô còn lại tới đích; người dẫn đầu được tôn vinh như người thắng.
 - **Hòa:** so số câu trả lời đúng.
 
 ## 11. Cân bằng
 
 Độ dài đường, tỉ lệ ô, power-up và bẫy được chỉnh bằng **mô phỏng 1.000 ván bot** cho 1, 2, 3, 5 người ở cả hai bố cục.
 
-**Mục tiêu (bố cục Ngắn, ~20 s mỗi lượt, giới hạn mặc định 10 phút):**
+**Mục tiêu (bố cục Ngắn, giới hạn mặc định 10 phút):**
 
 | Số người | Mục tiêu |
 |---|---|
 | 1 người | Về đích trong ~3–5 phút |
 | 3 người | Phần lớn ván có người về đích trong ~8–10 phút |
 | 5 người | Nhiều ván có người về đích trước 10 phút; số còn lại kết thúc theo giờ với khoảng cách hợp lý |
+| Trên lớp (5 hoặc 7 phút) | Phần lớn ván kết thúc theo giờ là chấp nhận được; xếp hạng theo khoảng cách phải phân định rõ người dẫn đầu |
 
 Thêm một mục tiêu: không ai bị kẹt quá lâu vì bẫy hoặc trả lời sai liên tiếp.
 
-**Chỉ số mô phỏng cần báo:**
+**Chỉ số mô phỏng cần báo** — chạy với cả **20 s và 25 s mỗi lượt** (riêng đồng hồ trả lời đã 20 s):
 - Số lượt trung bình để về đích.
 - Thời gian ước tính.
-- Tỉ lệ ván có người về đích trước 10 phút.
+- Tỉ lệ ván có người về đích trong 5, 7 và 10 phút.
 - Số lần dính bẫy trung bình.
 - Chuỗi lượt đứng yên dài nhất.
+
+Ước tính thô ở G0 (chưa phải mô phỏng chính thức) ghi ở mục 20.
 
 **Kết quả mô phỏng:** `TODO` — điền ở G1.
 
@@ -217,6 +242,7 @@ Một giao diện co giãn cho cả máy tính và điện thoại.
 3. **Phòng chờ:** như mục 9.
 4. **Bàn cờ:**
    - Bàn cờ 6 nhánh co giãn; mỗi loại ô có biểu tượng + màu; ngựa các màu.
+   - Ô câu hỏi hiện trụ cột bằng viền màu + biểu tượng + chữ viết tắt trụ cột, không chỉ bằng màu; ngựa dùng màu khác hẳn màu trụ cột (mục 15.7).
    - Sau khi tung, ô đích của bước đi được làm nổi.
    - **Bảng người chơi:** màu, số ô còn lại, power-up đang giữ, trạng thái (mất lượt, mất kết nối, máy), ai đang tới lượt.
    - **Khu điều khiển của mình:** nút Tung xúc xắc, túi power-up.
@@ -225,10 +251,11 @@ Một giao diện co giãn cho cả máy tính và điện thoại.
 5. **Cửa sổ:**
    - Câu hỏi: đồng hồ, nút 50:50 / Đổi câu nếu có, giải thích sau khi chốt.
    - Power-up · Thẻ bẫy · Câu về đích.
+   - **Thẻ hiện vật** (mở từ chip "Hiện vật liên quan"): mã, ngày, tên, trụ cột, câu chuyện, trích dẫn kèm `quote.cite` và ghi chú ngữ cảnh. Không có ảnh, "Ngày nay" và danh sách nguồn APA. Hiện vật có `hidden: true` (nếu có) thì không hiện chip.
    - Trên điện thoại hiện dạng tấm trượt từ dưới lên hoặc toàn màn hình, nút đáp án to.
    - Nếu phòng bật Đoán cùng: người đang chờ thấy nút chọn đáp án để tự kiểm tra.
 6. **Kết thúc:**
-   - Thứ tự về đích (hoặc xếp hạng theo khoảng cách nếu hết giờ).
+   - Thứ tự về đích (hoặc xếp hạng theo khoảng cách nếu hết giờ; người dẫn đầu được tôn vinh như người thắng).
    - Thống kê từng người: số câu đúng/sai, power-up đã dùng, số lần dính bẫy (và điểm Đoán cùng nếu bật).
    - Ôn lại câu mình trả lời sai (giải thích + nguồn).
    - Thông điệp kết.
@@ -238,31 +265,45 @@ Một giao diện co giãn cho cả máy tính và điện thoại.
    - Nhập 1–5 người + số máy chơi cùng, thay phiên trên cùng thiết bị.
    - Lưu ván trên máy; tải lại → "Tiếp tục ván".
    - Có nút hoàn tác thao tác vừa rồi.
-8. **Kho câu hỏi:** "Tổng số câu hỏi: N", lọc theo trụ cột, nhãn `[Chờ xác minh]` và nhãn `[Câu hỏi thử]`, nguồn từng câu, đáp án ẩn mặc định — có nút hiện.
+8. **Kho câu hỏi:** "Tổng số câu hỏi: N", lọc theo trụ cột, nhãn `[Chờ xác minh]` và nhãn `[Câu hỏi thử]`, nguồn từng câu, đáp án ẩn mặc định — có nút hiện. **Ẩn nút Kho câu hỏi khi đang ở trong phòng chơi** (mục 15.4).
 9. **Luật chơi:** có hình minh họa các loại ô, power-up và thẻ bẫy.
 10. **Chung:** hộp xác nhận thoát phòng, toast, cảnh báo khi đóng tab giữa ván.
 
 ## 13. Nội dung và nguồn
 
 ### 13.1 Bộ câu hỏi
-- **Nhóm biên soạn và cung cấp sau** file `docs/CAU-HOI-GAME.md`, theo mẫu `docs/CAU-HOI-GAME.mau.md` (mục 13.4).
-- Khi nhận được:
+- **Nhóm biên soạn** file `docs/CAU-HOI-GAME.md`, theo mẫu `docs/CAU-HOI-GAME.mau.md` (mục 13.4).
+- **Bộ khởi đầu — 12 câu kiến thức nhóm đã duyệt:** lấy từ `QUIZ-KIEN-THUC.md` của nhánh web (10 câu chính + 2 câu dự phòng; nhóm đã đối chiếu giáo trình và duyệt ngày 2/10/2026).
+  - Chép một lần sang `docs/nguon/QUIZ-KIEN-THUC.md`, ghi vào `src/data/NGUON.md`; không đồng bộ lại với web.
+  - Chuyển thành 12 dòng đầu của `docs/CAU-HOI-GAME.md` (`Q-01` → `Q-12`), **giữ nguyên văn** câu hỏi, đáp án, giải thích; loại `single`; nguồn là các số trang ghi trong giải thích; `verified: true`; hiện vật theo mục "Hiện vật liên quan".
+  - **Ngoại lệ — hai lời giải thích nhóm đã sửa** vì nhắc chữ cái phương án, mà game trộn đáp án (mục 8). Nguyên văn sau khi sửa:
+    - **Q-02** (bỏ câu cuối nhắc "Phương án B" — vừa hết chữ cái, vừa không lộ đáp án Q-03, vì nội dung "dân làm chủ" đã có trong giải thích Q-03; nguồn còn `GT tr. 84`):
+      > Nhà nước của dân tức là "dân là chủ"; nguyên lý này khẳng định địa vị chủ thể tối cao của mọi quyền lực là nhân dân (GT tr. 84).
+    - **Q-11** (thay "C và D" bằng nội dung hai phương án):
+      > Nguyên nhân chủ quan, bắt nguồn từ căn "bệnh mẹ" là chủ nghĩa cá nhân, sự thiếu tu dưỡng, rèn luyện của cán bộ; âm mưu của các thế lực thù địch và trình độ phát triển thấp của xã hội là nguyên nhân khách quan (GT tr. 94).
+  - **Độ khó (nhóm đã xác nhận 03/10/2026):**
+    - Độ khó 1: Q-05, Q-06, Q-07, Q-09, Q-11.
+    - Độ khó 2: Q-01, Q-04, Q-10, Q-12.
+    - Độ khó 3: Q-02, Q-03, Q-08.
+  - Phân bố theo trụ cột: dân chủ 6, pháp quyền 4, trong sạch 2.
+- Nhóm soạn tiếp các câu còn lại vào cùng file, gửi lúc nào cũng được.
+- Mỗi lần có bản mới:
   1. Script `scripts/import-questions.mjs` chuyển file sang `src/data/questions.json` và kiểm tra định dạng (mục 17).
-  2. Claude Code đối chiếu với các nguồn ở mục 13.2, báo câu thiếu nguồn, sai định dạng hoặc nghi sai nội dung để nhóm sửa.
-  3. Thay toàn bộ câu hỏi thử bằng bộ câu hỏi của nhóm.
+  2. Claude Code đối chiếu với các nguồn ở mục 13.2, báo câu thiếu nguồn, sai định dạng hoặc nghi sai nội dung để nhóm sửa — không tự sửa nội dung.
+  3. Câu hỏi thử chỉ còn lấp những tổ hợp trụ cột × độ khó chưa đủ câu chính thức (mục 13.3).
 - **Claude Code không tự viết câu hỏi nội dung** về tư tưởng Hồ Chí Minh.
 
 ### 13.2 Nguồn tham chiếu trong nhánh `game`
 - `docs/nguon/THIET-KE-WEB-APP.md` — bản sao tài liệu thiết kế bảo tàng số (đặc biệt mục 2 và mục 4).
+- `docs/nguon/QUIZ-KIEN-THUC.md` — bản sao 12 câu kiến thức nhóm đã duyệt (nguồn của bộ khởi đầu).
 - `src/data/artifacts.json` và `src/data/mindmap.json` — dữ liệu khởi đầu, chép một lần lúc tạo nhánh; nguồn gốc ghi trong `src/data/NGUON.md`.
 
 Dùng để:
 - Đối chiếu câu hỏi của nhóm.
-- Hiện chip "Hiện vật liên quan".
+- Hiện chip và thẻ "Hiện vật liên quan".
 - Lấy tên và màu trụ cột.
-- Làm nhãn thẻ bẫy gắn nội dung (nếu nhóm chọn).
 
-### 13.3 Câu hỏi thử (dùng cho tới khi có bộ câu hỏi của nhóm)
+### 13.3 Câu hỏi thử (lấp chỗ thiếu cho tới khi bộ câu hỏi của nhóm đủ)
 - **Mục đích:** chơi thử, chạy test, mô phỏng cân bằng, kiểm tra giao diện — không phải nội dung chính thức.
 - **Nội dung:** không chứa kiến thức về tư tưởng Hồ Chí Minh. Hỏi về luật chơi của chính game (vd. "Trả lời sai ở ô câu hỏi thì ngựa đi đâu?"), hoặc câu giữ chỗ.
 - **Đánh dấu rõ:**
@@ -271,8 +312,8 @@ Dùng để:
   - `source.ref` = `"Câu hỏi thử"`, `verified: false`;
   - giao diện hiện nhãn `[Câu hỏi thử]`.
 - **Phủ đủ:**
-  - Mỗi trụ cột × mỗi độ khó (1, 2, 3) có ít nhất 2 câu (≈ 18–24 câu nếu có 3 trụ cột).
-  - Có đủ 4 loại câu.
+  - Chỉ thêm vào tổ hợp trụ cột × độ khó còn dưới 2 câu chính thức, sao cho mỗi tổ hợp (3 trụ cột × độ khó 1, 2, 3) có ít nhất 2 câu.
+  - Có đủ 4 loại câu (12 câu khởi đầu đều là `single`, nên câu hỏi thử phải có `truefalse`, `fillQuote`, `situation` để thử giao diện).
   - Có vài câu và đáp án rất dài, nhiều dấu tiếng Việt, để thử bố cục trên điện thoại.
 - **Bản phát hành (G6) không được còn câu hỏi thử** — kiểm tra tự động (mục 17).
 
@@ -280,20 +321,21 @@ Dùng để:
 Nhóm áp dụng khi biên soạn; script và Claude Code kiểm tra khi nhập.
 
 **Nội dung:**
-- Câu hỏi và nhãn thẻ bẫy chỉ dựa trên giáo trình, *Toàn tập* và các nguồn tham chiếu ở mục 13.2. Không thêm sự kiện, năm, số liệu, trích dẫn không có nguồn.
+- Câu hỏi chỉ dựa trên giáo trình, *Toàn tập* và các nguồn tham chiếu ở mục 13.2. Không thêm sự kiện, năm, số liệu, trích dẫn không có nguồn.
 - Power-up và thẻ bẫy mô tả hiệu ứng trò chơi bằng lời trung tính.
 - Mỗi câu có `source.ref` (vd. `"GT tr. 85"`, `"HV-07"`). `verified: true` chỉ khi đã đối chiếu với giáo trình hoặc bản gốc; còn lại `false`.
 - **Đáp án nhiễu không được là câu trích giả gán cho Hồ Chí Minh.** Dùng biến thể của khái niệm, đảo vai trò, nhầm trụ cột…
+- **Giải thích không nhắc chữ cái phương án** ("phương án B", "C và D"…) vì game trộn đáp án; nêu thẳng nội dung phương án. Cũng tránh để giải thích của câu này lộ đáp án của câu khác.
 
 **Loại câu:**
 - `single` — trắc nghiệm một đáp án.
 - `truefalse` — đúng/sai.
-- `fillQuote` — điền từ vào trích dẫn; trích dẫn phải có nguyên văn trong nguồn.
+- `fillQuote` — điền từ vào trích dẫn; trích dẫn phải có nguyên văn trong nguồn. Chỗ trống đánh dấu bằng `___` (3 dấu gạch dưới) trong lời câu hỏi; mỗi đáp án là từ/cụm từ điền vào.
 - `situation` — tình huống **giả định** trong đời sống sinh viên, không nêu sự kiện/số liệu thật.
 
-**Số câu:** gần như mỗi lượt là một câu, nên mục tiêu **≥ 60 câu** (≈ 20 mỗi trụ cột).
+**Số câu:** gần như mỗi lượt là một câu, nên mục tiêu **≥ 60 câu** (≈ 20 mỗi trụ cột): mỗi trụ cột **≥ 10 câu độ khó 1, ≥ 6 câu độ khó 2, ≥ 4 câu độ khó 3**.
 - Độ khó 1 cho vòng chung; độ khó 2–3 cho đường về đích và câu về đích.
-- Trụ cột thiếu tr. 92–93 (xem `todo` trong `mindmap.json`) cần nhóm bổ sung từ giáo trình.
+- Trụ cột trong sạch ít nội dung (giáo trình còn thiếu tr. 92–93, xem `todo` trong `mindmap.json`) **được phép ít hơn 20 câu**; khi thiếu, game lặp câu sớm hơn hoặc mượn độ khó gần nhất theo quy tắc mục 8. Nhóm bổ sung tr. 92–93 nếu có.
 
 **Mẫu `docs/CAU-HOI-GAME.md`:**
 - Bảng Markdown, mỗi dòng một câu.
@@ -326,17 +368,17 @@ Nhóm áp dụng khi biên soạn; script và Claude Code kiểm tra khi nhập.
 | File | Nội dung |
 |---|---|
 | `board.json` | Hai bố cục; từng ô: loại, trụ cột, độ khó; cổng và đường về đích của từng màu |
-| `rules.json` | Tùy chọn luật và giá trị mặc định: giới hạn thời gian (mặc định 10 phút), đúng số về đích, ra chuồng 1/6, số ngựa, Đoán cùng (mặc định tắt), thời hạn tung/trả lời |
+| `rules.json` | Tùy chọn luật và giá trị mặc định: giới hạn thời gian (5 / 7 / 10 / 15 phút / không giới hạn; mặc định 10 phút), đúng số về đích, ra chuồng 1/6, số ngựa, Đoán cùng (mặc định tắt), thời hạn tung/trả lời |
 | `powerups.json` | Danh sách power-up, kiểu, hiệu ứng, tỉ lệ xuất hiện |
-| `traps.json` | Hai loại thẻ bẫy (mất lượt / lùi ngẫu nhiên 1–3 ô), tỉ lệ, khoảng lùi, nhãn |
-| `questions.json` | Kho câu hỏi (mục 13). Hiện là câu hỏi thử; thay bằng bộ câu hỏi của nhóm khi có |
+| `traps.json` | Hai loại thẻ bẫy (mất lượt / lùi ngẫu nhiên 1–3 ô), tỉ lệ, khoảng lùi, nhãn trung tính |
+| `questions.json` | Kho câu hỏi (mục 13): 12 câu khởi đầu nhóm đã duyệt + các câu nhóm soạn thêm; câu hỏi thử chỉ lấp chỗ còn thiếu |
 | `bots.json` | Xác suất trả lời đúng theo độ khó, luật dùng power-up |
 | `tokens.json` | Màu và ký hiệu ngựa |
 | `site.json` | Chữ giao diện, tên game, thông điệp, `siteUrl` |
-| `artifacts.json` | Dữ liệu khởi đầu chép từ nhánh web — hiện vật dùng cho chip "Hiện vật liên quan" |
+| `artifacts.json` | Dữ liệu khởi đầu chép từ nhánh web — hiện vật dùng cho chip và thẻ "Hiện vật liên quan" (mục 12) |
 | `mindmap.json` | Dữ liệu khởi đầu chép từ nhánh web — trụ cột và nội dung giáo trình tóm lược |
 | `pillars.json` | Id, tên, màu trụ cột — lấy giá trị từ `pillars.ts` / `pillarStyles.ts` của nhánh web lúc tạo nhánh |
-| `NGUON.md` | Ghi nguồn gốc dữ liệu khởi đầu: tên nhánh web, commit hash, danh sách file đã chép |
+| `NGUON.md` | Ghi nguồn gốc dữ liệu khởi đầu: tên nhánh web, commit hash, danh sách file đã chép (cả `QUIZ-KIEN-THUC.md`), mã băm |
 
 Sau khi chép, các file này **thuộc về game**: sửa trực tiếp trên nhánh `game` khi cần, không đồng bộ lại với web.
 
@@ -357,8 +399,8 @@ Sau khi chép, các file này **thuộc về game**: sửa trực tiếp trên n
 ├── docs/
 │   ├── THIET-KE-GAME.md      ← tài liệu này
 │   ├── CAU-HOI-GAME.mau.md   ← mẫu để nhóm soạn câu hỏi
-│   ├── CAU-HOI-GAME.md       ← bộ câu hỏi nhóm cung cấp (sau)
-│   └── nguon/THIET-KE-WEB-APP.md   ← bản sao nguồn tham chiếu
+│   ├── CAU-HOI-GAME.md       ← bộ câu hỏi của nhóm (bắt đầu bằng 12 câu đã duyệt)
+│   └── nguon/                ← bản sao nguồn tham chiếu: THIET-KE-WEB-APP.md, QUIZ-KIEN-THUC.md
 ├── public/                   ← favicon, robots.txt
 ├── api/                      ← lớp mỏng Vercel Functions
 ├── server/                   ← kho phòng, token, pub/sub, xử lý hành động
@@ -425,6 +467,7 @@ Reducer thuần, không phụ thuộc trình duyệt hay Node. Hành động:
   - Quá hạn thì **bất kỳ máy nào trong phòng** gửi TIMEOUT / AUTO_ROLL / SKIP_TURN / BOT_STEP; server chỉ nhận khi `now ≥ deadline`.
 - **Nối lại:** `playerId` + `playerToken` lưu trên máy (localStorage, bọc try/catch). Tải lại trang → nhận snapshot đầy đủ, về đúng phòng.
 - **Không lộ đáp án:** state gửi xuống máy người chơi không chứa đáp án đúng trước khi chốt câu.
+  - Bản online vẫn đóng gói `questions.json` (cho Kho câu hỏi và Chơi trên một máy) nên đáp án đọc được trong mã trang — **chấp nhận vì đây là game ôn tập (đã chốt)**. Khi đang ở trong phòng chơi thì ẩn nút Kho câu hỏi.
 - **Kiểm tra đầu vào:** biệt danh 1–20 ký tự, cắt khoảng trắng; giới hạn tần suất tạo phòng và gửi hành động; lỗi trả về thông báo tiếng Việt.
 - `GET /api/health` để kiểm tra trước buổi chơi.
 - **Tách lớp:** `server/` (test được không cần Vercel) và `api/` (lớp mỏng nối Vercel Functions).
@@ -467,9 +510,11 @@ Reducer thuần, không phụ thuộc trình duyệt hay Node. Hành động:
 | Offline | `npm run build:offline` | Một file (vite-plugin-singlefile). **Chỉ "Chơi trên một máy"** (gồm chơi một mình, máy chơi cùng); ẩn Tạo/Vào phòng; không có request mạng |
 | Gói nộp | `npm run package:offline` | `HCM202-Con-duong-tu-tuong.zip` kèm hướng dẫn chạy |
 
+**Deployment Protection:** mặc định Standard Protection bảo vệ mọi URL **trừ tên miền chính** (production domain) — kể cả link bản deploy thử và URL riêng của từng bản deploy, nên mở những link đó phải đăng nhập Vercel. Khi thử trên điện thoại, dùng Shareable Links; khi chơi thật, luôn mở game và tạo mã QR, link mời từ **tên miền chính**; trước buổi học, kiểm tra tên miền chính mở được mà không cần đăng nhập.
+
 ### 15.7 Khác
 - **Âm thanh:** Web Audio API (oscillator), không file âm thanh — xúc xắc, bước đi, đúng/sai, power-up, bẫy, về đích; nút tắt/bật.
-- **Quân cờ:** 5–6 con ngựa SVG tự vẽ, phân biệt bằng cả màu lẫn ký hiệu; máy chơi cùng có dấu riêng.
+- **Quân cờ:** ngựa SVG tự vẽ, **6 màu tươi khác hẳn ba màu trụ cột** (đỏ son, xanh mực, vàng đồng) — vd. xanh lá, cam, tím, xanh ngọc, hồng, xanh dương sáng; mỗi màu một ký hiệu; máy chơi cùng có dấu riêng. Cổng và đường về đích mang màu ngựa của người đó.
 - **Icon:** SVG tự vẽ hoặc gói npm đóng gói sẵn (vd. lucide-react). Không icon font, không CDN, không Google Fonts.
 - **Font:** tự host trong `src/assets/fonts` kèm giấy phép OFL (có thể chép bộ Be Vietnam Pro / Noto Serif từ nhánh web).
 - **Mã QR:** gói `qrcode`.
@@ -498,14 +543,18 @@ Reducer thuần, không phụ thuộc trình duyệt hay Node. Hành động:
 **Khác:**
 - **Trình duyệt nhúng Zalo/Messenger:** chạy được trong đó; tránh API không phổ biến; có phương án thay cho Web Share, rung, toàn màn hình.
 - **Phong cách:** bản sắc riêng của game — bàn cờ cá ngựa vui mắt, màu tươi, đọc tốt trên điện thoại. Có thể dùng tông đỏ son – vàng đồng của bảo tàng số làm điểm nhấn, không bắt buộc.
-- **Tiếp cận:** màu không phải tín hiệu duy nhất — mỗi loại ô có biểu tượng + nhãn; mỗi ngựa có cả màu lẫn ký hiệu; chữ đạt tương phản WCAG AA.
+- **Tiếp cận:** màu không phải tín hiệu duy nhất — mỗi loại ô có biểu tượng + nhãn; ô câu hỏi hiện trụ cột bằng viền màu + biểu tượng + chữ viết tắt; mỗi ngựa có cả màu lẫn ký hiệu; chữ đạt tương phản WCAG AA.
 - **Phím tắt trên máy tính:** Space = tung / tiếp tục · 1–4 hoặc A–D = chọn đáp án · Q/W = dùng power-up 1/2 · M = tắt tiếng · F = toàn màn hình.
 - **Hiệu ứng:** xúc xắc lăn, ngựa đi từng ô, ô đích nhấp nháy, ngựa trượt lùi khi dính bẫy, pháo giấy (canvas tự làm) khi về đích. Tắt khi `prefers-reduced-motion`.
 
 ## 17. Kiểm thử
 
 ### Engine
-- **Đường đi:** đúng cho từng màu ở cả hai bố cục.
+- **Đường đi:** đúng cho từng màu ở cả hai bố cục; quãng đường 22 bước (bố cục Dài 29).
+- **Bàn cờ:**
+  - Trụ cột của nhánh tính từ dữ liệu: nhánh *i* → trụ cột ((*i* − 1) mod số trụ cột) + 1.
+  - Vị trí power-up và bẫy đúng `board.json`; cổng của màu trống thành ô câu hỏi đúng trụ cột.
+  - Đường về đích: độ khó 2, 2, 3, 3 (Dài: 2, 2, 3, 3, 3), trụ cột xoay vòng từ nhánh có cổng; trụ cột câu về đích theo seed.
 - **Luật cốt lõi:**
   - Ô câu hỏi: đúng → nhảy lên; sai/hết giờ → đứng yên.
   - Power-up/bẫy: nhảy lên rồi áp dụng.
@@ -514,30 +563,34 @@ Reducer thuần, không phụ thuộc trình duyệt hay Node. Hành động:
 - **Di chuyển:**
   - Nhiều ngựa đứng chung một ô.
   - Vượt quá Đích ở cả hai luật.
-  - Ra 6 tung thêm (tối đa một lần).
-  - Hiệu ứng không dây chuyền.
-- **Power-up:** từng loại; túi tối đa 2 món.
+  - Ra 6 tung thêm (tối đa một lần); với Xúc xắc ×2 xét mặt xúc xắc trước khi nhân.
+  - Hiệu ứng không dây chuyền; Tiến 3 ô không bao giờ vào Đích.
+- **Power-up:**
+  - Từng loại; túi tối đa 2 món.
+  - 50:50: 4 → 2 đáp án, 3 → 2 đáp án; câu 2 đáp án thì nút mờ và không mất power-up.
 - **Bẫy:**
-  - Chỉ ra hai loại thẻ theo tỉ lệ cấu hình.
+  - Chỉ ra hai loại thẻ theo tỉ lệ cấu hình, nhãn trung tính.
   - Lùi ngẫu nhiên chỉ ra 1, 2 hoặc 3 ô, phân bố đều trên nhiều lần rút.
   - Mất lượt bỏ đúng một lượt.
-  - Không lùi quá cổng.
+  - Lùi được từ đường về đích ra vòng chung; không lùi quá cổng.
   - Khiên chặn cả hai loại.
 - **Tùy chọn luật:** ra chuồng 1/6; 2 ngựa; Đoán cùng khi bật không ảnh hưởng di chuyển và mặc định tắt.
-- **Kết thúc:** người đầu tiên về đích thắng; chơi tiếp để xếp hạng; hết giờ (mặc định 10 phút) xếp theo khoảng cách; hòa.
-- **Câu hỏi:** không lặp cho tới khi hết kho.
-- **Tự động:** tự tung; tự xử lý khi mất kết nối; thử thách cá nhân đếm lượt.
-- **Khác:** hoàn tác (chơi trên một máy); cùng seed → cùng kết quả (cả thẻ bẫy và bot).
+- **Kết thúc:** người đầu tiên về đích thắng; chơi tiếp để xếp hạng; các mốc 5 / 7 / 10 / 15 phút / không giới hạn, mặc định 10 phút; hết giờ xếp theo khoảng cách; hòa.
+- **Câu hỏi:** không lặp cho tới khi hết kho; tổ hợp trụ cột × độ khó không có câu → lấy độ khó gần nhất cùng trụ cột, rồi tới trụ cột khác.
+- **Tự động:** tự tung; tự xử lý khi mất kết nối; thử thách cá nhân đếm lượt, kỷ lục chỉ lưu khi về đích.
+- **Khác:** hoàn tác (chơi trên một máy); cùng seed → cùng kết quả (cả thẻ bẫy và bot); Kho câu hỏi ẩn khi đang ở trong phòng.
 
 ### Dữ liệu
 - id không trùng; 2–4 đáp án, không trùng nhau; `correct` hợp lệ.
 - `pillar` có trong `mindmap.json`; `artifact` (nếu có) tồn tại; `source.ref` không rỗng.
-- Câu `fillQuote` của bộ câu hỏi chính thức có trích dẫn nguyên văn trong nguồn.
+- Câu `fillQuote` của bộ câu hỏi chính thức có đúng một chỗ trống `___` và trích dẫn nguyên văn trong nguồn.
+- **12 câu khởi đầu** trong `questions.json` trùng nguyên văn với `docs/nguon/QUIZ-KIEN-THUC.md` (câu hỏi, đáp án, đáp án đúng, giải thích), trừ hai lời giải thích Q-02, Q-11 phải đúng bản nhóm sửa ở mục 13.1.
+- **Giải thích không nhắc chữ cái phương án:** script nhập và test báo lỗi khi gặp mẫu như "phương án A–D", "C và D", "A hoặc B".
 - Mỗi màu có đường đi liền mạch tới Đích; số ô từng loại đúng cấu hình; mỗi trụ cột đủ câu ở mọi độ khó.
 - `traps.json` chỉ có hai loại thẻ, tổng tỉ lệ 100%.
 - **Câu hỏi thử:**
   - Mọi câu có id `TEST-` đều có `"test": true` và ngược lại.
-  - Bộ câu hỏi thử phủ đủ trụ cột × độ khó.
+  - Câu hỏi thử chỉ có ở tổ hợp trụ cột × độ khó còn dưới 2 câu chính thức; cùng với câu chính thức, mọi tổ hợp đủ ≥ 2 câu và đủ 4 loại câu.
   - Lệnh kiểm tra phát hành (`npm run check:release`, chạy ở G6) **báo lỗi nếu còn câu hỏi thử**.
 - **Script nhập câu hỏi:**
   - Đọc đúng file mẫu.
@@ -571,26 +624,27 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 
 | Mốc | Nội dung | Trạng thái |
 |---|---|---|
-| **G0 — Nhánh và rà soát** | Tạo nhánh mồ côi `game`; chép dữ liệu khởi đầu, nguồn tham chiếu và font từ nhánh web (ghi `NGUON.md`); tạo `CLAUDE.md` của nhánh; đối chiếu tài liệu này với dữ liệu; xác nhận nền tảng Vercel; ước lượng chi phí (15.5); tạo mẫu `docs/CAU-HOI-GAME.mau.md` để nhóm bắt đầu soạn câu hỏi; cập nhật mục 20. **Dừng chờ duyệt** | ☑ Xong 03/10/2026 — chờ nhóm duyệt (mục 20). Nhánh `game` đẩy được với đúng tên `game` |
-| **G1 — Nền móng** | Khởi tạo dự án ở gốc nhánh, JSON + kiểu dữ liệu, **bộ câu hỏi thử** (13.3), script nhập câu hỏi, test dữ liệu, engine + bot + unit test, mô phỏng cân bằng (điền mục 11) | ☐ |
+| **G0 — Nhánh và rà soát** | Tạo nhánh mồ côi `game`; chép dữ liệu khởi đầu, nguồn tham chiếu và font từ nhánh web (ghi `NGUON.md`); tạo `CLAUDE.md` của nhánh; đối chiếu tài liệu này với dữ liệu; xác nhận nền tảng Vercel; ước lượng chi phí (15.5); tạo mẫu `docs/CAU-HOI-GAME.mau.md` để nhóm bắt đầu soạn câu hỏi; cập nhật mục 20. **Dừng chờ duyệt** | ☑ Xong và được nhóm duyệt 03/10/2026 — quyết định ghi ở mục 20. Nhánh `game` đẩy được với đúng tên `game` |
+| **G1 — Nền móng** | Khởi tạo dự án ở gốc nhánh, JSON + kiểu dữ liệu, **12 câu khởi đầu** từ `QUIZ-KIEN-THUC.md` (13.1) + **câu hỏi thử** lấp chỗ thiếu (13.3), script nhập câu hỏi, test dữ liệu, engine + bot + unit test, mô phỏng cân bằng ở 20 s và 25 s/lượt (điền mục 11) | ☐ |
 | **G2 — Chơi trên một máy** | Bàn cờ SVG, xúc xắc, ngựa đi từng ô, các loại ô, túi power-up, thẻ bẫy, bot, thử thách cá nhân + kỷ lục, lưu/tiếp tục ván, hoàn tác — chơi trọn ván | ☐ |
 | **G3 — Server** | Tạo/vào phòng, sức chứa, chọn màu, hành động, bước bot, Redis, pub/sub, WebSocket + polling, nối lại, chuyển chủ phòng, `/api/health`; test server, mô phỏng tải, chạy cục bộ | ☐ |
 | **G4 — Chơi qua phòng** | Trang chủ, tạo phòng, vào bằng mã / QR / link, phòng chờ, chơi qua mạng, trạng thái kết nối, mất kết nối, kết thúc + chơi lại, tùy chọn Đoán cùng | ☐ |
 | **G5 — Hoàn thiện** | Ôn câu sai, thống kê, Kho câu hỏi, Luật chơi minh họa, Cài đặt, âm thanh, phím tắt, chỉnh giao diện, reduced motion | ☐ |
 | **G6 — Phát hành** | Hướng dẫn tạo project Vercel (Production Branch = `game`) + gắn Redis (nhóm làm phần cần tài khoản), deploy preview, diễn tập, `npm run check:release` (không còn câu hỏi thử), bản offline, README, cập nhật `CLAUDE.md` | ☐ |
 
-**Nhập bộ câu hỏi của nhóm** — làm bất cứ lúc nào nhóm gửi `docs/CAU-HOI-GAME.md`, không chờ mốc:
+**Nhập bộ câu hỏi của nhóm** — làm bất cứ lúc nào nhóm gửi bản mới của `docs/CAU-HOI-GAME.md`, không chờ mốc:
 1. Chạy script nhập.
 2. Đối chiếu nguồn (mục 13.1).
 3. Báo các câu cần sửa.
-4. Thay câu hỏi thử.
+4. Bỏ câu hỏi thử ở những tổ hợp đã đủ câu chính thức.
 5. Chạy lại mô phỏng cân bằng.
 
 **Danh sách diễn tập (G6):**
 - ≥ 5 máy thật gồm điện thoại và laptop.
 - Wi-Fi trường và 4G.
 - Quét QR bằng Zalo; mở link trong Messenger.
-- Phòng 1 người (có và không có máy chơi cùng) và phòng 5 người.
+- Phòng 1 người (có và không có máy chơi cùng) và phòng 5 người; thử cả mốc 5 và 7 phút.
+- Link mở được mà không cần đăng nhập Vercel (Deployment Protection, mục 15.6).
 
 ## 19. Đối chiếu tiêu chí chấm sản phẩm sáng tạo (10 điểm)
 
@@ -602,7 +656,7 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 | Lan tỏa (2) | Ai cũng tạo phòng và mời bạn qua mã, QR hoặc link; chơi một mình để tự ôn; thông điệp "Chủ nhân không đứng ngoài" |
 | Thái độ (1) | Tài liệu thiết kế, nguồn minh bạch, nhãn chờ xác minh, mô phỏng cân bằng, danh sách TODO |
 
-**Buổi thuyết trình:** chế độ 5–7 phút làm mini game kết thúc (0,5 điểm "Khởi động + mini game"); lớp chia phòng ≤ 5 người, quét QR trên slide.
+**Buổi thuyết trình:** chế độ 5 hoặc 7 phút làm mini game kết thúc (0,5 điểm "Khởi động + mini game"); lớp chia phòng ≤ 5 người, quét QR trên slide.
 
 ## 20. Việc còn mở
 
@@ -613,7 +667,38 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 - [x] Thẻ bẫy chỉ có hai loại: mất lượt, hoặc lùi ngẫu nhiên 1–3 ô.
 - [x] Không có luật đá ngựa.
 - [x] Game là sản phẩm độc lập, làm trên nhánh `game` riêng; dữ liệu chép lúc tạo nhánh thuộc về game, không đồng bộ lại với web.
-- [x] Bộ câu hỏi do nhóm cung cấp sau; trong lúc chờ dùng câu hỏi thử.
+- [x] Bộ câu hỏi do nhóm biên soạn, bắt đầu bằng 12 câu kiến thức đã duyệt (`QUIZ-KIEN-THUC.md`); câu hỏi thử chỉ lấp chỗ còn thiếu.
+- [x] **Duyệt G0:** D1–D6, L1–L5, N1–N3 theo đúng phương án Claude Code đề xuất ở G0; N2 chấp nhận trụ cột trong sạch ít hơn 20 câu.
+- [x] **T1:** thêm mốc 7 phút (5 / 7 / 10 / 15 phút / không giới hạn); mặc định vẫn 10 phút.
+- [x] **N4:** nhãn thẻ bẫy trung tính (phương án A).
+- [x] Tên game: giữ tên tạm; tên chính thức để sau.
+- [x] Ghi chú Deployment Protection (mục 15.6, 18, 20) là nội dung cố ý thêm ở bản 1.4.
+- [x] Hai lời giải thích Q-02, Q-11 nhắc chữ cái phương án: nhóm sửa câu chữ (cách a) — Q-02 bỏ câu cuối, Q-11 nêu thẳng hai phương án.
+- [x] Độ khó 12 câu khởi đầu: duyệt theo đề xuất của Claude Code.
+
+**Quyết định G0 đã ghi vào tài liệu:**
+
+| Mã | Quyết định | Ghi ở mục |
+|---|---|---|
+| D1 | Trụ cột của nhánh lặp theo thứ tự trong `mindmap.json` | 4 |
+| D2 | Power-up ở ô 3 nhánh 1 và 5; bẫy ở ô 3 nhánh 3 và 6 → ô câu hỏi dân chủ 3, pháp quyền 3, trong sạch 2 | 4 |
+| D3 | Đường về đích độ khó 2, 2, 3, 3, trụ cột xoay vòng từ nhánh có cổng; Đích độ khó 3, trụ cột theo seed | 4 |
+| D4 | Bố cục Dài: vòng chung 24 ô, đường về đích 5 ô | 4 |
+| D5 | Quãng đường 22 bước (bố cục Dài 29) | 4 |
+| D6 | Màu ngựa khác hẳn màu trụ cột; trụ cột trên ô hiện bằng viền + biểu tượng + chữ viết tắt | 12, 15.7, 16 |
+| L1 | Tiến 3 ô không vào thẳng Đích; bẫy lùi theo đường của người đó, có thể ra vòng chung | 5, 6, 7 |
+| L2 | 50:50 loại tới khi còn 2 đáp án; câu 2 đáp án không dùng được, không mất power-up | 6 |
+| L3 | Luật ra 6 xét mặt xúc xắc trước khi nhân đôi | 5, 6 |
+| L4 | Kỷ lục cá nhân chỉ lưu khi về đích; hết giờ báo số ô còn lại | 9 |
+| L5 | Chấp nhận đáp án nằm trong mã trang; ẩn Kho câu hỏi khi đang ở trong phòng | 12, 15.4 |
+| T1 | Thêm mốc 7 phút; trên lớp chọn 5 hoặc 7 phút; hết giờ tôn vinh người dẫn đầu; mô phỏng ở 20 s và 25 s/lượt | 10, 11 |
+| N1 | Nội dung thẻ hiện vật trong game (không ảnh, không "Ngày nay", không nguồn APA) | 12 |
+| N2 | Mỗi trụ cột ≥ 10 / 6 / 4 câu theo độ khó 1 / 2 / 3; trụ cột trong sạch được ít hơn; quy tắc lấy câu khi thiếu | 8, 13.4 |
+| N3 | Câu `fillQuote` đánh dấu chỗ trống bằng `___` | 13.4 |
+| N4 | Nhãn thẻ bẫy trung tính | 7 |
+| — | Ghi chú Deployment Protection: chỉ tên miền chính mở công khai; thử trên điện thoại dùng Shareable Links | 15.6, 18, 20 |
+| — | Giải thích không nhắc chữ cái phương án; sửa Q-02, Q-11 | 13.1, 13.4, 17 |
+| — | Độ khó 12 câu khởi đầu | 13.1 |
 
 **Kết quả rà soát G0 (03/10/2026) — đối chiếu tài liệu này với dữ liệu đã chép:**
 
@@ -626,51 +711,21 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 | Nhánh web | `CLAUDE.md` nằm ở `San-pham-sang-tao/web/CLAUDE.md`; không có `web/scripts/package-offline.mjs` — web hiện chỉ còn bản offline, script là `scripts/package.mjs` | Không ảnh hưởng game; game tự viết script đóng gói riêng |
 | Cân bằng (ước tính thô) | Script tạm, **không phải mô phỏng chính thức G1**: bố cục Ngắn, xác suất đúng 70/50/35%, ~20 s/lượt, ván dừng khi người đầu tiên về đích | 1 người ~3,9 phút (trung vị 10 lượt) · 3 người ~8 phút, 84% ván xong ≤ 10 phút · 5 người ~11,7 phút, 42% xong ≤ 10 phút, **3% xong ≤ 5 phút**; dính bẫy ~0,8 lần/người; chuỗi đứng yên dài nhất ~3 lượt (xem T1) |
 
-**Nhóm cần quyết** — mỗi mục có phương án Claude Code đề xuất (**in đậm**); nhóm đồng ý thì dùng làm mặc định, không thì ghi phương án khác. Duyệt xong mới làm G1.
-
-*Bàn cờ:*
-- [ ] **D1. Trụ cột của 6 nhánh.** Đề xuất: **lặp theo thứ tự trong `mindmap.json`** — nhánh 1–6 = dân chủ, pháp quyền, trong sạch, dân chủ, pháp quyền, trong sạch (tính từ dữ liệu: nhánh *i* → trụ cột *i* mod số trụ cột, không viết cứng). Cổng của màu trống thành ô câu hỏi độ khó 1 thuộc trụ cột của nhánh đó.
-- [ ] **D2. Vị trí 2 power-up và 2 bẫy trên vòng chung.** 8 ô câu hỏi không chia đều cho 3 trụ cột. Đề xuất: **mỗi nhánh = [cổng, ô 2, ô 3]; power-up ở ô 3 nhánh 1 và nhánh 5, bẫy ở ô 3 nhánh 3 và nhánh 6** → ô câu hỏi: dân chủ 3, pháp quyền 3, trong sạch 2 (trụ cột ít nội dung nhất có ít ô câu hỏi nhất). Vị trí cuối chỉnh theo mô phỏng G1.
-- [ ] **D3. Trụ cột và độ khó của đường về đích, Đích.** Thiết kế chưa nói ô về đích thuộc trụ cột nào. Đề xuất: **4 ô độ khó 2, 2, 3, 3; trụ cột xoay vòng bắt đầu từ trụ cột của nhánh có cổng người đó (vd. cổng ở nhánh pháp quyền → pháp quyền, trong sạch, dân chủ, pháp quyền); Đích: trụ cột ngẫu nhiên theo seed, độ khó 3.** Phương án khác: cả đường về đích theo trụ cột của nhánh mình.
-- [ ] **D4. Bố cục Dài cụ thể.** Đề xuất: **vòng chung 24 ô = 6 cổng + 3 power-up + 3 bẫy + 12 câu hỏi; đường về đích 5 ô độ khó 2, 2, 3, 3, 3.**
-- [ ] **D5. Quãng đường.** Đề xuất: **cổng (bước 0) → 17 ô vòng chung → rẽ vào đường về đích ở ô ngay trước cổng của mình → 4 ô về đích → Đích = 22 bước** (bố cục Dài: 23 + 5 + 1 = 29 bước). Khớp "khoảng 21–22 ô" ở mục 4.
-- [ ] **D6. Màu ngựa khác màu trụ cột.** Bàn có 6 màu người chơi (cổng, đường về đích, ngựa) và 3 màu trụ cột (đoạn đường). Đề xuất: **ngựa dùng 6 màu tươi khác hẳn đỏ son / xanh mực / vàng đồng (vd. xanh lá, cam, tím, xanh ngọc, hồng, xanh dương sáng), mỗi màu một ký hiệu; ô câu hỏi hiện trụ cột bằng viền màu + biểu tượng và chữ viết tắt trụ cột**, không chỉ bằng màu.
-
-*Luật — chi tiết thiếu:*
-- [ ] **L1. Tiến 3 ô gần Đích.** Hiệu ứng không dây chuyền nên Tiến 3 ô tới Đích sẽ về đích không cần trả lời. Đề xuất: **Tiến 3 ô dừng tối đa ở ô cuối đường về đích; vào Đích luôn phải trả lời câu về đích.** Bẫy lùi đi lùi theo đường của người đó (có thể từ đường về đích ra vòng chung), không quá cổng.
-- [ ] **L2. 50:50 với câu ít đáp án.** Câu `truefalse` chỉ có 2 đáp án, câu `single` có thể có 3. Đề xuất: **50:50 loại đáp án sai tới khi còn 2 (4 → 2, 3 → 2); câu 2 đáp án thì nút mờ, không mất power-up.**
-- [ ] **L3. Xúc xắc ×2 và luật ra 6.** Đề xuất: **được tung thêm khi mặt xúc xắc là 6 (trước khi nhân đôi)**, không tính theo số sau khi nhân.
-- [ ] **L4. Thử thách cá nhân và giới hạn giờ.** Đề xuất: **giữ mặc định 10 phút; kỷ lục (ít lượt nhất) chỉ lưu khi về đích; hết giờ thì báo số ô còn lại.**
-- [ ] **L5. Lộ đáp án.** Bản online vẫn đóng gói `questions.json` (cho Kho câu hỏi và Chơi trên một máy), nên ai mở mã trang vẫn xem được đáp án; quy định "state không chứa đáp án" (15.4) chỉ chặn xem qua mạng. Đề xuất: **chấp nhận (game ôn tập), giữ quy định 15.4 và ẩn nút Kho câu hỏi khi đang ở trong phòng.** Phương án khác (tốn công hơn): bản online tải câu hỏi từ server, không đóng gói.
-
-*Thời lượng trên lớp:*
-- [ ] **T1. Mini game 5–7 phút và mặc định 10 phút.** Mục 1 và 19 dùng game 5–7 phút trên lớp; mặc định 10 phút đã chốt và không đổi. Theo ước tính thô, phòng 5 người chơi 5 phút gần như luôn kết thúc theo giờ (xếp theo số ô còn lại). Mức ~20 s/lượt cũng còn lạc quan (riêng đồng hồ trả lời đã 20 s). Đề xuất: **giữ mặc định 10 phút; trên lớp chủ phòng chọn 5 phút; màn kết thúc theo giờ vẫn tôn vinh người dẫn đầu; mô phỏng G1 chạy cả 20 s và 25 s/lượt.** Hỏi nhóm: có thêm mốc **7 phút** vào danh sách 5 / 10 / 15 / không giới hạn không?
-
-*Dữ liệu và nội dung:*
-- [ ] **N1. Thẻ hiện vật trong game.** `sourceIds` trỏ tới `sources.json` không được chép; chưa có ảnh. Đề xuất: **thẻ chỉ hiện mã, ngày, tên, trụ cột, câu chuyện, trích dẫn kèm `quote.cite` và ghi chú ngữ cảnh — không có ảnh, "Ngày nay" và danh sách nguồn APA; tôn trọng `hidden: true` (không hiện chip).** Nếu muốn hiện nguồn APA thì chép thêm `sources.json` (sửa mục 14 trước).
-- [ ] **N2. Phân bổ câu hỏi.** Đề xuất: **mỗi trụ cột ≥ 10 câu độ khó 1, ≥ 6 câu độ khó 2, ≥ 4 câu độ khó 3** (đã ghi trong file mẫu). Trụ cột trong sạch ít nội dung: nếu không đủ 20 câu, có chấp nhận ít hơn không (D2 đã cho trụ cột này ít ô câu hỏi nhất)?
-- [ ] **N3. Định dạng `fillQuote`.** Đề xuất: **đánh dấu chỗ trống bằng `___` trong cột câu hỏi; đáp án là từ/cụm từ điền vào** (đã ghi trong file mẫu).
-- [ ] **N4. Nhãn thẻ bẫy (mục 7)** — chọn A hoặc B:
-  - **A. Trung tính (mặc định):** "Bẫy — mất lượt" · "Bẫy — lùi {n} ô".
-  - B. Gắn nội dung môn học; dòng hiệu ứng vẫn trung tính; chỉ dùng nguồn mục 13.2 có số trang. Nhóm đối chiếu lại với giáo trình / *Toàn tập* trước khi chọn:
-
-    | Thẻ | Nhãn | Dòng hiệu ứng | Nguồn |
-    |---|---|---|---|
-    | Mất lượt | Cậy thế, cậy quyền | Bỏ lượt tiếp theo | t.4, tr.51 (HV-06); GT tr. 91 |
-    | Lùi ngẫu nhiên | Chủ nghĩa cá nhân — "bệnh mẹ" | Lùi {n} ô | GT tr. 94–95 (`mindmap.json`, trụ cột trong sạch) |
-    | Mất lượt (thêm, tùy chọn) | "Dĩ công vi tư" | Bỏ lượt tiếp theo | t.6, tr.127 (HV-10) |
-    | Lùi ngẫu nhiên (thêm, tùy chọn) | Tham ô, lãng phí, quan liêu | Lùi {n} ô | GT tr. 82 (HV-13 — tóm ý, chưa có số trang *Toàn tập*) |
-
-- [ ] Tên chính thức của game.
+**Nhóm cần quyết:**
+- [ ] Tên chính thức của game — để sau, không chặn các mốc.
 
 **Nội dung (nhóm cung cấp):**
-- [ ] Soạn và gửi `docs/CAU-HOI-GAME.md` theo mẫu `docs/CAU-HOI-GAME.mau.md` (mục 13.4): mục tiêu ≥ 60 câu, đủ trụ cột và độ khó, mỗi câu có nguồn kèm số trang; nhớ phần giáo trình tr. 92–93.
+- [ ] Soạn tiếp `docs/CAU-HOI-GAME.md` (đã có 12 câu khởi đầu) theo mẫu `docs/CAU-HOI-GAME.mau.md` (mục 13.4): mục tiêu ≥ 60 câu, mỗi câu có nguồn kèm số trang.
+  - Ưu tiên trụ cột trong sạch (mới có 2 câu) và câu độ khó 2–3.
+  - Thêm vài câu `truefalse`, `fillQuote`, `situation` — 12 câu khởi đầu đều là `single`.
+  - Nhớ phần giáo trình tr. 92–93.
 
 **Hạ tầng (cần tài khoản nhóm):**
 - [ ] Tạo project Vercel thứ hai, nối repo `HCM202`, Production Branch = `game`, Root Directory = gốc nhánh, Fluid Compute bật (mặc định).
 - [ ] Gắn **Upstash for Redis** (gói Free) từ Vercel Marketplace (15.4, 15.5).
 - [ ] Điền `siteUrl` của game.
 - [ ] Đề xuất: deploy preview ngay sau G3 để thử WebSocket thật sớm, không đợi G6.
+- [ ] Kiểm tra Deployment Protection (mục 15.6): khi thử trên điện thoại dùng Shareable Links; trước buổi học, tên miền chính phải mở được mà không cần đăng nhập Vercel.
 
 **Cần xác minh:**
 - [x] Trạng thái WebSocket trên Vercel và cách chạy với Vite + `api/` — đã xác minh ở G0 (15.4).
