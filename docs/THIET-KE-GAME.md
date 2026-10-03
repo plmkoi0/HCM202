@@ -674,7 +674,9 @@ Reducer thuần, không phụ thuộc trình duyệt hay Node. Hành động:
 - **Không gắn thống kê.** Tài nguyên bên ngoài duy nhất được phép: Vercel Functions + Redis (Vercel Marketplace) cho phòng chơi. Bản offline không có request mạng nào.
 - Không commit lên nhánh web; không import mã hay dữ liệu từ nhánh web; không đồng bộ dữ liệu lại với web.
 - Cập nhật `CLAUDE.md` và mục 18 sau mỗi mốc.
-- **Giới hạn sub agent khi kiểm tra:** mỗi khâu kiểm tra / rà soát (sau mỗi mốc, hoặc trước khi báo nhóm) dùng **tối đa 6 sub agent**, tính cả người rà soát lẫn người phản biện; sub agent không tạo thêm sub agent. Kiểm bằng test, build, script, chạy thử trước; chỉ giao sub agent phần cần góc nhìn độc lập (vd. đối chiếu nội dung với nguồn, rà soát mã server). Cần nhiều hơn thì gộp việc, không vượt 6.
+- **Kiểm tra sau mỗi mốc:** chỉ chạy kiểm tra tự động (test, build, build offline, lint; thêm `npm run e2e` khi đổi giao diện). Không rà soát bằng sub agent sau từng mốc.
+- **Rà soát bằng sub agent:** chỉ một lần trước phát hành (G6), hoặc khi nhóm yêu cầu. Mỗi lần dùng **tối đa 6 sub agent**, tính cả người rà soát lẫn người phản biện; sub agent không tạo thêm sub agent; chỉ giao phần cần góc nhìn độc lập (vd. đối chiếu nội dung với nguồn, rà soát mã server).
+- **Dừng sau mỗi mốc G:** xong một mốc thì chạy kiểm tra tự động, commit, push, cập nhật `CLAUDE.md` và mục 18, báo cáo ngắn (đã làm gì, chi tiết tự chọn, cần nhóm làm gì), rồi dừng chờ nhóm cho phép làm mốc tiếp theo. Không tự sang mốc mới. Trong một mốc chỉ dừng giữa chừng khi: cần nhóm quyết; cần tài khoản hoặc quyền mạng cho việc không làm cục bộ được; kiểm tra cho thấy không đạt yêu cầu trong tài liệu. Phiên quá dài thì dừng ở chỗ hợp lý, ghi tiến độ vào `CLAUDE.md`.
 
 ## 16. Giao diện
 
@@ -848,7 +850,8 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 - [x] Ghi chú Deployment Protection (mục 15.6, 18, 20) là nội dung cố ý thêm ở bản 1.4.
 - [x] Hai lời giải thích Q-02, Q-11 nhắc chữ cái phương án: nhóm sửa câu chữ (cách a) — Q-02 bỏ câu cuối, Q-11 nêu thẳng hai phương án.
 - [x] Độ khó 12 câu khởi đầu: duyệt theo đề xuất của Claude Code.
-- [x] Giới hạn tối đa 6 sub agent cho mỗi khâu kiểm tra / rà soát (mục 15.8).
+- [x] Kiểm tra sau mỗi mốc chỉ bằng kiểm tra tự động; rà soát bằng sub agent (tối đa 6) chỉ một lần trước phát hành (G6) hoặc khi nhóm yêu cầu (mục 15.8). Thay quy định cũ "tối đa 6 sub agent mỗi khâu kiểm tra".
+- [x] Dừng sau mỗi mốc G, chờ nhóm cho phép làm mốc tiếp theo (mục 15.8), áp dụng từ G4.
 
 **Quyết định G0 đã ghi vào tài liệu:**
 

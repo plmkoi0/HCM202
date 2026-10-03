@@ -57,7 +57,9 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - **Không commit lên nhánh web**; không import mã hay dữ liệu từ nhánh web; không đồng bộ dữ liệu lại với web.
 - Không sao chép mã, giao diện, tên, đồ họa, âm thanh của game tham khảo (Phụ lục A).
 - Cập nhật `CLAUDE.md` này và mục 18 tài liệu thiết kế sau mỗi mốc.
-- **Giới hạn sub agent khi kiểm tra:** mỗi khâu kiểm tra / rà soát (sau mỗi mốc, hoặc trước khi báo nhóm) dùng **tối đa 6 sub agent**, tính cả người rà soát lẫn người phản biện; sub agent không tạo thêm sub agent. Kiểm bằng test, build, script, chạy thử trước; chỉ giao sub agent phần cần góc nhìn độc lập (vd. đối chiếu nội dung với nguồn, rà soát mã server). Cần nhiều hơn thì gộp việc, không vượt 6.
+- **Kiểm tra sau mỗi mốc:** chỉ chạy kiểm tra tự động (test, build, build offline, lint; thêm `npm run e2e` khi đổi giao diện). Không rà soát bằng sub agent sau từng mốc.
+- **Rà soát bằng sub agent:** chỉ một lần trước phát hành (G6), hoặc khi nhóm yêu cầu. Mỗi lần dùng **tối đa 6 sub agent**, tính cả người rà soát lẫn người phản biện; sub agent không tạo thêm sub agent; chỉ giao phần cần góc nhìn độc lập (vd. đối chiếu nội dung với nguồn, rà soát mã server).
+- **Dừng sau mỗi mốc G:** xong một mốc thì chạy kiểm tra tự động, commit, push, cập nhật `CLAUDE.md` và mục 18, báo cáo ngắn (đã làm gì, chi tiết tự chọn, cần nhóm làm gì), rồi dừng chờ nhóm cho phép làm mốc tiếp theo. Không tự sang mốc mới. Trong một mốc chỉ dừng giữa chừng khi: cần nhóm quyết; cần tài khoản hoặc quyền mạng cho việc không làm cục bộ được; kiểm tra cho thấy không đạt yêu cầu trong tài liệu. Phiên quá dài thì dừng ở chỗ hợp lý, ghi tiến độ vào `CLAUDE.md`.
 - Kiểm tra trước khi commit (từ G1): `npm run test && npm run build && npm run build:offline && npm run lint` ở gốc nhánh. Từ G2, khi đổi giao diện: thêm `npm run e2e` (Chromium thật ở `/opt/pw-browsers/chromium` hoặc `CHROMIUM_PATH`; `--motion` để bật hiệu ứng, `--shots <thư mục>` để chụp màn hình).
 
 ## Cấu trúc thư mục
@@ -201,13 +203,15 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 **Nội dung (nhóm cung cấp):**
 - [ ] Soạn tiếp `docs/CAU-HOI-GAME.md` (đã có 12 câu khởi đầu) theo mẫu: mục tiêu ≥ 60 câu, mỗi câu có nguồn kèm số trang. Ưu tiên trụ cột trong sạch (mới có 2 câu) và câu độ khó 2–3; thêm vài câu `truefalse`, `fillQuote`, `situation`; nhớ giáo trình tr. 92–93.
 
-**Hạ tầng (cần tài khoản nhóm):**
+**Hạ tầng (cần tài khoản nhóm — làm theo `docs/HUONG-DAN-VERCEL.md`):**
 - [ ] Tạo project Vercel thứ hai, nối repo `HCM202`, Production Branch = `game`, Root Directory = gốc nhánh, Fluid Compute bật (mặc định).
-- [ ] Gắn **Upstash for Redis** (gói Free) từ Vercel Marketplace — không dùng Redis Cloud Free (30 kết nối, 100 lệnh/giây).
+- [ ] Gắn **Upstash for Redis** (gói Free) từ Vercel Marketplace — không dùng Redis Cloud Free. Xong thì `/api/health` trả `"store":"redis"`.
 - [ ] Điền `siteUrl` của game.
-- [ ] Đề xuất: deploy preview ngay sau G3 để thử WebSocket thật sớm.
 - [ ] Kiểm tra Deployment Protection: thử trên điện thoại dùng Shareable Links; trước buổi học, tên miền chính mở được mà không cần đăng nhập Vercel.
 
 **Cần xác minh:**
-- [ ] Trước G3: Upstash có tính mỗi tin pub/sub nhận được là một lệnh không; tên biến môi trường Marketplace đặt cho Redis (`REDIS_URL` / `KV_URL`…).
-- [ ] Trên deploy preview: WebSocket qua `experimental_upgradeWebSocket` chạy được, đóng sau 300 giây, client tự nối lại.
+- [ ] Upstash có tính mỗi tin pub/sub nhận được là một lệnh không — **chưa xác minh được** (upstash.com bị chặn; bằng chứng gián tiếp: không tính). Ước lượng chi phí đang tính **trường hợp xấu** (có tính).
+- [x] Tên biến môi trường Redis — xác minh một phần: server đọc `REDIS_URL` → `KV_URL` → `UPSTASH_REDIS_URL` (TCP `rediss://`); chỉ có biến REST thì `/api/health` báo thiếu.
+- [ ] Trên bản deploy thật: `npm run check:deploy -- <địa chỉ> --long` — WebSocket qua `experimental_upgradeWebSocket`, đóng sau 300 giây và client tự nối lại, polling dự phòng, `api/[...path].ts` bắt mọi `/api/*`. Ghi kết quả vào mục 15.4.
+
+*Mỗi lần sửa mục 20 tài liệu thiết kế thì sửa phần TODO này cùng lúc.*
