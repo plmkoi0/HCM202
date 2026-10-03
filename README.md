@@ -2,7 +2,7 @@
 
 Board game kiểu cờ cá ngựa về Chủ đề 4 — *Tư tưởng Hồ Chí Minh về Nhà nước của nhân dân, do nhân dân, vì nhân dân* (HCM202, sản phẩm sáng tạo thứ hai). Thiết kế: [`docs/THIET-KE-GAME.md`](docs/THIET-KE-GAME.md).
 
-> Đang làm theo lộ trình mục 18 của tài liệu thiết kế. Hiện xong **G1–G5**: chơi trên một máy, chơi qua phòng (Vercel + Upstash Redis, đang chạy ở https://hcm-202-web-omega.vercel.app), Luật chơi, Kho câu hỏi, Cài đặt, âm thanh, phím tắt. Hướng dẫn deploy và bản offline hoàn chỉnh viết ở G6.
+> Đang làm theo lộ trình mục 18 của tài liệu thiết kế. Hiện xong **G1–G5** và **Đ1.6** (bộ 55 câu hỏi, rút ngẫu nhiên các mức độ khó suốt ván): chơi trên một máy, chơi qua phòng (Vercel + Upstash Redis, đang chạy ở https://hcm-202-web-omega.vercel.app), Luật chơi, Kho câu hỏi, Cài đặt, âm thanh, phím tắt. Hướng dẫn deploy và bản offline hoàn chỉnh viết ở G6.
 
 ## Chạy
 
@@ -26,13 +26,13 @@ Kiểm tra trước khi commit: `npm run test && npm run build && npm run build:
 
 ## Sửa bộ câu hỏi
 
-1. Thêm dòng vào bảng trong [`docs/CAU-HOI-GAME.md`](docs/CAU-HOI-GAME.md) theo hướng dẫn ở [`docs/CAU-HOI-GAME.mau.md`](docs/CAU-HOI-GAME.mau.md) (id `Q-13` trở đi; mỗi câu có nguồn kèm số trang; giải thích không nhắc chữ cái phương án).
-2. Chạy `npm run import:questions`. Script báo rõ dòng sai và **không ghi đè** `questions.json` khi còn lỗi. Câu hỏi thử (`TEST-…`, chỉ hỏi về luật chơi) tự lấp những tổ hợp trụ cột × độ khó còn dưới 2 câu chính thức.
+1. Thêm dòng vào bảng 8 cột trong [`docs/CAU-HOI-GAME.md`](docs/CAU-HOI-GAME.md) theo hướng dẫn ở [`docs/CAU-HOI-GAME.mau.md`](docs/CAU-HOI-GAME.mau.md): id · độ khó · câu hỏi · đáp án A–D · đúng (id `Q-56` trở đi; giữ ba mức độ khó gần bằng nhau).
+2. Chạy `npm run import:questions`. Script tự suy ra loại câu, báo rõ dòng sai và câu trùng, **không ghi đè** `questions.json` khi còn lỗi. Câu hỏi thử (`TEST-…`, chỉ hỏi về luật chơi) tự lấp độ khó còn dưới 2 câu chính thức.
 3. Chạy `npm run test` và `npm run simulate`.
 
 ## Cấu trúc
 
 - `src/engine/` — reducer thuần (chạy được trên server và trình duyệt), RNG có seed, bot.
-- `src/data/` — dữ liệu JSON (bàn cờ, luật, power-up, bẫy, câu hỏi, bot, màu ngựa, chữ giao diện, hiện vật, trụ cột). Nguồn gốc dữ liệu chép từ bảo tàng số: `src/data/NGUON.md`.
+- `src/data/` — dữ liệu JSON (bàn cờ, luật, power-up, bẫy, câu hỏi, bot, màu ngựa, chữ giao diện). Nguồn gốc dữ liệu từng chép từ bảo tàng số và việc gỡ ở bản 1.6: `src/data/NGUON.md`.
 - `scripts/` — nhập câu hỏi, mô phỏng cân bằng.
 - `tests/` — Vitest.

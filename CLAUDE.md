@@ -12,8 +12,8 @@ File này lưu bối cảnh, quy ước và tiến độ của **nhánh `game`**
 - **Chế độ:** Chơi qua phòng (online, server trên Vercel Functions + Redis Marketplace) · Chơi trên một máy (1–5 người thay phiên, không cần mạng; cũng là bản offline một file).
 - **Thông điệp:** **"Chủ nhân không đứng ngoài"**.
 - **Đối tượng:** sinh viên đại học; dùng làm mini game cuối buổi thuyết trình (chủ phòng chọn mốc 5 hoặc 7 phút).
-- **Nguồn nội dung:** Giáo trình HCM202, Chương IV, mục II (tr. 83–95) và *Hồ Chí Minh Toàn tập* (Nxb Chính trị quốc gia, 2011). **Bộ câu hỏi do nhóm biên soạn** (`docs/CAU-HOI-GAME.md`, theo mẫu `docs/CAU-HOI-GAME.mau.md`), bắt đầu bằng 12 câu kiến thức nhóm đã duyệt (chép từ `QUIZ-KIEN-THUC.md` của web, mục 13.1); câu hỏi thử chỉ lấp tổ hợp trụ cột × độ khó còn dưới 2 câu (mục 13.3).
-- **Dữ liệu khởi đầu** (hiện vật, sơ đồ tư duy, màu trụ cột, font) chép một lần từ nhánh web — nguồn gốc ghi ở `src/data/NGUON.md`; từ đó thuộc về game, không đồng bộ lại.
+- **Nội dung (bản 1.6):** Chủ đề 4 theo giáo trình HCM202, Chương IV, mục II. **Bộ câu hỏi 55 câu do nhóm biên soạn và chịu trách nhiệm** (`docs/CAU-HOI-GAME.md`, bảng 8 cột theo mẫu `docs/CAU-HOI-GAME.mau.md`): Q-01 → Q-12 là 12 câu khởi đầu (từ `QUIZ-KIEN-THUC.md`), Q-13 → Q-55 từ `Câu hỏi.docx` của nhóm; 18 / 19 / 18 câu theo độ khó. **Không có** trụ cột, giải thích, nguồn, xác minh, hiện vật. Mỗi ô câu hỏi (kể cả Đích) rút ngẫu nhiên một câu từ toàn bộ kho — các mức trộn lẫn suốt ván (mục 5). Câu hỏi thử chỉ lấp độ khó còn dưới 2 câu (hiện không dùng).
+- **Dữ liệu chép từ nhánh web:** `artifacts.json`, `mindmap.json`, `pillars.json` **đã gỡ ở bản 1.6**; font giữ; `docs/nguon/` giữ làm hồ sơ — nguồn gốc ghi ở `src/data/NGUON.md`.
 
 ### Luật cốt lõi (đã chốt — không đổi, mục 2 và 20)
 1. Chơi theo lượt, mỗi lượt tung xúc xắc.
@@ -24,33 +24,33 @@ File này lưu bối cảnh, quy ước và tiến độ của **nhánh `game`**
 Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối đa 5 người · **giới hạn mặc định 10 phút** · **Đoán cùng tắt mặc định** · **thẻ bẫy chỉ "mất lượt" hoặc "lùi ngẫu nhiên 1–3 ô"**.
 
 ### Đã chốt ở G0 (bản 1.5, mục 20 — bảng "Quyết định G0 đã ghi vào tài liệu")
-- **D1** Trụ cột của nhánh *i* = trụ cột thứ ((*i* − 1) mod số trụ cột) + 1 theo thứ tự `mindmap.json` → nhánh 1–6: dân chủ, pháp quyền, trong sạch, dân chủ, pháp quyền, trong sạch.
-- **D2** Mỗi nhánh [cổng, ô 2, ô 3]; power-up ở ô 3 nhánh 1 và 5; bẫy ở ô 3 nhánh 3 và 6 → ô câu hỏi vòng chung (độ khó 1): dân chủ 3, pháp quyền 3, trong sạch 2. Cổng của màu trống = ô câu hỏi độ khó 1 của trụ cột nhánh đó.
-- **D3** Đường về đích 4 ô độ khó 2, 2, 3, 3; trụ cột xoay vòng bắt đầu từ trụ cột của nhánh có cổng; Đích độ khó 3, trụ cột theo seed.
-- **D4** Bố cục Dài: vòng 24 ô = 6 cổng + 3 power-up + 3 bẫy + 12 câu hỏi; đường về đích 5 ô độ khó 2, 2, 3, 3, 3.
+> **Bản 1.6** (đầu mục 20 "Thay đổi bản 1.6") ưu tiên hơn: D1, D3, N1, N2, phần trụ cột của D2 / D6, quy tắc giải thích và hai lời giải thích Q-02 / Q-11 **đã bỏ**. Câu hỏi rút ngẫu nhiên từ toàn bộ kho; sau khi chốt chỉ hiện Đúng / Sai và đáp án đúng (3 giây).
+- ~~**D1** Trụ cột của nhánh *i* = trụ cột thứ ((*i* − 1) mod số trụ cột) + 1 theo thứ tự `mindmap.json` → nhánh 1–6: dân chủ, pháp quyền, trong sạch, dân chủ, pháp quyền, trong sạch.~~ *(đã bỏ ở 1.6)*
+- **D2** Mỗi nhánh [cổng, ô 2, ô 3]; power-up ở ô 3 nhánh 1 và 5; bẫy ở ô 3 nhánh 3 và 6 → 8 ô câu hỏi vòng chung; cổng của màu trống = ô câu hỏi (phần trụ cột / độ khó *(đã bỏ ở 1.6)*).
+- ~~**D3** Đường về đích 4 ô độ khó 2, 2, 3, 3; trụ cột xoay vòng bắt đầu từ trụ cột của nhánh có cổng; Đích độ khó 3, trụ cột theo seed.~~ *(đã bỏ ở 1.6)* — đường về đích 4 ô câu hỏi + Đích, câu rút ngẫu nhiên.
+- **D4** Bố cục Dài: vòng 24 ô = 6 cổng + 3 power-up + 3 bẫy + 12 câu hỏi; đường về đích 5 ô.
 - **D5** Quãng đường 22 bước: cổng (0) → 17 ô vòng chung → rẽ ở ô ngay trước cổng → 4 ô về đích → Đích (22). Bố cục Dài 29.
-- **D6** Ngựa 6 màu tươi khác hẳn đỏ son / xanh mực / vàng đồng, mỗi màu một ký hiệu; cổng và đường về đích mang màu ngựa; ô câu hỏi hiện trụ cột bằng viền màu + biểu tượng + chữ viết tắt.
+- **D6** Ngựa 6 màu tươi, mỗi màu một ký hiệu; cổng và đường về đích mang màu ngựa; ô câu hỏi đồng nhất (phần trụ cột *(đã bỏ ở 1.6)*).
 - **L1** Hiệu ứng đẩy không bao giờ đưa ngựa vào Đích (Tiến 3 ô dừng tối đa ở ô cuối đường về đích). Bẫy lùi theo đường của người đó, có thể từ đường về đích ra vòng chung, không quá cổng.
 - **L2** 50:50 loại tới khi còn 2 đáp án (4 → 2, 3 → 2); câu 2 đáp án: nút mờ, không mất power-up.
 - **L3** Luật ra 6 xét mặt xúc xắc trước khi nhân đôi (Xúc xắc ×2).
 - **L4** Thử thách cá nhân: giới hạn mặc định 10 phút; kỷ lục (ít lượt nhất) chỉ lưu khi về đích; hết giờ báo số ô còn lại.
 - **L5** Chấp nhận đáp án nằm trong mã trang (bản online đóng gói `questions.json`); state vẫn không chứa đáp án trước khi chốt; ẩn nút Kho câu hỏi khi đang ở trong phòng.
 - **T1** Giới hạn 5 / 7 / 10 / 15 phút / không giới hạn, mặc định 10; trên lớp chọn 5 hoặc 7; hết giờ xếp theo khoảng cách, người dẫn đầu được tôn vinh như người thắng; mô phỏng ở 20 s và 25 s/lượt.
-- **N1** Thẻ hiện vật trong game: mã, ngày, tên, trụ cột, câu chuyện, trích dẫn + `quote.cite`, ghi chú ngữ cảnh; không ảnh, không "Ngày nay", không nguồn APA; hiện vật `hidden` không hiện chip.
-- **N2** Mục tiêu mỗi trụ cột ≥ 10 / 6 / 4 câu độ khó 1 / 2 / 3; trụ cột trong sạch được ít hơn 20 câu. Tổ hợp không có câu: lấy cùng trụ cột ở độ khó gần nhất, rồi trụ cột khác cùng độ khó (mục 8).
+- ~~**N1** Thẻ hiện vật trong game: mã, ngày, tên, trụ cột, câu chuyện, trích dẫn + `quote.cite`, ghi chú ngữ cảnh; không ảnh, không "Ngày nay", không nguồn APA; hiện vật `hidden` không hiện chip.~~ *(đã bỏ ở 1.6)*
+- ~~**N2** Mục tiêu mỗi trụ cột ≥ 10 / 6 / 4 câu độ khó 1 / 2 / 3; trụ cột trong sạch được ít hơn 20 câu. Tổ hợp không có câu: lấy cùng trụ cột ở độ khó gần nhất, rồi trụ cột khác cùng độ khó (mục 8).~~ *(đã bỏ ở 1.6)*
 - **N3** `fillQuote`: đúng một chỗ trống `___`.
 - **N4** Nhãn thẻ bẫy trung tính: "Bẫy — mất lượt" · "Bẫy — lùi {n} ô".
-- **12 câu khởi đầu** Q-01 → Q-12 giữ nguyên văn `docs/nguon/QUIZ-KIEN-THUC.md`, trừ giải thích Q-02, Q-11 theo bản nhóm sửa (mục 13.1). Độ khó đã duyệt: 1 = Q-05, 06, 07, 09, 11 · 2 = Q-01, 04, 10, 12 · 3 = Q-02, 03, 08. **Giải thích không nhắc chữ cái phương án** — script nhập và test báo lỗi (mục 13.4, 17). Vẫn trộn đáp án khi hiện (mục 8).
+- **12 câu khởi đầu** Q-01 → Q-12 giữ nguyên văn `docs/nguon/QUIZ-KIEN-THUC.md` ở câu hỏi, đáp án, đáp án đúng (test kiểm). Độ khó đã duyệt: 1 = Q-05, 06, 07, 09, 11 · 2 = Q-01, 04, 10, 12 · 3 = Q-02, 03, 08. Vẫn trộn đáp án khi hiện (mục 8). (Giải thích và quy tắc chữ cái phương án *(đã bỏ ở 1.6)*.)
 - **Deployment Protection** Chỉ tên miền chính mở công khai; khi chơi thật luôn mở game, tạo QR và link mời từ tên miền chính; thử trên điện thoại dùng Shareable Links (mục 15.6).
 
 ## Quy ước (mục 15.8 tài liệu thiết kế)
 - Trả lời và viết nội dung bằng **tiếng Việt**; commit message ngắn gọn bằng tiếng Việt.
 - `docs/THIET-KE-GAME.md` là nguồn chuẩn duy nhất cho game; thay đổi đã được nhóm duyệt thì **cập nhật tài liệu trước rồi mới code**. Chỗ thiết kế thiếu, mâu thuẫn hoặc không khả thi: nêu ra kèm phương án đề xuất và hỏi nhóm, không tự quyết lặng lẽ.
-- **Không tự thêm** sự kiện, số liệu, trích dẫn ngoài các nguồn ở mục 13; trường nào thiếu thì ghi `TODO`.
-- **Không tự viết câu hỏi nội dung** về tư tưởng Hồ Chí Minh — bộ câu hỏi do nhóm cung cấp; trước đó chỉ dùng câu hỏi thử (mục 13.3: hỏi về luật chơi hoặc giữ chỗ, id `TEST-`, `"test": true`, `source.ref` = `"Câu hỏi thử"`, `verified: false`, nhãn `[Câu hỏi thử]`).
+- **Không tự viết hay sửa nội dung câu hỏi** về tư tưởng Hồ Chí Minh — bộ câu hỏi do nhóm biên soạn và chịu trách nhiệm (mục 13); chỉ báo lỗi định dạng, câu trùng. Câu hỏi thử (mục 13.3) chỉ hỏi về luật chơi: id `TEST-`, `"test": true`, nhãn `[Câu hỏi thử]`.
+- Không tự thêm sự kiện, số liệu, trích dẫn vào chữ giao diện.
 - Nhãn thẻ bẫy trung tính (N4); power-up và thẻ bẫy mô tả hiệu ứng bằng lời trung tính.
-- Khi nhóm gửi bản mới `docs/CAU-HOI-GAME.md`: chạy script nhập, đối chiếu nguồn mục 13.2, báo câu thiếu nguồn / sai định dạng / nghi sai nội dung — **không tự sửa nội dung**; bỏ câu hỏi thử ở tổ hợp đã đủ; chạy lại test và mô phỏng.
-- Nội dung về tư tưởng Hồ Chí Minh phải chính xác, có nguồn kèm số trang.
+- Khi nhóm gửi bản mới `docs/CAU-HOI-GAME.md`: chạy `npm run import:questions`, báo lỗi định dạng và câu trùng — **không tự sửa nội dung**; câu hỏi thử tự lấp độ khó còn thiếu; chạy lại test và mô phỏng.
 - Không tự lấy ảnh trên mạng khi chưa rõ bản quyền; không tự vẽ chân dung Bác.
 - Nội dung nằm trong `src/data/*.json`, không viết cứng trong component.
 - **Không gắn thống kê.** Tài nguyên bên ngoài duy nhất được phép: Vercel Functions + Redis (Vercel Marketplace) cho phòng chơi. Bản offline không có request mạng nào. Không icon font, không CDN, không Google Fonts.
@@ -98,7 +98,7 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 │   └── lib/question-table.mjs, lib/quiz-source.mjs   ← đọc bảng câu hỏi, mẫu chữ cái phương án; đọc QUIZ-KIEN-THUC.md
 ├── src/
 │   ├── data/                            ← board, rules, powerups, traps, bots, tokens, site, questions (sinh từ script),
-│   │                                      test-questions (kho câu hỏi thử), artifacts, mindmap, pillars, NGUON.md
+│   │                                      test-questions (kho câu hỏi thử), NGUON.md (artifacts / mindmap / pillars đã gỡ ở 1.6)
 │   ├── engine/                          ← types, rng (mulberry32), data, board (hình học, đường đi), questions (chọn câu),
 │   │                                      reducer (luật), bot, ranking, history (hoàn tác), view (state gửi client), index
 │   ├── online/                          ← session (phiên phòng, biệt danh), useRoom
@@ -120,7 +120,7 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 │   └── vite-env.d.ts
 └── tests/                               ← helpers, data, questions, engine, local, server (lõi), server-net (HTTP + WebSocket thật),
                                            store (kho bộ nhớ + redis-server cục bộ), vercel-api (Node ESM như Vercel, cả rewrite
-                                           __p), g5 (cài đặt, Sổ ôn tập, phím tắt, thống kê trụ cột, âm thanh), netHelpers
+                                           __p), g5 (cài đặt, Sổ ôn tập, phím tắt, thống kê, âm thanh), netHelpers
 ```
 
 **Đích (mục 15.1):**
@@ -140,7 +140,7 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 ├── server/                   ← kho phòng, token, pub/sub, xử lý hành động
 ├── scripts/                  ← nhập câu hỏi, mô phỏng cân bằng, mô phỏng tải, đóng gói offline
 └── src/
-    ├── data/                 ← mục 14 (board, rules, powerups, traps, questions, bots, tokens, site, artifacts, mindmap, pillars, NGUON.md)
+    ├── data/                 ← mục 14 (board, rules, powerups, traps, questions, test-questions, bots, tokens, site, NGUON.md)
     ├── engine/               ← reducer thuần + bot
     ├── net/                  ← WebSocket + polling, đo lệch đồng hồ
     ├── components/, screens/
@@ -157,7 +157,8 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 | **G2 — Chơi trên một máy** | Bàn cờ SVG, xúc xắc, ngựa, ô, power-up, bẫy, bot, thử thách cá nhân, lưu/tiếp tục, hoàn tác | ☑ Xong 03/10/2026 — 131 test; `npm run e2e` đạt ở 360 × 780 sáng và 1366 × 768 tối (axe không lỗi) |
 | **G3 — Server** | Phòng, sức chứa, màu, hành động, bot, Redis, pub/sub, WebSocket + polling, nối lại, chủ phòng, `/api/health`, test, mô phỏng tải | ☑ Xong 03/10/2026 — 170 test; mô phỏng tải đạt (kho bộ nhớ và redis-server thật, có/không Đoán cùng); chờ nhóm tạo project để kiểm trên Vercel |
 | **G4 — Chơi qua phòng** | Trang chủ, tạo/vào phòng (mã, QR, link), phòng chờ, chơi qua mạng, trạng thái kết nối, kết thúc, chơi lại, Đoán cùng | ☑ Xong 03/10/2026 (e2e 3 máy cục bộ); kiểm trên Vercel ở đầu G5 |
-| **G5 — Hoàn thiện** | Ôn câu sai, thống kê, Kho câu hỏi, Luật chơi, Cài đặt, âm thanh, phím tắt, giao diện, reduced motion | ☑ Xong 03/10/2026 — 178 test; `npm run e2e` đạt; deploy thật: sửa catch-all `/api/*`, `check:deploy --long` + phòng 3 máy trên deploy đạt. **Dừng — chờ nhóm cho phép G6** |
+| **G5 — Hoàn thiện** | Ôn câu sai, thống kê, Kho câu hỏi, Luật chơi, Cài đặt, âm thanh, phím tắt, giao diện, reduced motion | ☑ Xong 03/10/2026 — 178 test; `npm run e2e` đạt; deploy thật: sửa catch-all `/api/*`, `check:deploy --long` + phòng 3 máy trên deploy đạt |
+| **Đ1.6 — Đơn giản hóa câu hỏi** | Bảng câu hỏi 8 cột + script nhập, 55 câu, rút ngẫu nhiên từ toàn bộ kho; bỏ trụ cột, giải thích, nguồn, xác minh, hiện vật; hiện đáp án 3 giây; mô phỏng lại | ☑ Xong 04/10/2026 — 157 test; mô phỏng đạt; `npm run e2e` đạt; deploy: `check:deploy` + phòng 3 máy đạt. **Dừng — chờ nhóm cho phép G6** |
 | **G6 — Phát hành** | Hướng dẫn tạo project Vercel + Redis (nhóm làm), deploy preview, diễn tập, `check:release`, bản offline, README | ☐ |
 
 ## Ghi chú nền tảng (G0, chi tiết ở mục 15.4–15.5)
@@ -171,9 +172,9 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - Pha: `roll` → (`chooseHorse`) → `question` | thẳng `reveal` → (`discard`) → `reveal` → NEXT_TURN → tung thêm (ra 6 / Thêm lượt) hoặc lượt sau. `ended` khi kết thúc.
 - `pendingAutoAction(state, now)`: hành động bất kỳ máy nào gửi khi quá hạn (BOT_STEP / SKIP_TURN / AUTO_ROLL / TIMEOUT / NEXT_TURN).
 - RNG trong `state.rng` (seed lưu `state.seed`); `clientView(state, viewerId)` bỏ seed/rng và lựa chọn Đoán cùng của người khác.
-- Đường đi: bước 0 = cổng, 1…17 vòng chung, 18…21 về đích, 22 = Đích (Ngắn); trụ cột nhánh / ô về đích tính từ thứ tự `mindmap.json`.
-- Chọn câu: không lặp tới hết kho, trộn lại vòng mới (câu vừa hỏi không ra ngay), ưu tiên câu chưa gặp; thiếu tổ hợp thì mượn (mục 8).
-- Kết quả mô phỏng và các chi tiết tự chọn ở G1 (mặc định "dừng ngay", hiện giải thích 8 s, Đổi câu đặt lại đồng hồ…) ghi ở mục 11 và 20 tài liệu thiết kế.
+- Đường đi: bước 0 = cổng, 1…17 vòng chung, 18…21 về đích, 22 = Đích (Ngắn); ô không gắn trụ cột hay độ khó (bản 1.6).
+- Chọn câu (bản 1.6): rút ngẫu nhiên từ toàn bộ kho, không lặp tới hết kho, trộn lại vòng mới (câu vừa hỏi không ra ngay), ưu tiên câu chưa gặp.
+- Kết quả mô phỏng (chạy lại ở Đ1.6) và các chi tiết tự chọn ở G1 (mặc định "dừng ngay", Đổi câu đặt lại đồng hồ…; hiện đáp án nay 3 s) ghi ở mục 11 và 20 tài liệu thiết kế.
 - `npm audit` báo `braces` (qua `vite-plugin-singlefile` → `micromatch`): chỉ là công cụ build, không vào mã chạy.
 
 ## Ghi chú server (G3, chi tiết ở mục 15.4, 20)
@@ -184,7 +185,7 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - Phòng = một khối JSON `Room` (server/types.ts), có `game: GameState`. Ghi qua `mutate()`: đọc (đệm/kho) → rà kết nối → sửa → `store.put(room, version cũ)` (Lua: kiểm version + ghi + hạn + publish) → xung đột thì đọc lại, thử lại. Lỗi phát hiện trên bản đệm có thể cũ → đọc lại kho trước khi báo (lỗi tìm ra nhờ mô phỏng tải).
 - Hành động tự động: máy gửi `TICK`, server chạy `pendingAutoAction(game, giờ server)`. Hạn luôn theo giờ server; client đo lệch đồng hồ.
 - Trạng thái kết nối: `links` (WebSocket đang mở, quá 320 s coi là chết) + `lastSeen` (lần ghi do chính người đó) + hash poll (tối đa 10 s/lần) → vắng 20 s thì `connected = false` (đồng bộ SET_CONNECTED sang engine) ở lần ghi kế tiếp; chủ phòng mất kết nối / rời → chuyển cho người vào sớm nhất còn kết nối.
-- **Tiến độ phiên:** G5 xong và đã commit; **dừng chờ nhóm cho phép G6**. Deploy thật đã kiểm (mục 15.4); còn huy hiệu "Trực tiếp" trên máy thật (diễn tập G6).
+- **Tiến độ phiên:** Đ1.6 xong và đã commit; **dừng chờ nhóm cho phép G6**. Deploy thật đã kiểm (mục 15.4); còn huy hiệu "Trực tiếp" trên máy thật (diễn tập G6).
 - **Vercel:** `api/[...path].ts` ngoài Next.js chỉ khớp một cấp → `vercel.json` có rewrite `/api/(.*)` → `/api/[...path]?__p=$1`; `api/` khôi phục đường gốc từ `__p`. Đừng bỏ rewrite này.
 - Chromium trong môi trường Claude Code đi qua proxy chặn TLS: cần `E2E_PROXY_CA=/root/.ccr/agent-proxy-ca.crt` để chạy `e2e:online -- --url`, và WebSocket của Chromium bị proxy làm mất `Upgrade` (dùng polling) — không phải lỗi game.
 - Sub agent rà soát phải được dặn rõ CHỈ ĐỌC; ở G3 một sub agent vẫn sửa mã sau khi bị ngắt giữa chừng (đã đọc lại và kiểm toàn bộ trước khi commit).
@@ -205,14 +206,15 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - Phím tắt: `shortcutOf` (thuần, có test) + `useShortcuts(handlers, enabled)`; màn chơi tự kiểm điều kiện như nút trên màn.
 - Sổ ôn tập: `game/review.ts`, khóa `review.v1`; ghi khi ván kết thúc (một máy: `onEnded`; phòng: effect một lần mỗi ván theo `startedAt`).
 - Chữ mới trong `site.json`: `practice`, `bank`, `rules` (luật chơi — chỉ luật, không nội dung tư tưởng), `settings`.
-- `e2e-local` kiểm thêm: Luật chơi, Kho câu hỏi (ẩn đáp án, lọc, Sổ ôn tập, ôn tập bằng phím), Cài đặt (đổi giao diện, chữ lớn, nhớ sau tải lại), Menu trong ván, phím M / Space / 1, thống kê trụ cột, làm lại câu sai.
+- `e2e-local` kiểm thêm: Luật chơi, Kho câu hỏi (ẩn đáp án, lọc, Sổ ôn tập, ôn tập bằng phím), Cài đặt (đổi giao diện, chữ lớn, nhớ sau tải lại), Menu trong ván, phím M / Space / 1, thống kê, làm lại câu sai; Đ1.6: không còn giải thích / nguồn / trụ cột trong cửa sổ câu hỏi và Kho câu hỏi, lọc theo độ khó.
 
-## Ghi chú dữ liệu
-- 3 trụ cột: `dan-chu` (Đỏ son `#A4262C`), `phap-quyen` (Xanh mực `#23395B`), `trong-sach` (Vàng đồng `#B8892B`; chữ trên nền sáng dùng `#7A5A17` để đạt WCAG AA). Tên trụ cột đọc từ dữ liệu, không viết cứng.
-- 13 hiện vật, mọi hiện vật `verified: true`, không hiện vật nào `hidden`: dân chủ 5 (HV-02, 04, 05, 07, 12), pháp quyền 4 (HV-01, 03, 08, 09), trong sạch 4 (HV-06, 10, 11, 13). Chưa có ảnh (chỉ `image.src` trỏ tới file chưa tồn tại). `sourceIds` trỏ tới `sources.json` của web — không chép sang game; thẻ hiện vật không hiện nguồn APA (N1).
-- `mindmap.json`: trụ cột `trong-sach` có `todo` — giáo trình thiếu tr. 92–93.
-- `questions.json` **sinh bởi** `npm run import:questions` — không sửa tay. Hiện: 12 câu khởi đầu (dân chủ 6, pháp quyền 4, trong sạch 2; đều `single`, `verified: true`) + 6 câu hỏi thử TEST-09, 11, 13, 15, 17, 18 (pháp quyền độ khó 2, 3; trong sạch 1, 2, 3, 3). Trang chủ hiện dải "Đang dùng bộ câu hỏi thử" khi còn câu `test`.
-- `test-questions.json`: 18 câu hỏi thử (2 câu mỗi tổ hợp), chỉ hỏi luật chơi; script chỉ lấy câu cần lấp, ưu tiên loại câu còn thiếu.
+## Ghi chú dữ liệu (bản 1.6)
+- `questions.json` **sinh bởi** `npm run import:questions` từ `docs/CAU-HOI-GAME.md` (bảng 8 cột: id · độ khó · câu hỏi · đáp án A–D · đúng) — không sửa tay. Mỗi câu chỉ có `id, difficulty, type, question, answers, correct` (+ `test`). Loại câu tự suy ra: có `___` → `fillQuote`; đáp án đúng là "Đúng", "Sai" → `truefalse`; còn lại `single`.
+- Hiện: 55 câu, 18 / 19 / 18 theo độ khó; 51 `single` + 4 `fillQuote` (Q-14, Q-27, Q-42, Q-44); không câu hỏi thử. Script báo lỗi câu trùng lời câu hỏi, cảnh báo khi ba mức chênh nhau quá 3.
+- `test-questions.json`: 17 câu hỏi thử (chỉ luật chơi), chỉ lấp độ khó còn dưới 2 câu chính thức.
+- Engine: `pickQuestion(data, ctx, player, excludeId?)` rút từ toàn bộ kho (seed), không lặp tới hết kho; `ActiveQuestion` chỉ còn `difficulty` (nhãn, bot) + `isFinish`; `board.json` mỗi bố cục có `homeLength` (không còn độ khó theo ô). `GameState.schema` = 2, `Room.schema` = 2: ván lưu / phòng định dạng cũ bị bỏ.
+- Đã gỡ `artifacts.json`, `mindmap.json`, `pillars.json`, `ArtifactCard`, `PillarChip`, `stats.byPillar`. Bàn cờ: ô câu hỏi một màu (`QUESTION_STROKE`).
+- `revealMs` = 3000 (chỉ hiện Đúng / Sai + đáp án đúng, `data-correct-answer` trong giao diện).
 
 ## TODO (mục 20 tài liệu thiết kế)
 
@@ -220,7 +222,7 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - [ ] Tên chính thức của game — để sau, không chặn các mốc.
 
 **Nội dung (nhóm cung cấp):**
-- [ ] Soạn tiếp `docs/CAU-HOI-GAME.md` (đã có 12 câu khởi đầu) theo mẫu: mục tiêu ≥ 60 câu, mỗi câu có nguồn kèm số trang. Ưu tiên trụ cột trong sạch (mới có 2 câu) và câu độ khó 2–3; thêm vài câu `truefalse`, `fillQuote`, `situation`; nhớ giáo trình tr. 92–93.
+- [x] Bộ câu hỏi 55 câu (bản 1.6). Thêm câu thì giữ ba mức độ khó gần bằng nhau (mục 13.4); nhóm tự lưu bản gốc `Câu hỏi.docx` (có nguồn) làm hồ sơ.
 
 **Hạ tầng (cần tài khoản nhóm — làm theo `docs/HUONG-DAN-VERCEL.md`):**
 - [x] Tạo project Vercel thứ hai (https://hcm-202-web-omega.vercel.app) — G5 đã kiểm: trang chủ là game, Production Branch = `game`.
