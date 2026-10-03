@@ -57,6 +57,7 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - **Không commit lên nhánh web**; không import mã hay dữ liệu từ nhánh web; không đồng bộ dữ liệu lại với web.
 - Không sao chép mã, giao diện, tên, đồ họa, âm thanh của game tham khảo (Phụ lục A).
 - Cập nhật `CLAUDE.md` này và mục 18 tài liệu thiết kế sau mỗi mốc.
+- **Giới hạn sub agent khi kiểm tra:** mỗi khâu kiểm tra / rà soát (sau mỗi mốc, hoặc trước khi báo nhóm) dùng **tối đa 6 sub agent**, tính cả người rà soát lẫn người phản biện; sub agent không tạo thêm sub agent. Kiểm bằng test, build, script, chạy thử trước; chỉ giao sub agent phần cần góc nhìn độc lập (vd. đối chiếu nội dung với nguồn, rà soát mã server). Cần nhiều hơn thì gộp việc, không vượt 6.
 - Kiểm tra trước khi commit (từ G1): `npm run test && npm run build && npm run build:offline && npm run lint` ở gốc nhánh. Từ G2, khi đổi giao diện: thêm `npm run e2e` (Chromium thật ở `/opt/pw-browsers/chromium` hoặc `CHROMIUM_PATH`; `--motion` để bật hiệu ứng, `--shots <thư mục>` để chụp màn hình).
 
 ## Cấu trúc thư mục
