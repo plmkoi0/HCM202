@@ -196,6 +196,7 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - **Tiến độ phiên:** G6 (phần Claude Code) xong và đã commit; **dừng — nhóm diễn tập theo `docs/DIEN-TAP.md` và gửi kết quả; chỉ sửa sau khi nhận kết quả**. Rà soát G6 (5 sub agent) đã dùng — lần rà soát duy nhất trước phát hành.
 - **G6 server:** giới hạn theo IP trước khi đọc kho (`Limits.requestsPerIp`, `failsPerIp`), nhớ mã phòng không tồn tại, `MAX_LINKS = 3`, `/api/health` giữ 5 s; `state` / `act` / `linkOpen` nhận `ip` (Vercel: `clientIp(request)`; Node: `remoteIp(req)`).
 - **Vercel:** `api/[...path].ts` ngoài Next.js chỉ khớp một cấp → `vercel.json` có rewrite `/api/(.*)` → `/api/[...path]?__p=$1`; `api/` khôi phục đường gốc từ `__p`. Đừng bỏ rewrite này.
+- `check:deploy` bằng Node đi thẳng (không qua proxy) có lúc bị tường lửa Vercel chặn 403 (`x-vercel-mitigated: deny`) → chạy với `NODE_USE_ENV_PROXY=1 NODE_EXTRA_CA_CERTS=/root/.ccr/ca-bundle.crt`.
 - Chromium trong môi trường Claude Code đi qua proxy chặn TLS: cần `E2E_PROXY_CA=/root/.ccr/agent-proxy-ca.crt` để chạy `e2e:online -- --url`, và WebSocket của Chromium bị proxy làm mất `Upgrade` (dùng polling) — không phải lỗi game.
 - Sub agent rà soát phải được dặn rõ CHỈ ĐỌC; ở G3 một sub agent vẫn sửa mã sau khi bị ngắt giữa chừng (đã đọc lại và kiểm toàn bộ trước khi commit).
 - Test Redis thật: `tests/store.test.ts` tự bật `redis-server` cục bộ ở cổng trống (bỏ qua nếu máy không có).
@@ -240,6 +241,7 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - [x] Gắn **Upstash for Redis** — G5: `/api/health` trả `"store":"redis"`.
 - [x] Điền `siteUrl` của game: `https://hcm-202-web-omega.vercel.app` (đã xác nhận đúng project game).
 - [ ] Kiểm tra Deployment Protection: thử trên điện thoại dùng Shareable Links; trước buổi học, tên miền chính mở được mà không cần đăng nhập Vercel — G6: chưa nhận kết quả (dòng 11 `docs/DIEN-TAP.md`).
+- [ ] Đổi Function Region sang Singapore (`sin1`): G6 thấy function ở `iad1`, `pingMs` tới Redis ≈ 220 ms (HUONG-DAN-VERCEL, Hiện trạng).
 - [ ] Diễn tập theo `docs/DIEN-TAP.md` (≥ 5 máy thật, Wi-Fi trường + 4G, Zalo / Messenger, bản offline) và gửi kết quả.
 
 **Cần xác minh:**

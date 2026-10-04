@@ -16,6 +16,8 @@ Các bước 1–3 **đã xong** (mục 15.4 tài liệu thiết kế). Phần d
 | Redis | Upstash for Redis (Free) đã gắn — `/api/health` trả `"store":"redis"` |
 | Đường `/api/*` | `vercel.json` có rewrite `/api/(.*)` → `/api/[...path]?__p=$1` (Vercel chỉ cho `[...path]` khớp một cấp ngoài Next.js). **Không xóa rewrite này** |
 | Kiểm tra | `npm run check:deploy -- https://hcm-202-web-omega.vercel.app --long` đạt; phòng 3 máy trên bản deploy (`npm run e2e:online -- --url …`) đạt |
+| **Vùng function** | **Nên đổi:** function đang chạy ở `iad1` (Mỹ, thấy ở header `x-vercel-id`), còn `/api/health` báo `pingMs` ≈ 220 ms → Redis ở xa function (có vẻ ở Singapore). Mỗi thao tác cần vài lần gọi Redis nên chậm thấy rõ. Làm bước 1.7 (Function Region → **Singapore (sin1)**), **Redeploy**, rồi mở `/api/health`: `pingMs` nên còn dưới ~20 ms. Nếu gói Hobby không cho đổi vùng thì giữ nguyên, game vẫn chơi được |
+| Tường lửa Vercel | G6: một số request từ script Node (không phải trình duyệt) bị tường lửa Vercel chặn (`403`, header `x-vercel-mitigated: deny`); trình duyệt và curl không bị. Nếu học sinh gặp lỗi 403 khi vào phòng: xem **Firewall** của project trên Vercel (tắt luật chặn bot nếu đã bật) |
 | Còn lại | Bước 4 (Deployment Protection, thử trên điện thoại) và bước 5 (xem Usage) — làm trong buổi diễn tập, ghi vào `docs/DIEN-TAP.md` |
 
 ---

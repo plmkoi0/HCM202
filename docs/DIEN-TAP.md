@@ -35,7 +35,8 @@ Ngày diễn tập: ………… · Người điền: ………… · Số máy 
 | 18 | **Ô Đích hỏi câu như các ô khác** (nhãn "Câu về đích", độ khó bất kỳ 1 / 2 / 3, không luôn là câu khó nhất) | | | |
 | 19 | Bản offline: giải nén gói zip, mở `index.html` khi **tắt mạng** → "Chơi trên một máy" chơi được | | | |
 | 20 | "Chơi trên một máy" trên **máy chiếu / laptop của lớp** (phương án dự phòng) | | | |
-| 21 | Xem **Usage** của Vercel và Upstash trước và sau buổi diễn tập (`docs/HUONG-DAN-VERCEL.md` mục 5) | | | Lệnh Upstash trước: ……… sau: ……… |
+| 21 | Vùng function: trước buổi diễn tập đổi sang **Singapore (sin1)** (`docs/HUONG-DAN-VERCEL.md` bước 1.7), Redeploy; `/api/health` báo `pingMs` dưới ~20 ms; thao tác trong phòng phản hồi nhanh | | | `pingMs` trước: ~220 sau: ……… |
+| 22 | Xem **Usage** của Vercel và Upstash trước và sau buổi diễn tập (`docs/HUONG-DAN-VERCEL.md` mục 5) | | | Lệnh Upstash trước: ……… sau: ……… |
 
 **Đo lệnh Redis của một ván (để cập nhật mục 15.5):** ghi số **Commands** trên Upstash ngay trước khi tạo một phòng, chơi một ván **3 người** (mốc 5 hoặc 7 phút) tới hết, chờ 1–2 phút, ghi lại số **Commands**.
 
@@ -48,7 +49,7 @@ Ngày diễn tập: ………… · Người điền: ………… · Số máy 
 Mini game kết thúc buổi thuyết trình (phần "Khởi động + mini game"), khoảng **10–12 phút** gồm cả chia phòng.
 
 **Chuẩn bị (trước buổi học 1 ngày và 15 phút trước giờ):**
-1. Mở https://hcm-202-web-omega.vercel.app/api/health → `"ok":true,"store":"redis"`.
+1. Mở https://hcm-202-web-omega.vercel.app/api/health → `"ok":true,"store":"redis"`; `pingMs` nhỏ (dưới ~20 ms nếu đã đổi vùng function sang Singapore — `docs/HUONG-DAN-VERCEL.md`, Hiện trạng).
 2. Mở tên miền chính ở cửa sổ ẩn danh → vào thẳng được (không đăng nhập Vercel).
 3. Xem Usage của Upstash: còn đủ lệnh trong tháng (hạn mức 500.000).
 4. Slide cuối có **ảnh QR** (`docs/phat-hanh/qr-game.png`) và địa chỉ game viết rõ dưới QR.
