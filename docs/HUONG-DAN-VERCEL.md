@@ -6,6 +6,18 @@ Toàn bộ các bước dưới đây dùng **gói miễn phí** (Vercel Hobby +
 
 > Các trang Vercel / Upstash đổi giao diện khá thường xuyên. Nếu tên nút hơi khác, tìm mục có ý nghĩa tương tự. Tài liệu gốc: vercel.com/docs (mục Projects, Git, Functions, Marketplace, Deployment Protection) và upstash.com/docs/redis.
 
+## Hiện trạng (04/10/2026)
+
+Các bước 1–3 **đã xong** (mục 15.4 tài liệu thiết kế). Phần dưới giữ để tham khảo khi cần tạo lại project.
+
+| Mục | Hiện trạng |
+|---|---|
+| Project game | https://hcm-202-web-omega.vercel.app — Production Branch = `game`, Root Directory = `./` |
+| Redis | Upstash for Redis (Free) đã gắn — `/api/health` trả `"store":"redis"` |
+| Đường `/api/*` | `vercel.json` có rewrite `/api/(.*)` → `/api/[...path]?__p=$1` (Vercel chỉ cho `[...path]` khớp một cấp ngoài Next.js). **Không xóa rewrite này** |
+| Kiểm tra | `npm run check:deploy -- https://hcm-202-web-omega.vercel.app --long` đạt; phòng 3 máy trên bản deploy (`npm run e2e:online -- --url …`) đạt |
+| Còn lại | Bước 4 (Deployment Protection, thử trên điện thoại) và bước 5 (xem Usage) — làm trong buổi diễn tập, ghi vào `docs/DIEN-TAP.md` |
+
 ---
 
 ## 0. Chuẩn bị
@@ -126,14 +138,15 @@ Vượt hạn mức miễn phí của Vercel Hobby thì project **bị tạm d�
 - Ước lượng (mục 15.5): một buổi trên lớp 40 người + 20 người chơi một mình dùng khoảng **vài nghìn tới vài chục nghìn lệnh Redis**. Một tháng đủ cho nhiều buổi.
   - **Buổi tập nên dùng ít máy.**
   - Trước buổi chính, xem số lệnh đã dùng trong tháng.
-- Dự phòng nếu server có sự cố: luôn còn **"Chơi trên một máy"** và **bản offline** (một file HTML).
+- **Đo số lệnh Redis của một ván** (để xác minh ước lượng mục 15.5): trên Upstash ghi số **Commands** ngay trước khi tạo phòng, chơi một ván 3 người tới hết, chờ 1–2 phút rồi ghi lại số **Commands**. Gửi hai số (và số người, số phút) cho Claude Code để cập nhật mục 15.5.
+- Dự phòng nếu server có sự cố: luôn còn **"Chơi trên một máy"** và **bản offline** (`phat-hanh/HCM202-Con-duong-tu-tuong.zip`).
 
 ---
 
 ## Tóm tắt việc nhóm cần làm
 
-- [ ] Bước 1: tạo project, Production Branch = `game`, Root Directory = `./`, Fluid Compute bật.
-- [ ] Bước 2: gắn Upstash for Redis (Free), kiểm biến `rediss://…`, Redeploy.
-- [ ] Bước 3: `/api/health` trả `"ok":true,"store":"redis"` → báo Claude Code địa chỉ project.
+- [x] Bước 1: tạo project, Production Branch = `game`, Root Directory = `./`, Fluid Compute bật.
+- [x] Bước 2: gắn Upstash for Redis (Free), kiểm biến `rediss://…`, Redeploy.
+- [x] Bước 3: `/api/health` trả `"ok":true,"store":"redis"` → báo Claude Code địa chỉ project.
 - [ ] Bước 4: kiểm tên miền chính mở không cần đăng nhập; thử Shareable Link trên điện thoại.
 - [ ] Bước 5: biết chỗ xem Usage của Vercel và Upstash.

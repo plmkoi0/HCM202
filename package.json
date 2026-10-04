@@ -22,7 +22,10 @@
     "e2e": "node scripts/e2e-local.mjs && npm run build && tsx scripts/e2e-online.ts",
     "check:deploy": "tsx scripts/check-deploy.ts",
     "e2e:local": "node scripts/e2e-local.mjs",
-    "e2e:online": "tsx scripts/e2e-online.ts"
+    "e2e:online": "tsx scripts/e2e-online.ts",
+    "check:release": "node scripts/check-release.mjs",
+    "package:offline": "node scripts/package-offline.mjs",
+    "qr": "node scripts/make-qr.mjs"
   },
   "dependencies": {
     "@vercel/functions": "3.9.11",

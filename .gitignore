@@ -21,3 +21,6 @@ coverage/
 .vscode/*
 !.vscode/extensions.json
 .idea/
+
+# Gói offline phát hành được commit (npm run package:offline)
+!phat-hanh/*.zip
