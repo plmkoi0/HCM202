@@ -35,7 +35,7 @@ function TimeLeft({ endsAt, paused }: { endsAt: number | null; paused: boolean }
   if (endsAt === null) return <span className="text-sm text-ink-soft">{t.noLimit}</span>
   const left = endsAt - now
   return (
-    <span className={`flex items-center gap-1 text-sm font-semibold tabular-nums ${left <= 60_000 ? 'text-bad' : ''}`}>
+    <span className={`flex items-center gap-1 whitespace-nowrap text-sm font-semibold tabular-nums ${left <= 60_000 ? 'text-bad' : ''}`}>
       <Clock size={16} aria-hidden="true" />
       {left > 0 ? fill(t.timeLeft, { time: clock(left) }) : t.timeUp}
     </span>
@@ -167,7 +167,7 @@ export function LocalGame({ initial, onHome, onAgain }: { initial: LocalSave; on
   }
 
   const tok = cur ? tokens.colors[cur.color] : null
-  // câu hỏi hiện sau khi xúc xắc diễn xong (không che xúc xắc); giải thích hiện ngay khi chốt
+  // câu hỏi hiện sau khi xúc xắc diễn xong (không che xúc xắc); kết quả hiện ngay khi chốt
   const showQuestion = state.turn.question !== null && ((state.phase === 'question' && !anim.busy) || (state.phase === 'reveal' && state.turn.outcome?.kind === 'answered'))
   const roll = state.turn.roll
   const showOutcome = state.phase === 'reveal' && state.turn.outcome !== null && state.turn.outcome.kind !== 'answered' && !anim.busy
@@ -242,7 +242,7 @@ export function LocalGame({ initial, onHome, onAgain }: { initial: LocalSave; on
               )}
                     {state.phase === 'roll' && human && !anim.busy && (
                 <>
-                  {cur.bag.includes('double') && (
+                  {(cur.bag.includes('double') || state.turn.doubleArmed) && (
                     <button type="button" className={`btn-secondary ${state.turn.doubleArmed ? 'ring-4 ring-gold' : ''}`} disabled={state.turn.doubleArmed} onClick={() => applyPowerup('double')}>
                       <DoubleIcon size={18} aria-hidden="true" /> {state.turn.doubleArmed ? t.doubleArmed : t.doubleButton}
                     </button>

@@ -65,7 +65,7 @@ Các bước 1–3 **đã xong** (mục 15.4 tài liệu thiết kế). Phần d
    - Tên database: ví dụ `hcm202-game`.
 3. **Connect Project**: chọn project game; môi trường chọn cả **Production**, **Preview**, **Development** → **Connect**.
 4. **Kiểm biến môi trường**: project → **Settings** → **Environment Variables**. Phải thấy các biến Upstash tự thêm, thường là:
-   - `KV_URL` — bắt đầu bằng `rediss://`; **server dùng biến này**;
+   - `KV_URL` — bắt đầu bằng `rediss://`; **server dùng biến này** khi không có `REDIS_URL`;
    - `KV_REST_API_URL`, `KV_REST_API_TOKEN`, `KV_REST_API_READ_ONLY_TOKEN` — server không dùng tới;
    - có thể có thêm `REDIS_URL` (cũng `rediss://…`).
 
@@ -86,7 +86,7 @@ Các bước 1–3 **đã xong** (mục 15.4 tài liệu thiết kế). Phần d
    ```
 3. Nếu thấy:
    - `"store":"none"` và `"missing":[…]` → chưa có biến Redis, hoặc chưa deploy lại sau khi gắn → làm lại bước 2.4–2.5.
-   - `"ok":false` kèm `"error"` → Redis không kết nối được. Kiểm giá trị biến có bắt đầu bằng `rediss://` không. Thử **Redeploy**.
+   - `"store":"redis"` mà `"ok":false` (kèm `"error"`) → Redis không kết nối được. Kiểm giá trị biến có bắt đầu bằng `rediss://` không. Thử **Redeploy**.
    - Trang 404 → nhánh deploy chưa phải `game`. Xem lại bước 1.5 và tab **Deployments** (cột Branch phải là `game`).
 4. **Báo lại cho Claude Code địa chỉ project.** Claude Code sẽ chạy:
    ```

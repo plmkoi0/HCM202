@@ -10,6 +10,7 @@ File này lưu bối cảnh, quy ước và tiến độ của **nhánh `game`**
 - **Thể loại:** board game đua kiểu cờ cá ngựa, theo lượt, tung xúc xắc; bàn 6 nhánh.
 - **Người chơi:** chơi đơn, mỗi người một máy; phòng 1–5 người (vào bằng mã 5 ký tự, QR, link `/p/ABCDE`); có máy chơi cùng (bot).
 - **Chế độ:** Chơi qua phòng (online, server trên Vercel Functions + Redis Marketplace) · Chơi trên một máy (1–5 người thay phiên, không cần mạng; cũng là bản offline một file).
+- **Phát hành (G6):** game https://hcm-202-web-omega.vercel.app · QR `docs/phat-hanh/qr-game.png` · gói offline `phat-hanh/HCM202-Con-duong-tu-tuong.zip` · diễn tập và kịch bản trên lớp `docs/DIEN-TAP.md`.
 - **Thông điệp:** **"Chủ nhân không đứng ngoài"**.
 - **Đối tượng:** sinh viên đại học; dùng làm mini game cuối buổi thuyết trình (chủ phòng chọn mốc 5 hoặc 7 phút).
 - **Nội dung (bản 1.6):** Chủ đề 4 theo giáo trình HCM202, Chương IV, mục II. **Bộ câu hỏi 55 câu do nhóm biên soạn và chịu trách nhiệm** (`docs/CAU-HOI-GAME.md`, bảng 8 cột theo mẫu `docs/CAU-HOI-GAME.mau.md`): Q-01 → Q-12 là 12 câu khởi đầu (từ `QUIZ-KIEN-THUC.md`), Q-13 → Q-55 từ `Câu hỏi.docx` của nhóm; 18 / 19 / 18 câu theo độ khó. **Không có** trụ cột, giải thích, nguồn, xác minh, hiện vật. Mỗi ô câu hỏi (kể cả Đích) rút ngẫu nhiên một câu từ toàn bộ kho — các mức trộn lẫn suốt ván (mục 5). Câu hỏi thử chỉ lấp độ khó còn dưới 2 câu (hiện không dùng).
@@ -60,11 +61,11 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - **Kiểm tra sau mỗi mốc:** chỉ chạy kiểm tra tự động (test, build, build offline, lint; thêm `npm run e2e` khi đổi giao diện). Không rà soát bằng sub agent sau từng mốc.
 - **Rà soát bằng sub agent:** chỉ một lần trước phát hành (G6), hoặc khi nhóm yêu cầu. Mỗi lần dùng **tối đa 6 sub agent**, tính cả người rà soát lẫn người phản biện; sub agent không tạo thêm sub agent; chỉ giao phần cần góc nhìn độc lập (vd. đối chiếu nội dung với nguồn, rà soát mã server).
 - **Dừng sau mỗi mốc G:** xong một mốc thì chạy kiểm tra tự động, commit, push, cập nhật `CLAUDE.md` và mục 18, báo cáo ngắn (đã làm gì, chi tiết tự chọn, cần nhóm làm gì), rồi dừng chờ nhóm cho phép làm mốc tiếp theo. Không tự sang mốc mới. Trong một mốc chỉ dừng giữa chừng khi: cần nhóm quyết; cần tài khoản hoặc quyền mạng cho việc không làm cục bộ được; kiểm tra cho thấy không đạt yêu cầu trong tài liệu. Phiên quá dài thì dừng ở chỗ hợp lý, ghi tiến độ vào `CLAUDE.md`.
-- Kiểm tra trước khi commit (từ G1): `npm run test && npm run build && npm run build:offline && npm run lint` ở gốc nhánh. Từ G2, khi đổi giao diện: thêm `npm run e2e` (Chromium thật ở `/opt/pw-browsers/chromium` hoặc `CHROMIUM_PATH`; `--motion` để bật hiệu ứng, `--shots <thư mục>` để chụp màn hình).
+- Kiểm tra trước khi commit (từ G1): `npm run test && npm run build && npm run build:offline && npm run lint && npm run check:release` ở gốc nhánh (`check:release` từ G6; đổi mã giao diện / câu hỏi thì chạy `npm run package:offline` trước để gói zip khớp). Từ G2, khi đổi giao diện: thêm `npm run e2e` (Chromium thật ở `/opt/pw-browsers/chromium` hoặc `CHROMIUM_PATH`; `--motion` để bật hiệu ứng, `--shots <thư mục>` để chụp màn hình).
 
 ## Cấu trúc thư mục
 
-**Hiện tại (sau G5):**
+**Hiện tại (sau G6):**
 ```
 /
 ├── CLAUDE.md, README.md, .gitignore, .oxlintrc.json, .env.example (biến Redis), vercel.json
@@ -83,8 +84,11 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 │   ├── THIET-KE-GAME.md                 ← tài liệu thiết kế (bản 1.5 + kết quả G1)
 │   ├── CAU-HOI-GAME.md                  ← bộ câu hỏi của nhóm: 12 câu khởi đầu Q-01 → Q-12
 │   ├── CAU-HOI-GAME.mau.md              ← mẫu + hướng dẫn điền (mục 13.4)
-│   ├── HUONG-DAN-VERCEL.md              ← từng bước tạo project Vercel thứ hai + gắn Upstash (nhóm làm)
+│   ├── HUONG-DAN-VERCEL.md              ← từng bước tạo project Vercel thứ hai + gắn Upstash, hiện trạng (G6)
+│   ├── DIEN-TAP.md                      ← danh sách diễn tập (Đạt / Lỗi / Ghi chú), kịch bản trên lớp, dự phòng (G6)
+│   ├── phat-hanh/qr-game.png            ← QR mở game cho slide (npm run qr, sinh từ siteUrl, không gọi mạng)
 │   └── nguon/THIET-KE-WEB-APP.md, nguon/QUIZ-KIEN-THUC.md   ← bản sao nguồn tham chiếu (không sửa; mã băm trong NGUON.md)
+├── phat-hanh/HCM202-Con-duong-tu-tuong.zip   ← gói offline (index.html + HUONG-DAN.txt), npm run package:offline, có commit
 ├── public/robots.txt                    ← chặn máy tìm kiếm (kèm meta robots, header X-Robots-Tag trong vercel.json)
 ├── scripts/
 │   ├── import-questions.mjs             ← CAU-HOI-GAME.md → questions.json; báo dòng sai, không ghi đè khi lỗi; lấp câu hỏi thử
@@ -94,7 +98,11 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 │   │                                      -- --url <deploy> chạy trên bản deploy, E2E_PROXY_CA = CA của proxy chặn TLS nếu có)
 │   ├── load-sim.ts                      ← mô phỏng tải 10 × 5 + 20 × 1 qua HTTP/WebSocket thật (npm run sim:load [-- --guess] [-- --redis])
 │   ├── check-deploy.ts                  ← kiểm bản deploy thật: health, WebSocket, polling, đóng/nối lại 300 s (npm run check:deploy -- <url> --long)
-│   ├── check-offline.mjs                ← bản offline không chứa mã mạng (chạy trong build:offline)
+│   ├── check-offline.mjs                ← bản offline không chứa mã mạng (chạy trong build:offline; export networkCodeIn)
+│   ├── check-release.mjs                ← npm run check:release: không câu hỏi thử, questions.json khớp, offline không mạng,
+│   │                                      siteUrl, QR và zip mới nhất
+│   ├── package-offline.mjs, make-qr.mjs ← npm run package:offline, npm run qr
+│   ├── lib/zip.mjs, lib/release.mjs     ← zip cố định byte (deflate, ngày cố định); tên gói, QR, HUONG-DAN.txt
 │   └── lib/question-table.mjs, lib/quiz-source.mjs   ← đọc bảng câu hỏi, mẫu chữ cái phương án; đọc QUIZ-KIEN-THUC.md
 ├── src/
 │   ├── data/                            ← board, rules, powerups, traps, bots, tokens, site, questions (sinh từ script),
@@ -158,8 +166,8 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 | **G3 — Server** | Phòng, sức chứa, màu, hành động, bot, Redis, pub/sub, WebSocket + polling, nối lại, chủ phòng, `/api/health`, test, mô phỏng tải | ☑ Xong 03/10/2026 — 170 test; mô phỏng tải đạt (kho bộ nhớ và redis-server thật, có/không Đoán cùng); chờ nhóm tạo project để kiểm trên Vercel |
 | **G4 — Chơi qua phòng** | Trang chủ, tạo/vào phòng (mã, QR, link), phòng chờ, chơi qua mạng, trạng thái kết nối, kết thúc, chơi lại, Đoán cùng | ☑ Xong 03/10/2026 (e2e 3 máy cục bộ); kiểm trên Vercel ở đầu G5 |
 | **G5 — Hoàn thiện** | Ôn câu sai, thống kê, Kho câu hỏi, Luật chơi, Cài đặt, âm thanh, phím tắt, giao diện, reduced motion | ☑ Xong 03/10/2026 — 178 test; `npm run e2e` đạt; deploy thật: sửa catch-all `/api/*`, `check:deploy --long` + phòng 3 máy trên deploy đạt |
-| **Đ1.6 — Đơn giản hóa câu hỏi** | Bảng câu hỏi 8 cột + script nhập, 55 câu, rút ngẫu nhiên từ toàn bộ kho; bỏ trụ cột, giải thích, nguồn, xác minh, hiện vật; hiện đáp án 3 giây; mô phỏng lại | ☑ Xong 04/10/2026 — 157 test; mô phỏng đạt; `npm run e2e` đạt; deploy: `check:deploy` + phòng 3 máy đạt. **Dừng — chờ nhóm cho phép G6** |
-| **G6 — Phát hành** | Hướng dẫn tạo project Vercel + Redis (nhóm làm), deploy preview, diễn tập, `check:release`, bản offline, README | ☐ |
+| **Đ1.6 — Đơn giản hóa câu hỏi** | Bảng câu hỏi 8 cột + script nhập, 55 câu, rút ngẫu nhiên từ toàn bộ kho; bỏ trụ cột, giải thích, nguồn, xác minh, hiện vật; hiện đáp án 3 giây; mô phỏng lại | ☑ Xong 04/10/2026 — 157 test; mô phỏng đạt; `npm run e2e` đạt; deploy: `check:deploy` + phòng 3 máy đạt |
+| **G6 — Phát hành** | Hướng dẫn tạo project Vercel + Redis (nhóm làm), deploy preview, diễn tập, `check:release`, bản offline, README | ☑ phần Claude Code — chờ diễn tập (04/10/2026): `check:release`, `package:offline` (zip trong `phat-hanh/`), QR `docs/phat-hanh/qr-game.png`, README, `docs/DIEN-TAP.md`; rà soát 5 sub agent, đã sửa lỗi kỹ thuật, việc cần nhóm quyết ở mục 20. **Dừng — chờ kết quả diễn tập** |
 
 ## Ghi chú nền tảng (G0, chi tiết ở mục 15.4–15.5)
 - Vite (giao diện tĩnh) + `api/` (Vercel Functions Node.js, handler kiểu Web), **không cần framework**. WebSocket: `experimental_upgradeWebSocket()` của `@vercel/functions` (cần `ws`), chỉ chạy trong runtime Vercel → chạy cục bộ/test bằng server Node riêng + Redis giả lập.
@@ -180,12 +188,13 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 ## Ghi chú server (G3, chi tiết ở mục 15.4, 20)
 - G4: phần chơi qua phòng ở `src/screens/online/` (OnlineApp, CreateRoom, JoinRoom, Lobby, OnlineGame, RoomScreen, RoomSettings) + `src/online/` (session: phiên + biệt danh trong localStorage; useRoom: bọc RoomConnection). `App.tsx` nạp `OnlineApp` bằng `lazy()` trong nhánh `__OFFLINE__ ? null : …` để bản offline bỏ hẳn. Hạn giờ server đổi sang giờ máy (`localGame` trong OnlineGame) trước khi đưa vào các thành phần dùng chung với "Chơi trên một máy".
 - `npm run e2e` = e2e một máy (bản offline) + build + `e2e:online` (3 trang trình duyệt, server cục bộ hạn rút ngắn: tạo / vào bằng link và mã, mất mạng rồi nối lại, tải lại trang, kết thúc, Chơi lại, chuyển chủ phòng).
-- Lệnh: `npm run server` (cổng 8787, kho bộ nhớ; có `REDIS_URL` thì Redis thật) · `npm run dev` (Vite chuyển `/api` sang 8787) · `npm run serve` (build + phục vụ `dist/`) · `npm run sim:load` · `npm run check:deploy -- <url>`.
+- Lệnh: `npm run server` (cổng 8787, kho bộ nhớ; có `REDIS_URL` thì Redis thật) · `npm run dev` (Vite chuyển `/api` sang 8787) · `npm run serve` (build + phục vụ `dist/`) · `npm run sim:load` · `npm run check:deploy -- <url>` · G6: `npm run check:release` · `npm run package:offline` · `npm run qr`.
 - Mọi import tương đối trong `server/`, `api/`, `src/engine/` **phải ghi đuôi `.js`**; JSON trong server nạp bằng `with { type: 'json' }` (`server/data.ts`). Vercel biên dịch từng file sang Node ESM, không sửa đường dẫn — `tests/vercel-api.test.ts` kiểm điều này. `src/net/` và giao diện dùng import không đuôi như cũ (Vite).
 - Phòng = một khối JSON `Room` (server/types.ts), có `game: GameState`. Ghi qua `mutate()`: đọc (đệm/kho) → rà kết nối → sửa → `store.put(room, version cũ)` (Lua: kiểm version + ghi + hạn + publish) → xung đột thì đọc lại, thử lại. Lỗi phát hiện trên bản đệm có thể cũ → đọc lại kho trước khi báo (lỗi tìm ra nhờ mô phỏng tải).
 - Hành động tự động: máy gửi `TICK`, server chạy `pendingAutoAction(game, giờ server)`. Hạn luôn theo giờ server; client đo lệch đồng hồ.
 - Trạng thái kết nối: `links` (WebSocket đang mở, quá 320 s coi là chết) + `lastSeen` (lần ghi do chính người đó) + hash poll (tối đa 10 s/lần) → vắng 20 s thì `connected = false` (đồng bộ SET_CONNECTED sang engine) ở lần ghi kế tiếp; chủ phòng mất kết nối / rời → chuyển cho người vào sớm nhất còn kết nối.
-- **Tiến độ phiên:** Đ1.6 xong và đã commit; **dừng chờ nhóm cho phép G6**. Deploy thật đã kiểm (mục 15.4); còn huy hiệu "Trực tiếp" trên máy thật (diễn tập G6).
+- **Tiến độ phiên:** G6 (phần Claude Code) xong và đã commit; **dừng — nhóm diễn tập theo `docs/DIEN-TAP.md` và gửi kết quả; chỉ sửa sau khi nhận kết quả**. Rà soát G6 (5 sub agent) đã dùng — lần rà soát duy nhất trước phát hành.
+- **G6 server:** giới hạn theo IP trước khi đọc kho (`Limits.requestsPerIp`, `failsPerIp`), nhớ mã phòng không tồn tại, `MAX_LINKS = 3`, `/api/health` giữ 5 s; `state` / `act` / `linkOpen` nhận `ip` (Vercel: `clientIp(request)`; Node: `remoteIp(req)`).
 - **Vercel:** `api/[...path].ts` ngoài Next.js chỉ khớp một cấp → `vercel.json` có rewrite `/api/(.*)` → `/api/[...path]?__p=$1`; `api/` khôi phục đường gốc từ `__p`. Đừng bỏ rewrite này.
 - Chromium trong môi trường Claude Code đi qua proxy chặn TLS: cần `E2E_PROXY_CA=/root/.ccr/agent-proxy-ca.crt` để chạy `e2e:online -- --url`, và WebSocket của Chromium bị proxy làm mất `Upgrade` (dùng polling) — không phải lỗi game.
 - Sub agent rà soát phải được dặn rõ CHỈ ĐỌC; ở G3 một sub agent vẫn sửa mã sau khi bị ngắt giữa chừng (đã đọc lại và kiểm toàn bộ trước khi commit).
@@ -219,7 +228,9 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 ## TODO (mục 20 tài liệu thiết kế)
 
 **Nhóm cần quyết:**
-- [ ] Tên chính thức của game — để sau, không chặn các mốc.
+- [ ] Tên chính thức của game — để sau, không chặn các mốc (đổi tên thì đổi tên gói zip).
+- [ ] Rà soát G6 (chi tiết mục 20): hoàn tác trong Chơi trên một máy bị lợi dụng (đề xuất chỉ hoàn tác thao tác chọn); Khiên / power-up dùng ngay cho người mất kết nối; chữ "Cần tung đúng số"; bàn cờ lớn hơn ở 1920 px; vài điểm máy chủ mức thấp.
+- [ ] Bộ câu hỏi: danh sách điểm cần nhóm xem (Q-27, Q-52/Q-53, Q-48, Q-43/Q-45, Q-14…) ở mục 20 — Claude Code không sửa nội dung.
 
 **Nội dung (nhóm cung cấp):**
 - [x] Bộ câu hỏi 55 câu (bản 1.6). Thêm câu thì giữ ba mức độ khó gần bằng nhau (mục 13.4); nhóm tự lưu bản gốc `Câu hỏi.docx` (có nguồn) làm hồ sơ.
@@ -228,10 +239,11 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - [x] Tạo project Vercel thứ hai (https://hcm-202-web-omega.vercel.app) — G5 đã kiểm: trang chủ là game, Production Branch = `game`.
 - [x] Gắn **Upstash for Redis** — G5: `/api/health` trả `"store":"redis"`.
 - [x] Điền `siteUrl` của game: `https://hcm-202-web-omega.vercel.app` (đã xác nhận đúng project game).
-- [ ] Kiểm tra Deployment Protection: thử trên điện thoại dùng Shareable Links; trước buổi học, tên miền chính mở được mà không cần đăng nhập Vercel.
+- [ ] Kiểm tra Deployment Protection: thử trên điện thoại dùng Shareable Links; trước buổi học, tên miền chính mở được mà không cần đăng nhập Vercel — G6: chưa nhận kết quả (dòng 11 `docs/DIEN-TAP.md`).
+- [ ] Diễn tập theo `docs/DIEN-TAP.md` (≥ 5 máy thật, Wi-Fi trường + 4G, Zalo / Messenger, bản offline) và gửi kết quả.
 
 **Cần xác minh:**
-- [ ] Upstash có tính mỗi tin pub/sub nhận được là một lệnh không — **chưa xác minh được** (upstash.com bị chặn; bằng chứng gián tiếp: không tính). Ước lượng chi phí đang tính **trường hợp xấu** (có tính).
+- [ ] Upstash có tính mỗi tin pub/sub nhận được là một lệnh không — **chưa xác minh được** (upstash.com bị chặn; bằng chứng gián tiếp: không tính). Ước lượng chi phí đang tính **trường hợp xấu** (có tính). G6: chưa nhận kết quả; đo số Commands trước / sau một ván ở buổi diễn tập.
 - [x] Tên biến môi trường Redis — xác minh một phần: server đọc `REDIS_URL` → `KV_URL` → `UPSTASH_REDIS_URL` (TCP `rediss://`); chỉ có biến REST thì `/api/health` báo thiếu.
 - [x] Trên bản deploy thật (G5, mục 15.4): `check:deploy --long` đạt (WebSocket, đóng 300 s + tự nối lại, polling, mọi `/api/*` sau khi thêm rewrite); phòng 3 máy trên deploy đạt.
 - [ ] Huy hiệu "Trực tiếp" (WebSocket) trong trình duyệt trên máy thật — kiểm ở diễn tập G6 (Chromium của môi trường Claude Code bị proxy chặn TLS làm mất `Upgrade`).

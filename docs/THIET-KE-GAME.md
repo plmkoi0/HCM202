@@ -783,7 +783,7 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 | **G4 — Chơi qua phòng** | Trang chủ, tạo phòng, vào bằng mã / QR / link, phòng chờ, chơi qua mạng, trạng thái kết nối, mất kết nối, kết thúc + chơi lại, tùy chọn Đoán cùng | ☑ Xong 03/10/2026 trên server cục bộ — `npm run e2e` gồm chạy thử 3 máy (`e2e:online`). Kiểm trên bản deploy thật làm ở đầu G5 (mục 15.4) |
 | **G5 — Hoàn thiện** | Ôn câu sai, thống kê, Kho câu hỏi, Luật chơi minh họa, Cài đặt, âm thanh, phím tắt, chỉnh giao diện, reduced motion | ☑ Xong 03/10/2026 — 178 test; `npm run e2e` (một máy 360 × 780 sáng + 1366 × 768 tối, có Luật chơi, Kho câu hỏi, Cài đặt, ôn tập, phím tắt; 3 máy cục bộ) đạt, axe không lỗi. Kiểm bản deploy thật (mục 15.4): sửa catch-all `/api/*`, `check:deploy --long` đạt, phòng 3 máy trên deploy đạt. Chi tiết tự chọn ở mục 20. Dừng chờ nhóm cho phép làm G6 |
 | **Đ1.6 — Đơn giản hóa câu hỏi** | Định dạng câu hỏi 8 cột (13.4) + script nhập; nhập 55 câu; câu hỏi trộn ngẫu nhiên các mức suốt ván (mục 5); bỏ trụ cột, giải thích, nguồn, xác minh, hiện vật khỏi engine, server, giao diện, dữ liệu; hiện đáp án đúng ngắn lại; Kho câu hỏi, thống kê, ôn câu sai theo định dạng mới; mô phỏng lại (mục 11); sửa test, e2e | ☑ Xong 04/10/2026 — 157 test; nhập 55 câu (18 / 19 / 18, không lỗi, không câu trùng); mô phỏng đạt mục tiêu (mục 11); `npm run e2e` đạt; deploy thật: `check:deploy` + phòng 3 máy đạt. Chi tiết tự chọn ở mục 20. Dừng chờ nhóm cho phép G6 |
-| **G6 — Phát hành** | Hướng dẫn tạo project Vercel (Production Branch = `game`) + gắn Redis (nhóm làm phần cần tài khoản), deploy preview, diễn tập, `npm run check:release` (không còn câu hỏi thử), bản offline, README, cập nhật `CLAUDE.md` | ☑ phần Claude Code — chờ diễn tập (04/10/2026). Đã xong từ G4–G5: project Vercel (Production Branch = `game`), Upstash Redis, thử bản deploy (mục 15.4). G6: `check:release`, `package:offline` (gói zip trong `phat-hanh/`), ảnh QR `docs/phat-hanh/qr-game.png`, README, `docs/DIEN-TAP.md`, hiện trạng `docs/HUONG-DAN-VERCEL.md`, rà soát 6 sub agent (mục 20). Còn: nhóm diễn tập theo `docs/DIEN-TAP.md` và gửi kết quả |
+| **G6 — Phát hành** | Hướng dẫn tạo project Vercel (Production Branch = `game`) + gắn Redis (nhóm làm phần cần tài khoản), deploy preview, diễn tập, `npm run check:release` (không còn câu hỏi thử), bản offline, README, cập nhật `CLAUDE.md` | ☑ phần Claude Code — chờ diễn tập (04/10/2026). Đã xong từ G4–G5: project Vercel (Production Branch = `game`), Upstash Redis, thử bản deploy (mục 15.4). G6: `check:release`, `package:offline` (gói zip trong `phat-hanh/`), ảnh QR `docs/phat-hanh/qr-game.png`, README, `docs/DIEN-TAP.md`, hiện trạng `docs/HUONG-DAN-VERCEL.md`, rà soát 5 sub agent, đã sửa lỗi kỹ thuật, việc cần nhóm quyết ở mục 20. Còn: nhóm diễn tập theo `docs/DIEN-TAP.md` và gửi kết quả |
 
 **Nhập bộ câu hỏi của nhóm** — làm bất cứ lúc nào nhóm gửi bản mới của `docs/CAU-HOI-GAME.md`, không chờ mốc:
 1. Chạy script nhập.
@@ -1004,6 +1004,25 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 - **Câu hỏi thử:** kho `test-questions.json` còn 17 câu chỉ về luật chơi (bỏ câu hỏi về giải thích/hiện vật), định dạng mới; chỉ dùng khi một mức còn dưới 2 câu.
 - **Mô phỏng:** giữ mô hình thời gian T giây mỗi lần hỏi dù hiện đáp án ngắn lại (ước lượng thận trọng).
 
+**Rà soát trước phát hành G6 (04/10/2026) — 5 sub agent chỉ đọc (máy chủ, engine, giao diện, bộ câu hỏi, bản offline + README):**
+
+*Đã sửa (lỗi kỹ thuật, không đổi luật):*
+- Server: giới hạn số request và số lần sai mã / token theo IP **trước khi** đọc kho (chống dò mã phòng, chống đốt lệnh Redis); nhớ ngắn hạn mã phòng không tồn tại; mỗi người tối đa 3 kết nối WebSocket ghi trong phòng; `/api/health` giữ kết quả 5 giây và không trả chi tiết lỗi Redis; body `null` / mảng → `BAD_REQUEST`; biệt danh bỏ ký tự điều khiển / vô hình, phải có ít nhất một ký tự nhìn thấy.
+- Engine: Đổi câu sau 50:50 không còn khóa 50:50 của câu mới; máy chơi cùng không dùng Xúc xắc ×2 khi mọi ngựa còn trong chuồng.
+- Giao diện: bàn cờ trên điện thoại tràn ngang khi có từ 3 người (chữ `sr-only` trong dải người chơi thoát vùng cuộn → cửa sổ câu hỏi bị đẩy ra ngoài màn hình, cả khi chơi qua phòng) — đã sửa, e2e kiểm thêm không cuộn ngang trên bàn cờ 4 người ở 360 px; nút đáp án cao ≥ 56 px trên mọi màn (mục 16); sau khi chốt, kết quả + đáp án đúng + nút Tiếp tục đặt trên danh sách đáp án, nhãn "✓ Đáp án đúng / ✗ Lựa chọn" trên điện thoại chỉ còn biểu tượng (vẫn đọc cho trình đọc màn hình); chỉ báo "Xúc xắc ×2 đã bật" hiện được; đồng hồ ván không xuống dòng; nút "← Quay lại", "Chú thích", nút độ khó, nút "Bỏ người này" đủ vùng bấm; ô tiêu đề rỗng trong bảng thống kê; chữ Luật chơi "máy tự tung" → "game tự động tung", "Chủ phòng có thể chọn chơi tiếp" → "Khi tạo phòng hoặc thiết lập ván có thể chọn chơi tiếp" (vì Chơi trên một máy không có chủ phòng); gỡ chữ và component không dùng.
+- Chạy thử: e2e một máy hết chập chờn (bấm "Tung xúc xắc" khi cửa sổ vừa mở; vòng phím tắt quá ngắn); README ghi rõ cần Chromium, thêm `serve`, `e2e:local`; DIEN-TAP và HUONG-DAN-VERCEL sửa vài câu lệch với game.
+
+*Cần nhóm quyết (không tự sửa vì đổi luật / thiết kế / nội dung câu hỏi):*
+- [ ] **Hoàn tác trong "Chơi trên một máy" bị lợi dụng được:** hoàn tác sau khi dùng 50:50 rồi dùng lại; hoàn tác + tung lại để có thêm thời gian trả lời; hoàn tác sau khi thấy mặt xúc xắc để quyết định có dùng ×2 hay không. Phương án: (a) xóa lịch sử hoàn tác khi đã hiện câu hỏi / tung / rút thẻ bẫy — chỉ hoàn tác được thao tác chọn (đề xuất); (b) không cho hoàn tác lượt có dùng power-up; (c) giữ nguyên (chơi trên một máy là chơi thân thiện).
+- [ ] **Mất kết nối tới lượt:** game tự động tung và câu tính sai như Luật chơi, nhưng Khiên và power-up dùng ngay vẫn có tác dụng cho người vắng mặt (mục 9 ghi "không dùng power-up"). Hỏi: Khiên tự chặn bẫy cho người vắng có được không?
+- [ ] **"Phải tung đúng số":** khi tung quá Đích và mọi ngựa khác đều không đi được, lượt bị bỏ mà không có dòng giải thích riêng. Đề xuất thêm một chữ "Cần tung đúng số để về Đích".
+- [ ] **Bàn cờ ở 1920 × 1080** chỉ rộng ~700 px (khung `max-w-6xl`); khi chiếu trên lớp có thể cho bàn cờ lớn hơn. Đổi bố cục màn chơi → hỏi nhóm.
+- [ ] **Máy chủ (thấp):** báo lỗi khác nhau cho "không có phòng" và "sai token" (đã giới hạn theo IP nên khó dò); server Node cục bộ tin `x-forwarded-for` (chỉ dùng khi chạy thử, Vercel không dùng); Upstash có tính EVAL Lua như một lệnh — đo ở buổi diễn tập (DIEN-TAP).
+- [ ] **Bộ câu hỏi — nhóm xem và tự sửa `docs/CAU-HOI-GAME.md` (Claude Code không sửa nội dung):** Q-27 "quyền binh" (nguyên văn thường là "quyền bính"); Q-52 có đáp án đúng trùng lời câu hỏi Q-53 (lộ đáp án); Q-48 bị lộ qua Q-49 / Q-51 / Q-52; Q-43 và Q-45 (cả Q-44) gần trùng ý; đáp án "đầy tớ" của Q-14 lộ qua Q-31 và một phương án nhiễu của Q-03; Q-02 và Q-03 hỏi gần cùng ý; Q-14 chính tả "uỷ" / câu trích; Q-13 "gánh vác" hay "gánh"; Q-50 "Nhà nước ta" hay "của ta"; Q-45 "có thể bị bãi nhiệm"; Q-27 viết hoa phương án nhiễu; dấu câu / ngữ pháp Q-36, Q-37, Q-52, Q-55; dấu ngoặc kép lẫn kiểu; Q-40 cách gọi "Bác Hồ"; nhãn "Tình huống giả định" lúc có lúc không; Q-39 có thể hiểu hai cách; Q-46, Q-52, Q-53 nên đối chiếu lại giáo trình; Q-04 / Q-29 có phương án nhiễu tương đương đáp án đúng; Q-24 / Q-34 / Q-38 cùng ý; độ khó Q-43 → Q-47 có vẻ dễ hơn mức ghi, Q-38 có vẻ khó hơn. Không thấy câu trích dẫn Bác bị bịa; không thấy lỗi trộn đáp án.
+- Ghi chú: byte của gói zip phụ thuộc phiên bản zlib của Node (nội dung giải nén không đổi; `check:release` so nội dung).
+
+*Mục 0 của yêu cầu G6 (nhóm chưa điền):* chưa nhận kết quả kiểm Deployment Protection, chưa có file câu hỏi mới (giữ 55 câu), chưa có tên chính thức (giữ tên tạm), chưa kiểm Upstash pub/sub — giữ nguyên các mục chưa xong bên dưới, kiểm ở buổi diễn tập (`docs/DIEN-TAP.md`).
+
 **Nhóm cần quyết:**
 - [ ] Tên chính thức của game — để sau, không chặn các mốc.
 
@@ -1015,7 +1034,7 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 - [x] Gắn **Upstash for Redis** (gói Free) từ Vercel Marketplace (15.4, 15.5) — G5: `/api/health` trả `"store":"redis"`.
 - [x] Điền `siteUrl` của game: `https://hcm-202-web-omega.vercel.app` (G4); đã xác nhận đúng project game (G5, mục 15.4).
 - [x] Thử WebSocket thật trên bản deploy (G5, mục 15.4).
-- [ ] Kiểm tra Deployment Protection (mục 15.6): khi thử trên điện thoại dùng Shareable Links; trước buổi học, tên miền chính phải mở được mà không cần đăng nhập Vercel.
+- [ ] Kiểm tra Deployment Protection (mục 15.6): khi thử trên điện thoại dùng Shareable Links; trước buổi học, tên miền chính phải mở được mà không cần đăng nhập Vercel. — G6: chưa nhận kết quả; kiểm ở dòng 11 của `docs/DIEN-TAP.md`.
 
 **Cần xác minh:**
 - [x] Trạng thái WebSocket trên Vercel và cách chạy với Vite + `api/` — đã xác minh ở G0 (15.4).
@@ -1025,6 +1044,7 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
   - Bằng chứng gián tiếp: bảng lệnh của **Upstash Realtime** (cùng tài liệu, `realtime/overall/pricing.mdx`) liệt kê lệnh được tính khi nối, nối lại, ping, phát tin (SUBSCRIBE, UNSUBSCRIBE, PUBLISH, XADD, XRANGE), **không** có dòng nào cho tin nhận được. Điều này gợi ý tin nhận không bị tính.
   - Chưa có câu nói thẳng, nên ước lượng chi phí (mục 15.5) **giữ trường hợp xấu**: có tính.
   - Nhóm có thể xem câu hỏi thường gặp ở upstash.com/pricing/redis khi tạo database.
+  - G6: nhóm chưa gửi kết quả. Cách đo trực tiếp ở buổi diễn tập: số **Commands** trước / sau một ván (`docs/DIEN-TAP.md` mục 1).
 - [x] **Tên biến môi trường Redis — xác minh một phần (G3).**
   - Mã nguồn gói `@upstash/redis` 1.39.0 (`Redis.fromEnv`) đọc `UPSTASH_REDIS_REST_URL` hoặc `KV_REST_API_URL`, cùng `…_TOKEN` tương ứng. Đây là các biến REST.
   - Kết quả tìm kiếm cho biết Marketplace thêm `KV_URL`, `KV_REST_API_URL`, `KV_REST_API_TOKEN`, `KV_REST_API_READ_ONLY_TOKEN`, có khi thêm `REDIS_URL`.

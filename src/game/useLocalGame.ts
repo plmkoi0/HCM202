@@ -7,7 +7,7 @@ const SEEN_EVERY_MS = 2000
 
 /**
  * Điều khiển ván "Chơi trên một máy": áp dụng hành động, lưu sau mỗi thay đổi, hoàn tác,
- * tạm dừng (khi mở thẻ hiện vật / hộp xác nhận — đồng hồ ván và hạn pha không trôi).
+ * tạm dừng (khi mở Menu / hộp xác nhận — đồng hồ ván và hạn pha không trôi).
  * `onEnded` được gọi đúng một lần, ngay khi một hành động làm ván kết thúc.
  */
 export function useLocalGame(data: GameData, initial: LocalSave, onEnded?: (s: GameState) => void) {
@@ -83,7 +83,7 @@ export function useLocalGame(data: GameData, initial: LocalSave, onEnded?: (s: G
 
 /**
  * Lúc tự gửi hành động kế tiếp (tự tung, hết giờ trả lời, bước của máy, tự sang lượt…).
- * Cửa sổ kết quả (giải thích / bước đi) luôn được hiện đủ thời gian tính từ lúc diễn hoạt
+ * Cửa sổ kết quả (đáp án đúng / bước đi) luôn được hiện đủ thời gian tính từ lúc diễn hoạt
  * xong (`idleAt`), để người xem kịp đọc. Dùng cho cả đồng hồ trên nút "Tiếp tục".
  */
 export function autoActionAt(state: GameState, idleAt: number): number | null {

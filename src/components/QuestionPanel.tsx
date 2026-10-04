@@ -20,7 +20,7 @@ interface Props {
   onAnswer: (choice: number) => void
   onPowerup: (id: PowerupId) => void
   onContinue: () => void
-  /** lúc tự sang lượt sau khi hiện giải thích (đồng hồ trên nút Tiếp tục) */
+  /** lúc tự sang lượt sau khi hiện đáp án đúng (đồng hồ trên nút Tiếp tục) */
   autoAt: number | null
   /** chơi qua phòng: chỉ người đến lượt bấm Tiếp tục */
   canContinue?: boolean
@@ -65,6 +65,26 @@ export function QuestionPanel({ data, state, playerName, canAnswer, bag, onAnswe
         )}
         {!revealed && !canAnswer && <p className="text-ink-soft" aria-live="polite">{fill(t.botAnswering, { name: playerName })}</p>}
         {!revealed && note && <p className="text-sm font-semibold text-accent-text">{note}</p>}
+        {revealed && (
+          <div className="flex flex-col gap-3">
+            <p className={`text-xl font-bold ${outcome.correct ? 'text-ok' : 'text-bad'}`}>
+              {outcome.correct ? t.correct : outcome.timedOut ? t.timeout : t.wrong}{' '}
+              <span className="font-semibold text-ink">
+                — {outcome.correct ? (outcome.finished ? t.reachedFinish : fill(t.moveOn, { n: outcome.moved })) : t.stay}
+              </span>
+            </p>
+            {/* bản 1.6: chỉ Đúng / Sai và đáp án đúng; đặt trên danh sách đáp án để điện thoại thấy ngay không cần cuộn */}
+            <p className="rounded-2xl bg-bg p-3" data-correct-answer>
+              <span className="font-bold text-ink-soft">{t.correctAnswer}:</span> {q.answers[outcome.correctIndex]}
+            </p>
+            <Countdown deadline={autoAt} total={state.config.timers.revealMs} label={(s) => fill(site.game.autoContinueIn, { s })} />
+            {canContinue && (
+              <button type="button" className="btn-primary" data-autofocus onClick={onContinue}>
+                {site.game.continue}
+              </button>
+            )}
+          </div>
+        )}
         <div role="group" aria-label={t.answersLabel} className="flex flex-col gap-2">
           {aq.order.map((orig, pos) => {
             const eliminated = aq.eliminated.includes(orig)
@@ -87,12 +107,12 @@ export function QuestionPanel({ data, state, playerName, canAnswer, bag, onAnswe
                 <span className={`flex-1 text-left ${eliminated ? 'line-through opacity-50' : ''}`}>{q.answers[orig]}</span>
                 {isCorrect && (
                   <span className="flex items-center gap-1 text-sm font-bold text-ok">
-                    <Check size={18} aria-hidden="true" /> {t.correctAnswer}
+                    <Check size={18} aria-hidden="true" /> <span className="sr-only sm:not-sr-only">{t.correctAnswer}</span>
                   </span>
                 )}
                 {isChosen && !isCorrect && (
                   <span className="flex items-center gap-1 text-sm font-bold text-bad">
-                    <X size={18} aria-hidden="true" /> {t.chosen}
+                    <X size={18} aria-hidden="true" /> <span className="sr-only sm:not-sr-only">{t.chosen}</span>
                   </span>
                 )}
               </button>
@@ -121,26 +141,6 @@ export function QuestionPanel({ data, state, playerName, canAnswer, bag, onAnswe
               <span id="fifty-note" className="text-sm text-ink-soft">
                 {site.game.fiftyFiftyUnavailable}
               </span>
-            )}
-          </div>
-        )}
-        {revealed && (
-          <div className="flex flex-col gap-3">
-            <p className={`text-xl font-bold ${outcome.correct ? 'text-ok' : 'text-bad'}`}>
-              {outcome.correct ? t.correct : outcome.timedOut ? t.timeout : t.wrong}{' '}
-              <span className="font-semibold text-ink">
-                — {outcome.correct ? (outcome.finished ? t.reachedFinish : fill(t.moveOn, { n: outcome.moved })) : t.stay}
-              </span>
-            </p>
-            {/* bản 1.6: không có giải thích, nguồn, chip hiện vật — chỉ đáp án đúng */}
-            <p className="rounded-2xl bg-bg p-3" data-correct-answer>
-              <span className="font-bold text-ink-soft">{t.correctAnswer}:</span> {q.answers[outcome.correctIndex]}
-            </p>
-            <Countdown deadline={autoAt} total={state.config.timers.revealMs} label={(s) => fill(site.game.autoContinueIn, { s })} />
-            {canContinue && (
-              <button type="button" className="btn-primary" data-autofocus onClick={onContinue}>
-                {site.game.continue}
-              </button>
             )}
           </div>
         )}

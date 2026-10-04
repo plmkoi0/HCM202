@@ -132,7 +132,7 @@ export function EndPanel({
           <table className="w-full min-w-[20rem] text-left text-xs sm:text-sm">
             <thead>
               <tr className="text-ink-soft">
-                <th className="py-1 pr-2 font-semibold"> </th>
+                <th className="py-1 pr-2 font-semibold"><span className="sr-only">{site.game.playersLabel}</span></th>
                 <th className="py-1 pr-2 font-semibold">{t.correct}</th>
                 <th className="py-1 pr-2 font-semibold">{t.wrong}</th>
                 <th className="py-1 pr-2 font-semibold">{t.accuracy}</th>

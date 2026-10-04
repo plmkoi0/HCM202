@@ -111,7 +111,7 @@
     "continue": "Chơi tiếp để xếp hạng",
     "start": "Bắt đầu",
     "back": "Quay lại",
-    "nameError": "Biệt danh 1–20 ký tự."
+    "nameError": "Biệt danh cần 1–20 ký tự."
   },
   "game": {
     "turnOf": "Lượt của {name}",
@@ -144,7 +144,6 @@
     "horseN": "Ngựa {n}",
     "horseMove": "bước {from} → {to}",
     "inStable": "trong chuồng",
-    "handOver": "Đưa máy cho {name}",
     "question": {
       "title": "Câu hỏi",
       "finish": "Câu về đích",
@@ -354,8 +353,7 @@
     "types": {
       "single": "Một đáp án",
       "truefalse": "Đúng / Sai",
-      "fillQuote": "Điền trích dẫn",
-      "situation": "Tình huống"
+      "fillQuote": "Điền trích dẫn"
     },
     "back": "Về trang chủ"
   },
@@ -372,7 +370,7 @@
     "pathNote": "Bố cục {name}: {steps} bước từ cổng tới Đích. Ngựa rẽ vào đường về đích ở ô ngay trước cổng của mình.",
     "turnTitle": "Một lượt chơi",
     "turn": [
-      "Tung xúc xắc (1–6). Quá {roll} giây không tung thì máy tự tung.",
+      "Tung xúc xắc (1–6). Quá {roll} giây không tung thì game tự động tung.",
       "Đi đúng số ô theo đường của mình. Không có luật đá ngựa — nhiều ngựa đứng chung một ô được.",
       "Tới ô câu hỏi (kể cả Đích): một câu rút ngẫu nhiên từ kho, trả lời trong {answer} giây. Đúng → nhảy lên ô đó; sai hoặc hết giờ → đứng yên ở ô cũ. Sau khi chốt chỉ hiện Đúng / Sai và đáp án đúng.",
       "Ra 6 mà đã đi được thì tung thêm một lần (tối đa một lần mỗi lượt).",
@@ -389,7 +387,7 @@
     "trapsNote": "Dừng ở ô bẫy thì rút ngẫu nhiên một thẻ. Lùi theo đường của chính mình, không lùi quá cổng; ô bị lùi tới không hỏi. Khiên chặn được cả hai loại thẻ.",
     "endTitle": "Kết thúc",
     "end": [
-      "Người đầu tiên về đích thắng. Chủ phòng có thể chọn chơi tiếp để xếp hạng 2, 3…",
+      "Người đầu tiên về đích thắng. Khi tạo phòng hoặc thiết lập ván có thể chọn chơi tiếp để xếp hạng 2, 3…",
       "Giới hạn thời gian {limits}. Hết giờ thì chơi nốt lượt đang dở, rồi xếp hạng theo số ô còn lại tới đích; người dẫn đầu được tôn vinh như người thắng.",
       "Bằng nhau thì so số câu trả lời đúng.",
       "Màn kết thúc có thống kê, ôn lại câu trả lời sai và thông điệp \"{message}\"."
@@ -398,7 +396,7 @@
     "modes": [
       "Chơi qua phòng: mỗi người một máy, vào phòng bằng mã 5 ký tự, mã QR hoặc link. Phòng 1–5 người, có thể thêm máy chơi cùng.",
       "Chơi trên một máy: 1–5 người thay phiên trên cùng thiết bị, không cần mạng. 1 người và 0 máy = thử thách cá nhân (về đích với ít lượt nhất).",
-      "Mất kết nối khi tới lượt: sau {disconnect} giây máy tự tung, câu hỏi tính là sai. Quay lại thì chơi tiếp ở vị trí cũ."
+      "Mất kết nối khi tới lượt: sau {disconnect} giây game tự động tung, câu hỏi tính là sai. Quay lại thì chơi tiếp ở vị trí cũ."
     ],
     "optionsTitle": "Tùy chọn của ván",
     "options": [

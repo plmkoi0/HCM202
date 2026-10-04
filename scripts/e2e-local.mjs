@@ -49,7 +49,8 @@ async function visible(loc) {
 }
 
 async function noHScroll(page, name) {
-  const sw = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)
+  // clientWidth (không phải innerWidth): khi giả lập điện thoại, innerWidth phình theo nội dung tràn
+  const sw = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
   check(sw <= 0, `${name}: không cuộn ngang`)
 }
 
@@ -145,8 +146,8 @@ async function play(page, { maxSteps = 4000, pick = 'random', label, axe = false
     }
     const roll = page.getByRole('button', { name: 'Tung xúc xắc' })
     if (await visible(roll)) {
-      await roll.click()
-      continue
+      // nút vẫn "visible" khi một cửa sổ vừa mở phủ lên → bấm hụt thì xử lý cửa sổ ở dưới
+      if (await roll.click({ timeout: 2000 }).then(() => true, () => false)) continue
     }
     if (!axedR && (await visible(page.locator('[data-correct-answer]')))) {
       // bản 1.6: sau khi chốt chỉ có Đúng / Sai và đáp án đúng
@@ -208,6 +209,7 @@ for (const [w, h, sch] of [
   await page.clock.runFor(500)
   if (shots) await page.screenshot({ path: join(shots, `${label}-board.png`) })
   await axeCheck(page, `${label} bàn cờ`)
+  await noHScroll(page, `${label} bàn cờ 4 người`)
   // vài bước rồi thử hoàn tác
   await play(page, { maxSteps: 12, label })
   const undo = page.getByRole('button', { name: 'Hoàn tác' })
@@ -253,7 +255,12 @@ for (const [w, h, sch] of [
   check(await visible(page.getByRole('button', { name: 'Bật tiếng (M)' })), `${label}: phím M tắt tiếng`)
   await page.keyboard.press('m')
   let keyAnswered = false
-  for (let i = 0; i < 12 && !keyAnswered; i++) {
+  // xúc xắc ngẫu nhiên: có thể nhiều lượt liền không tới ô câu hỏi → thử tới 40 lần, xử lý cửa sổ chặn
+  for (let i = 0; i < 40 && !keyAnswered; i++) {
+    for (const name of [/^Bỏ món mới/, /^Ngựa \d/]) {
+      const b = page.getByRole('button', { name }).and(page.locator(':enabled'))
+      if (await visible(b)) await b.first().click({ timeout: 2000 }).catch(() => {})
+    }
     if (await visible(page.getByRole('button', { name: 'Tung xúc xắc' }))) await page.keyboard.press('Space')
     await page.clock.runFor(1500)
     if ((await page.locator('button[data-answer]:enabled').count()) > 0) {

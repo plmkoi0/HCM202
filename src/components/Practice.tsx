@@ -101,12 +101,12 @@ export function Practice({ ids, onClose, onCorrect }: { ids: string[]; onClose: 
                 <span className="flex-1 text-left">{q.answers[orig]}</span>
                 {isCorrect && (
                   <span className="flex items-center gap-1 text-sm font-bold text-ok">
-                    <Check size={18} aria-hidden="true" /> {qt.correctAnswer}
+                    <Check size={18} aria-hidden="true" /> <span className="sr-only sm:not-sr-only">{qt.correctAnswer}</span>
                   </span>
                 )}
                 {isChosen && !isCorrect && (
                   <span className="flex items-center gap-1 text-sm font-bold text-bad">
-                    <X size={18} aria-hidden="true" /> {qt.chosen}
+                    <X size={18} aria-hidden="true" /> <span className="sr-only sm:not-sr-only">{qt.chosen}</span>
                   </span>
                 )}
               </button>

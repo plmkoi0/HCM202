@@ -19,7 +19,7 @@ export function Sheet({ title, children, onClose, labelledBy, tone = 'default' }
       if (before && before.isConnected) before.focus({ preventScroll: true })
     }
   }, [])
-  // nội dung đổi (ví dụ câu hỏi → giải thích): nút cũ bị gỡ thì đưa tiêu điểm về nút data-autofocus mới
+  // nội dung đổi (ví dụ câu hỏi → đáp án đúng): nút cũ bị gỡ thì đưa tiêu điểm về nút data-autofocus mới
   useEffect(() => {
     const el = ref.current
     if (!el) return

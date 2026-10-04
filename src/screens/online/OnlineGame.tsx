@@ -53,7 +53,7 @@ function TimeLeft({ endsAt }: { endsAt: number | null }) {
   const t = site.game
   if (endsAt === null) return <span className="text-sm text-ink-soft">{t.noLimit}</span>
   const left = endsAt - now
-  return <span className={`text-sm font-semibold tabular-nums ${left <= 60_000 ? 'text-bad' : ''}`}>{left > 0 ? fill(t.timeLeft, { time: clock(left) }) : t.timeUp}</span>
+  return <span className={`whitespace-nowrap text-sm font-semibold tabular-nums ${left <= 60_000 ? 'text-bad' : ''}`}>{left > 0 ? fill(t.timeLeft, { time: clock(left) }) : t.timeUp}</span>
 }
 
 export function OnlineGame({ view, offset, mode, act, onLeave, report }: { view: StateView; offset: number; mode: ConnectionMode; act: Act; onLeave: () => void; report: (msg: string) => void }) {
@@ -229,7 +229,7 @@ export function OnlineGame({ view, offset, mode, act, onLeave, report }: { view:
               {state.phase === 'chooseHorse' && mine && !anim.busy && <ChooseHorsePanel data={data} state={state} movable={movable} onChoose={(h) => void send({ type: 'CHOOSE_HORSE', horse: h })} />}
               {state.phase === 'roll' && mine && !anim.busy && (
                 <>
-                  {cur.bag.includes('double') && (
+                  {(cur.bag.includes('double') || state.turn.doubleArmed) && (
                     <button type="button" className={`btn-secondary ${state.turn.doubleArmed ? 'ring-4 ring-gold' : ''}`} disabled={state.turn.doubleArmed} onClick={() => usePower('double')}>
                       <DoubleIcon size={18} aria-hidden="true" /> {state.turn.doubleArmed ? t.doubleArmed : t.doubleButton}
                     </button>

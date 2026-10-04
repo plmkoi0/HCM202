@@ -48,11 +48,12 @@ Project Vercel riêng của game (Production Branch = `game`, Root Directory = g
 
 ## Lệnh
 
-Cần Node.js ≥ 22.12. Lần đầu: `npm install`.
+Cần Node.js ≥ 22.12. Lần đầu: `npm install` (`npm audit` báo lỗi ở `braces` qua `vite-plugin-singlefile` — chỉ là công cụ build, không vào mã chạy). Các lệnh `e2e` cần Chrome / Chromium: đặt `CHROMIUM_PATH=<đường dẫn trình duyệt>` (mặc định `/opt/pw-browsers/chromium`).
 
 | Lệnh | Việc |
 |---|---|
 | `npm run dev` + `npm run server` | Chạy thử giao diện ở http://localhost:5173 với server phòng chơi cục bộ (cổng 8787, kho trong bộ nhớ) |
+| `npm run serve` | Build rồi phục vụ `dist/` cùng server phòng chơi ở cổng 8787 (giống bản deploy) |
 | `npm run build` | Bản online → `dist/` (Vercel chạy lệnh này) |
 | `npm run build:offline` | Bản offline một file → `dist-offline/index.html` (kiểm luôn không có mã mạng) |
 | `npm run package:offline` | Build offline rồi đóng gói `phat-hanh/HCM202-Con-duong-tu-tuong.zip` (index.html + HUONG-DAN.txt) |
@@ -60,7 +61,8 @@ Cần Node.js ≥ 22.12. Lần đầu: `npm install`.
 | `npm run import:questions` | Nhập `docs/CAU-HOI-GAME.md` → `src/data/questions.json` |
 | `npm run test` | Toàn bộ test (engine, dữ liệu, câu hỏi, server, kho Redis, lớp Vercel) |
 | `npm run lint` | Kiểm tra mã (oxlint) |
-| `npm run e2e` | Chạy thử trong Chromium: chơi trên một máy (bản offline) + 3 máy chơi qua phòng (server cục bộ) |
+| `npm run e2e` | Chạy thử trong Chromium: chơi trên một máy (bản offline, chạy `build:offline` trước) + 3 máy chơi qua phòng (server cục bộ) |
+| `npm run e2e:local` | Chỉ phần chơi trên một máy |
 | `npm run e2e:online -- --url <địa chỉ>` | Chạy thử 3 máy trên bản deploy thật |
 | `npm run check:deploy -- <địa chỉ> [--long]` | Kiểm bản deploy: `/api/health`, WebSocket, polling, (`--long`) đóng / nối lại ở 300 s |
 | `npm run check:release` | Kiểm trước phát hành: không còn câu hỏi thử, `questions.json` khớp file câu hỏi, bản offline không có mã mạng, `siteUrl`, ảnh QR và gói zip mới nhất |

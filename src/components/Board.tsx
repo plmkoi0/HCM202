@@ -315,13 +315,13 @@ export function cellLegendItems(data: GameData): { key: string; swatch: React.Re
   ]
 }
 
-/** Chú thích bàn cờ (mục 12.4): loại ô, màu + chữ viết tắt trụ cột, ô đích của bước đi */
+/** Chú thích bàn cờ (mục 12.4): loại ô, màu ngựa, ô đích của bước đi */
 export function BoardLegend({ data }: { data: GameData }) {
   const t = site.board
   const items = cellLegendItems(data)
   return (
     <details className="card board-light text-sm">
-      <summary className="cursor-pointer font-bold">{t.legend}</summary>
+      <summary className="-my-1 cursor-pointer py-2.5 font-bold">{t.legend}</summary>
       <ul className="mt-2 flex flex-col gap-2">
         {items.map((it) => (
           <li key={it.key} className="flex items-start gap-2">

@@ -67,7 +67,7 @@ export interface ShortcutHandlers {
 }
 
 /**
- * Gắn phím tắt cho màn chơi. `enabled = false` khi có hộp thoại khác đang mở (thẻ hiện vật, xác
+ * Gắn phím tắt cho màn chơi. `enabled = false` khi có hộp thoại khác đang mở (Menu, xác
  * nhận thoát, cài đặt) — lúc đó chỉ còn M và F.
  */
 export function useShortcuts(handlers: ShortcutHandlers, enabled: boolean): void {

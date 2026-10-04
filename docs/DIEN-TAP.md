@@ -19,7 +19,7 @@ Ngày diễn tập: ………… · Người điền: ………… · Số máy 
 | 2 | Wi-Fi trường: tạo phòng, vào phòng, chơi hết một ván | | | |
 | 3 | 4G: tạo phòng, vào phòng, chơi hết một ván | | | |
 | 4 | Quét **QR trên slide** bằng camera điện thoại → mở đúng trang game | | | |
-| 5 | Quét **QR phòng chờ** bằng **Zalo** → vào thẳng phòng (mã điền sẵn) | | | |
+| 5 | Quét **QR phòng chờ** bằng **Zalo** → mở màn **Vào phòng** có sẵn mã phòng; nhập biệt danh, chọn màu là vào | | | |
 | 6 | Mở **link mời** `/p/ABCDE` trong **Messenger** (trình duyệt trong ứng dụng) → vào được phòng, chơi được | | | |
 | 7 | Phòng 1 người, **0 máy chơi cùng** (thử thách cá nhân) — về đích hoặc hết giờ, có kỷ lục / số ô còn lại | | | |
 | 8 | Phòng 1 người, **có máy chơi cùng** (2–4 máy) | | | |
@@ -37,7 +37,7 @@ Ngày diễn tập: ………… · Người điền: ………… · Số máy 
 | 20 | "Chơi trên một máy" trên **máy chiếu / laptop của lớp** (phương án dự phòng) | | | |
 | 21 | Xem **Usage** của Vercel và Upstash trước và sau buổi diễn tập (`docs/HUONG-DAN-VERCEL.md` mục 5) | | | Lệnh Upstash trước: ……… sau: ……… |
 
-**Đo lệnh Redis của một ván (để cập nhật mục 15.5):** ghi số **Commands** trên Upstash ngay trước khi tạo một phòng, chơi một ván ___ người trong ___ phút tới hết, chờ 1–2 phút, ghi lại số **Commands**.
+**Đo lệnh Redis của một ván (để cập nhật mục 15.5):** ghi số **Commands** trên Upstash ngay trước khi tạo một phòng, chơi một ván **3 người** (mốc 5 hoặc 7 phút) tới hết, chờ 1–2 phút, ghi lại số **Commands**.
 
 | Trước | Sau | Số người | Số phút | Ghi chú (có ai dùng chế độ dự phòng không) |
 |---|---|---|---|---|
@@ -66,8 +66,8 @@ Mini game kết thúc buổi thuyết trình (phần "Khởi động + mini game
 |---|---|
 | Trang mở được nhưng tạo / vào phòng báo lỗi server | Bấm **"Chơi trên một máy"** trên laptop máy chiếu: cả lớp chia 2–5 đội, mỗi đội một màu ngựa, thay phiên trả lời trên màn chiếu |
 | Không mở được trang game | Mở **bản offline** (`index.html` trong gói zip) trên laptop máy chiếu, chơi "Chơi trên một máy" như trên |
-| Một số máy không vào được (mạng yếu) | Bạn đó vào chung phòng với bạn bên cạnh không được — cho xem cùng máy, hoặc chơi "Chơi trên một máy" trên máy của bạn |
-| Mất mạng giữa ván | Chờ vài giây: game tự chuyển chế độ dự phòng / tự nối lại. Tải lại trang vẫn về đúng phòng. Lượt của người mất kết nối tự bỏ qua sau 20 giây |
+| Một số máy không vào được (mạng yếu) | Bạn đó không vào được phòng → xem chung máy với bạn bên cạnh, hoặc chơi "Chơi trên một máy" trên máy mình |
+| Mất mạng giữa ván | Chờ vài giây: game tự chuyển chế độ dự phòng / tự nối lại. Tải lại trang vẫn về đúng phòng. Tới lượt người mất kết nối thì sau 20 giây game tự động tung, câu hỏi tính là sai |
 | Chủ phòng rời phòng | Quyền chủ phòng tự chuyển cho người vào sớm nhất còn kết nối |
 
 ## 3. Gửi kết quả

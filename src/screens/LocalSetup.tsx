@@ -125,7 +125,7 @@ export function LocalSetup({ onStart, onBack }: { onStart: (s: Setup) => void; o
                   />
                 </label>
                 {d.humans.length > 1 && (
-                  <button type="button" className="btn-icon" aria-label={t.removePlayer} onClick={() => set({ humans: d.humans.filter((_, k) => k !== i) })}>
+                  <button type="button" className="btn-icon shrink-0" aria-label={t.removePlayer} onClick={() => set({ humans: d.humans.filter((_, k) => k !== i) })}>
                     <Trash2 size={20} />
                   </button>
                 )}

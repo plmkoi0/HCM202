@@ -13,7 +13,7 @@ export function PlayerStrip({ data, state }: { data: GameData; state: GameState 
   const current = state.phase === 'ended' ? null : state.order[state.turnIndex]
   return (
     // cuộn ngang trên điện thoại → nhận tiêu điểm bàn phím để cuộn được (axe: scrollable-region-focusable)
-    <ul className="flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible" aria-label={t.playersLabel} tabIndex={0}>
+    <ul className="relative flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible" aria-label={t.playersLabel} tabIndex={0}>
       {ordered.map((p) => {
         const tok = tokens.colors[p.color]
         const isCur = p.id === current

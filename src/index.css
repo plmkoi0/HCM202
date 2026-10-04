@@ -3,7 +3,7 @@
 
 /*
  * Màu giao diện game (mục 16): bàn cờ vui mắt, màu tươi; điểm nhấn đỏ son – vàng đồng.
- * Màu trụ cột và màu ngựa nằm trong src/data (pillars.json, tokens.json), không viết cứng ở đây.
+ * Màu ngựa nằm trong src/data/tokens.json, không viết cứng ở đây.
  */
 :root {
   --bg: #fff8ec;
@@ -122,7 +122,7 @@ body {
     @apply inline-flex h-11 w-11 items-center justify-center rounded-xl border-2 border-ink/15 bg-surface text-ink transition hover:border-ink/40 disabled:cursor-not-allowed disabled:opacity-40;
   }
   .btn-link {
-    @apply font-semibold text-accent-text underline-offset-4 hover:underline;
+    @apply inline-flex min-h-11 items-center font-semibold text-accent-text underline-offset-4 hover:underline;
   }
   .btn-chip {
     @apply rounded-full border-2 border-accent-text px-3 py-1.5 text-sm font-semibold text-accent-text;
@@ -131,7 +131,7 @@ body {
     @apply min-h-12 rounded-xl border-2 border-line bg-bg px-3 text-base font-normal text-ink outline-none focus:border-accent;
   }
   .seg {
-    @apply inline-flex min-h-11 cursor-pointer items-center rounded-xl border-2 border-line bg-bg px-3 font-semibold;
+    @apply inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-xl border-2 border-line bg-bg px-3 font-semibold;
   }
   .seg-on {
     @apply border-accent bg-accent text-accent-ink;
@@ -148,7 +148,7 @@ body {
   }
   /* nút đáp án ≥ 56px, trả lời không cần cuộn (mục 16) */
   .answer {
-    @apply flex min-h-12 w-full items-center gap-2 rounded-2xl border-2 border-line bg-bg px-3 py-1.5 text-left text-base sm:min-h-14 sm:gap-3 sm:py-2 leading-snug transition enabled:hover:border-accent enabled:active:translate-y-px disabled:cursor-default;
+    @apply flex min-h-14 w-full items-center gap-2 rounded-2xl border-2 border-line bg-bg px-3 py-1.5 text-left text-base sm:gap-3 sm:py-2 leading-snug transition enabled:hover:border-accent enabled:active:translate-y-px disabled:cursor-default;
   }
   .answer-letter {
     @apply inline-flex h-7 w-7 shrink-0 items-center sm:h-8 sm:w-8 justify-center rounded-full bg-ink text-sm font-bold text-bg;
@@ -192,8 +192,8 @@ body {
   to { transform: none; opacity: 1; }
 }
 
-/* Bàn cờ luôn nền sáng (như bàn cờ thật) để màu trụ cột (đỏ son, xanh mực, vàng đồng)
-   và màu ngựa giữ đủ tương phản cả khi máy bật chế độ tối. */
+/* Bàn cờ luôn nền sáng (như bàn cờ thật) để màu ô và
+   màu ngựa giữ đủ tương phản cả khi máy bật chế độ tối. */
 .board-light {
   --surface: #fffaf1;
   --ink: #1d1a16;
