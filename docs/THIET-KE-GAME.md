@@ -633,7 +633,7 @@ Reducer thuần, không phụ thuộc trình duyệt hay Node. Hành động:
 
 **Deployment Protection:** mặc định Standard Protection bảo vệ mọi URL **trừ tên miền chính** (production domain) — kể cả link bản deploy thử và URL riêng của từng bản deploy, nên mở những link đó phải đăng nhập Vercel. Khi thử trên điện thoại, dùng Shareable Links; khi chơi thật, luôn mở game và tạo mã QR, link mời từ **tên miền chính**; trước buổi học, kiểm tra tên miền chính mở được mà không cần đăng nhập.
 
-**Kết quả nhóm kiểm Deployment Protection (G6):** *chưa nhận* — chỉ thị G6 (04/10/2026) để trống ô kết quả. Claude Code đã mở tên miền chính và `/api/health` từ môi trường làm việc (không đăng nhập Vercel) và vào thẳng được (mục 15.4), nhưng đó không phải điện thoại / cửa sổ ẩn danh của nhóm. Kiểm ở dòng 11 của `docs/DIEN-TAP.md`.
+**Kết quả nhóm kiểm Deployment Protection (G6):** **đạt** (diễn tập lần 1, 04/10/2026 — dòng 11 của `docs/DIEN-TAP.md`): mở tên miền chính trong cửa sổ ẩn danh và trên điện thoại chưa đăng nhập Vercel thì vào thẳng game.
 
 ### 15.7 Khác
 - **Âm thanh:** Web Audio API (oscillator), không file âm thanh — xúc xắc, bước đi, đúng/sai, power-up, bẫy, về đích; nút tắt/bật.
@@ -1017,7 +1017,7 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 - [ ] **Mất kết nối tới lượt:** game tự động tung và câu tính sai như Luật chơi, nhưng Khiên và power-up dùng ngay vẫn có tác dụng cho người vắng mặt (mục 9 ghi "không dùng power-up"). Hỏi: Khiên tự chặn bẫy cho người vắng có được không?
 - [ ] **"Phải tung đúng số":** khi tung quá Đích và mọi ngựa khác đều không đi được, lượt bị bỏ mà không có dòng giải thích riêng. Đề xuất thêm một chữ "Cần tung đúng số để về Đích".
 - [ ] **Bàn cờ ở 1920 × 1080** chỉ rộng ~700 px (khung `max-w-6xl`); khi chiếu trên lớp có thể cho bàn cờ lớn hơn. Đổi bố cục màn chơi → hỏi nhóm.
-- [ ] **Vùng function (hạ tầng, nhóm làm):** kiểm deploy G6 thấy function chạy ở `iad1` (Mỹ) mà `pingMs` tới Redis ≈ 220 ms (Redis ở Singapore) → mỗi thao tác chậm vài trăm ms. Đề xuất đổi Function Region sang `sin1` (`docs/HUONG-DAN-VERCEL.md` bước 1.7, Hiện trạng), Redeploy, kiểm `pingMs`.
+- [x] **Vùng function (hạ tầng, nhóm làm):** kiểm deploy G6 thấy function chạy ở `iad1` (Mỹ) mà `pingMs` tới Redis ≈ 220 ms. Nhóm đã đổi sang `sin1` (diễn tập lần 1); Claude Code đo lại: `x-vercel-id` có `sin1`, `pingMs` = 1 ms.
 - [ ] **Tường lửa Vercel:** `check:deploy` chạy bằng Node bị chặn `403` (`x-vercel-mitigated: deny`) ở bước vào phòng; đi qua proxy của môi trường thì đạt; trình duyệt (e2e 3 máy trên deploy) đạt. Nếu khi diễn tập có máy bị 403, xem Firewall của project.
 - [ ] **Máy chủ (thấp):** báo lỗi khác nhau cho "không có phòng" và "sai token" (đã giới hạn theo IP nên khó dò); server Node cục bộ tin `x-forwarded-for` (chỉ dùng khi chạy thử, Vercel không dùng); Upstash có tính EVAL Lua như một lệnh — đo ở buổi diễn tập (DIEN-TAP).
 - [ ] **Bộ câu hỏi — nhóm xem và tự sửa `docs/CAU-HOI-GAME.md` (Claude Code không sửa nội dung):** Q-27 "quyền binh" (nguyên văn thường là "quyền bính"); Q-52 có đáp án đúng trùng lời câu hỏi Q-53 (lộ đáp án); Q-48 bị lộ qua Q-49 / Q-51 / Q-52; Q-43 và Q-45 (cả Q-44) gần trùng ý; đáp án "đầy tớ" của Q-14 lộ qua Q-31 và một phương án nhiễu của Q-03; Q-02 và Q-03 hỏi gần cùng ý; Q-14 chính tả "uỷ" / câu trích; Q-13 "gánh vác" hay "gánh"; Q-50 "Nhà nước ta" hay "của ta"; Q-45 "có thể bị bãi nhiệm"; Q-27 viết hoa phương án nhiễu; dấu câu / ngữ pháp Q-36, Q-37, Q-52, Q-55; dấu ngoặc kép lẫn kiểu; Q-40 cách gọi "Bác Hồ"; nhãn "Tình huống giả định" lúc có lúc không; Q-39 có thể hiểu hai cách; Q-46, Q-52, Q-53 nên đối chiếu lại giáo trình; Q-04 / Q-29 có phương án nhiễu tương đương đáp án đúng; Q-24 / Q-34 / Q-38 cùng ý; độ khó Q-43 → Q-47 có vẻ dễ hơn mức ghi, Q-38 có vẻ khó hơn. Không thấy câu trích dẫn Bác bị bịa; không thấy lỗi trộn đáp án.
@@ -1036,7 +1036,7 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 - [x] Gắn **Upstash for Redis** (gói Free) từ Vercel Marketplace (15.4, 15.5) — G5: `/api/health` trả `"store":"redis"`.
 - [x] Điền `siteUrl` của game: `https://hcm-202-web-omega.vercel.app` (G4); đã xác nhận đúng project game (G5, mục 15.4).
 - [x] Thử WebSocket thật trên bản deploy (G5, mục 15.4).
-- [ ] Kiểm tra Deployment Protection (mục 15.6): khi thử trên điện thoại dùng Shareable Links; trước buổi học, tên miền chính phải mở được mà không cần đăng nhập Vercel. — G6: chưa nhận kết quả; kiểm ở dòng 11 của `docs/DIEN-TAP.md`.
+- [ ] Kiểm tra Deployment Protection (mục 15.6): khi thử trên điện thoại dùng Shareable Links; trước buổi học, tên miền chính phải mở được mà không cần đăng nhập Vercel. — G6: **đạt** ở diễn tập lần 1 (dòng 11 của `docs/DIEN-TAP.md`); trước buổi học vẫn mở thử ở cửa sổ ẩn danh.
 
 **Cần xác minh:**
 - [x] Trạng thái WebSocket trên Vercel và cách chạy với Vite + `api/` — đã xác minh ở G0 (15.4).

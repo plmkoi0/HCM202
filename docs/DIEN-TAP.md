@@ -9,6 +9,8 @@
 
 Ngày diễn tập: ………… · Người điền: ………… · Số máy dùng: ………… (≥ 5, gồm điện thoại và laptop)
 
+**Tiến độ (04/10/2026, lần 1 — diễn tập một phần):** đạt 7 dòng (4, 5, 6, 11, 13, 14, 19), chưa ghi lỗi nào; đã đổi vùng function sang Singapore (dòng 21). **Còn phải thử:** 1–3, 7–10, 12, 15–18, 20, 22 và đo lệnh Redis của một ván.
+
 ## 1. Danh sách diễn tập
 
 Đánh dấu ✓ vào cột **Đạt**, hoặc ghi ngắn lỗi gặp vào cột **Lỗi** (máy nào, trình duyệt nào, làm gì thì lỗi). Cột **Ghi chú** để ghi số liệu, ý kiến.
@@ -18,24 +20,24 @@ Ngày diễn tập: ………… · Người điền: ………… · Số máy 
 | 1 | Dùng ≥ 5 máy thật, có cả điện thoại (Android, iPhone) và laptop | | | |
 | 2 | Wi-Fi trường: tạo phòng, vào phòng, chơi hết một ván | | | |
 | 3 | 4G: tạo phòng, vào phòng, chơi hết một ván | | | |
-| 4 | Quét **QR trên slide** bằng camera điện thoại → mở đúng trang game | | | |
-| 5 | Quét **QR phòng chờ** bằng **Zalo** → mở màn **Vào phòng** có sẵn mã phòng; nhập biệt danh, chọn màu là vào | | | |
-| 6 | Mở **link mời** `/p/ABCDE` trong **Messenger** (trình duyệt trong ứng dụng) → vào được phòng, chơi được | | | |
+| 4 | Quét **QR trên slide** bằng camera điện thoại → mở đúng trang game | ✓ | | |
+| 5 | Quét **QR phòng chờ** bằng **Zalo** → mở màn **Vào phòng** có sẵn mã phòng; nhập biệt danh, chọn màu là vào | ✓ | | |
+| 6 | Mở **link mời** `/p/ABCDE` trong **Messenger** (trình duyệt trong ứng dụng) → vào được phòng, chơi được | ✓ | | |
 | 7 | Phòng 1 người, **0 máy chơi cùng** (thử thách cá nhân) — về đích hoặc hết giờ, có kỷ lục / số ô còn lại | | | |
 | 8 | Phòng 1 người, **có máy chơi cùng** (2–4 máy) | | | |
 | 9 | Phòng **5 người** thật, mốc **5 phút** — hết giờ xếp hạng theo số ô còn lại | | | |
 | 10 | Phòng **5 người** thật, mốc **7 phút** | | | |
-| 11 | Mở tên miền chính trong **cửa sổ ẩn danh** và trên điện thoại chưa đăng nhập Vercel → vào thẳng, **không** hiện trang đăng nhập Vercel (Deployment Protection, mục 15.6) | | | |
+| 11 | Mở tên miền chính trong **cửa sổ ẩn danh** và trên điện thoại chưa đăng nhập Vercel → vào thẳng, **không** hiện trang đăng nhập Vercel (Deployment Protection, mục 15.6) | ✓ | | |
 | 12 | Huy hiệu kết nối hiện **"Trực tiếp"** trên máy thật (không phải "Đang dùng chế độ dự phòng") | | | |
-| 13 | Đang chơi, tắt Wi-Fi vài giây rồi bật lại → báo "Mất kết nối — đang thử lại", sau đó về "Trực tiếp", ván chơi tiếp đúng chỗ | | | |
-| 14 | Tải lại trang giữa ván → về đúng phòng, đúng vị trí | | | |
+| 13 | Đang chơi, tắt Wi-Fi vài giây rồi bật lại → báo "Mất kết nối — đang thử lại", sau đó về "Trực tiếp", ván chơi tiếp đúng chỗ | ✓ | | |
+| 14 | Tải lại trang giữa ván → về đúng phòng, đúng vị trí | ✓ | | |
 | 15 | Âm thanh trên điện thoại (iPhone ở chế độ im lặng có thể không phát tiếng); nút loa / tắt tiếng hoạt động | | | |
 | 16 | **Đọc kịp đáp án đúng trong 3 giây** sau khi trả lời (người trả lời bấm "Tiếp tục" được nếu muốn đi sớm) | | | |
 | 17 | **Trong một ván không lặp câu** (ghi lại vài câu đã gặp; câu chỉ lặp khi đã hỏi hết 55 câu) | | | |
 | 18 | **Ô Đích hỏi câu như các ô khác** (nhãn "Câu về đích", độ khó bất kỳ 1 / 2 / 3, không luôn là câu khó nhất) | | | |
-| 19 | Bản offline: giải nén gói zip, mở `index.html` khi **tắt mạng** → "Chơi trên một máy" chơi được | | | |
+| 19 | Bản offline: giải nén gói zip, mở `index.html` khi **tắt mạng** → "Chơi trên một máy" chơi được | ✓ | | |
 | 20 | "Chơi trên một máy" trên **máy chiếu / laptop của lớp** (phương án dự phòng) | | | |
-| 21 | Vùng function: trước buổi diễn tập đổi sang **Singapore (sin1)** (`docs/HUONG-DAN-VERCEL.md` bước 1.7), Redeploy; `/api/health` báo `pingMs` dưới ~20 ms; thao tác trong phòng phản hồi nhanh | | | `pingMs` trước: ~220 sau: ……… |
+| 21 | Vùng function: trước buổi diễn tập đổi sang **Singapore (sin1)** (`docs/HUONG-DAN-VERCEL.md` bước 1.7), Redeploy; `/api/health` báo `pingMs` dưới ~20 ms; thao tác trong phòng phản hồi nhanh | | | `pingMs` trước: ~220 sau: ~60. Claude Code đo lại 04/10/2026: function chạy ở `sin1`, `pingMs` = 1 ms ổn định (~60 ms là lần đầu nối Redis) |
 | 22 | Xem **Usage** của Vercel và Upstash trước và sau buổi diễn tập (`docs/HUONG-DAN-VERCEL.md` mục 5) | | | Lệnh Upstash trước: ……… sau: ……… |
 
 **Đo lệnh Redis của một ván (để cập nhật mục 15.5):** ghi số **Commands** trên Upstash ngay trước khi tạo một phòng, chơi một ván **3 người** (mốc 5 hoặc 7 phút) tới hết, chờ 1–2 phút, ghi lại số **Commands**.

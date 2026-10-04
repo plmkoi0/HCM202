@@ -240,9 +240,9 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - [x] Tạo project Vercel thứ hai (https://hcm-202-web-omega.vercel.app) — G5 đã kiểm: trang chủ là game, Production Branch = `game`.
 - [x] Gắn **Upstash for Redis** — G5: `/api/health` trả `"store":"redis"`.
 - [x] Điền `siteUrl` của game: `https://hcm-202-web-omega.vercel.app` (đã xác nhận đúng project game).
-- [ ] Kiểm tra Deployment Protection: thử trên điện thoại dùng Shareable Links; trước buổi học, tên miền chính mở được mà không cần đăng nhập Vercel — G6: chưa nhận kết quả (dòng 11 `docs/DIEN-TAP.md`).
-- [ ] Đổi Function Region sang Singapore (`sin1`): G6 thấy function ở `iad1`, `pingMs` tới Redis ≈ 220 ms (HUONG-DAN-VERCEL, Hiện trạng).
-- [ ] Diễn tập theo `docs/DIEN-TAP.md` (≥ 5 máy thật, Wi-Fi trường + 4G, Zalo / Messenger, bản offline) và gửi kết quả.
+- [ ] Kiểm tra Deployment Protection: thử trên điện thoại dùng Shareable Links; trước buổi học, tên miền chính mở được mà không cần đăng nhập Vercel — **đạt** ở diễn tập lần 1 (dòng 11 `docs/DIEN-TAP.md`).
+- [x] Đổi Function Region sang Singapore (`sin1`): trước ở `iad1`, `pingMs` ≈ 220 ms; nay `sin1`, `pingMs` ≈ 1 ms (diễn tập lần 1).
+- [ ] Diễn tập theo `docs/DIEN-TAP.md` và gửi kết quả — lần 1 (04/10/2026) đạt dòng 4, 5, 6, 11, 13, 14, 19; còn 1–3, 7–10, 12, 15–18, 20, 22 và đo lệnh Redis một ván.
 
 **Cần xác minh:**
 - [ ] Upstash có tính mỗi tin pub/sub nhận được là một lệnh không — **chưa xác minh được** (upstash.com bị chặn; bằng chứng gián tiếp: không tính). Ước lượng chi phí đang tính **trường hợp xấu** (có tính). G6: chưa nhận kết quả; đo số Commands trước / sau một ván ở buổi diễn tập.
