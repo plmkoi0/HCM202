@@ -21,12 +21,18 @@ export interface Limits {
   joinPerIp: [number, number]
   /** hành động: mỗi người, đếm trong từng instance */
   actionsPerPlayer: [number, number]
+  /** poll + hành động + mở WebSocket: mỗi IP, đếm trong từng instance, kiểm TRƯỚC khi đọc kho (cả lớp chung một IP Wi-Fi) */
+  requestsPerIp: [number, number]
+  /** yêu cầu thất bại vì sai phòng / sai phiên: quá mức thì chặn IP đó tới hết cửa sổ (chống dò mã, đốt lệnh Redis) */
+  failsPerIp: [number, number]
 }
 
 export const DEFAULT_LIMITS: Limits = {
   createPerIp: [120, 600_000],
   joinPerIp: [240, 60_000],
   actionsPerPlayer: [60, 10_000],
+  requestsPerIp: [6000, 60_000],
+  failsPerIp: [120, 60_000],
 }
 
 export interface ServiceOptions {
@@ -42,6 +48,8 @@ export interface ServiceOptions {
 }
 
 const MAX_ATTEMPTS = 12
+/** số kết nối WebSocket tối đa ghi cho mỗi người (mở thêm thì bỏ kết nối cũ nhất) */
+const MAX_LINKS = 3
 const RECENT_LIMIT = 64
 const CACHE_LIMIT = 500
 /** người dùng polling ghi "lần poll gần nhất" tối đa mỗi chừng này */
@@ -61,7 +69,15 @@ class LocalLimiter {
     c.n += 1
     return c.n <= limit
   }
+  /** đã vượt mức trong cửa sổ hiện tại chưa (không đếm thêm) */
+  over(key: string, [limit]: [number, number], now: number): boolean {
+    const c = this.m.get(key)
+    return !!c && c.resetAt > now && c.n > limit
+  }
 }
+
+/** lỗi của người gửi sai phòng / sai phiên — đếm để chặn IP dò mã */
+const FAIL_CODES = new Set(['ROOM_NOT_FOUND', 'UNAUTHORIZED'])
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
@@ -396,7 +412,37 @@ export class RoomService {
    * Ảnh chụp cho người chơi; null nếu version vẫn bằng `since` (không đổi). Mỗi lần poll chỉ
    * đọc khóa version (1 lệnh); đọc cả phòng khi version đổi.
    */
-  async state(cred: Credentials, since?: number): Promise<StateView | null> {
+  async state(cred: Credentials, since?: number, ip = 'local'): Promise<StateView | null> {
+    return this.guarded(ip, () => this.stateInner(cred, since))
+  }
+
+  /**
+   * Chặn theo IP trước mọi truy cập kho (mỗi instance): tổng số yêu cầu, và IP gửi sai phòng / sai
+   * phiên quá nhiều → RATE_LIMITED tới hết cửa sổ, không tốn lệnh Redis.
+   */
+  private async guarded<T>(ip: string, fn: () => Promise<T>): Promise<T> {
+    const now = this.now()
+    if (this.limiter.over(`fail:${ip}`, this.limits.failsPerIp, now) || !this.limiter.hit(`req:${ip}`, this.limits.requestsPerIp, now)) throw new RoomError('RATE_LIMITED')
+    try {
+      return await fn()
+    } catch (e) {
+      if (e instanceof RoomError && FAIL_CODES.has(e.code)) this.limiter.hit(`fail:${ip}`, this.limits.failsPerIp, this.now())
+      throw e
+    }
+  }
+
+  /** mã phòng vừa biết là không tồn tại → báo ngay, không đọc kho (10 s) */
+  private checkMissing(code: string): void {
+    if ((this.missing.get(code) ?? 0) > this.now()) throw new RoomError('ROOM_NOT_FOUND')
+  }
+
+  private rememberMissing(code: string, e: unknown): void {
+    if (!(e instanceof RoomError) || e.code !== 'ROOM_NOT_FOUND') return
+    if (this.missing.size > 10_000) this.missing.clear()
+    this.missing.set(code, this.now() + 10_000)
+  }
+
+  private async stateInner(cred: Credentials, since?: number): Promise<StateView | null> {
     const code = this.code(cred.code)
     const t0 = this.now()
     if ((this.missing.get(code) ?? 0) > t0) throw new RoomError('ROOM_NOT_FOUND')
@@ -456,12 +502,28 @@ export class RoomService {
   // ---------- kết nối WebSocket ----------
 
   /** Mở kết nối: ghi nhận (một lần ghi), trả phòng mới nhất */
-  async linkOpen(cred: Credentials, linkId: string): Promise<Room> {
+  async linkOpen(cred: Credentials, linkId: string, ip = 'local'): Promise<Room> {
+    const code = this.code(cred.code)
+    return this.guarded(ip, async () => {
+      this.checkMissing(code)
+      try {
+        return await this.linkOpenInner(code, cred, linkId)
+      } catch (e) {
+        this.rememberMissing(code, e)
+        throw e
+      }
+    })
+  }
+
+  private async linkOpenInner(code: string, cred: Credentials, linkId: string): Promise<Room> {
     const { room } = await this.mutate(
-      this.code(cred.code),
+      code,
       (r, now) => {
         const m = this.member(r, cred.playerId, cred.token)
         m.links[linkId] = now
+        // tối đa MAX_LINKS kết nối mỗi người: bỏ kết nối cũ nhất (thường là kết nối đã chết chưa kịp báo đóng)
+        const ids = Object.keys(m.links).sort((x, y) => m.links[x]! - m.links[y]!)
+        for (const old of ids.slice(0, Math.max(0, ids.length - MAX_LINKS))) delete m.links[old]
         m.lastSeen = now
         if (!m.left) setConnected(r, this.data, m, true, now)
         transferHost(r)
@@ -489,8 +551,20 @@ export class RoomService {
 
   // ---------- hành động ----------
 
-  async act(cred: Credentials, actionId: unknown, action: unknown): Promise<{ room: Room; playerId: string; duplicate: boolean }> {
+  async act(cred: Credentials, actionId: unknown, action: unknown, ip = 'local'): Promise<{ room: Room; playerId: string; duplicate: boolean }> {
     const code = this.code(cred.code)
+    return this.guarded(ip, async () => {
+      this.checkMissing(code)
+      try {
+        return await this.actInner(code, cred, actionId, action)
+      } catch (e) {
+        this.rememberMissing(code, e)
+        throw e
+      }
+    })
+  }
+
+  private async actInner(code: string, cred: Credentials, actionId: unknown, action: unknown): Promise<{ room: Room; playerId: string; duplicate: boolean }> {
     if (typeof actionId !== 'string' || actionId.length < 1 || actionId.length > 64) throw new RoomError('BAD_REQUEST')
     if (!action || typeof action !== 'object' || typeof (action as { type?: unknown }).type !== 'string') throw new RoomError('BAD_REQUEST')
     const a = action as ClientAction
@@ -652,12 +726,24 @@ export class RoomService {
 
   // ---------- kiểm tra sức khỏe ----------
 
+  private healthCache: { at: number; value: { ok: boolean; store: string; pingMs: number | null; error?: string } } | null = null
+
+  /**
+   * Kiểm tra kho: kết quả giữ 5 s (mỗi lần ping là một lệnh Redis — ai cũng gọi được /api/health).
+   * Lỗi chỉ trả mã chung; chi tiết (có thể chứa tên máy Redis) ghi vào log của server.
+   */
   async health(): Promise<{ ok: boolean; store: string; pingMs: number | null; error?: string }> {
+    const now = this.now()
+    if (this.healthCache && now - this.healthCache.at < 5000) return this.healthCache.value
+    let value: { ok: boolean; store: string; pingMs: number | null; error?: string }
     try {
       const pingMs = await this.store.ping()
-      return { ok: true, store: this.store.kind, pingMs }
+      value = { ok: true, store: this.store.kind, pingMs }
     } catch (e) {
-      return { ok: false, store: this.store.kind, pingMs: null, error: e instanceof Error ? e.message : String(e) }
+      console.error('[health] kho không trả lời', e instanceof Error ? e.message : e)
+      value = { ok: false, store: this.store.kind, pingMs: null, error: 'STORE_UNAVAILABLE' }
     }
+    this.healthCache = { at: now, value }
+    return value
   }
 }

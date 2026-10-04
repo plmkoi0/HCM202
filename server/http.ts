@@ -108,8 +108,10 @@ export async function handleApi(ctx: ApiContext | null, req: Request, ip: string
       if (sub === 'actions') {
         if (method !== 'POST') return errorResponse('BAD_REQUEST', 405)
         const cred = credentials(req, code)
-        const b = (await readJson(req)) as { actionId?: unknown; action?: unknown }
-        const r = await service.act(cred, b.actionId, b.action)
+        const raw = await readJson(req)
+        if (!raw || typeof raw !== 'object' || Array.isArray(raw)) throw new RoomError('BAD_REQUEST')
+        const b = raw as { actionId?: unknown; action?: unknown }
+        const r = await service.act(cred, b.actionId, b.action, ip)
         return json({ ok: true, duplicate: r.duplicate, state: service.view(r.room, r.playerId) })
       }
       // state (polling)
@@ -117,7 +119,7 @@ export async function handleApi(ctx: ApiContext | null, req: Request, ip: string
       const cred = credentials(req, code)
       const s = url.searchParams.get('since')
       const since = s !== null && /^\d{1,12}$/.test(s) ? Number(s) : undefined
-      const view = await service.state(cred, since)
+      const view = await service.state(cred, since, ip)
       if (!view) return new Response(null, { status: 204, headers: { 'cache-control': 'no-store', 'x-server-now': String(service.now()) } })
       return json(view)
     }

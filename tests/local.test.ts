@@ -212,5 +212,10 @@ describe('tiện ích chữ', () => {
     expect(cleanNickname('a'.repeat(21))).toBeNull()
     expect(cleanNickname('Đặng Thị Ngọc Ánh Dươ')).toBeNull()
     expect(cleanNickname('Đặng Thị Ngọc Ánh')).toBe('Đặng Thị Ngọc Ánh')
+    // ký tự vô hình / đổi chiều chữ / điều khiển (rà soát G6): bỏ đi; chỉ có chúng thì không hợp lệ
+    expect(cleanNickname('\u200B\u202E')).toBeNull()
+    expect(cleanNickname('\u0000\u0007')).toBeNull()
+    expect(cleanNickname('Lan\u202Eabc')).toBe('Lan abc')
+    expect(cleanNickname('Đức'.normalize('NFD'))).toBe('Đức'.normalize('NFD'))
   })
 })

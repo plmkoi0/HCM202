@@ -25,8 +25,10 @@ export function botAction(data: GameData, s: GameState, p: PlayerState): BotDeci
   switch (s.phase) {
     case 'roll': {
       const geo = geometry(data, s.config.layout)
-      const remaining = Math.min(...p.horses.filter((h) => !h.done).map((h) => remainingSteps(geo, Math.max(h.step, 0), false)))
-      if (p.bag.includes('double') && !t.doubleArmed && remaining >= rules.useDoubleWhenRemainingAtLeast) {
+      // chỉ tính ngựa đã ra khỏi chuồng: ra chuồng chỉ xét mặt xúc xắc, nhân đôi không có tác dụng
+      const out = p.horses.filter((h) => !h.done && h.step >= 0)
+      const remaining = out.length > 0 ? Math.min(...out.map((h) => remainingSteps(geo, h.step, false))) : 0
+      if (p.bag.includes('double') && !t.doubleArmed && out.length > 0 && remaining >= rules.useDoubleWhenRemainingAtLeast) {
         return { kind: 'use', powerup: 'double' }
       }
       return { kind: 'roll' }

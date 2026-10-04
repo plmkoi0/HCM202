@@ -691,7 +691,8 @@ function usePowerup(data: GameData, s: GameState, p: PlayerState, id: PowerupId,
         difficulty: q.difficulty,
         order: answerOrder(s, q),
         eliminated: [],
-        fiftyFiftyUsed: cur.fiftyFiftyUsed,
+        // câu mới: 50:50 dùng lại được (mục 6 — dùng "khi đang trả lời", không gắn với câu cũ)
+        fiftyFiftyUsed: false,
         swapUsed: true,
       }
       t.guesses = {}

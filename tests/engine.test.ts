@@ -6,6 +6,7 @@ import { pickQuestion } from '../src/engine/questions'
 import { applyAction, createGame, currentPlayer, pendingAutoAction, resolveConfig, restartDeadline, shiftTime } from '../src/engine/reducer'
 import { buildGameData } from '../src/engine/data'
 import { clientView } from '../src/engine/view'
+import { botAction } from '../src/engine/bot'
 import type { GameState } from '../src/engine/types'
 import { rawGameData } from '../src/lib/gameData'
 import {
@@ -361,6 +362,26 @@ describe('power-up (mục 6)', () => {
     const t = act(rigFace(setBag(mk(one), P1, ['swap']), 1), { type: 'ROLL', actor: P1, now: T0 }, one)
     expect(applyAction(one, t, { type: 'USE_POWERUP', actor: P1, powerup: 'swap', now: T0 })).toEqual({ ok: false, error: 'NO_ALTERNATIVE' })
     expect(player(t).bag).toEqual(['swap'])
+  })
+
+  it('Đổi câu sau 50:50: câu mới dùng được 50:50 thứ hai (rà soát G6)', () => {
+    const d = dataWithQuestions([q('A', 1), q('B', 1), q('C', 1)])
+    const mk = forceFirst(createGame(d, { players: [{ id: P1, name: 'A', color: 0 }], seed: 5, now: T0 }))
+    let s = act(rigFace(setBag(mk, P1, ['fiftyFifty', 'swap']), 1), { type: 'ROLL', actor: P1, now: T0 }, d)
+    s = act(s, { type: 'USE_POWERUP', actor: P1, powerup: 'fiftyFifty', now: T0 }, d)
+    s = act(s, { type: 'USE_POWERUP', actor: P1, powerup: 'swap', now: T0 }, d)
+    expect(s.turn.question).toMatchObject({ fiftyFiftyUsed: false, eliminated: [] })
+    s = setBag(s, P1, ['fiftyFifty'])
+    s = act(s, { type: 'USE_POWERUP', actor: P1, powerup: 'fiftyFifty', now: T0 }, d)
+    expect(s.turn.question!.eliminated.length).toBe(2)
+  })
+
+  it('máy chơi cùng không dùng Xúc xắc ×2 khi mọi ngựa còn trong chuồng (rà soát G6)', () => {
+    const s = setBag(game(1, { startFromStable: true }), P1, ['double'])
+    expect(player(s).horses[0]!.step).toBe(-1)
+    expect(botAction(data, s, player(s))).toEqual({ kind: 'roll' })
+    const out = setStep(s, P1, 0)
+    expect(botAction(data, out, player(out))).toEqual({ kind: 'use', powerup: 'double' })
   })
 
   it('Khiên: tự dùng khi dính bẫy, chặn cả hai loại thẻ', () => {

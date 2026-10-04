@@ -29,7 +29,7 @@ async function handle(request: Request): Promise<Response> {
     if (!ctx) return errorResponse('SERVER_NOT_READY', 503)
     // Vercel tự đóng kết nối sau 300 s (Hobby) — client nối lại trước mốc đó
     try {
-      return await experimental_upgradeWebSocket((ws) => attachSocket(ws, ctx), { maxPayload: SOCKET_MAX_PAYLOAD })
+      return await experimental_upgradeWebSocket((ws) => attachSocket(ws, ctx, { ip: clientIp(request) }), { maxPayload: SOCKET_MAX_PAYLOAD })
     } catch (e) {
       // môi trường không hỗ trợ WebSocket → client tự dùng polling
       console.error('[api] không nâng cấp được WebSocket', e instanceof Error ? e.message : e)

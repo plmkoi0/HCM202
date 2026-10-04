@@ -11,8 +11,11 @@ export function clock(ms: number): string {
   return `${m}:${String(s).padStart(2, '0')}`
 }
 
-/** Cắt khoảng trắng, gộp khoảng trắng liền nhau; trả null nếu không hợp lệ (1–20 ký tự) */
+/** ký tự điều khiển, ký tự đổi chiều chữ và ký tự rộng 0 — bỏ khỏi biệt danh (dấu tiếng Việt giữ nguyên) */
+const INVISIBLE = /[\p{Cc}\u200B-\u200F\u202A-\u202E\u2060-\u2069\uFEFF]/gu
+
+/** Bỏ ký tự vô hình, gộp khoảng trắng; trả null nếu không hợp lệ (1–20 ký tự, có ít nhất một chữ / số / ký hiệu nhìn thấy được) */
 export function cleanNickname(raw: string): string | null {
-  const v = raw.replace(/\s+/g, ' ').trim()
-  return v.length >= 1 && [...v].length <= 20 ? v : null
+  const v = raw.replace(INVISIBLE, ' ').replace(/\s+/g, ' ').trim()
+  return v.length >= 1 && [...v].length <= 20 && /[\p{L}\p{N}\p{S}\p{P}]/u.test(v) ? v : null
 }

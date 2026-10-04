@@ -1,8 +1,10 @@
 // Server với kho giả lập trong bộ nhớ (mục 17 — Server): sức chứa, vào phòng, chủ phòng,
 // quyền và đồng thời, chống gửi trùng, hạn thời gian, state không lộ đáp án, nối lại, hết hạn.
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { currentPlayer } from '../src/engine/reducer'
 import { RoomError } from '../server/errors'
+import { createContext } from '../server/context'
+import { handleApi } from '../server/http'
 import { MemoryStore } from '../server/memoryStore'
 import { RoomService } from '../server/rooms'
 import type { ClientAction, Credentials, Room, StateView } from '../server/types'
@@ -460,6 +462,69 @@ describe('Server — hạn thời gian, trạng thái, nối lại, hết hạn'
 function currentPlayerId(g: NonNullable<StateView['game']>): string {
   return g.order[g.turnIndex]!
 }
+
+describe('Server — chống dò mã và đốt lệnh Redis (rà soát G6)', () => {
+  it('mã phòng không tồn tại: hành động lần sau không đọc kho (nhớ 10 s); IP gửi sai quá nhiều bị chặn trước khi đọc kho', async () => {
+    const ctx = setup()
+    const get = vi.spyOn(ctx.store, 'get')
+    const version = vi.spyOn(ctx.store, 'version')
+    const bad = { code: 'ABCDE', playerId: 'p1', token: 'x' }
+    expect(await errorOf(ctx.svc.act(bad, 'a1', { type: 'ROLL' }, 'ip1'))).toBe('ROOM_NOT_FOUND')
+    const reads = get.mock.calls.length
+    for (let i = 0; i < 20; i++) expect(await errorOf(ctx.svc.act(bad, `b${i}`, { type: 'ROLL' }, 'ip1'))).toBe('ROOM_NOT_FOUND')
+    expect(get.mock.calls.length).toBe(reads)
+    // nhiều mã khác nhau / phiên sai: sau 120 lần sai trong 1 phút thì RATE_LIMITED, không đọc kho
+    const host = await create(ctx.svc)
+    let limited = 0
+    for (let i = 0; i < 200; i++) {
+      const e = await errorOf(ctx.svc.state({ code: host.code, playerId: 'nobody', token: 'x' }, undefined, 'ip2'))
+      if (e === 'RATE_LIMITED') limited++
+    }
+    expect(limited).toBeGreaterThan(70)
+    const v = version.mock.calls.length
+    expect(await errorOf(ctx.svc.state({ code: host.code, playerId: host.playerId, token: host.token }, undefined, 'ip2'))).toBe('RATE_LIMITED')
+    expect(version.mock.calls.length).toBe(v)
+    // IP khác không bị ảnh hưởng; hết cửa sổ thì IP đó chơi lại được
+    expect(await errorOf(ctx.svc.state({ code: host.code, playerId: host.playerId, token: host.token }, undefined, 'ip3'))).toBeNull()
+    ctx.advance(61_000)
+    expect(await errorOf(ctx.svc.state({ code: host.code, playerId: host.playerId, token: host.token }, undefined, 'ip2'))).toBeNull()
+  })
+
+  it('mỗi người giữ tối đa 3 kết nối WebSocket trong phòng (bỏ kết nối cũ nhất)', async () => {
+    const ctx = setup()
+    const host = await create(ctx.svc)
+    let room!: Room
+    for (let i = 0; i < 6; i++) {
+      ctx.advance(10)
+      room = await ctx.svc.linkOpen(host, `L${i}`)
+    }
+    expect(Object.keys(room.members[0]!.links).sort()).toEqual(['L3', 'L4', 'L5'])
+  })
+
+  it('POST /actions với body null / mảng → 400 BAD_REQUEST (không phải 503 BUSY)', async () => {
+    const ctx = createContext(new MemoryStore())
+    const r = await ctx.service.create({ name: 'Chủ', color: 0, capacity: 2 }, 'ip')
+    for (const body of ['null', '[]', '42']) {
+      const res = await handleApi(ctx, new Request(`http://x/api/rooms/${r.room.code}/actions`, { method: 'POST', headers: { authorization: `Bearer ${r.playerId}.${r.token}` }, body }), 'ip')
+      expect(res.status, body).toBe(400)
+    }
+  })
+
+  it('/api/health: giữ kết quả 5 s; lỗi kho chỉ trả mã chung', async () => {
+    const ctx = setup()
+    const ping = vi.spyOn(ctx.store, 'ping')
+    await ctx.svc.health()
+    await ctx.svc.health()
+    expect(ping).toHaveBeenCalledTimes(1)
+    ctx.advance(6000)
+    ping.mockRejectedValueOnce(new Error('getaddrinfo ENOTFOUND bi-mat.upstash.io'))
+    const err = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const h = await ctx.svc.health()
+    err.mockRestore()
+    expect(h).toMatchObject({ ok: false, error: 'STORE_UNAVAILABLE' })
+    expect(JSON.stringify(h)).not.toContain('upstash')
+  })
+})
 
 // dùng để chắc chắn kiểu GameState của engine khớp ClientState (biên dịch)
 void currentPlayer

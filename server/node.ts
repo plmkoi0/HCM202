@@ -138,7 +138,7 @@ export function startLocalServer(o: LocalServerOptions): Promise<LocalServer> {
       return
     }
     const ctx = o.ctx
-    wss.handleUpgrade(req, socket, head, (ws) => attachSocket(ws, ctx, { maxLifeMs: maxLife || undefined }))
+    wss.handleUpgrade(req, socket, head, (ws) => attachSocket(ws, ctx, { maxLifeMs: maxLife || undefined, ip: remoteIp(req) }))
   })
 
   return new Promise((ok) => {

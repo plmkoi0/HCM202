@@ -360,7 +360,6 @@ export class RoomConnection {
     // mình đã rời / đang bị coi là mất kết nối → để máy khác gửi
     if (!humans.includes(me)) return
     const curIsHuman = humans.includes(current!)
-    if (!humans.includes(me)) return
     const rankIdx = current === me ? 0 : curIsHuman ? humans.indexOf(me) + 1 : humans.indexOf(me)
     const delay = 150 + Math.max(0, rankIdx) * 700 + this.tickTries * 1000
     const at = this.o.api.clock.toLocal(g.deadline) + delay

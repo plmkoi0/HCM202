@@ -27,6 +27,8 @@ export interface SocketContext {
 export interface SocketOptions {
   /** đóng kết nối sau chừng này (server cục bộ giả lập giới hạn 300 s của Vercel Hobby) */
   maxLifeMs?: number
+  /** địa chỉ IP của máy (giới hạn tần suất theo IP) */
+  ip?: string
 }
 
 export function attachSocket(ws: WebSocket, ctx: SocketContext, opts: SocketOptions = {}): void {
@@ -86,7 +88,7 @@ export function attachSocket(ws: WebSocket, ctx: SocketContext, opts: SocketOpti
       const linkId = newLinkId()
       const cred = { code: String(msg.code ?? ''), playerId: String(msg.playerId ?? ''), token: String(msg.token ?? '') }
       try {
-        const room = await ctx.service.linkOpen(cred, linkId)
+        const room = await ctx.service.linkOpen(cred, linkId, opts.ip)
         if (closed) {
           // máy đóng kết nối trong lúc đang mở → ghi nhận đóng luôn
           void ctx.service.linkClose(room.code, cred.playerId, linkId)
