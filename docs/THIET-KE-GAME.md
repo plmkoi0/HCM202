@@ -627,9 +627,13 @@ Reducer thuần, không phụ thuộc trình duyệt hay Node. Hành động:
 |---|---|---|
 | Online | `npm run build` (Vercel) | Giao diện + `api/`. Project Vercel riêng, nối repo `HCM202`, **Production Branch = `game`**, Root Directory = gốc nhánh. Không liệt kê công khai: meta robots, header `X-Robots-Tag: noindex`, `robots.txt` |
 | Offline | `npm run build:offline` | Một file (vite-plugin-singlefile). **Chỉ "Chơi trên một máy"** (gồm chơi một mình, máy chơi cùng); ẩn Tạo/Vào phòng; không có request mạng |
-| Gói nộp | `npm run package:offline` | `HCM202-Con-duong-tu-tuong.zip` kèm hướng dẫn chạy |
+| Gói nộp | `npm run package:offline` | Build offline rồi đóng `phat-hanh/HCM202-Con-duong-tu-tuong.zip` = `index.html` (một file) + `HUONG-DAN.txt`. Gói được **commit vào nhánh `game`** để nhóm tải từ GitHub; chạy lại mỗi khi đổi câu hỏi hoặc mã (`check:release` báo khi gói cũ). Zip ghi bằng zlib có sẵn của Node, thời gian cố định → cùng nội dung ra cùng file. Đổi tên gói khi nhóm chốt tên game (`scripts/lib/release.mjs`) |
+| Ảnh QR | `npm run qr` | `docs/phat-hanh/qr-game.png` (1024 px, mức sửa lỗi M) từ `siteUrl`, sinh bằng gói `qrcode` trên máy — không gọi mạng. Đặt lên slide |
+| Kiểm phát hành | `npm run check:release` | Lỗi nếu: còn câu hỏi thử hoặc một mức độ khó dưới 2 câu chính thức; `questions.json` không khớp `docs/CAU-HOI-GAME.md`; bản offline có mã mạng (build lại rồi gọi kiểm tra của `build:offline`); `siteUrl` trống / không phải `https://`; ảnh QR hoặc gói zip cũ |
 
 **Deployment Protection:** mặc định Standard Protection bảo vệ mọi URL **trừ tên miền chính** (production domain) — kể cả link bản deploy thử và URL riêng của từng bản deploy, nên mở những link đó phải đăng nhập Vercel. Khi thử trên điện thoại, dùng Shareable Links; khi chơi thật, luôn mở game và tạo mã QR, link mời từ **tên miền chính**; trước buổi học, kiểm tra tên miền chính mở được mà không cần đăng nhập.
+
+**Kết quả nhóm kiểm Deployment Protection (G6):** *chưa nhận* — chỉ thị G6 (04/10/2026) để trống ô kết quả. Claude Code đã mở tên miền chính và `/api/health` từ môi trường làm việc (không đăng nhập Vercel) và vào thẳng được (mục 15.4), nhưng đó không phải điện thoại / cửa sổ ẩn danh của nhóm. Kiểm ở dòng 11 của `docs/DIEN-TAP.md`.
 
 ### 15.7 Khác
 - **Âm thanh:** Web Audio API (oscillator), không file âm thanh — xúc xắc, bước đi, đúng/sai, power-up, bẫy, về đích; nút tắt/bật.
@@ -711,7 +715,7 @@ Reducer thuần, không phụ thuộc trình duyệt hay Node. Hành động:
 - **Câu hỏi thử:**
   - Mọi câu có id `TEST-` đều có `"test": true` và ngược lại.
   - Câu hỏi thử chỉ có ở độ khó còn dưới 2 câu chính thức (hiện tại: không có).
-  - Lệnh kiểm tra phát hành (`npm run check:release`, chạy ở G6) **báo lỗi nếu còn câu hỏi thử**.
+  - Lệnh kiểm tra phát hành (`npm run check:release`, có từ G6) **báo lỗi nếu còn câu hỏi thử** (và các ý ở mục 15.6). `tests/release.test.ts` kiểm gói zip, kiểm tra mã mạng, `HUONG-DAN.txt`, ảnh QR.
 - **Script nhập câu hỏi:**
   - Đọc đúng file mẫu.
   - Báo rõ dòng sai (thiếu cột, độ khó không thuộc 1–3, đáp án đúng không thuộc A–D, đáp án trùng, câu trùng).
@@ -779,7 +783,7 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 | **G4 — Chơi qua phòng** | Trang chủ, tạo phòng, vào bằng mã / QR / link, phòng chờ, chơi qua mạng, trạng thái kết nối, mất kết nối, kết thúc + chơi lại, tùy chọn Đoán cùng | ☑ Xong 03/10/2026 trên server cục bộ — `npm run e2e` gồm chạy thử 3 máy (`e2e:online`). Kiểm trên bản deploy thật làm ở đầu G5 (mục 15.4) |
 | **G5 — Hoàn thiện** | Ôn câu sai, thống kê, Kho câu hỏi, Luật chơi minh họa, Cài đặt, âm thanh, phím tắt, chỉnh giao diện, reduced motion | ☑ Xong 03/10/2026 — 178 test; `npm run e2e` (một máy 360 × 780 sáng + 1366 × 768 tối, có Luật chơi, Kho câu hỏi, Cài đặt, ôn tập, phím tắt; 3 máy cục bộ) đạt, axe không lỗi. Kiểm bản deploy thật (mục 15.4): sửa catch-all `/api/*`, `check:deploy --long` đạt, phòng 3 máy trên deploy đạt. Chi tiết tự chọn ở mục 20. Dừng chờ nhóm cho phép làm G6 |
 | **Đ1.6 — Đơn giản hóa câu hỏi** | Định dạng câu hỏi 8 cột (13.4) + script nhập; nhập 55 câu; câu hỏi trộn ngẫu nhiên các mức suốt ván (mục 5); bỏ trụ cột, giải thích, nguồn, xác minh, hiện vật khỏi engine, server, giao diện, dữ liệu; hiện đáp án đúng ngắn lại; Kho câu hỏi, thống kê, ôn câu sai theo định dạng mới; mô phỏng lại (mục 11); sửa test, e2e | ☑ Xong 04/10/2026 — 157 test; nhập 55 câu (18 / 19 / 18, không lỗi, không câu trùng); mô phỏng đạt mục tiêu (mục 11); `npm run e2e` đạt; deploy thật: `check:deploy` + phòng 3 máy đạt. Chi tiết tự chọn ở mục 20. Dừng chờ nhóm cho phép G6 |
-| **G6 — Phát hành** | Hướng dẫn tạo project Vercel (Production Branch = `game`) + gắn Redis (nhóm làm phần cần tài khoản), deploy preview, diễn tập, `npm run check:release` (không còn câu hỏi thử), bản offline, README, cập nhật `CLAUDE.md` | ☐ |
+| **G6 — Phát hành** | Hướng dẫn tạo project Vercel (Production Branch = `game`) + gắn Redis (nhóm làm phần cần tài khoản), deploy preview, diễn tập, `npm run check:release` (không còn câu hỏi thử), bản offline, README, cập nhật `CLAUDE.md` | ☑ phần Claude Code — chờ diễn tập (04/10/2026). Đã xong từ G4–G5: project Vercel (Production Branch = `game`), Upstash Redis, thử bản deploy (mục 15.4). G6: `check:release`, `package:offline` (gói zip trong `phat-hanh/`), ảnh QR `docs/phat-hanh/qr-game.png`, README, `docs/DIEN-TAP.md`, hiện trạng `docs/HUONG-DAN-VERCEL.md`, rà soát 6 sub agent (mục 20). Còn: nhóm diễn tập theo `docs/DIEN-TAP.md` và gửi kết quả |
 
 **Nhập bộ câu hỏi của nhóm** — làm bất cứ lúc nào nhóm gửi bản mới của `docs/CAU-HOI-GAME.md`, không chờ mốc:
 1. Chạy script nhập.
