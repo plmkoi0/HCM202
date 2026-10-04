@@ -29,9 +29,7 @@ export function Home({ canResume, onLocal, onResume, online, info }: { canResume
         <p className="text-sm font-semibold text-accent-text">{site.course}</p>
         <h1 className="font-serif text-4xl font-bold leading-tight">{site.title}</h1>
         <p className="text-ink-soft">{site.subtitle}</p>
-        <p className="mt-1 font-serif text-lg italic">“{site.message}”</p>
       </header>
-      <p className="text-center">{t.tagline}</p>
       <nav className="flex flex-col gap-3" aria-label={site.title}>
         {online?.onResumeRoom && (
           <button type="button" className="btn-primary btn-big" onClick={online.onResumeRoom}>

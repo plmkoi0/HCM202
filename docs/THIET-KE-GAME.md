@@ -304,7 +304,7 @@ Thêm một mục tiêu: không ai bị kẹt quá lâu vì bẫy hoặc trả l
 
 Một giao diện co giãn cho cả máy tính và điện thoại.
 
-1. **Trang chủ:** Tạo phòng · Vào phòng · Chơi trên một máy · Luật chơi · Kho câu hỏi · Cài đặt. Có "Vào lại phòng gần nhất" nếu còn phòng đang chơi. Khi kho còn câu hỏi thử, hiện dải báo "Đang dùng bộ câu hỏi thử" (với 55 câu hiện tại thì không còn).
+1. **Trang chủ:** Tạo phòng · Vào phòng · Chơi trên một máy · Luật chơi · Kho câu hỏi · Cài đặt. Có "Vào lại phòng gần nhất" nếu còn phòng đang chơi. Khi kho còn câu hỏi thử, hiện dải báo "Đang dùng bộ câu hỏi thử" (với 55 câu hiện tại thì không còn). Trang chủ không hiện dòng thông điệp và dòng giới thiệu "Muốn tiến phải hiểu bài…" (nhóm bỏ, 04/10/2026); thông điệp vẫn ở màn kết thúc.
 2. **Tạo phòng** và **Vào phòng:** như mục 9.
 3. **Phòng chờ:** như mục 9.
 4. **Bàn cờ:**
