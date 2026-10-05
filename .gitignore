@@ -2,6 +2,7 @@
 node_modules/
 dist/
 dist-offline/
+dist-e2e/
 *.zip
 *.tsbuildinfo
 

@@ -1,5 +1,5 @@
 // Trang chủ (mục 12.1). Bản offline chỉ có "Chơi trên một máy" (mục 15.6).
-import { BookOpen, DoorOpen, Dices, Play, PlusCircle, RotateCcw, Settings } from 'lucide-react'
+import { BookOpen, DoorOpen, Dices, Library, Play, PlusCircle, RotateCcw, Settings } from 'lucide-react'
 import { hasTestQuestions, questionList, site } from '../lib/gameData'
 import { fill } from '../lib/text'
 
@@ -12,6 +12,7 @@ export interface OnlineEntry {
 
 export interface InfoEntry {
   onRules: () => void
+  onBank: () => void
   onSettings: () => void
 }
 
@@ -54,10 +55,11 @@ export function Home({ canResume, onLocal, onResume, online, info }: { canResume
           <Dices size={22} aria-hidden="true" /> {t.localPlay}
         </button>
       </nav>
-      <nav className="grid grid-cols-2 gap-2" aria-label={t.more}>
+      <nav className="grid grid-cols-3 gap-2" aria-label={t.more}>
         {(
           [
             [t.rules, BookOpen, info.onRules],
+            [t.questionBank, Library, info.onBank],
             [t.settings, Settings, info.onSettings],
           ] as const
         ).map(([label, I, on]) => (
@@ -68,7 +70,7 @@ export function Home({ canResume, onLocal, onResume, online, info }: { canResume
         ))}
       </nav>
       {__OFFLINE__ && <p className="text-center text-sm text-ink-soft">{t.offlineNote}</p>}
-      <p className="text-center text-xs text-ink-soft">{fill(t.total, { n: questionList.length })}</p>
+      <p className="text-center text-xs text-ink-soft">{fill(site.bank.total, { n: questionList.length })}</p>
     </main>
   )
 }

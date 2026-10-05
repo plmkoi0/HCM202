@@ -5,7 +5,8 @@
 //  - questions.json không khớp docs/CAU-HOI-GAME.md (chưa chạy lại npm run import:questions);
 //  - bản offline còn mã mạng (build lại bản offline rồi gọi lại kiểm tra của build:offline);
 //  - site.json → siteUrl trống / không phải https://…;
-//  - ảnh QR (docs/phat-hanh/qr-game.png) hoặc gói offline (phat-hanh/*.zip) cũ so với hiện tại.
+//  - ảnh QR (docs/phat-hanh/qr-game.png) hoặc gói offline (phat-hanh/*.zip) cũ so với hiện tại;
+//  - src/data/bank-lock.json chưa có băm mã mở Kho câu hỏi, hoặc mã gốc lộ trong mã nguồn / bản build / gói zip.
 //
 // Dùng: npm run check:release   [--no-build: dùng dist-offline/ có sẵn]
 import { execSync } from 'node:child_process'
@@ -16,6 +17,7 @@ import { networkCodeIn, OFFLINE_FILE } from './check-offline.mjs'
 import { runImport, selectTestFill } from './import-questions.mjs'
 import { guideText, qrPng, QR_FILE, root, site, ZIP_FILE } from './lib/release.mjs'
 import { readZip } from './lib/zip.mjs'
+import { LOCK_FILE, lockReady, readLock, scanForLeaks } from './lib/bank-lock.mjs'
 
 const problems = []
 const ok = []
@@ -66,6 +68,15 @@ else if (offlineHtml) {
   const fresh = entries['index.html']?.equals(offlineHtml) && entries['HUONG-DAN.txt']?.equals(Buffer.from(guideText(), 'utf8'))
   if (!fresh) problems.push(`${rel(ZIP_FILE)} cũ so với mã / câu hỏi hiện tại — chạy npm run package:offline`)
   else ok.push(`${rel(ZIP_FILE)} khớp bản offline hiện tại`)
+}
+
+// 7. Khóa Kho câu hỏi: có băm, mã gốc không lộ
+const lock = readLock()
+if (!lockReady(lock)) problems.push(`${rel(LOCK_FILE)} chưa có băm mã mở Kho câu hỏi — chạy npm run set:bank-code -- <mã>`)
+else {
+  const leaks = await scanForLeaks(lock)
+  if (leaks.length) problems.push(`mã mở Kho câu hỏi bị lộ trong: ${leaks.join(', ')} — xóa mã gốc khỏi các file này rồi đổi mã (npm run set:bank-code)`)
+  else ok.push('Kho câu hỏi khóa bằng mã (chỉ có băm; mã gốc không có trong mã nguồn, bản build, gói zip)')
 }
 
 for (const m of ok) console.log(`✓ ${m}`)

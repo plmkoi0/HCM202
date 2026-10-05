@@ -39,7 +39,7 @@ export function guideText() {
     'BẢN NÀY CÓ GÌ',
     '- Chỉ có "Chơi trên một máy": 1–5 người thay phiên trên cùng thiết bị, có thể thêm máy chơi cùng.',
     '  1 người và 0 máy = thử thách cá nhân.',
-    '- Có Luật chơi, Cài đặt. Ván đang chơi được lưu trong trình duyệt của máy này.',
+    '- Có Luật chơi, Kho câu hỏi, Cài đặt. Ván đang chơi được lưu trong trình duyệt của máy này.',
     '- Không có "Chơi qua phòng" (tạo / vào phòng bằng mã, QR) — phần đó cần mạng.',
     '',
     'CHƠI QUA PHÒNG (CÓ MẠNG)',

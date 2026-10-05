@@ -99,6 +99,11 @@ const [host, g2, g3] = pages as [Page, Page, Page]
 // 1. chủ phòng tạo phòng 3 người
 await host.goto(server.url)
 await axe(host, 'trang chủ (bản online)')
+// Kho câu hỏi có ở trang chủ nhưng khóa bằng mã (mã thật không có ở đây — chỉ kiểm đang khóa)
+await host.getByRole('button', { name: 'Kho câu hỏi' }).click()
+check(await host.getByText('Nhóm sẽ cho mã sau khi chơi xong.').isVisible(), 'trang chủ có Kho câu hỏi, mở ra đang khóa bằng mã')
+check((await host.locator('[data-question]').count()) === 0, 'Kho câu hỏi khóa: không thấy câu hỏi')
+await host.getByRole('button', { name: /Về trang chủ/ }).first().click()
 await host.getByRole('button', { name: 'Tạo phòng' }).click()
 await host.getByLabel('Biệt danh').fill('Lan')
 await host.locator('label.seg', { hasText: /^3$/ }).first().click()
@@ -142,7 +147,7 @@ if (shots) await host.screenshot({ path: join(shots, 'lobby.png'), fullPage: tru
 await host.getByRole('button', { name: 'Bắt đầu' }).click()
 await Promise.all(pages.map((p) => p.locator('[data-room-status="playing"]').waitFor()))
 check(true, 'cả 3 máy vào ván')
-// không có Kho câu hỏi (đã bỏ); Menu chỉ có Luật chơi + Cài đặt
+// L5: không mở được Kho câu hỏi khi đang ở trong phòng; Menu chỉ có Luật chơi + Cài đặt
 check((await host.getByRole('button', { name: 'Kho câu hỏi' }).count()) === 0, 'trong phòng không có nút Kho câu hỏi')
 await host.getByRole('button', { name: 'Menu' }).click()
 check(await visible(host, host.getByRole('dialog').getByRole('tab', { name: 'Cài đặt' })), 'Menu trong ván có Luật chơi + Cài đặt')

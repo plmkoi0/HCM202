@@ -1,5 +1,5 @@
 // Ôn tập (mục 12.6, 12.8): trả lời lại từng câu, không ảnh hưởng ván; sau khi chọn chỉ hiện
-// Đúng / Sai và đáp án đúng (bản 1.6). Dùng cho "Làm lại câu sai" (màn kết thúc).
+// Đúng / Sai và đáp án đúng (bản 1.6). Dùng cho "Làm lại câu sai" (màn kết thúc) và Kho câu hỏi.
 import { Check, X } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { answerOrder } from '../engine/questions'

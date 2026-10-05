@@ -1,0 +1,5 @@
+{
+  "note": "Khóa Kho câu hỏi: SHA-256 của \"salt:mã\" (mã đã bỏ khoảng trắng hai đầu, chữ thường). Đổi mã: npm run set:bank-code -- <mã>. Không ghi mã gốc vào repo.",
+  "salt": "871a209113f342fe5fa4b36044f2fe9d",
+  "hash": "f1e37d419867a1d054baedfbb992108de4423156fbb6c618d59a3dcec40e5610"
+}

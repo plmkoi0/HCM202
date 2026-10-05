@@ -5,6 +5,7 @@ import { gameData } from './lib/gameData'
 import { Home } from './screens/Home'
 import { LocalGame } from './screens/LocalGame'
 import { LocalSetup } from './screens/LocalSetup'
+import { QuestionBank } from './screens/QuestionBank'
 import { Rules } from './screens/Rules'
 import { Settings } from './screens/Settings'
 import { codeFromPath, loadSession } from './online/session'
@@ -14,7 +15,7 @@ import type { OnlineStart } from './screens/online/OnlineApp'
 // nên không có mã mạng nào trong file offline (scripts/check-offline.mjs kiểm).
 const OnlineApp = __OFFLINE__ ? null : lazy(() => import('./screens/online/OnlineApp'))
 
-type Screen = { name: 'home' } | { name: 'setup' } | { name: 'rules' } | { name: 'settings' } | { name: 'game'; save: LocalSave; key: number } | { name: 'online'; start: OnlineStart; key: number }
+type Screen = { name: 'home' } | { name: 'setup' } | { name: 'rules' } | { name: 'bank' } | { name: 'settings' } | { name: 'game'; save: LocalSave; key: number } | { name: 'online'; start: OnlineStart; key: number }
 
 /** Mở bằng link /p/ABCDE: có phiên của phòng đó thì vào lại, không thì màn Vào phòng điền sẵn mã */
 function initialScreen(): Screen {
@@ -57,7 +58,7 @@ export default function App() {
           canResume={canResume}
           onLocal={() => setScreen({ name: 'setup' })}
           onResume={() => saved && setScreen({ name: 'game', save: resumeLocal(saved, Date.now(), loadLastSeen()), key: Date.now() })}
-          info={{ onRules: () => setScreen({ name: 'rules' }), onSettings: () => setScreen({ name: 'settings' }) }}
+          info={{ onRules: () => setScreen({ name: 'rules' }), onBank: () => setScreen({ name: 'bank' }), onSettings: () => setScreen({ name: 'settings' }) }}
           online={
             OnlineApp
               ? {
@@ -72,6 +73,9 @@ export default function App() {
       break
     case 'rules':
       view = <Rules onBack={home} />
+      break
+    case 'bank':
+      view = <QuestionBank onBack={home} />
       break
     case 'settings':
       view = <Settings onBack={home} />

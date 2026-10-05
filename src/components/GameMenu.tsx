@@ -1,5 +1,5 @@
 // Nút trên thanh đầu màn chơi: tắt/bật tiếng (M) và Menu (Luật chơi · Cài đặt · toàn màn hình).
-// Không có Kho câu hỏi (đã bỏ 05/10/2026 để tránh gian lận).
+// Kho câu hỏi không có ở đây — không mở được khi đang chơi (L5).
 import { Maximize, Menu, Volume2, VolumeX } from 'lucide-react'
 import { useState } from 'react'
 import { canFullscreen, toggleFullscreen, toggleSound } from '../game/useShortcuts'

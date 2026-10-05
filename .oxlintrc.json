@@ -34,7 +34,8 @@
       "warn",
       {
         "allow": [
-          "__OFFLINE__"
+          "__OFFLINE__",
+          "__BANK_LOCK_TEST__"
         ]
       }
     ]

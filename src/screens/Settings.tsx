@@ -2,6 +2,7 @@
 // xóa dữ liệu trên máy. Dùng ở màn riêng và trong cửa sổ Menu của ván.
 import { Volume2 } from 'lucide-react'
 import { useState } from 'react'
+import { clearReview } from '../game/review'
 import { canFullscreen, toggleFullscreen } from '../game/useShortcuts'
 import { clearSave, RECORDS_KEY, SETUP_KEY, SEEN_KEY } from '../game/local'
 import { clearProfile, clearSession } from '../online/session'
@@ -28,11 +29,11 @@ function Choice<K extends keyof S>({ name, legend, value, options, hint }: { nam
   )
 }
 
-/** Xóa dữ liệu trên máy (giữ cài đặt): ván lưu, thiết lập, kỷ lục, biệt danh, phiên phòng */
+/** Xóa dữ liệu trên máy (giữ cài đặt): ván lưu, thiết lập, kỷ lục, Sổ ôn tập, biệt danh, phiên phòng */
 export function clearLocalData(): void {
   clearSave()
-  // review.v1: Sổ ôn tập cũ (đã bỏ cùng Kho câu hỏi) — vẫn xóa nếu máy còn giữ
-  for (const k of [SEEN_KEY, SETUP_KEY, RECORDS_KEY, 'review.v1']) remove(k)
+  for (const k of [SEEN_KEY, SETUP_KEY, RECORDS_KEY]) remove(k)
+  clearReview()
   clearSession()
   clearProfile()
 }

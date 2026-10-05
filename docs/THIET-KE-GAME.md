@@ -111,14 +111,14 @@ Tên hiển thị, màu và biểu tượng từng loại ô nằm trong `board.
 
 | Ô đích của bước đi | Xử lý |
 |---|---|
-| **Câu hỏi** | Hiện một câu rút ngẫu nhiên từ kho (bên dưới), đồng hồ 20 s. **Đúng → nhảy lên. Sai hoặc hết giờ → đứng yên.** Sau khi chốt chỉ hiện Đúng / Sai và đáp án đúng |
+| **Câu hỏi** | Hiện một câu rút ngẫu nhiên từ kho (bên dưới), đồng hồ 20 s. **Đúng → nhảy lên. Sai hoặc hết giờ → đứng yên.** Sau khi chốt chỉ hiện Đúng / Sai và đáp án đúng: **3 giây khi đúng, 5 giây khi sai hoặc hết giờ** (05/10/2026) |
 | **Power-up** | Nhảy lên, nhận một power-up (mục 6) |
 | **Bẫy** | Nhảy lên, rút một thẻ bẫy (mục 7), trừ khi có Khiên |
 | **Cổng (ô nghỉ)** | Nhảy lên, không hỏi |
 | **Đích** | Câu "về đích" (rút ngẫu nhiên như mọi ô câu hỏi). Đúng → về đích; sai → đứng yên |
 
 4. **Vượt quá Đích:** mặc định vẫn tính là tới Đích (vẫn phải trả lời câu về đích).
-   - Tùy chọn **"Phải tung đúng số"** (luật gốc): không đúng số thì đứng yên.
+   - Tùy chọn **"Phải tung đúng số"** (luật gốc): không đúng số thì đứng yên; cửa sổ kết quả ghi rõ "Cần tung đúng số để về Đích" (05/10/2026).
 5. **Ra 6:** nếu đã di chuyển được thì tung thêm một lần; tối đa một lần mỗi lượt. Khi dùng Xúc xắc ×2, xét mặt xúc xắc **trước** khi nhân đôi.
 6. **Hiệu ứng không dây chuyền:** khi power-up hoặc bẫy đẩy ngựa tới ô khác, ô mới không hỏi và không kích hoạt thêm hiệu ứng.
    - Hiệu ứng đẩy **không bao giờ đưa ngựa vào Đích**: Tiến 3 ô dừng tối đa ở ô cuối đường về đích; vào Đích luôn phải trả lời câu về đích.
@@ -133,7 +133,7 @@ Các tùy chọn luật và giá trị mặc định nằm trong `rules.json`; c
 - Mỗi lần hỏi rút ngẫu nhiên một câu từ **toàn bộ kho**, không xét vị trí trên bàn cờ, không xét độ khó.
 - Kho có ba mức gần bằng nhau (18 / 19 / 18) nên các mức xuất hiện xen kẽ, đều nhau suốt ván.
 - Không lặp câu cho tới khi dùng hết kho (mục 8).
-- Độ khó chỉ còn dùng để: hiện nhãn "Độ khó n" trong cửa sổ câu hỏi và tính xác suất trả lời đúng của máy chơi cùng (`bots.json`).
+- Độ khó chỉ còn dùng để: hiện nhãn "Độ khó n" trong cửa sổ câu hỏi, lọc trong Kho câu hỏi, và tính xác suất trả lời đúng của máy chơi cùng (`bots.json`).
 
 ## 6. Power-up (`powerups.json`)
 
@@ -197,6 +197,7 @@ Dừng ở ô bẫy → rút ngẫu nhiên một thẻ bẫy. Chỉ có **hai lo
 
 **Máy chơi cùng (bot):**
 - Chủ phòng thêm vào chỗ trống; bot tính vào sức chứa (tổng ≤ 5).
+- Bot "suy nghĩ" 4–6 giây trước khi trả lời (câu càng dài càng lâu); các bước khác ~1,5 s (05/10/2026).
 - Bot trả lời đúng theo xác suất theo độ khó (gợi ý 70% / 50% / 35%) và dùng power-up theo luật đơn giản. Tham số trong `bots.json`.
 
 **Chơi một mình:**
@@ -205,7 +206,8 @@ Dừng ở ô bẫy → rút ngẫu nhiên một thẻ bẫy. Chỉ có **hai lo
 - **Kỷ lục cá nhân** (ít lượt nhất) lưu trên máy, **chỉ lưu khi về đích**; hết giờ thì báo số ô còn lại.
 
 **Mất kết nối:**
-- Đến lượt người đang mất kết nối → sau 20 s tự tung, câu hỏi tính là sai (đứng yên), không dùng power-up.
+- Đến lượt người đang mất kết nối → sau **8 s** tự tung (05/10/2026; trước là 20 s), câu hỏi tính là sai (đứng yên), không dùng power-up: **Khiên không tự chặn bẫy, power-up dùng ngay (Tiến 3 ô, Thêm lượt) không có tác dụng** (05/10/2026); túi đầy thì bỏ món mới.
+- (Server coi một người là mất kết nối khi vắng 20 s — mục 15.4; 8 s tính từ lúc tới lượt người đã bị coi là mất kết nối.)
 - Quay lại thì chơi tiếp ở vị trí cũ.
 
 **Ván đã bắt đầu:** không nhận người mới; người cũ vẫn nối lại được.
@@ -304,7 +306,7 @@ Thêm một mục tiêu: không ai bị kẹt quá lâu vì bẫy hoặc trả l
 
 Một giao diện co giãn cho cả máy tính và điện thoại.
 
-1. **Trang chủ:** Tạo phòng · Vào phòng · Chơi trên một máy · Luật chơi · Cài đặt (Kho câu hỏi đã bỏ, 05/10/2026 — mục 20). Có "Vào lại phòng gần nhất" nếu còn phòng đang chơi. Khi kho còn câu hỏi thử, hiện dải báo "Đang dùng bộ câu hỏi thử" (với 55 câu hiện tại thì không còn). Trang chủ không hiện dòng thông điệp và dòng giới thiệu "Muốn tiến phải hiểu bài…" (nhóm bỏ, 04/10/2026); thông điệp vẫn ở màn kết thúc.
+1. **Trang chủ:** Tạo phòng · Vào phòng · Chơi trên một máy · Luật chơi · Kho câu hỏi (khóa bằng mã — mục 12.8) · Cài đặt. Có "Vào lại phòng gần nhất" nếu còn phòng đang chơi. Khi kho còn câu hỏi thử, hiện dải báo "Đang dùng bộ câu hỏi thử" (với 55 câu hiện tại thì không còn). Trang chủ không hiện dòng thông điệp và dòng giới thiệu "Muốn tiến phải hiểu bài…" (nhóm bỏ, 04/10/2026); thông điệp vẫn ở màn kết thúc.
 2. **Tạo phòng** và **Vào phòng:** như mục 9.
 3. **Phòng chờ:** như mục 9.
 4. **Bàn cờ:**
@@ -316,7 +318,7 @@ Một giao diện co giãn cho cả máy tính và điện thoại.
    - **Nhật ký** vài sự kiện gần nhất (vd. "Lan trả lời đúng, tiến 4 ô", "Minh dính bẫy, lùi 2 ô").
    - **Trạng thái kết nối:** "Trực tiếp" / "Đang dùng chế độ dự phòng" / "Mất kết nối — đang thử lại".
 5. **Cửa sổ:**
-   - Câu hỏi: nhãn "Độ khó 1/2/3", đồng hồ, nút 50:50 / Đổi câu nếu có; sau khi chốt chỉ hiện Đúng / Sai và đáp án đúng.
+   - Câu hỏi: chip màu + tên người đang trả lời ("Câu hỏi của Minh"), nhãn "Độ khó 1/2/3", đồng hồ, nút 50:50 / Đổi câu nếu có; sau khi chốt chỉ hiện Đúng / Sai (kèm tên, vd. "Máy Sen: Đúng!") và đáp án đúng — 3 s khi đúng, 5 s khi sai (05/10/2026).
    - Power-up · Thẻ bẫy · Câu về đích.
    - Trên điện thoại hiện dạng tấm trượt từ dưới lên hoặc toàn màn hình, nút đáp án to.
    - Nếu phòng bật Đoán cùng: người đang chờ thấy nút chọn đáp án để tự kiểm tra.
@@ -330,8 +332,14 @@ Một giao diện co giãn cho cả máy tính và điện thoại.
 7. **Chơi trên một máy:**
    - Nhập 1–5 người + số máy chơi cùng, thay phiên trên cùng thiết bị.
    - Lưu ván trên máy; tải lại → "Tiếp tục ván".
-   - Có nút hoàn tác thao tác vừa rồi.
-8. ~~**Kho câu hỏi:** "Tổng số câu hỏi: N", lọc theo độ khó, đáp án ẩn mặc định — có nút hiện; ẩn khi đang ở trong phòng chơi.~~ **Đã bỏ (05/10/2026, nhóm quyết định — tránh gian lận):** không còn màn xem toàn bộ câu hỏi và đáp án, kể cả Sổ ôn tập (lọc "Câu từng trả lời sai"). Trang chủ vẫn ghi "Tổng số câu hỏi: N". Sau khi ván kết thúc vẫn xem lại và làm lại được các câu mình trả lời sai trong ván đó (mục 9).
+   - Có nút hoàn tác thao tác vừa rồi. **Chỉ hoàn tác được thao tác chọn** (vd. bật Xúc xắc ×2 trước khi tung, chọn món bỏ khi túi đầy, chọn ngựa tới ô nghỉ): lịch sử hoàn tác bị xóa khi đã tung, đã hiện câu hỏi, đã dùng 50:50 / Đổi câu, đã nhận power-up hoặc rút thẻ bẫy (05/10/2026, phương án (a) mục 20).
+8. **Kho câu hỏi — khóa bằng mã** (05/10/2026: sáng bỏ hẳn để tránh gian lận, cùng ngày đưa trở lại có khóa mã — mục 20):
+   - Bấm "Kho câu hỏi" ở trang chủ → ô nhập mã kèm dòng "Nhóm sẽ cho mã sau khi chơi xong". Chưa đúng mã thì không thấy câu hỏi, đáp án hay nút "Ôn tập N câu". Khóa cả bản online lẫn bản offline.
+   - Mã do nhóm đặt; nhập không phân biệt hoa thường, bỏ khoảng trắng hai đầu. Repo chỉ lưu salt + SHA-256 (`src/data/bank-lock.json`), không lưu mã gốc; đổi mã bằng `npm run set:bank-code -- <mã>`.
+   - Đúng mã → Kho mở, máy nhớ đã mở theo băm hiện tại (đổi mã thì mọi máy khóa lại). Sai → "Mã chưa đúng"; sai 5 lần → chờ 30 giây.
+   - Mở rồi: "Tổng số câu hỏi: N", lọc theo độ khó, **Sổ ôn tập** ("Câu từng trả lời sai trên máy này" — khôi phục, cũng sau mã), đáp án ẩn mặc định (nút hiện), ôn tập các câu đang lọc.
+   - Vẫn ẩn nút Kho khi đang ở trong phòng chơi (L5).
+   - **Không khóa:** "Ôn lại câu trả lời sai" và "Làm lại các câu sai" ở màn kết thúc ván; Luật chơi; Cài đặt; dòng "Tổng số câu hỏi: N" trên trang chủ.
 9. **Luật chơi:** có hình minh họa các loại ô, power-up và thẻ bẫy.
 10. **Chung:** hộp xác nhận thoát phòng, toast, cảnh báo khi đóng tab giữa ván.
 
@@ -479,12 +487,13 @@ Reducer thuần, không phụ thuộc trình duyệt hay Node. Hành động:
   5. Phát tin qua Redis pub/sub tới mọi instance giữ kết nối của phòng.
 - **Sức chứa phòng** kiểm tra nguyên tử: nhiều người vào cùng lúc không vượt giới hạn; không trùng màu.
 - **Hạn thời gian:** không chạy timer trên server.
-  - State lưu `deadline` theo giờ server: tung, trả lời, bỏ qua người mất kết nối, bước của bot ~1,5 s.
+  - State lưu `deadline` theo giờ server: tung, trả lời, bỏ qua người mất kết nối (8 s), bước của bot ~1,5 s, bot trả lời 4–6 s.
   - Client đo độ lệch đồng hồ và đếm ngược.
   - Quá hạn thì **bất kỳ máy nào trong phòng** gửi TIMEOUT / AUTO_ROLL / SKIP_TURN / BOT_STEP; server chỉ nhận khi `now ≥ deadline`.
 - **Nối lại:** `playerId` + `playerToken` lưu trên máy (localStorage, bọc try/catch). Tải lại trang → nhận snapshot đầy đủ, về đúng phòng.
 - **Không lộ đáp án:** state gửi xuống máy người chơi không chứa đáp án đúng trước khi chốt câu.
-  - Bản online vẫn đóng gói `questions.json` (cho Chơi trên một máy) nên đáp án đọc được trong mã trang — **chấp nhận vì đây là game ôn tập (đã chốt)**. Kho câu hỏi đã bỏ (05/10/2026): không còn màn xem đáp án trong giao diện; người cố tình mở mã trang vẫn đọc được.
+  - Bản online vẫn đóng gói `questions.json` (cho Chơi trên một máy và Kho câu hỏi) nên đáp án đọc được trong mã trang — **chấp nhận vì đây là game ôn tập (đã chốt)**. Khi đang ở trong phòng chơi thì ẩn nút Kho câu hỏi.
+  - **Kho câu hỏi khóa bằng mã (05/10/2026, mục 12.8).** Giới hạn: đáp án vẫn nằm trong mã trang (cần cho chơi trên một máy và chơi offline), nên người biết dùng công cụ nhà phát triển vẫn đọc được; mã khóa chỉ chặn việc tra cứu thông thường.
 - **Kiểm tra đầu vào:** biệt danh 1–20 ký tự, cắt khoảng trắng; giới hạn tần suất tạo phòng và gửi hành động; lỗi trả về thông báo tiếng Việt.
 - `GET /api/health` để kiểm tra trước buổi chơi.
 - **Tách lớp:** `server/` (test được không cần Vercel) và `api/` (lớp mỏng nối Vercel Functions).
@@ -629,7 +638,8 @@ Reducer thuần, không phụ thuộc trình duyệt hay Node. Hành động:
 | Offline | `npm run build:offline` | Một file (vite-plugin-singlefile). **Chỉ "Chơi trên một máy"** (gồm chơi một mình, máy chơi cùng); ẩn Tạo/Vào phòng; không có request mạng |
 | Gói nộp | `npm run package:offline` | Build offline rồi đóng `phat-hanh/HCM202-Con-duong-tu-tuong.zip` = `index.html` (một file) + `HUONG-DAN.txt`. Gói được **commit vào nhánh `game`** để nhóm tải từ GitHub; chạy lại mỗi khi đổi câu hỏi hoặc mã (`check:release` báo khi gói cũ). Zip ghi bằng zlib có sẵn của Node, thời gian cố định → cùng nội dung ra cùng file. Đổi tên gói khi nhóm chốt tên game (`scripts/lib/release.mjs`) |
 | Ảnh QR | `npm run qr` | `docs/phat-hanh/qr-game.png` (1024 px, mức sửa lỗi M) từ `siteUrl`, sinh bằng gói `qrcode` trên máy — không gọi mạng. Đặt lên slide |
-| Kiểm phát hành | `npm run check:release` | Lỗi nếu: còn câu hỏi thử hoặc một mức độ khó dưới 2 câu chính thức; `questions.json` không khớp `docs/CAU-HOI-GAME.md`; bản offline có mã mạng (build lại rồi gọi kiểm tra của `build:offline`); `siteUrl` trống / không phải `https://`; ảnh QR hoặc gói zip cũ |
+| Kiểm phát hành | `npm run check:release` | Lỗi nếu: còn câu hỏi thử hoặc một mức độ khó dưới 2 câu chính thức; `questions.json` không khớp `docs/CAU-HOI-GAME.md`; bản offline có mã mạng (build lại rồi gọi kiểm tra của `build:offline`); `siteUrl` trống / không phải `https://`; ảnh QR hoặc gói zip cũ; `bank-lock.json` chưa có băm mã mở Kho, hoặc mã gốc lộ trong mã nguồn / `dist/` / `dist-offline/` / gói zip (dò từng từ, băm với salt rồi so) |
+| Đổi mã Kho | `npm run set:bank-code -- <mã>` | Ghi salt mới + SHA-256 vào `src/data/bank-lock.json` (không ghi mã gốc); sau đó `npm run package:offline` để gói offline mang khóa mới |
 
 **Deployment Protection:** mặc định Standard Protection bảo vệ mọi URL **trừ tên miền chính** (production domain) — kể cả link bản deploy thử và URL riêng của từng bản deploy, nên mở những link đó phải đăng nhập Vercel. Khi thử trên điện thoại, dùng Shareable Links; khi chơi thật, luôn mở game và tạo mã QR, link mời từ **tên miền chính**; trước buổi học, kiểm tra tên miền chính mở được mà không cần đăng nhập.
 
@@ -664,10 +674,12 @@ Reducer thuần, không phụ thuộc trình duyệt hay Node. Hành động:
 
 **Máy tính (1366–1920px):**
 - Bàn cờ ở giữa; bảng người chơi và nhật ký bên cạnh.
+- **Màn hình ≥ 1600 px** (máy chiếu, màn lớn): phóng to bàn cờ, chữ, cửa sổ câu hỏi theo bề rộng màn hình (05/10/2026).
 
 **Khác:**
 - **Trình duyệt nhúng Zalo/Messenger:** chạy được trong đó; tránh API không phổ biến; có phương án thay cho Web Share, rung, toàn màn hình.
 - **Phong cách:** bản sắc riêng của game — bàn cờ cá ngựa vui mắt, màu tươi, đọc tốt trên điện thoại. Có thể dùng tông đỏ son – vàng đồng của bảo tàng số làm điểm nhấn, không bắt buộc.
+- **Biểu tượng ô:** ô bẫy dùng biểu tượng cảnh báo (tam giác chấm than), không dùng tia sét (dễ hiểu nhầm là tăng tốc); chú thích các loại ô hiện thẳng, mỗi loại một dòng, không gấp lại (05/10/2026).
 - **Tiếp cận:** màu không phải tín hiệu duy nhất — mỗi loại ô có biểu tượng + nhãn; mỗi ngựa có cả màu lẫn ký hiệu; chữ đạt tương phản WCAG AA.
 - **Phím tắt trên máy tính:** Space = tung / tiếp tục · 1–4 hoặc A–D = chọn đáp án · Q/W = dùng power-up 1/2 · M = tắt tiếng · F = toàn màn hình.
 - **Hiệu ứng:** xúc xắc lăn, ngựa đi từng ô, ô đích nhấp nháy, ngựa trượt lùi khi dính bẫy, pháo giấy (canvas tự làm) khi về đích. Tắt khi `prefers-reduced-motion`.
@@ -702,7 +714,9 @@ Reducer thuần, không phụ thuộc trình duyệt hay Node. Hành động:
 - **Kết thúc:** người đầu tiên về đích thắng; chơi tiếp để xếp hạng; các mốc 5 / 7 / 10 / 15 phút / không giới hạn, mặc định 10 phút; hết giờ xếp theo khoảng cách; hòa.
 - **Câu hỏi:** không lặp cho tới khi hết toàn bộ kho; Đổi câu lấy một câu ngẫu nhiên khác chưa hỏi.
 - **Tự động:** tự tung; tự xử lý khi mất kết nối; thử thách cá nhân đếm lượt, kỷ lục chỉ lưu khi về đích.
-- **Khác:** hoàn tác (chơi trên một máy); cùng seed → cùng kết quả (cả thẻ bẫy và bot); Kho câu hỏi ẩn khi đang ở trong phòng *(đã bỏ hẳn Kho câu hỏi, 05/10/2026)*.
+- **Khác:** hoàn tác (chơi trên một máy) chỉ cho thao tác chọn — tung / hiện câu / 50:50 / Đổi câu / nhận power-up / rút thẻ bẫy xóa lịch sử; cùng seed → cùng kết quả (cả thẻ bẫy và bot); Kho câu hỏi ẩn khi đang ở trong phòng.
+- **Mất kết nối (05/10/2026):** tự tung sau 8 s; Khiên không tự chặn, power-up dùng ngay không có tác dụng; hiện đáp án 3 s khi đúng / 5 s khi sai; bot trả lời sau 4–6 s; "Phải tung đúng số" có lý do riêng khi không đi được.
+- **Khóa Kho câu hỏi (05/10/2026):** mã đúng mở được kể cả khác hoa thường / khoảng trắng hai đầu; mã sai không mở; sai 5 lần chờ 30 s; đổi băm thì khóa lại; SHA-256 thuần JS khớp `node:crypto`; mã gốc không có trong mã nguồn, `dist/`, `dist-offline/`, gói zip. e2e: trang chủ có Kho, Kho khóa khi mở lần đầu, mở bằng **mã thử** riêng (biến `BANK_TEST_CODE`, chỉ khi build để chạy thử).
 
 ### Dữ liệu
 - id không trùng; 2–4 đáp án, không trùng nhau; `correct` hợp lệ.
@@ -770,7 +784,7 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
   - Kiểm: mọi ván kết thúc; mọi máy hội tụ đúng trạng thái trong kho; không lỗi server.
 
 ### Lệnh kiểm tra cuối
-`npm run test && npm run build && npm run build:offline && npm run lint` ở gốc nhánh `game`, cộng `npm run e2e` (từ G2) và `npm run sim:load` khi đổi server (từ G3).
+`npm run test && npm run build && npm run build:offline && npm run lint && npm run check:release` ở gốc nhánh `game`, cộng `npm run e2e` (từ G2) và `npm run sim:load` khi đổi server (từ G3).
 
 ## 18. Lộ trình
 
@@ -815,7 +829,9 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 ## 20. Việc còn mở
 
 **Thay đổi sau G6 (nhóm quyết định):**
-- [x] **05/10/2026 — Bỏ Kho câu hỏi** để tránh gian lận: gỡ màn Kho câu hỏi (xem toàn bộ câu và đáp án), nút trên trang chủ và Sổ ôn tập (`review.v1`, chỉ dùng trong Kho câu hỏi). Giữ: "Tổng số câu hỏi: N" trên trang chủ; màn kết thúc vẫn ôn lại / làm lại câu sai của chính ván đó. Đáp án vẫn nằm trong mã trang (L5) — chỉ chặn đường xem dễ trong giao diện.
+- [x] **05/10/2026 (sáng) — Bỏ Kho câu hỏi** để tránh gian lận (commit `d53b016`): gỡ màn Kho câu hỏi, nút trên trang chủ và Sổ ôn tập.
+- [x] **05/10/2026 — Đưa Kho câu hỏi trở lại, khóa bằng mã** (nhóm đổi quyết định cùng ngày): Kho và Sổ ôn tập khôi phục, chỉ mở khi nhập đúng mã nhóm đưa sau khi chơi (mục 12.8). Repo chỉ có salt + SHA-256 (`src/data/bank-lock.json`); `npm run set:bank-code -- <mã>` đổi mã. **Giới hạn (L5):** đáp án vẫn nằm trong mã trang (cần cho chơi trên một máy / offline) — người biết dùng công cụ nhà phát triển vẫn đọc được; khóa chỉ chặn tra cứu thông thường.
+- [x] **05/10/2026 — Nhóm trả lời các câu hỏi rà soát G6:** hoàn tác phương án (a) (chỉ hoàn tác thao tác chọn); người mất kết nối: Khiên và power-up không tự có tác dụng (đúng mục 9); thêm dòng "Cần tung đúng số để về Đích"; màn hình ≥ 1600 px phóng to bàn cờ, chữ, cửa sổ câu hỏi; hiện đáp án 3 s khi đúng / 5 s khi sai; tự tung cho người mất kết nối sau 8 s (thay 20 s); Sổ ôn tập khôi phục sau mã; giữ tên tạm. Diễn tập: chưa có kết quả mới sau lần 1.
 - [x] **04/10/2026 — Trang chủ** bỏ dòng thông điệp và dòng giới thiệu "Muốn tiến phải hiểu bài…" (thông điệp vẫn ở màn kết thúc).
 
 **Thay đổi bản 1.6 (04/10/2026) — nhóm quyết định, ưu tiên hơn mọi ghi chép cũ trong mục này:**
@@ -860,7 +876,7 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 | L2 | 50:50 loại tới khi còn 2 đáp án; câu 2 đáp án không dùng được, không mất power-up | 6 |
 | L3 | Luật ra 6 xét mặt xúc xắc trước khi nhân đôi | 5, 6 |
 | L4 | Kỷ lục cá nhân chỉ lưu khi về đích; hết giờ báo số ô còn lại | 9 |
-| L5 | Chấp nhận đáp án nằm trong mã trang; ẩn Kho câu hỏi khi đang ở trong phòng *(Kho câu hỏi đã bỏ, 05/10/2026)* | 12, 15.4 |
+| L5 | Chấp nhận đáp án nằm trong mã trang; ẩn Kho câu hỏi khi đang ở trong phòng *(05/10/2026: Kho khóa bằng mã — mục 12.8)* | 12, 15.4 |
 | T1 | Thêm mốc 7 phút; trên lớp chọn 5 hoặc 7 phút; hết giờ tôn vinh người dẫn đầu; mô phỏng ở 20 s và 25 s/lượt | 10, 11 |
 | N1 | Nội dung thẻ hiện vật trong game (không ảnh, không "Ngày nay", không nguồn APA) *(đã bỏ ở 1.6)* | 12 |
 | N2 | Mỗi trụ cột ≥ 10 / 6 / 4 câu theo độ khó 1 / 2 / 3; trụ cột trong sạch được ít hơn; quy tắc lấy câu khi thiếu *(đã bỏ ở 1.6)* | 8, 13.4 |
@@ -986,10 +1002,10 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
   - Chơi qua phòng: chỉ ôn câu **mình** trả lời sai ("Câu bạn trả lời sai"); chơi trên một máy: câu của từng người (không phải máy).
   - Mỗi câu sai có đáp án đúng, giải thích, nguồn, chip "Hiện vật liên quan" *(đã đổi ở 1.6: câu hỏi + đáp án đúng + độ khó)*.
   - Nút "Làm lại các câu sai": trả lời lại từng câu (đáp án trộn lại), hiện giải thích *(đã đổi ở 1.6: hiện đáp án đúng)*, cuối cùng báo "đúng x/y". Không ảnh hưởng ván.
-  - **Sổ ôn tập trên máy:** câu sai ở các ván đã kết thúc được lưu id vào localStorage (`review.v1`, tối đa 300, mới nhất trước). Kho câu hỏi lọc được "Câu từng trả lời sai trên máy này"; ôn tập trả lời đúng thì câu đó được bỏ khỏi sổ. Không gửi đi đâu. *(đã bỏ 05/10/2026 cùng Kho câu hỏi)*
+  - **Sổ ôn tập trên máy:** câu sai ở các ván đã kết thúc được lưu id vào localStorage (`review.v1`, tối đa 300, mới nhất trước). Kho câu hỏi lọc được "Câu từng trả lời sai trên máy này"; ôn tập trả lời đúng thì câu đó được bỏ khỏi sổ. Không gửi đi đâu. *(05/10/2026: bỏ rồi khôi phục cùng ngày, nay sau mã Kho câu hỏi)*
 - **Thống kê (màn kết thúc):** thêm cột "Tỉ lệ đúng" và mục "Theo trụ cột" (đúng / đã trả lời theo trụ cột của câu). Engine thêm `stats.byPillar` (tùy chọn — ván lưu cũ không có thì hiện "chưa trả lời câu nào") *(mục "Theo trụ cột" và `stats.byPillar` đã bỏ ở 1.6)*. Bảng thống kê trên điện thoại cuộn ngang được (vùng cuộn nhận tiêu điểm bàn phím).
 - **Chia sẻ game** ở màn kết thúc: Web Share nếu có, không thì sao chép `siteUrl` (trình duyệt nhúng Zalo/Messenger).
-- **Kho câu hỏi** *(đã đổi ở 1.6: bỏ lọc trụ cột, `[Chờ xác minh]`, nguồn, chip hiện vật, giải thích)*: lọc theo trụ cột, độ khó, Sổ ôn tập, chỉ câu hỏi thử; tìm chữ (không phân biệt dấu); mỗi câu có id, trụ cột, độ khó, loại, nhãn `[Câu hỏi thử]` / `[Chờ xác minh]`, nguồn, chip hiện vật; đáp án + giải thích ẩn mặc định, nút "Hiện đáp án" từng câu và "Hiện mọi đáp án"; "Ôn tập N câu đang lọc". Chỉ mở từ trang chủ; Menu trong ván không có Kho câu hỏi (L5; `e2e:online` kiểm). *(đã bỏ 05/10/2026 cùng Kho câu hỏi)*
+- **Kho câu hỏi** *(đã đổi ở 1.6: bỏ lọc trụ cột, `[Chờ xác minh]`, nguồn, chip hiện vật, giải thích)*: lọc theo trụ cột, độ khó, Sổ ôn tập, chỉ câu hỏi thử; tìm chữ (không phân biệt dấu); mỗi câu có id, trụ cột, độ khó, loại, nhãn `[Câu hỏi thử]` / `[Chờ xác minh]`, nguồn, chip hiện vật; đáp án + giải thích ẩn mặc định, nút "Hiện đáp án" từng câu và "Hiện mọi đáp án"; "Ôn tập N câu đang lọc". Chỉ mở từ trang chủ; Menu trong ván không có Kho câu hỏi (L5; `e2e:online` kiểm). *(05/10/2026: bỏ rồi khôi phục cùng ngày, nay sau mã Kho câu hỏi)*
 - **Luật chơi minh họa:** màn riêng và tab trong Menu của ván. Gồm: mục tiêu, sơ đồ đường đi (cổng → 17 ô vòng chung → 4 ô về đích → Đích, số liệu tính từ `board.json`), một lượt chơi, các loại ô (hình mẫu giống bàn cờ + chữ viết tắt trụ cột *(đã đổi ở 1.6: bỏ trụ cột, thêm câu "rút ngẫu nhiên từ toàn bộ kho")*), power-up (biểu tượng, dùng ngay / cất vào túi, hiệu ứng từ `powerups.json`), thẻ bẫy (nhãn trung tính, tỉ lệ từ `traps.json`), kết thúc, cách chơi, tùy chọn, phím tắt. Chỉ nói về luật chơi, không có nội dung tư tưởng Hồ Chí Minh.
 - **Cài đặt** (lưu `settings.v1`): Âm thanh bật/tắt + "Nghe thử"; Hiệu ứng chuyển động Theo máy / Giảm / Đầy đủ; Giao diện Theo máy / Sáng / Tối; Cỡ chữ Vừa / Lớn (112,5%); Toàn màn hình (khi trình duyệt hỗ trợ); "Xóa dữ liệu trên máy này" (ván lưu, kỷ lục, Sổ ôn tập, biệt danh, phiên phòng — giữ cài đặt; có hộp xác nhận; chỉ ở màn Cài đặt từ trang chủ). Ghi rõ game không thu thập thống kê.
 - **Menu trong ván** (nút ☰ cạnh đồng hồ): tab Luật chơi / Cài đặt + nút toàn màn hình. "Chơi trên một máy": mở Menu thì tạm dừng đồng hồ (như hộp "Thoát ván?"). Chơi qua phòng: không tạm dừng (ván chung).
@@ -1017,10 +1033,10 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 - Chạy thử: e2e một máy hết chập chờn (bấm "Tung xúc xắc" khi cửa sổ vừa mở; vòng phím tắt quá ngắn); README ghi rõ cần Chromium, thêm `serve`, `e2e:local`; DIEN-TAP và HUONG-DAN-VERCEL sửa vài câu lệch với game.
 
 *Cần nhóm quyết (không tự sửa vì đổi luật / thiết kế / nội dung câu hỏi):*
-- [ ] **Hoàn tác trong "Chơi trên một máy" bị lợi dụng được:** hoàn tác sau khi dùng 50:50 rồi dùng lại; hoàn tác + tung lại để có thêm thời gian trả lời; hoàn tác sau khi thấy mặt xúc xắc để quyết định có dùng ×2 hay không. Phương án: (a) xóa lịch sử hoàn tác khi đã hiện câu hỏi / tung / rút thẻ bẫy — chỉ hoàn tác được thao tác chọn (đề xuất); (b) không cho hoàn tác lượt có dùng power-up; (c) giữ nguyên (chơi trên một máy là chơi thân thiện).
-- [ ] **Mất kết nối tới lượt:** game tự động tung và câu tính sai như Luật chơi, nhưng Khiên và power-up dùng ngay vẫn có tác dụng cho người vắng mặt (mục 9 ghi "không dùng power-up"). Hỏi: Khiên tự chặn bẫy cho người vắng có được không?
-- [ ] **"Phải tung đúng số":** khi tung quá Đích và mọi ngựa khác đều không đi được, lượt bị bỏ mà không có dòng giải thích riêng. Đề xuất thêm một chữ "Cần tung đúng số để về Đích".
-- [ ] **Bàn cờ ở 1920 × 1080** chỉ rộng ~700 px (khung `max-w-6xl`); khi chiếu trên lớp có thể cho bàn cờ lớn hơn. Đổi bố cục màn chơi → hỏi nhóm.
+- [x] **Hoàn tác trong "Chơi trên một máy" bị lợi dụng được:** hoàn tác sau khi dùng 50:50 rồi dùng lại; hoàn tác + tung lại để có thêm thời gian trả lời; hoàn tác sau khi thấy mặt xúc xắc để quyết định có dùng ×2 hay không. Phương án: (a) xóa lịch sử hoàn tác khi đã hiện câu hỏi / tung / rút thẻ bẫy — chỉ hoàn tác được thao tác chọn (đề xuất); (b) không cho hoàn tác lượt có dùng power-up; (c) giữ nguyên (chơi trên một máy là chơi thân thiện). → **nhóm chọn (a), đã làm 05/10/2026.**
+- [x] **Mất kết nối tới lượt:** game tự động tung và câu tính sai như Luật chơi, nhưng Khiên và power-up dùng ngay vẫn có tác dụng cho người vắng mặt (mục 9 ghi "không dùng power-up"). Hỏi: Khiên tự chặn bẫy cho người vắng có được không? → **nhóm chọn: không tự có tác dụng, đã làm 05/10/2026.**
+- [x] **"Phải tung đúng số":** khi tung quá Đích và mọi ngựa khác đều không đi được, lượt bị bỏ mà không có dòng giải thích riêng. Đề xuất thêm một chữ "Cần tung đúng số để về Đích". → **nhóm đồng ý, đã làm 05/10/2026.**
+- [x] **Bàn cờ ở 1920 × 1080** chỉ rộng ~700 px (khung `max-w-6xl`); khi chiếu trên lớp có thể cho bàn cờ lớn hơn. Đổi bố cục màn chơi → hỏi nhóm. → **nhóm chọn phóng to ở ≥ 1600 px, đã làm 05/10/2026.**
 - [x] **Vùng function (hạ tầng, nhóm làm):** kiểm deploy G6 thấy function chạy ở `iad1` (Mỹ) mà `pingMs` tới Redis ≈ 220 ms. Nhóm đã đổi sang `sin1` (diễn tập lần 1); Claude Code đo lại: `x-vercel-id` có `sin1`, `pingMs` = 1 ms.
 - [ ] **Tường lửa Vercel:** `check:deploy` chạy bằng Node bị chặn `403` (`x-vercel-mitigated: deny`) ở bước vào phòng; đi qua proxy của môi trường thì đạt; trình duyệt (e2e 3 máy trên deploy) đạt. Nếu khi diễn tập có máy bị 403, xem Firewall của project.
 - [ ] **Máy chủ (thấp):** báo lỗi khác nhau cho "không có phòng" và "sai token" (đã giới hạn theo IP nên khó dò); server Node cục bộ tin `x-forwarded-for` (chỉ dùng khi chạy thử, Vercel không dùng); Upstash có tính EVAL Lua như một lệnh — đo ở buổi diễn tập (DIEN-TAP).
