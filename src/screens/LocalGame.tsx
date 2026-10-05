@@ -17,7 +17,6 @@ import { geometry } from '../engine/board'
 import { currentPlayer, movableHorses } from '../engine/reducer'
 import type { ErrorCode, GameState, PowerupId } from '../engine/types'
 import { clearSave, isSoloChallenge, loadRecords, settleRecord, storeRecords, type LocalSave, type RecordResult } from '../game/local'
-import { addToReview } from '../game/review'
 import { useShortcuts } from '../game/useShortcuts'
 import { useBoardAnimation } from '../game/useBoardAnimation'
 import { autoActionAt, useAutoActions, useLocalGame } from '../game/useLocalGame'
@@ -48,8 +47,6 @@ export function LocalGame({ initial, onHome, onAgain }: { initial: LocalSave; on
   // kết thúc: xóa ván đã lưu; thử thách cá nhân → kỷ lục (chỉ lưu khi về đích — L4)
   const onEnded = useCallback((final: GameState) => {
     clearSave()
-    // Sổ ôn tập: câu người chơi (không phải máy) trả lời sai
-    addToReview(final.players.filter((p) => !p.isBot).flatMap((p) => p.stats.wrongIds))
     if (isSoloChallenge(final)) {
       const { result, records } = settleRecord(final, loadRecords())
       storeRecords(records)

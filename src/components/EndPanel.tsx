@@ -173,7 +173,6 @@ export function EndPanel({
             <button type="button" className="btn-primary self-start" onClick={() => setPractice(allWrong)}>
               <GraduationCap size={18} aria-hidden="true" /> {t.practiceWrong}
             </button>
-            <p className="text-sm text-ink-soft">{t.savedToReview}</p>
           </div>
         )}
         {humans

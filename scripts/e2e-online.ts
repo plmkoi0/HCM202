@@ -142,7 +142,7 @@ if (shots) await host.screenshot({ path: join(shots, 'lobby.png'), fullPage: tru
 await host.getByRole('button', { name: 'Bắt đầu' }).click()
 await Promise.all(pages.map((p) => p.locator('[data-room-status="playing"]').waitFor()))
 check(true, 'cả 3 máy vào ván')
-// L5: không mở được Kho câu hỏi khi đang ở trong phòng; Menu chỉ có Luật chơi + Cài đặt
+// không có Kho câu hỏi (đã bỏ); Menu chỉ có Luật chơi + Cài đặt
 check((await host.getByRole('button', { name: 'Kho câu hỏi' }).count()) === 0, 'trong phòng không có nút Kho câu hỏi')
 await host.getByRole('button', { name: 'Menu' }).click()
 check(await visible(host, host.getByRole('dialog').getByRole('tab', { name: 'Cài đặt' })), 'Menu trong ván có Luật chơi + Cài đặt')

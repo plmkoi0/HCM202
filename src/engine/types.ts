@@ -87,7 +87,7 @@ export interface BotsData {
 /** Câu hỏi (mục 13.4, bản 1.6): không có trụ cột, giải thích, nguồn, xác minh, hiện vật */
 export interface Question {
   id: string
-  /** chỉ dùng cho nhãn "Độ khó n", lọc Kho câu hỏi và xác suất đúng của máy chơi cùng (mục 5) */
+  /** chỉ dùng cho nhãn "Độ khó n" và xác suất đúng của máy chơi cùng (mục 5) */
   difficulty: Difficulty
   type: QuestionType
   question: string

@@ -36,7 +36,7 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - **L2** 50:50 loại tới khi còn 2 đáp án (4 → 2, 3 → 2); câu 2 đáp án: nút mờ, không mất power-up.
 - **L3** Luật ra 6 xét mặt xúc xắc trước khi nhân đôi (Xúc xắc ×2).
 - **L4** Thử thách cá nhân: giới hạn mặc định 10 phút; kỷ lục (ít lượt nhất) chỉ lưu khi về đích; hết giờ báo số ô còn lại.
-- **L5** Chấp nhận đáp án nằm trong mã trang (bản online đóng gói `questions.json`); state vẫn không chứa đáp án trước khi chốt; ẩn nút Kho câu hỏi khi đang ở trong phòng.
+- **L5** Chấp nhận đáp án nằm trong mã trang (bản online đóng gói `questions.json`); state vẫn không chứa đáp án trước khi chốt. **Kho câu hỏi đã bỏ hẳn (05/10/2026, tránh gian lận)** — cùng Sổ ôn tập.
 - **T1** Giới hạn 5 / 7 / 10 / 15 phút / không giới hạn, mặc định 10; trên lớp chọn 5 hoặc 7; hết giờ xếp theo khoảng cách, người dẫn đầu được tôn vinh như người thắng; mô phỏng ở 20 s và 25 s/lượt.
 - ~~**N1** Thẻ hiện vật trong game: mã, ngày, tên, trụ cột, câu chuyện, trích dẫn + `quote.cite`, ghi chú ngữ cảnh; không ảnh, không "Ngày nay", không nguồn APA; hiện vật `hidden` không hiện chip.~~ *(đã bỏ ở 1.6)*
 - ~~**N2** Mục tiêu mỗi trụ cột ≥ 10 / 6 / 4 câu độ khó 1 / 2 / 3; trụ cột trong sạch được ít hơn 20 câu. Tổ hợp không có câu: lấy cùng trụ cột ở độ khó gần nhất, rồi trụ cột khác cùng độ khó (mục 8).~~ *(đã bỏ ở 1.6)*
@@ -115,11 +115,11 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 │   │                                      polling, thay kết nối ~280 s, TICK khi quá hạn) — bản offline không nạp
 │   ├── game/                            ← local.ts (lưu / tiếp tục / hoàn tác / kỷ lục), useLocalGame (hành động, tạm dừng,
 │   │                                      tự động khi quá hạn), useBoardAnimation (xúc xắc lăn, ngựa đi từng ô, âm thanh,
-│   │                                      pháo giấy), review (Sổ ôn tập), useShortcuts (phím tắt, tắt tiếng, toàn màn hình)
+│   │                                      pháo giấy), useShortcuts (phím tắt, tắt tiếng, toàn màn hình)
 │   ├── components/                      ← Board (+ BoardLegend, cellLegendItems), Dice, Countdown, Sheet (giữ tiêu điểm),
 │   │                                      QuestionPanel, TurnPanels, PlayerStrip, EndPanel (thống kê, ôn câu sai, chia sẻ),
 │   │                                      Practice (ôn tập), GameMenu (loa, Menu), Confetti, ArtifactCard, PillarChip, …
-│   ├── screens/                         ← Home, LocalSetup, LocalGame, Rules (Luật chơi), QuestionBank (Kho câu hỏi), Settings
+│   ├── screens/                         ← Home, LocalSetup, LocalGame, Rules (Luật chơi), Settings (Kho câu hỏi đã bỏ 05/10/2026)
 │   ├── lib/                             ← gameData (nạp JSON → GameData), boardLayout (toạ độ SVG), eventText (nhật ký),
 │   │                                      storage (localStorage có try/catch), text (fill, clock, biệt danh), hooks,
 │   │                                      settings (cài đặt trên máy, data-theme/motion/text trên <html>), sound (Web Audio)
@@ -128,7 +128,7 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 │   └── vite-env.d.ts
 └── tests/                               ← helpers, data, questions, engine, local, server (lõi), server-net (HTTP + WebSocket thật),
                                            store (kho bộ nhớ + redis-server cục bộ), vercel-api (Node ESM như Vercel, cả rewrite
-                                           __p), g5 (cài đặt, Sổ ôn tập, phím tắt, thống kê, âm thanh), netHelpers
+                                           __p), g5 (cài đặt, phím tắt, thống kê, âm thanh), netHelpers
 ```
 
 **Đích (mục 15.1):**
@@ -193,6 +193,7 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - Phòng = một khối JSON `Room` (server/types.ts), có `game: GameState`. Ghi qua `mutate()`: đọc (đệm/kho) → rà kết nối → sửa → `store.put(room, version cũ)` (Lua: kiểm version + ghi + hạn + publish) → xung đột thì đọc lại, thử lại. Lỗi phát hiện trên bản đệm có thể cũ → đọc lại kho trước khi báo (lỗi tìm ra nhờ mô phỏng tải).
 - Hành động tự động: máy gửi `TICK`, server chạy `pendingAutoAction(game, giờ server)`. Hạn luôn theo giờ server; client đo lệch đồng hồ.
 - Trạng thái kết nối: `links` (WebSocket đang mở, quá 320 s coi là chết) + `lastSeen` (lần ghi do chính người đó) + hash poll (tối đa 10 s/lần) → vắng 20 s thì `connected = false` (đồng bộ SET_CONNECTED sang engine) ở lần ghi kế tiếp; chủ phòng mất kết nối / rời → chuyển cho người vào sớm nhất còn kết nối.
+- **Sau G6 (nhóm yêu cầu):** 04/10 trang chủ bỏ dòng thông điệp + giới thiệu; 05/10 bỏ Kho câu hỏi và Sổ ôn tập (mục 20 "Thay đổi sau G6").
 - **Tiến độ phiên:** G6 (phần Claude Code) xong và đã commit; **dừng — nhóm diễn tập theo `docs/DIEN-TAP.md` và gửi kết quả; chỉ sửa sau khi nhận kết quả**. Rà soát G6 (5 sub agent) đã dùng — lần rà soát duy nhất trước phát hành.
 - **G6 server:** giới hạn theo IP trước khi đọc kho (`Limits.requestsPerIp`, `failsPerIp`), nhớ mã phòng không tồn tại, `MAX_LINKS = 3`, `/api/health` giữ 5 s; `state` / `act` / `linkOpen` nhận `ip` (Vercel: `clientIp(request)`; Node: `remoteIp(req)`).
 - **Vercel:** `api/[...path].ts` ngoài Next.js chỉ khớp một cấp → `vercel.json` có rewrite `/api/(.*)` → `/api/[...path]?__p=$1`; `api/` khôi phục đường gốc từ `__p`. Đừng bỏ rewrite này.
@@ -214,9 +215,9 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - Cài đặt: `lib/settings.ts` (store + `useSettings`), khóa `settings.v1`; `applySettings` đặt `data-theme` / `data-motion` / `data-text` trên `<html>` (CSS dark mode: `@media` có `:root:not([data-theme='light'])` + `:root[data-theme='dark']`). `useReducedMotion()` = cài đặt "Hiệu ứng" kết hợp `prefers-reduced-motion`.
 - Âm thanh: `lib/sound.ts` (oscillator, không file); `useBoardAnimation` phát theo sự kiện (`segmentsOf` → `cue`) và trả `burst` cho `Confetti`. `Confetti` luôn là phần tử thứ hai của Fragment ở cả nhánh ván và nhánh kết thúc để không chạy lại.
 - Phím tắt: `shortcutOf` (thuần, có test) + `useShortcuts(handlers, enabled)`; màn chơi tự kiểm điều kiện như nút trên màn.
-- Sổ ôn tập: `game/review.ts`, khóa `review.v1`; ghi khi ván kết thúc (một máy: `onEnded`; phòng: effect một lần mỗi ván theo `startedAt`).
+- ~~Sổ ôn tập (`game/review.ts`, `review.v1`)~~ — **đã bỏ 05/10/2026 cùng Kho câu hỏi**; "Xóa dữ liệu trên máy" vẫn xóa khóa `review.v1` cũ. Màn kết thúc vẫn ôn / làm lại câu sai của ván đó (`Practice`).
 - Chữ mới trong `site.json`: `practice`, `bank`, `rules` (luật chơi — chỉ luật, không nội dung tư tưởng), `settings`.
-- `e2e-local` kiểm thêm: Luật chơi, Kho câu hỏi (ẩn đáp án, lọc, Sổ ôn tập, ôn tập bằng phím), Cài đặt (đổi giao diện, chữ lớn, nhớ sau tải lại), Menu trong ván, phím M / Space / 1, thống kê, làm lại câu sai; Đ1.6: không còn giải thích / nguồn / trụ cột trong cửa sổ câu hỏi và Kho câu hỏi, lọc theo độ khó.
+- `e2e-local` kiểm thêm: Luật chơi, trang chủ không có Kho câu hỏi (05/10/2026), Cài đặt (đổi giao diện, chữ lớn, nhớ sau tải lại), Menu trong ván, phím M / Space / 1, thống kê, làm lại câu sai; Đ1.6: không còn giải thích / nguồn / trụ cột trong cửa sổ câu hỏi.
 
 ## Ghi chú dữ liệu (bản 1.6)
 - `questions.json` **sinh bởi** `npm run import:questions` từ `docs/CAU-HOI-GAME.md` (bảng 8 cột: id · độ khó · câu hỏi · đáp án A–D · đúng) — không sửa tay. Mỗi câu chỉ có `id, difficulty, type, question, answers, correct` (+ `test`). Loại câu tự suy ra: có `___` → `fillQuote`; đáp án đúng là "Đúng", "Sai" → `truefalse`; còn lại `single`.

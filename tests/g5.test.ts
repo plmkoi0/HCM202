@@ -1,24 +1,10 @@
-// G5 — hoàn thiện: cài đặt trên máy, Sổ ôn tập, phím tắt, thống kê, âm thanh theo sự kiện.
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { addToReview, clearReview, loadReview, removeFromReview } from '../src/game/review'
+// G5 — hoàn thiện: cài đặt trên máy, phím tắt, thống kê, âm thanh theo sự kiện.
+import { describe, expect, it } from 'vitest'
 import { segmentsOf } from '../src/game/useBoardAnimation'
 import { shortcutOf } from '../src/game/useShortcuts'
 import { DEFAULT_SETTINGS, resolveReduced, sanitizeSettings } from '../src/lib/settings'
 import { answerCorrect, answerWrong, newGame, rollFace } from './helpers'
 import type { GameState } from '../src/engine/types'
-
-class MemoryStorage {
-  m = new Map<string, string>()
-  getItem(k: string) {
-    return this.m.get(k) ?? null
-  }
-  setItem(k: string, v: string) {
-    this.m.set(k, v)
-  }
-  removeItem(k: string) {
-    this.m.delete(k)
-  }
-}
 
 describe('Cài đặt trên máy', () => {
   it('đọc lại dữ liệu cũ / hỏng thì giữ phần hợp lệ, phần sai về mặc định', () => {
@@ -32,30 +18,6 @@ describe('Cài đặt trên máy', () => {
     expect(resolveReduced('system', false)).toBe(false)
     expect(resolveReduced('reduce', false)).toBe(true)
     expect(resolveReduced('full', true)).toBe(false)
-  })
-})
-
-describe('Sổ ôn tập', () => {
-  beforeEach(() => {
-    ;(globalThis as { localStorage?: unknown }).localStorage = new MemoryStorage()
-  })
-  afterEach(() => {
-    delete (globalThis as { localStorage?: unknown }).localStorage
-  })
-  it('thêm mới lên đầu, không trùng; bỏ câu đã ôn đúng; bỏ id không còn trong kho', () => {
-    addToReview(['Q-01', 'Q-02'])
-    addToReview(['Q-03', 'Q-01'])
-    expect(loadReview()).toEqual(['Q-03', 'Q-01', 'Q-02'])
-    expect(removeFromReview('Q-01')).toEqual(['Q-03', 'Q-02'])
-    expect(loadReview((id) => id !== 'Q-03')).toEqual(['Q-02'])
-    clearReview()
-    expect(loadReview()).toEqual([])
-  })
-  it('giới hạn 300 câu; dữ liệu hỏng thì coi như rỗng', () => {
-    addToReview(Array.from({ length: 350 }, (_, i) => `Q-${i}`))
-    expect(loadReview()).toHaveLength(300)
-    ;(globalThis as unknown as { localStorage: MemoryStorage }).localStorage.setItem('cdtt.review.v1', '{"a":1}')
-    expect(loadReview()).toEqual([])
   })
 })
 

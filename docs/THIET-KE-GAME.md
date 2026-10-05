@@ -133,7 +133,7 @@ Các tùy chọn luật và giá trị mặc định nằm trong `rules.json`; c
 - Mỗi lần hỏi rút ngẫu nhiên một câu từ **toàn bộ kho**, không xét vị trí trên bàn cờ, không xét độ khó.
 - Kho có ba mức gần bằng nhau (18 / 19 / 18) nên các mức xuất hiện xen kẽ, đều nhau suốt ván.
 - Không lặp câu cho tới khi dùng hết kho (mục 8).
-- Độ khó chỉ còn dùng để: hiện nhãn "Độ khó n" trong cửa sổ câu hỏi, lọc trong Kho câu hỏi, và tính xác suất trả lời đúng của máy chơi cùng (`bots.json`).
+- Độ khó chỉ còn dùng để: hiện nhãn "Độ khó n" trong cửa sổ câu hỏi và tính xác suất trả lời đúng của máy chơi cùng (`bots.json`).
 
 ## 6. Power-up (`powerups.json`)
 
@@ -304,7 +304,7 @@ Thêm một mục tiêu: không ai bị kẹt quá lâu vì bẫy hoặc trả l
 
 Một giao diện co giãn cho cả máy tính và điện thoại.
 
-1. **Trang chủ:** Tạo phòng · Vào phòng · Chơi trên một máy · Luật chơi · Kho câu hỏi · Cài đặt. Có "Vào lại phòng gần nhất" nếu còn phòng đang chơi. Khi kho còn câu hỏi thử, hiện dải báo "Đang dùng bộ câu hỏi thử" (với 55 câu hiện tại thì không còn). Trang chủ không hiện dòng thông điệp và dòng giới thiệu "Muốn tiến phải hiểu bài…" (nhóm bỏ, 04/10/2026); thông điệp vẫn ở màn kết thúc.
+1. **Trang chủ:** Tạo phòng · Vào phòng · Chơi trên một máy · Luật chơi · Cài đặt (Kho câu hỏi đã bỏ, 05/10/2026 — mục 20). Có "Vào lại phòng gần nhất" nếu còn phòng đang chơi. Khi kho còn câu hỏi thử, hiện dải báo "Đang dùng bộ câu hỏi thử" (với 55 câu hiện tại thì không còn). Trang chủ không hiện dòng thông điệp và dòng giới thiệu "Muốn tiến phải hiểu bài…" (nhóm bỏ, 04/10/2026); thông điệp vẫn ở màn kết thúc.
 2. **Tạo phòng** và **Vào phòng:** như mục 9.
 3. **Phòng chờ:** như mục 9.
 4. **Bàn cờ:**
@@ -331,7 +331,7 @@ Một giao diện co giãn cho cả máy tính và điện thoại.
    - Nhập 1–5 người + số máy chơi cùng, thay phiên trên cùng thiết bị.
    - Lưu ván trên máy; tải lại → "Tiếp tục ván".
    - Có nút hoàn tác thao tác vừa rồi.
-8. **Kho câu hỏi:** "Tổng số câu hỏi: N", lọc theo độ khó, nhãn `[Câu hỏi thử]` (nếu có), đáp án ẩn mặc định — có nút hiện. Không còn lọc trụ cột, nhãn `[Chờ xác minh]`, nguồn. **Ẩn nút Kho câu hỏi khi đang ở trong phòng chơi** (mục 15.4).
+8. ~~**Kho câu hỏi:** "Tổng số câu hỏi: N", lọc theo độ khó, đáp án ẩn mặc định — có nút hiện; ẩn khi đang ở trong phòng chơi.~~ **Đã bỏ (05/10/2026, nhóm quyết định — tránh gian lận):** không còn màn xem toàn bộ câu hỏi và đáp án, kể cả Sổ ôn tập (lọc "Câu từng trả lời sai"). Trang chủ vẫn ghi "Tổng số câu hỏi: N". Sau khi ván kết thúc vẫn xem lại và làm lại được các câu mình trả lời sai trong ván đó (mục 9).
 9. **Luật chơi:** có hình minh họa các loại ô, power-up và thẻ bẫy.
 10. **Chung:** hộp xác nhận thoát phòng, toast, cảnh báo khi đóng tab giữa ván.
 
@@ -484,7 +484,7 @@ Reducer thuần, không phụ thuộc trình duyệt hay Node. Hành động:
   - Quá hạn thì **bất kỳ máy nào trong phòng** gửi TIMEOUT / AUTO_ROLL / SKIP_TURN / BOT_STEP; server chỉ nhận khi `now ≥ deadline`.
 - **Nối lại:** `playerId` + `playerToken` lưu trên máy (localStorage, bọc try/catch). Tải lại trang → nhận snapshot đầy đủ, về đúng phòng.
 - **Không lộ đáp án:** state gửi xuống máy người chơi không chứa đáp án đúng trước khi chốt câu.
-  - Bản online vẫn đóng gói `questions.json` (cho Kho câu hỏi và Chơi trên một máy) nên đáp án đọc được trong mã trang — **chấp nhận vì đây là game ôn tập (đã chốt)**. Khi đang ở trong phòng chơi thì ẩn nút Kho câu hỏi.
+  - Bản online vẫn đóng gói `questions.json` (cho Chơi trên một máy) nên đáp án đọc được trong mã trang — **chấp nhận vì đây là game ôn tập (đã chốt)**. Kho câu hỏi đã bỏ (05/10/2026): không còn màn xem đáp án trong giao diện; người cố tình mở mã trang vẫn đọc được.
 - **Kiểm tra đầu vào:** biệt danh 1–20 ký tự, cắt khoảng trắng; giới hạn tần suất tạo phòng và gửi hành động; lỗi trả về thông báo tiếng Việt.
 - `GET /api/health` để kiểm tra trước buổi chơi.
 - **Tách lớp:** `server/` (test được không cần Vercel) và `api/` (lớp mỏng nối Vercel Functions).
@@ -702,7 +702,7 @@ Reducer thuần, không phụ thuộc trình duyệt hay Node. Hành động:
 - **Kết thúc:** người đầu tiên về đích thắng; chơi tiếp để xếp hạng; các mốc 5 / 7 / 10 / 15 phút / không giới hạn, mặc định 10 phút; hết giờ xếp theo khoảng cách; hòa.
 - **Câu hỏi:** không lặp cho tới khi hết toàn bộ kho; Đổi câu lấy một câu ngẫu nhiên khác chưa hỏi.
 - **Tự động:** tự tung; tự xử lý khi mất kết nối; thử thách cá nhân đếm lượt, kỷ lục chỉ lưu khi về đích.
-- **Khác:** hoàn tác (chơi trên một máy); cùng seed → cùng kết quả (cả thẻ bẫy và bot); Kho câu hỏi ẩn khi đang ở trong phòng.
+- **Khác:** hoàn tác (chơi trên một máy); cùng seed → cùng kết quả (cả thẻ bẫy và bot); Kho câu hỏi ẩn khi đang ở trong phòng *(đã bỏ hẳn Kho câu hỏi, 05/10/2026)*.
 
 ### Dữ liệu
 - id không trùng; 2–4 đáp án, không trùng nhau; `correct` hợp lệ.
@@ -814,6 +814,10 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 
 ## 20. Việc còn mở
 
+**Thay đổi sau G6 (nhóm quyết định):**
+- [x] **05/10/2026 — Bỏ Kho câu hỏi** để tránh gian lận: gỡ màn Kho câu hỏi (xem toàn bộ câu và đáp án), nút trên trang chủ và Sổ ôn tập (`review.v1`, chỉ dùng trong Kho câu hỏi). Giữ: "Tổng số câu hỏi: N" trên trang chủ; màn kết thúc vẫn ôn lại / làm lại câu sai của chính ván đó. Đáp án vẫn nằm trong mã trang (L5) — chỉ chặn đường xem dễ trong giao diện.
+- [x] **04/10/2026 — Trang chủ** bỏ dòng thông điệp và dòng giới thiệu "Muốn tiến phải hiểu bài…" (thông điệp vẫn ở màn kết thúc).
+
 **Thay đổi bản 1.6 (04/10/2026) — nhóm quyết định, ưu tiên hơn mọi ghi chép cũ trong mục này:**
 - [x] **Bỏ trụ cột / chủ đề** khỏi câu hỏi, bàn cờ, thống kê, Kho câu hỏi. Quyết định cũ D1, D2 (phần trụ cột), D3, D6 (phần trụ cột), N2 hết hiệu lực.
 - [x] **Bỏ giải thích và nguồn** (kèm `verified`, nhãn `[Chờ xác minh]`, thẻ và chip hiện vật). Quyết định cũ N1, quy tắc chữ cái phương án trong giải thích, hai lời giải thích Q-02/Q-11 hết hiệu lực.
@@ -856,7 +860,7 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 | L2 | 50:50 loại tới khi còn 2 đáp án; câu 2 đáp án không dùng được, không mất power-up | 6 |
 | L3 | Luật ra 6 xét mặt xúc xắc trước khi nhân đôi | 5, 6 |
 | L4 | Kỷ lục cá nhân chỉ lưu khi về đích; hết giờ báo số ô còn lại | 9 |
-| L5 | Chấp nhận đáp án nằm trong mã trang; ẩn Kho câu hỏi khi đang ở trong phòng | 12, 15.4 |
+| L5 | Chấp nhận đáp án nằm trong mã trang; ẩn Kho câu hỏi khi đang ở trong phòng *(Kho câu hỏi đã bỏ, 05/10/2026)* | 12, 15.4 |
 | T1 | Thêm mốc 7 phút; trên lớp chọn 5 hoặc 7 phút; hết giờ tôn vinh người dẫn đầu; mô phỏng ở 20 s và 25 s/lượt | 10, 11 |
 | N1 | Nội dung thẻ hiện vật trong game (không ảnh, không "Ngày nay", không nguồn APA) *(đã bỏ ở 1.6)* | 12 |
 | N2 | Mỗi trụ cột ≥ 10 / 6 / 4 câu theo độ khó 1 / 2 / 3; trụ cột trong sạch được ít hơn; quy tắc lấy câu khi thiếu *(đã bỏ ở 1.6)* | 8, 13.4 |
@@ -982,10 +986,10 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
   - Chơi qua phòng: chỉ ôn câu **mình** trả lời sai ("Câu bạn trả lời sai"); chơi trên một máy: câu của từng người (không phải máy).
   - Mỗi câu sai có đáp án đúng, giải thích, nguồn, chip "Hiện vật liên quan" *(đã đổi ở 1.6: câu hỏi + đáp án đúng + độ khó)*.
   - Nút "Làm lại các câu sai": trả lời lại từng câu (đáp án trộn lại), hiện giải thích *(đã đổi ở 1.6: hiện đáp án đúng)*, cuối cùng báo "đúng x/y". Không ảnh hưởng ván.
-  - **Sổ ôn tập trên máy:** câu sai ở các ván đã kết thúc được lưu id vào localStorage (`review.v1`, tối đa 300, mới nhất trước). Kho câu hỏi lọc được "Câu từng trả lời sai trên máy này"; ôn tập trả lời đúng thì câu đó được bỏ khỏi sổ. Không gửi đi đâu.
+  - **Sổ ôn tập trên máy:** câu sai ở các ván đã kết thúc được lưu id vào localStorage (`review.v1`, tối đa 300, mới nhất trước). Kho câu hỏi lọc được "Câu từng trả lời sai trên máy này"; ôn tập trả lời đúng thì câu đó được bỏ khỏi sổ. Không gửi đi đâu. *(đã bỏ 05/10/2026 cùng Kho câu hỏi)*
 - **Thống kê (màn kết thúc):** thêm cột "Tỉ lệ đúng" và mục "Theo trụ cột" (đúng / đã trả lời theo trụ cột của câu). Engine thêm `stats.byPillar` (tùy chọn — ván lưu cũ không có thì hiện "chưa trả lời câu nào") *(mục "Theo trụ cột" và `stats.byPillar` đã bỏ ở 1.6)*. Bảng thống kê trên điện thoại cuộn ngang được (vùng cuộn nhận tiêu điểm bàn phím).
 - **Chia sẻ game** ở màn kết thúc: Web Share nếu có, không thì sao chép `siteUrl` (trình duyệt nhúng Zalo/Messenger).
-- **Kho câu hỏi** *(đã đổi ở 1.6: bỏ lọc trụ cột, `[Chờ xác minh]`, nguồn, chip hiện vật, giải thích)*: lọc theo trụ cột, độ khó, Sổ ôn tập, chỉ câu hỏi thử; tìm chữ (không phân biệt dấu); mỗi câu có id, trụ cột, độ khó, loại, nhãn `[Câu hỏi thử]` / `[Chờ xác minh]`, nguồn, chip hiện vật; đáp án + giải thích ẩn mặc định, nút "Hiện đáp án" từng câu và "Hiện mọi đáp án"; "Ôn tập N câu đang lọc". Chỉ mở từ trang chủ; Menu trong ván không có Kho câu hỏi (L5; `e2e:online` kiểm).
+- **Kho câu hỏi** *(đã đổi ở 1.6: bỏ lọc trụ cột, `[Chờ xác minh]`, nguồn, chip hiện vật, giải thích)*: lọc theo trụ cột, độ khó, Sổ ôn tập, chỉ câu hỏi thử; tìm chữ (không phân biệt dấu); mỗi câu có id, trụ cột, độ khó, loại, nhãn `[Câu hỏi thử]` / `[Chờ xác minh]`, nguồn, chip hiện vật; đáp án + giải thích ẩn mặc định, nút "Hiện đáp án" từng câu và "Hiện mọi đáp án"; "Ôn tập N câu đang lọc". Chỉ mở từ trang chủ; Menu trong ván không có Kho câu hỏi (L5; `e2e:online` kiểm). *(đã bỏ 05/10/2026 cùng Kho câu hỏi)*
 - **Luật chơi minh họa:** màn riêng và tab trong Menu của ván. Gồm: mục tiêu, sơ đồ đường đi (cổng → 17 ô vòng chung → 4 ô về đích → Đích, số liệu tính từ `board.json`), một lượt chơi, các loại ô (hình mẫu giống bàn cờ + chữ viết tắt trụ cột *(đã đổi ở 1.6: bỏ trụ cột, thêm câu "rút ngẫu nhiên từ toàn bộ kho")*), power-up (biểu tượng, dùng ngay / cất vào túi, hiệu ứng từ `powerups.json`), thẻ bẫy (nhãn trung tính, tỉ lệ từ `traps.json`), kết thúc, cách chơi, tùy chọn, phím tắt. Chỉ nói về luật chơi, không có nội dung tư tưởng Hồ Chí Minh.
 - **Cài đặt** (lưu `settings.v1`): Âm thanh bật/tắt + "Nghe thử"; Hiệu ứng chuyển động Theo máy / Giảm / Đầy đủ; Giao diện Theo máy / Sáng / Tối; Cỡ chữ Vừa / Lớn (112,5%); Toàn màn hình (khi trình duyệt hỗ trợ); "Xóa dữ liệu trên máy này" (ván lưu, kỷ lục, Sổ ôn tập, biệt danh, phiên phòng — giữ cài đặt; có hộp xác nhận; chỉ ở màn Cài đặt từ trang chủ). Ghi rõ game không thu thập thống kê.
 - **Menu trong ván** (nút ☰ cạnh đồng hồ): tab Luật chơi / Cài đặt + nút toàn màn hình. "Chơi trên một máy": mở Menu thì tạm dừng đồng hồ (như hộp "Thoát ván?"). Chơi qua phòng: không tạm dừng (ván chung).

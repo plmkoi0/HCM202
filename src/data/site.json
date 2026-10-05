@@ -11,15 +11,14 @@
     "joinRoom": "Vào phòng",
     "localPlay": "Chơi trên một máy",
     "rules": "Luật chơi",
-    "questionBank": "Kho câu hỏi",
+    "total": "Tổng số câu hỏi: {n}",
     "settings": "Cài đặt",
     "resumeRoom": "Vào lại phòng gần nhất",
     "resumeLocal": "Tiếp tục ván",
     "offlineNote": "Bản offline: chỉ có Chơi trên một máy (không cần mạng).",
     "onlineSoon": "Chơi qua phòng (online) có ở bản trên Vercel.",
     "more": "Tìm hiểu thêm",
-    "shareGame": "Chia sẻ game",
-    "wrongCount": "Sổ ôn tập: {n} câu từng trả lời sai"
+    "shareGame": "Chia sẻ game"
   },
   "phases": {
     "roll": "Tung xúc xắc",
@@ -239,8 +238,7 @@
     "reviewMine": "Câu bạn trả lời sai",
     "share": "Chia sẻ game",
     "shareText": "Chơi thử Con đường tư tưởng HCM — board game ôn tập Chủ đề 4 (HCM202)",
-    "copied": "Đã sao chép link game",
-    "savedToReview": "Các câu sai đã được lưu vào Sổ ôn tập (Kho câu hỏi) trên máy này."
+    "copied": "Đã sao chép link game"
   },
   "board": {
     "label": "Bàn cờ — {n} ô vòng chung, đường về đích {h} ô",
@@ -329,32 +327,6 @@
     "close": "Đóng",
     "summary": "Bạn trả lời đúng {n}/{total} câu.",
     "empty": "Không có câu nào để ôn."
-  },
-  "bank": {
-    "title": "Kho câu hỏi",
-    "total": "Tổng số câu hỏi: {n}",
-    "intro": "Đáp án ẩn mặc định — bấm \"Hiện đáp án\" ở từng câu. Kho câu hỏi không mở được khi đang ở trong phòng chơi.",
-    "filterDifficulty": "Độ khó",
-    "filterOther": "Lọc thêm",
-    "all": "Tất cả",
-    "onlyWrong": "Câu từng trả lời sai trên máy này ({n})",
-    "onlyTest": "Chỉ câu hỏi thử",
-    "search": "Tìm trong câu hỏi",
-    "shown": "Đang hiện {n} câu",
-    "none": "Không có câu nào khớp bộ lọc.",
-    "showAnswer": "Hiện đáp án",
-    "hideAnswer": "Ẩn đáp án",
-    "showAll": "Hiện mọi đáp án",
-    "hideAll": "Ẩn mọi đáp án",
-    "practice": "Ôn tập {n} câu đang lọc",
-    "practiceHint": "Ôn tập trả lời đúng thì câu đó được bỏ khỏi Sổ ôn tập.",
-    "clearWrong": "Xóa Sổ ôn tập",
-    "types": {
-      "single": "Một đáp án",
-      "truefalse": "Đúng / Sai",
-      "fillQuote": "Điền trích dẫn"
-    },
-    "back": "Về trang chủ"
   },
   "rules": {
     "title": "Luật chơi",
@@ -455,9 +427,9 @@
     "fullscreen": "Toàn màn hình",
     "fullscreenButton": "Bật / tắt toàn màn hình",
     "data": "Dữ liệu trên máy này",
-    "dataNote": "Game không thu thập thống kê, không đăng nhập. Trên máy này chỉ lưu: cài đặt, biệt danh, ván đang chơi, kỷ lục thử thách cá nhân, Sổ ôn tập và phiên phòng gần nhất.",
+    "dataNote": "Game không thu thập thống kê, không đăng nhập. Trên máy này chỉ lưu: cài đặt, biệt danh, ván đang chơi, kỷ lục thử thách cá nhân và phiên phòng gần nhất.",
     "clear": "Xóa dữ liệu trên máy này",
-    "clearConfirm": "Xóa ván đang lưu, kỷ lục, Sổ ôn tập, biệt danh và phiên phòng trên máy này? Cài đặt được giữ lại.",
+    "clearConfirm": "Xóa ván đang lưu, kỷ lục, biệt danh và phiên phòng trên máy này? Cài đặt được giữ lại.",
     "clearYes": "Xóa",
     "cleared": "Đã xóa dữ liệu trên máy này.",
     "version": "Bản {kind}",

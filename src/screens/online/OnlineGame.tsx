@@ -1,7 +1,7 @@
 // Ván chơi qua phòng (mục 12.4–12.6): như "Chơi trên một máy" nhưng mỗi máy chỉ điều khiển ngựa của
 // mình; hạn theo giờ server (đổi sang giờ máy); trạng thái kết nối; Đoán cùng; chơi lại về phòng chờ.
 import { LogOut, Wifi, WifiOff } from 'lucide-react'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { ClientAction, StateView } from '../../../server/types'
 import { Board, BoardLegend } from '../../components/Board'
 import { Confetti } from '../../components/Confetti'
@@ -16,7 +16,6 @@ import { ChooseHorsePanel, DiscardPanel, OutcomePanel } from '../../components/T
 import { geometry } from '../../engine/board'
 import { currentPlayer, movableHorses } from '../../engine/reducer'
 import type { GameState, PowerupId } from '../../engine/types'
-import { addToReview } from '../../game/review'
 import { useBoardAnimation } from '../../game/useBoardAnimation'
 import { useShortcuts } from '../../game/useShortcuts'
 import { recentLog } from '../../lib/eventText'
@@ -85,13 +84,6 @@ export function OnlineGame({ view, offset, mode, act, onLeave, report }: { view:
   useEffect(() => {
     if (myRoll && state.players.length > 1) playSound('turn')
   }, [myRoll, state.players.length])
-  // ván kết thúc → câu mình trả lời sai vào Sổ ôn tập (một lần mỗi ván)
-  const reviewed = useRef<number | null>(null)
-  useEffect(() => {
-    if (!ended || !meP || reviewed.current === state.startedAt) return
-    reviewed.current = state.startedAt
-    addToReview(meP.stats.wrongIds)
-  }, [ended, meP, state.startedAt])
 
   // phím tắt (mục 16)
   const aq = state.turn.question

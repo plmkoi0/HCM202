@@ -19,7 +19,7 @@ Thiết kế (nguồn chuẩn): [`docs/THIET-KE-GAME.md`](docs/THIET-KE-GAME.md)
 
 - Tải gói [`phat-hanh/HCM202-Con-duong-tu-tuong.zip`](phat-hanh/HCM202-Con-duong-tu-tuong.zip) (trên GitHub: mở file → **Download raw file**).
 - Giải nén, mở `index.html` bằng trình duyệt (Chrome, Edge, Firefox, Safari). Hướng dẫn ngắn ở `HUONG-DAN.txt` trong gói.
-- Chỉ có **"Chơi trên một máy"** (kèm Luật chơi, Kho câu hỏi, Cài đặt); không có chơi qua phòng. Bản offline không gửi request mạng nào.
+- Chỉ có **"Chơi trên một máy"** (kèm Luật chơi, Cài đặt); không có chơi qua phòng. Bản offline không gửi request mạng nào.
 
 ## Dự phòng khi mất mạng
 
