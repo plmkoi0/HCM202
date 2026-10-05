@@ -230,7 +230,9 @@ describe('di chuyển', () => {
 
   it('tùy chọn "Phải tung đúng số": không đúng số thì đứng yên', () => {
     let s = rollFace(setStep(game(1, { exactFinish: true }), P1, 20), 5)
-    expect(s.turn.outcome).toEqual({ kind: 'blocked' })
+    // lý do riêng: cần tung đúng số để về Đích (05/10/2026)
+    expect(s.turn.outcome).toEqual({ kind: 'blocked', exact: true })
+    expect(s.events.find((e) => e.type === 'cannotMove')!.data).toEqual({ exact: true })
     expect(step(s)).toBe(20)
     s = rollFace(setStep(game(1, { exactFinish: true }), P1, 20), 2)
     expect(s.turn.question!.isFinish).toBe(true)
@@ -697,14 +699,14 @@ describe('tự động', () => {
     expect(t.events.find((e) => e.type === 'rolled')!.data).toMatchObject({ auto: true })
   })
 
-  it('mất kết nối: sau 20 s tự tung, câu hỏi tính là sai, không dùng power-up; quay lại chơi tiếp ở vị trí cũ', () => {
+  it('mất kết nối: sau 8 s tự tung, câu hỏi tính là sai, không dùng power-up; quay lại chơi tiếp ở vị trí cũ', () => {
     let s = act(game(2), { type: 'SET_CONNECTED', playerId: P2, connected: false, now: T0 })
     s = setBag(s, P2, ['double'])
     s = rollFace(s, 1)
     s = answerWrong(s)
     s = next(s, T0 + 100)
     expect(currentPlayer(s).id).toBe(P2)
-    expect(s.deadline).toBe(T0 + 100 + 20_000)
+    expect(s.deadline).toBe(T0 + 100 + 8_000)
     expect(pendingAutoAction(s, T0 + 100)).toBeNull()
     expect(pendingAutoAction(s, s.deadline!)).toEqual({ type: 'SKIP_TURN', now: s.deadline! })
     expect(tryAct(s, { type: 'SKIP_TURN', now: T0 + 1000 })).toEqual({ ok: false, error: 'TOO_EARLY' })
@@ -718,12 +720,12 @@ describe('tự động', () => {
   })
 
   it('nối lại giữa lượt (đang có lần tung thêm) thì chơi bình thường: có câu hỏi 20 s, dùng được power-up', () => {
-    // lần tung tự động (đang mất kết nối) tới ô power-up và nhận Thêm lượt
-    let t = act(setBag(game(2), P1, ['double']), { type: 'SET_CONNECTED', playerId: P1, connected: false, now: T0 })
+    // lần tung tự động (đang mất kết nối) ra 6 và đi được (bước 8 + 6 = ô power-up) → được tung thêm
+    let t = act(setBag(setStep(game(2), P1, 8), P1, ['double']), { type: 'SET_CONNECTED', playerId: P1, connected: false, now: T0 })
     t = searchRng(
       t,
       (x) => act(x, { type: 'SKIP_TURN', now: x.deadline! }),
-      (res) => res.turn.roll?.face === 2 && res.turn.outcome?.kind === 'powerup' && res.turn.outcome.powerup === 'extraRoll',
+      (res) => res.turn.roll?.face === 6 && res.turn.movedThisRoll === true && res.phase === 'reveal',
     )
     expect(t.turn.auto).toBe(true)
     t = act(t, { type: 'SET_CONNECTED', playerId: P1, connected: true, now: T0 + 5000 })
@@ -732,9 +734,54 @@ describe('tự động', () => {
     expect(currentPlayer(t).id).toBe(P1)
     expect(t.turn.auto).toBe(false)
     t = act(t, { type: 'USE_POWERUP', actor: P1, powerup: 'double', now: T0 + 6000 })
-    t = act(rigFace(t, 1), { type: 'ROLL', actor: P1, now: T0 + 7000 }) // bước 2 + 1×2 = 4: câu hỏi
-    expect(t.phase).toBe('question')
-    expect(t.deadline).toBe(T0 + 7000 + 20_000)
+    // tìm mặt xúc xắc đưa tới ô câu hỏi: có câu hỏi 20 s như bình thường
+    const asked = [1, 2, 3, 4, 5, 6].map((f) => act(rigFace(t, f), { type: 'ROLL', actor: P1, now: T0 + 7000 })).find((x) => x.phase === 'question')!
+    expect(asked.deadline).toBe(T0 + 7000 + 20_000)
+  })
+
+  it('mất kết nối (lượt tự động): Khiên không tự chặn bẫy, power-up dùng ngay không có tác dụng', () => {
+    const off = act(setBag(setStep(game(2), P1, 6), P1, ['shield']), { type: 'SET_CONNECTED', playerId: P1, connected: false, now: T0 })
+    const trapped = searchRng(
+      off,
+      (x) => act(x, { type: 'SKIP_TURN', now: x.deadline! }),
+      (r) => r.turn.roll?.face === 2 && r.turn.outcome?.kind === 'trap',
+    )
+    expect(trapped.turn.outcome).toMatchObject({ kind: 'trap', blocked: false })
+    expect(player(trapped).bag).toEqual(['shield'])
+    expect(player(trapped).stats.shieldBlocks).toBe(0)
+    for (const id of ['advance3', 'extraRoll'] as const) {
+      const r = searchRng(
+        act(setStep(game(2), P1, 0), { type: 'SET_CONNECTED', playerId: P1, connected: false, now: T0 }),
+        (x) => act(x, { type: 'SKIP_TURN', now: x.deadline! }),
+        (res) => res.turn.outcome?.kind === 'powerup' && res.turn.outcome.powerup === id && res.turn.roll?.face !== 6,
+      )
+      expect(r.turn.outcome).toMatchObject({ kind: 'powerup', powerup: id, idle: true })
+      expect(r.turn.extraRolls).toBe(0)
+      expect(step(r)).toBe(r.turn.target)
+      expect(player(r).stats.powerupsUsed).toBe(0)
+    }
+  })
+
+  it('hiện đáp án 3 s khi đúng, 5 s khi sai / hết giờ; máy chơi cùng trả lời sau 4–6 s', () => {
+    const asked = rollFace(game(1), [1, 2, 3, 4, 5, 6].find((f) => rollFace(game(1), f).phase === 'question')!)
+    const ok = answerCorrect(asked)
+    expect(ok.deadline! - T0).toBe(gameData.rules.timers.revealMs)
+    expect(gameData.rules.timers.revealMs).toBe(3000)
+    const bad = answerWrong(asked)
+    expect(bad.deadline! - T0).toBe(5000)
+    // máy chơi cùng: hạn trả lời 4–6 s, câu dài hơn thì lâu hơn
+    const bots = createGame(gameData, { players: [{ id: 'b1', name: 'Máy', color: 0, isBot: true }], seed: 3, now: T0 })
+    const seen: number[] = []
+    let x = bots
+    for (let i = 0; i < 400 && seen.length < 8; i++) {
+      const a = pendingAutoAction(x, x.deadline!)
+      if (!a) break
+      x = act(x, a)
+      if (x.phase === 'question') seen.push(x.deadline! - a.now)
+      if (x.phase === 'ended') break
+    }
+    expect(seen.length).toBeGreaterThan(0)
+    for (const ms of seen) expect(ms >= 4000 && ms <= 6000).toBe(true)
   })
 
   it('người đang mất kết nối không dùng được power-up', () => {

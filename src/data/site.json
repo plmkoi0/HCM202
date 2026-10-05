@@ -36,6 +36,7 @@
     "rolled": "{name} tung được {face}.",
     "rolledDouble": "{name} tung được {face} × 2 = {value}.",
     "cannotMove": "{name} chưa đi được.",
+    "cannotMoveExact": "{name} chưa đi được — cần tung đúng số để về Đích.",
     "leftStable": "{name} ra chuồng.",
     "asked": "{name} trả lời câu hỏi (độ khó {difficulty}).",
     "answeredCorrect": "{name} trả lời đúng, tiến {steps} ô.",
@@ -165,6 +166,8 @@
       "rest": "Dừng ở cổng — ô nghỉ, không hỏi",
       "blocked": "Chưa đi được lần này",
       "blockedExact": "Phải tung đúng số mới vào Đích",
+      "exactNeeded": "Cần tung đúng số để về Đích.",
+      "idle": "Đang mất kết nối — power-up không có tác dụng.",
       "stableStay": "Chưa ra chuồng — cần tung 1 hoặc 6",
       "stableLeft": "Ra chuồng!",
       "powerup": "Nhận power-up",
@@ -377,7 +380,7 @@
     "turn": [
       "Tung xúc xắc (1–6). Quá {roll} giây không tung thì game tự động tung.",
       "Đi đúng số ô theo đường của mình. Không có luật đá ngựa — nhiều ngựa đứng chung một ô được.",
-      "Tới ô câu hỏi (kể cả Đích): một câu rút ngẫu nhiên từ kho, trả lời trong {answer} giây. Đúng → nhảy lên ô đó; sai hoặc hết giờ → đứng yên ở ô cũ. Sau khi chốt chỉ hiện Đúng / Sai và đáp án đúng.",
+      "Tới ô câu hỏi (kể cả Đích): một câu rút ngẫu nhiên từ kho, trả lời trong {answer} giây. Đúng → nhảy lên ô đó; sai hoặc hết giờ → đứng yên ở ô cũ. Sau khi chốt chỉ hiện Đúng / Sai và đáp án đúng ({revealOk} giây khi đúng, {revealBad} giây khi sai).",
       "Ra 6 mà đã đi được thì tung thêm một lần (tối đa một lần mỗi lượt).",
       "Vượt quá Đích vẫn tính là tới Đích và phải trả lời câu về đích (trừ khi bật \"Phải tung đúng số\")."
     ],
@@ -401,7 +404,7 @@
     "modes": [
       "Chơi qua phòng: mỗi người một máy, vào phòng bằng mã 5 ký tự, mã QR hoặc link. Phòng 1–5 người, có thể thêm máy chơi cùng.",
       "Chơi trên một máy: 1–5 người thay phiên trên cùng thiết bị, không cần mạng. 1 người và 0 máy = thử thách cá nhân (về đích với ít lượt nhất).",
-      "Mất kết nối khi tới lượt: sau {disconnect} giây game tự động tung, câu hỏi tính là sai. Quay lại thì chơi tiếp ở vị trí cũ."
+      "Mất kết nối khi tới lượt: sau {disconnect} giây game tự động tung, câu hỏi tính là sai, không dùng power-up (Khiên không tự chặn bẫy). Quay lại thì chơi tiếp ở vị trí cũ."
     ],
     "optionsTitle": "Tùy chọn của ván",
     "options": [

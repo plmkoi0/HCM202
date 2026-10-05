@@ -13,7 +13,7 @@ export function fastData(data: GameData, scale = 0.03): GameData {
     ...data,
     rules: {
       ...data.rules,
-      timers: { rollMs: k(t.rollMs), answerMs: k(t.answerMs), revealMs: k(t.revealMs), noticeMs: k(t.noticeMs), disconnectMs: k(t.disconnectMs), botStepMs: k(t.botStepMs) },
+      timers: Object.fromEntries(Object.entries(t).map(([name, ms]) => [name, k(ms)])) as unknown as typeof t,
     },
   }
 }

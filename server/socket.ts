@@ -29,6 +29,12 @@ export interface SocketOptions {
   maxLifeMs?: number
   /** địa chỉ IP của máy (giới hạn tần suất theo IP) */
   ip?: string
+  /**
+   * Giữ function sống tới khi việc nền xong (Vercel: `waitUntil` của @vercel/functions). Dọn kết
+   * nối sau khi socket đóng (ghi Redis) phải chạy xong — nếu instance bị dừng ngay, chủ phòng đã
+   * rời không được chuyển quyền khoảng 5 phút (tới khi kết nối bị coi là chết).
+   */
+  waitUntil?: (p: Promise<unknown>) => void
 }
 
 export function attachSocket(ws: WebSocket, ctx: SocketContext, opts: SocketOptions = {}): void {
@@ -39,6 +45,12 @@ export function attachSocket(ws: WebSocket, ctx: SocketContext, opts: SocketOpti
   /** lần nhận tin gần nhất — client ping 25 s/lần; im quá lâu = kết nối nửa mở (máy mất mạng không báo) */
   let lastMsg = Date.now()
   const timers: ReturnType<typeof setTimeout>[] = []
+
+  /** việc nền: không để lỗi lọt ra ngoài, và báo cho nền tảng chờ (waitUntil) */
+  const background = (p: Promise<unknown>) => {
+    const done = p.catch((e: unknown) => console.error('[socket] lỗi khi dọn kết nối', e instanceof Error ? e.message : e))
+    opts.waitUntil?.(done)
+  }
 
   const send = (msg: unknown) => {
     if (ws.readyState === ws.OPEN) ws.send(JSON.stringify(msg))
@@ -91,7 +103,7 @@ export function attachSocket(ws: WebSocket, ctx: SocketContext, opts: SocketOpti
         const room = await ctx.service.linkOpen(cred, linkId, opts.ip)
         if (closed) {
           // máy đóng kết nối trong lúc đang mở → ghi nhận đóng luôn
-          void ctx.service.linkClose(room.code, cred.playerId, linkId)
+          background(ctx.service.linkClose(room.code, cred.playerId, linkId))
           return
         }
         client = { playerId: cred.playerId, code: room.code, linkId, sent: 0, push }
@@ -112,7 +124,7 @@ export function attachSocket(ws: WebSocket, ctx: SocketContext, opts: SocketOpti
     for (const t of timers) clearTimeout(t)
     if (!client) return
     ctx.hub.remove(client.code, client)
-    void ctx.service.linkClose(client.code, client.playerId, client.linkId)
+    background(ctx.service.linkClose(client.code, client.playerId, client.linkId))
     client = null
   })
   ws.on('error', () => {

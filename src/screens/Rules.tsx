@@ -68,7 +68,7 @@ export function RulesContent() {
       <Section title={t.turnTitle}>
         <ol className="flex list-decimal flex-col gap-1.5 pl-6 leading-relaxed">
           {t.turn.map((line, i) => (
-            <li key={i}>{fill(line, { roll: sec(timers.rollMs), answer: sec(timers.answerMs) })}</li>
+            <li key={i}>{fill(line, { roll: sec(timers.rollMs), answer: sec(timers.answerMs), revealOk: sec(timers.revealMs), revealBad: sec(timers.revealWrongMs) })}</li>
           ))}
         </ol>
       </Section>

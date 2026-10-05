@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { currentPlayer, pendingAutoAction, shiftTime } from '../engine/reducer'
+import { currentPlayer, pendingAutoAction, revealMsOf, shiftTime } from '../engine/reducer'
 import type { Action, ErrorCode, GameData, GameState } from '../engine/types'
 import { applyLocal, canUndo, markSeen, storeSave, undoLocal, type LocalSave } from './local'
 
@@ -90,7 +90,7 @@ export function autoActionAt(state: GameState, idleAt: number): number | null {
   if (state.phase === 'ended' || state.deadline === null) return null
   if (state.phase !== 'reveal') return state.deadline
   const t = state.config.timers
-  return Math.max(state.deadline, idleAt + (state.turn.outcome?.kind === 'answered' ? t.revealMs : t.noticeMs))
+  return Math.max(state.deadline, idleAt + (state.turn.outcome?.kind === 'answered' ? revealMsOf(state, t) : t.noticeMs))
 }
 
 /** Tự gửi hành động lúc `at`; `waiting` = đang diễn hoạt hoặc tạm dừng → chờ */

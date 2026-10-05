@@ -10,6 +10,10 @@ export interface HubClient {
   push(room: Room): void
 }
 
+/** thử theo dõi lại sau lỗi: 1 s, 2 s, 4 s… tối đa 10 s */
+export const HUB_RETRY_MS = 1000
+export const HUB_RETRY_MAX_MS = 10_000
+
 interface Entry {
   clients: Set<HubClient>
   unsubscribe: Promise<(() => Promise<void>) | null>
@@ -36,22 +40,36 @@ export class Hub {
     let e = this.rooms.get(code)
     if (!e) {
       const entry: Entry = { clients: new Set(), unsubscribe: Promise.resolve(null) }
-      entry.unsubscribe = this.service.store
-        .subscribe(code, (room) => this.deliver(room))
-        .then(async (unsub) => {
-          // có thể đã lỡ tin giữa lúc mở kết nối và lúc theo dõi xong → đọc lại một lần
-          const latest = await this.service.store.get(code).catch(() => null)
-          if (latest) this.deliver(latest)
-          return unsub
-        })
-        .catch((err: unknown) => {
-          console.error('[hub] không theo dõi được phòng', code, err)
-          return null
-        })
       this.rooms.set(code, entry)
+      this.follow(code, entry, 0)
       e = entry
     }
     e.clients.add(client)
+  }
+
+  /**
+   * Theo dõi kênh pub/sub của phòng. Lỗi (Redis chập chờn) thì thử lại sau 1, 2, 4… tối đa 10 s
+   * chừng nào phòng còn kết nối trên instance này — không để máy hiện "Trực tiếp" mà chỉ nhận
+   * nước đi qua lượt hỏi 30 giây.
+   */
+  private follow(code: string, entry: Entry, attempt: number): void {
+    entry.unsubscribe = this.service.store
+      .subscribe(code, (room) => this.deliver(room))
+      .then(async (unsub) => {
+        // có thể đã lỡ tin giữa lúc mở kết nối và lúc theo dõi xong → đọc lại một lần
+        const latest = await this.service.store.get(code).catch(() => null)
+        if (latest) this.deliver(latest)
+        return unsub
+      })
+      .catch((err: unknown) => {
+        console.error('[hub] không theo dõi được phòng', code, err instanceof Error ? err.message : err)
+        const delay = Math.min(HUB_RETRY_MAX_MS, HUB_RETRY_MS * 2 ** attempt)
+        const t = setTimeout(() => {
+          if (this.rooms.get(code) === entry && entry.clients.size > 0) this.follow(code, entry, attempt + 1)
+        }, delay)
+        ;(t as { unref?: () => void }).unref?.()
+        return null
+      })
   }
 
   remove(code: string, client: HubClient): void {

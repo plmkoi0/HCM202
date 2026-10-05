@@ -75,26 +75,53 @@ describe('Chơi trên một máy', () => {
     ])
   })
 
-  it('hoàn tác về ngay trước thao tác gần nhất của người; bước tự động không tạo điểm hoàn tác', () => {
-    const s = autoUntilHuman(newLocalGame(gameData, setup(1, 2), T, 4))
-    expect(canUndo(s)).toBe(false)
+  it('hoàn tác chỉ cho thao tác chọn (bật ×2); tung xúc xắc xóa lịch sử; bước tự động không tạo điểm hoàn tác', () => {
+    const s0 = autoUntilHuman(newLocalGame(gameData, setup(1, 2), T, 4))
+    expect(canUndo(s0)).toBe(false)
+    const actor = currentPlayer(s0.present).id
+    // cho người đến lượt một Xúc xắc ×2 trong túi
+    const present = structuredClone(s0.present)
+    present.players.find((p) => p.id === actor)!.bag = ['double']
+    const s: LocalSave = { ...s0, present }
     const before = s.present
-    const actor = currentPlayer(before).id
-    const r = applyLocal(gameData, s, { type: 'ROLL', actor, now: T }, true, T)
+    const r = applyLocal(gameData, s, { type: 'USE_POWERUP', actor, powerup: 'double', now: T }, true, T)
     expect(r.ok).toBe(true)
-    const rolled = (r as { save: LocalSave }).save
-    expect(rolled.past.length).toBe(1)
-    const u = undoLocal(rolled, T + 99_000)
-    expect(u.present.eventSeq).toBe(before.eventSeq)
+    const armed = (r as { save: LocalSave }).save
+    expect(armed.present.turn.doubleArmed).toBe(true)
+    expect(armed.past.length).toBe(1)
+    const u = undoLocal(armed, T + 99_000)
+    expect(u.present.turn.doubleArmed).toBe(false)
     expect(u.present.players).toEqual(before.players)
     // hạn được đặt lại từ lúc hoàn tác, không kích hoạt tự tung ngay
     expect(u.present.deadline).toBe(T + 99_000 + gameData.rules.timers.rollMs)
     expect(canUndo(u)).toBe(false)
+    // tung xúc xắc (lộ kết quả ngẫu nhiên) → không hoàn tác được nữa, kể cả bước bật ×2 trước đó
+    const rolled = applyLocal(gameData, armed, { type: 'ROLL', actor, now: T + 1 }, true, T + 1)
+    expect(rolled.ok && rolled.save.past.length).toBe(0)
     // tự tung khi quá hạn (không phải thao tác của người) → không có điểm hoàn tác
     const auto = pendingAutoAction(before, before.deadline!)!
     expect(auto.type).toBe('AUTO_ROLL')
     const x = applyLocal(gameData, s, auto, false, auto.now)
     expect(x.ok && x.save.past.length).toBe(0)
+  })
+
+  it('hiện câu hỏi, dùng 50:50 / Đổi câu thì không hoàn tác được (không dùng lại 50:50, không kéo dài giờ)', () => {
+    let found: LocalSave | null = null
+    for (let seed = 1; seed < 200 && !found; seed++) {
+      const s = autoUntilHuman(newLocalGame(gameData, setup(1, 0), T, seed))
+      const r = applyLocal(gameData, s, { type: 'ROLL', actor: 'p1', now: T }, true, T)
+      if (r.ok && r.save.present.phase === 'question' && gameData.questionById.get(r.save.present.turn.question!.id)!.answers.length > 2) found = r.save
+    }
+    if (!found) throw new Error('không tìm được ván có câu hỏi')
+    expect(canUndo(found)).toBe(false)
+    const present = structuredClone(found.present)
+    present.players[0].bag = ['fiftyFifty', 'swap']
+    const withBag: LocalSave = { ...found, present }
+    const f = applyLocal(gameData, withBag, { type: 'USE_POWERUP', actor: 'p1', powerup: 'fiftyFifty', now: T + 500 }, true, T + 500)
+    expect(f.ok && f.save.present.turn.question!.eliminated.length).toBeGreaterThan(0)
+    expect(f.ok && canUndo(f.save)).toBe(false)
+    const w = applyLocal(gameData, withBag, { type: 'USE_POWERUP', actor: 'p1', powerup: 'swap', now: T + 500 }, true, T + 500)
+    expect(w.ok && canUndo(w.save)).toBe(false)
   })
 
   it('đã chốt câu hỏi (lộ đáp án) thì xóa lịch sử hoàn tác', () => {
@@ -106,7 +133,7 @@ describe('Chơi trên một máy', () => {
       if (r.ok && r.save.present.phase === 'question') found = r.save
     }
     if (!found) throw new Error('không tìm được ván có câu hỏi')
-    expect(canUndo(found)).toBe(true)
+    expect(canUndo(found)).toBe(false)
     const a = applyLocal(gameData, found, { type: 'ANSWER', actor: 'p1', choice: 0, now: T + 1000 }, true, T + 1000)
     expect(a.ok).toBe(true)
     const answered = (a as { save: LocalSave }).save

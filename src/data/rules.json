@@ -18,15 +18,20 @@
     "rollMs": 15000,
     "answerMs": 20000,
     "revealMs": 3000,
+    "revealWrongMs": 5000,
     "noticeMs": 3000,
-    "disconnectMs": 20000,
-    "botStepMs": 1500
+    "disconnectMs": 8000,
+    "botStepMs": 1500,
+    "botAnswerMinMs": 4000,
+    "botAnswerMaxMs": 6000
   },
   "dice": { "faces": 6, "bonusFace": 6, "stableExitFaces": [1, 6] },
   "notes": {
     "timeLimitOptions": "Mục 10 (T1): 5 / 7 / 10 / 15 phút / không giới hạn (null); mặc định 10 phút; trên lớp chọn 5 hoặc 7.",
     "afterFirstFinish": "Mục 10: chủ phòng chọn dừng ngay khi có người về đích (stop) hoặc chơi tiếp để xếp hạng (continue).",
-    "revealMs": "Bản 1.6 (mục 8): sau khi chốt câu chỉ hiện Đúng / Sai và đáp án đúng trong 3 giây; người đến lượt bấm Tiếp tục để đi sớm hơn.",
+    "revealMs": "Mục 5 (05/10/2026): sau khi chốt câu chỉ hiện Đúng / Sai và đáp án đúng — 3 giây khi đúng (revealMs), 5 giây khi sai hoặc hết giờ (revealWrongMs); người đến lượt bấm Tiếp tục để đi sớm hơn.",
+    "disconnectMs": "Mục 9 (05/10/2026): tới lượt người đang mất kết nối thì 8 giây sau tự tung (trước là 20 giây).",
+    "botAnswerMs": "Mục 9 (05/10/2026): máy chơi cùng trả lời sau 4–6 giây — câu càng dài càng lâu.",
     "noticeMs": "Thời gian hiện kết quả bước đi không có câu hỏi (ô nghỉ, power-up, bẫy, không đi được)."
   }
 }

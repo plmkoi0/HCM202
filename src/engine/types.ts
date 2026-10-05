@@ -38,10 +38,16 @@ export interface RulesData {
 export interface Timers {
   rollMs: number
   answerMs: number
+  /** hiện đáp án khi trả lời đúng */
   revealMs: number
+  /** hiện đáp án khi sai hoặc hết giờ (05/10/2026: dài hơn để kịp đọc đáp án đúng) */
+  revealWrongMs: number
   noticeMs: number
   disconnectMs: number
   botStepMs: number
+  /** máy chơi cùng "suy nghĩ" trước khi trả lời: từ min (câu ngắn) tới max (câu dài) */
+  botAnswerMinMs: number
+  botAnswerMaxMs: number
 }
 
 export interface PowerupData {
@@ -197,17 +203,19 @@ export interface ActiveQuestion {
   eliminated: number[]
   fiftyFiftyUsed: boolean
   swapUsed: boolean
+  /** số ký tự câu hỏi + đáp án — máy chơi cùng đọc câu dài lâu hơn (mục 9) */
+  textLength?: number
 }
 
 export type Outcome =
   | { kind: 'answered'; correct: boolean; timedOut: boolean; chosen: number | null; correctIndex: number; questionId: string; moved: number; finished: boolean }
   | { kind: 'rest'; moved: number }
-  | { kind: 'powerup'; moved: number; powerup: PowerupId; extra?: number; kept: boolean }
+  | { kind: 'powerup'; moved: number; powerup: PowerupId; extra?: number; kept: boolean; /** lượt tự động của người mất kết nối: không có tác dụng */ idle?: boolean }
   /** back = số ô lùi thực tế (nhãn "lùi {n} ô"); drawn = số rút được (1–3), có thể lớn hơn khi bị chặn ở cổng;
    *  bị Khiên chặn: back = 0, drawn = số trên thẻ bị chặn */
   | { kind: 'trap'; moved: number; card: string; back?: number; drawn?: number; blocked: boolean }
-  | { kind: 'blocked' }
-  | { kind: 'stable'; left: boolean }
+  | { kind: 'blocked'; /** "Phải tung đúng số" chặn vì tung quá Đích */ exact?: boolean }
+  | { kind: 'stable'; left: boolean; exact?: boolean }
 
 export interface TurnState {
   playerId: string

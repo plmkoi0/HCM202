@@ -14,6 +14,9 @@ export function eventText(data: GameData, s: GameState, e: GameEvent): string | 
   const pu = (id: unknown) => data.powerups.items.find((p) => p.id === (id as PowerupId))?.label ?? String(id)
   const vars: Record<string, string | number> = { name }
   switch (e.type) {
+    case 'cannotMove':
+      if (d.exact) return fill(site.events.cannotMoveExact, { name })
+      break
     case 'rolled':
       if (d.doubled) return fill(site.events.rolledDouble, { name, face: d.face as number, value: d.value as number })
       vars.face = d.face as number

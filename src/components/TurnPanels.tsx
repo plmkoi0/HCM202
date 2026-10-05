@@ -44,16 +44,19 @@ export function OutcomePanel({
       title = t.rest
       break
     case 'blocked':
-      title = state.config.exactFinish ? t.blockedExact : t.blocked
+      title = o.exact ? t.blockedExact : t.blocked
+      if (o.exact) body = [t.exactNeeded]
       break
     case 'stable':
       title = o.left ? t.stableLeft : t.stableStay
+      if (o.exact) body = [t.exactNeeded]
       break
     case 'powerup': {
       const item = data.powerups.items.find((p) => p.id === o.powerup)!
       Icon = POWERUP_ICONS[o.powerup]
       title = `${t.powerup}: ${item.label}`
-      if (o.powerup === 'advance3') body = [(o.extra ?? 0) > 0 ? fill(t.advance, { n: o.extra ?? 0 }) : t.advanceNone]
+      if (o.idle) body = [t.idle]
+      else if (o.powerup === 'advance3') body = [(o.extra ?? 0) > 0 ? fill(t.advance, { n: o.extra ?? 0 }) : t.advanceNone]
       else if (o.powerup === 'extraRoll') body = [t.extraRoll]
       else body = [item.effect, o.kept ? t.kept : t.dropped]
       break
@@ -69,7 +72,7 @@ export function OutcomePanel({
       break
     }
   }
-  const tone = o.kind === 'trap' && !o.blocked ? 'bad' : o.kind === 'powerup' ? 'good' : 'default'
+  const tone = o.kind === 'trap' && !o.blocked ? 'bad' : o.kind === 'powerup' && !o.idle ? 'good' : 'default'
   return (
     <Sheet labelledBy="outcome-title" tone={tone}>
       <div className="flex flex-col gap-3" aria-live="polite">

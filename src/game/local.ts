@@ -43,16 +43,24 @@ export function newLocalGame(data: GameData, setup: LocalSetup, now: number, see
 
 export type LocalResult = { ok: true; save: LocalSave } | { ok: false; error: ErrorCode }
 
+/** Sự kiện làm lộ kết quả ngẫu nhiên hoặc thông tin mới — sau đó không hoàn tác được (mục 12.7, phương án (a)) */
+const REVEALING = new Set(['rolled', 'asked', 'answeredCorrect', 'answeredWrong', 'timedOut', 'powerupGained', 'trapDrawn'])
+
+/** có sự kiện làm lộ thông tin: tung, hiện câu hỏi, chốt câu, nhận power-up, rút thẻ bẫy, dùng 50:50 / Đổi câu */
+export function revealsInfo(events: GameState['events']): boolean {
+  return events.some((e) => REVEALING.has(e.type) || (e.type === 'powerupUsed' && e.data?.powerup !== 'double'))
+}
+
 /**
  * Áp dụng một hành động. `human` = thao tác của người → lưu điểm hoàn tác.
- * Khi một câu hỏi vừa được chốt (đáp án đúng đã hiện), xóa lịch sử hoàn tác: không cho quay
- * lại trả lời lại câu đã lộ đáp án.
+ * Chỉ hoàn tác được thao tác chọn (bật Xúc xắc ×2, chọn món bỏ khi túi đầy, chọn ngựa tới ô nghỉ…):
+ * hành động nào làm lộ thông tin (tung, hiện câu, 50:50 / Đổi câu, nhận power-up, rút thẻ bẫy, chốt
+ * câu) thì xóa lịch sử — không "tung lại", không dùng lại 50:50, không kéo dài giờ trả lời.
  */
 export function applyLocal(data: GameData, s: LocalSave, action: Action, human: boolean, now: number): LocalResult {
   const r = applyAction(data, s.present, action)
   if (!r.ok) return r
-  const revealed = r.state.events.some((e) => e.type === 'answeredCorrect' || e.type === 'answeredWrong' || e.type === 'timedOut')
-  const past = revealed ? [] : human ? [...s.past, s.present].slice(-PAST_LIMIT) : s.past
+  const past = revealsInfo(r.state.events) ? [] : human ? [...s.past, s.present].slice(-PAST_LIMIT) : s.past
   return { ok: true, save: { ...s, savedAt: now, present: r.state, past } }
 }
 

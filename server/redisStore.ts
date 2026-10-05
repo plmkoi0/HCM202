@@ -28,17 +28,27 @@ return n`
 
 type Client = ReturnType<typeof createClient>
 
-/** Hạn chờ mỗi lệnh: Redis chập chờn / sai mật khẩu thì báo lỗi nhanh (503) thay vì treo tới hết thời gian function */
+/**
+ * Hạn chờ mỗi lượt gọi: Redis chập chờn / sai mật khẩu thì báo lỗi nhanh (503) thay vì treo tới hết
+ * thời gian function. Hạn chỉ áp cho LƯỢT GỌI — việc kết nối vẫn chạy tiếp ở nền (connectTimeout 5 s),
+ * lượt gọi sau dùng lại đúng promise kết nối đó (không gọi connect() lần hai → "Socket already opened").
+ */
 const COMMAND_TIMEOUT_MS = 4000
+const CONNECT_TIMEOUT_MS = 5000
 
-function withTimeout<T>(p: Promise<T>, what: string): Promise<T> {
+function withTimeout<T>(p: Promise<T>, what: string, ms = COMMAND_TIMEOUT_MS): Promise<T> {
   let t: ReturnType<typeof setTimeout>
   return Promise.race([
     p,
     new Promise<never>((_, reject) => {
-      t = setTimeout(() => reject(new Error(`Redis không trả lời (${what})`)), COMMAND_TIMEOUT_MS)
+      t = setTimeout(() => reject(new Error(`Redis không trả lời (${what})`)), ms)
     }),
   ]).finally(() => clearTimeout(t))
+}
+
+export interface RedisStoreOptions {
+  /** hạn chờ mỗi lượt gọi (mặc định 4 s; test dùng hạn ngắn) */
+  timeoutMs?: number
 }
 
 export class RedisStore implements RoomStore {
@@ -48,15 +58,18 @@ export class RedisStore implements RoomStore {
   private sub: Client | null = null
   private subReady: Promise<Client> | null = null
   private listeners = new Map<string, Set<(room: Room) => void>>()
+  private subscribing = new Map<Set<(room: Room) => void>, Promise<void>>()
   private st: StoreStats = { commands: {}, received: 0 }
   private closed = false
   private everReady = false
+  private timeoutMs: number
 
-  constructor(url: string) {
+  constructor(url: string, opts: RedisStoreOptions = {}) {
+    this.timeoutMs = opts.timeoutMs ?? COMMAND_TIMEOUT_MS
     this.client = createClient({
       url,
       // chưa từng kết nối được (sai URL / mật khẩu) → bỏ cuộc sau vài lần để báo lỗi; đã từng kết nối → thử lại mãi
-      socket: { connectTimeout: 5000, reconnectStrategy: (retries: number) => (!this.everReady && retries >= 3 ? new Error('Không kết nối được Redis') : Math.min(100 + retries * 200, 2000)) },
+      socket: { connectTimeout: CONNECT_TIMEOUT_MS, reconnectStrategy: (retries: number) => (!this.everReady && retries >= 3 ? new Error('Không kết nối được Redis') : Math.min(100 + retries * 200, 2000)) },
     })
     this.client.on('error', (e: unknown) => console.error('[redis] lỗi kết nối lệnh', e instanceof Error ? e.message : e))
   }
@@ -65,19 +78,29 @@ export class RedisStore implements RoomStore {
     this.st.commands[name] = (this.st.commands[name] ?? 0) + 1
   }
 
+  private wait<T>(p: Promise<T>, what: string): Promise<T> {
+    return withTimeout(p, what, this.timeoutMs)
+  }
+
+  /** promise kết nối dùng chung: chỉ gọi connect() một lần; hỏng thật (không phải quá hạn lượt gọi) mới làm lại */
   private conn(): Promise<Client> {
     if (this.closed) return Promise.reject(new Error('Kho Redis đã đóng'))
-    this.ready ??= withTimeout(this.client.connect(), 'kết nối').then(
-      () => {
-        this.everReady = true
-        return this.client
-      },
-      (e: unknown) => {
-        this.ready = null
-        throw e
-      },
-    )
-    return this.ready
+    if (!this.ready) {
+      const p: Promise<Client> = this.client.isOpen
+        ? Promise.resolve(this.client)
+        : this.client.connect().then(
+            () => {
+              this.everReady = true
+              return this.client
+            },
+            (e: unknown) => {
+              if (this.ready === p) this.ready = null
+              throw e
+            },
+          )
+      this.ready = p
+    }
+    return this.wait(this.ready, 'kết nối')
   }
 
   private subscriber(): Promise<Client> {
@@ -86,36 +109,39 @@ export class RedisStore implements RoomStore {
       const sub = this.client.duplicate()
       sub.on('error', (e: unknown) => console.error('[redis] lỗi kết nối pub/sub', e instanceof Error ? e.message : e))
       this.sub = sub
-      this.subReady = sub.connect().then(
+      const p: Promise<Client> = sub.connect().then(
         () => sub,
         (e: unknown) => {
-          this.subReady = null
-          this.sub = null
+          if (this.subReady === p) {
+            this.subReady = null
+            this.sub = null
+          }
           throw e
         },
       )
+      this.subReady = p
     }
-    return this.subReady
+    return this.wait(this.subReady, 'kết nối pub/sub')
   }
 
   async get(code: string): Promise<Room | null> {
     const c = await this.conn()
     this.count('GET:room')
-    const s = await withTimeout(c.get(roomKey(code)), 'get')
+    const s = await this.wait(c.get(roomKey(code)), 'get')
     return s ? (JSON.parse(String(s)) as Room) : null
   }
 
   async version(code: string): Promise<number | null> {
     const c = await this.conn()
     this.count('GET:version')
-    const s = await withTimeout(c.get(versionKey(code)), 'get')
+    const s = await this.wait(c.get(versionKey(code)), 'get')
     return s === null || s === undefined ? null : Number(s)
   }
 
   async put(room: Room, expected: number, ttlMs: number): Promise<boolean> {
     const c = await this.conn()
     this.count('EVAL:put')
-    const r = await withTimeout(c.eval(PUT_SCRIPT, {
+    const r = await this.wait(c.eval(PUT_SCRIPT, {
       keys: [roomKey(room.code), versionKey(room.code)],
       arguments: [String(expected), JSON.stringify(room), String(room.version), String(Math.max(1, Math.round(ttlMs))), channelOf(room.code)],
     }), 'ghi phòng')
@@ -127,13 +153,13 @@ export class RedisStore implements RoomStore {
   async touch(code: string, playerId: string, at: number, ttlMs: number): Promise<void> {
     const c = await this.conn()
     this.count('EVAL:touch')
-    await withTimeout(c.eval(TOUCH_SCRIPT, { keys: [seenKey(code)], arguments: [playerId, String(at), String(Math.max(1, Math.round(ttlMs)))] }), 'touch')
+    await this.wait(c.eval(TOUCH_SCRIPT, { keys: [seenKey(code)], arguments: [playerId, String(at), String(Math.max(1, Math.round(ttlMs)))] }), 'touch')
   }
 
   async seen(code: string): Promise<Record<string, number>> {
     const c = await this.conn()
     this.count('HGETALL')
-    const h = (await withTimeout(c.hGetAll(seenKey(code)), 'hGetAll')) as Record<string, string>
+    const h = (await this.wait(c.hGetAll(seenKey(code)), 'hGetAll')) as Record<string, string>
     const out: Record<string, number> = {}
     for (const [k, v] of Object.entries(h)) out[k] = Number(v)
     return out
@@ -143,21 +169,40 @@ export class RedisStore implements RoomStore {
     const ch = channelOf(code)
     let set = this.listeners.get(ch)
     if (!set) {
-      set = new Set()
-      this.listeners.set(ch, set)
-      const sub = await this.subscriber()
-      this.count('SUBSCRIBE')
-      const own = set
-      await sub.subscribe(ch, (message: string) => {
-        this.st.received += 1
-        let room: Room
-        try {
-          room = JSON.parse(message) as Room
-        } catch {
-          return
-        }
-        for (const l of own) l(room)
-      })
+      const own = new Set<(room: Room) => void>()
+      set = own
+      this.listeners.set(ch, own)
+      // lần theo dõi đầu đang chạy: người gọi sau chờ cùng kết quả (đạt / lỗi)
+      const pending = (async () => {
+        const sub = await this.subscriber()
+        this.count('SUBSCRIBE')
+        await this.wait(
+          sub.subscribe(ch, (message: string) => {
+            this.st.received += 1
+            let room: Room
+            try {
+              room = JSON.parse(message) as Room
+            } catch {
+              return
+            }
+            for (const l of own) l(room)
+          }),
+          'subscribe',
+        )
+      })()
+      this.subscribing.set(own, pending)
+      try {
+        await pending
+      } catch (e) {
+        // lỗi: bỏ mục rỗng để lần sau theo dõi lại (không để máy tưởng "Trực tiếp" mà không nhận tin)
+        if (this.listeners.get(ch) === own) this.listeners.delete(ch)
+        throw e
+      } finally {
+        this.subscribing.delete(own)
+      }
+    } else {
+      const pending = this.subscribing.get(set)
+      if (pending) await pending
     }
     set.add(listener)
     const own = set
@@ -175,14 +220,14 @@ export class RedisStore implements RoomStore {
   async hit(key: string, limit: number, windowMs: number): Promise<boolean> {
     const c = await this.conn()
     this.count('EVAL:hit')
-    const n = await withTimeout(c.eval(HIT_SCRIPT, { keys: [`rl:${key}`], arguments: [String(windowMs)] }), 'hit')
+    const n = await this.wait(c.eval(HIT_SCRIPT, { keys: [`rl:${key}`], arguments: [String(windowMs)] }), 'hit')
     return Number(n) <= limit
   }
 
   async ping(): Promise<number> {
     const t0 = performance.now()
     const c = await this.conn()
-    await withTimeout(c.ping(), 'ping')
+    await this.wait(c.ping(), 'ping')
     return Math.round(performance.now() - t0)
   }
 

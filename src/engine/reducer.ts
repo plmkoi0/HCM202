@@ -20,6 +20,7 @@ import type {
   Outcome,
   PlayerState,
   PowerupId,
+  Question,
   TurnState,
 } from './types.js'
 
@@ -147,16 +148,31 @@ function setDeadline(s: GameState, p: PlayerState, kind: DeadlineKind, now: numb
       ms = p.isBot ? t.botStepMs : t.rollMs
       break
     case 'answer':
-      ms = p.isBot ? t.botStepMs : t.answerMs
+      ms = p.isBot ? botThinkMs(s, t) : t.answerMs
       break
     case 'reveal':
-      ms = t.revealMs
+      ms = revealMsOf(s, t)
       break
     case 'notice':
       ms = t.noticeMs
       break
   }
   s.deadline = now + ms
+}
+
+/** Hiện đáp án: 3 s khi đúng, 5 s khi sai / hết giờ (mục 5) */
+export function revealMsOf(s: GameState, t: GameState['config']['timers']): number {
+  const o = s.turn.outcome
+  return o?.kind === 'answered' && !o.correct ? (t.revealWrongMs ?? t.revealMs) : t.revealMs
+}
+
+/** Máy chơi cùng "suy nghĩ" 4–6 s theo độ dài câu + đáp án (≤ 80 ký tự → min, ≥ 300 → max) — không dùng RNG */
+function botThinkMs(s: GameState, t: GameState['config']['timers']): number {
+  const min = t.botAnswerMinMs ?? t.botStepMs
+  const max = t.botAnswerMaxMs ?? min
+  const len = s.turn.question?.textLength ?? 0
+  const k = Math.min(1, Math.max(0, (len - 80) / 220))
+  return Math.round(min + (max - min) * k)
 }
 
 // ---------- Tạo ván ----------
@@ -382,8 +398,11 @@ function doRoll(data: GameData, s: GameState, now: number, auto: boolean): void 
   const movable = movableHorses(data, s, p, face, value)
   if (movable.length === 0) {
     const inStable = p.horses.some((h) => !h.done && h.step < 0)
-    t.outcome = inStable ? { kind: 'stable', left: false } : { kind: 'blocked' }
-    emit(s, 'cannotMove', p.id)
+    // "Phải tung đúng số": có ngựa trên đường bị chặn vì tung quá Đích → báo lý do riêng (mục 5)
+    const finish = geometryOf(data, s).finishStep
+    const exact = s.config.exactFinish && p.horses.some((h) => !h.done && h.step >= 0 && h.step + value > finish)
+    t.outcome = inStable ? { kind: 'stable', left: false, ...(exact ? { exact } : {}) } : { kind: 'blocked', ...(exact ? { exact } : {}) }
+    emit(s, 'cannotMove', p.id, exact ? { exact } : undefined)
     toReveal(s, p, now, 'notice')
     return
   }
@@ -465,6 +484,10 @@ function moveTo(s: GameState, p: PlayerState, horse: number, target: number): nu
 
 // ---------- Câu hỏi ----------
 
+function textLengthOf(q: Question): number {
+  return q.question.length + q.answers.reduce((n, a) => n + a.length, 0)
+}
+
 function ask(data: GameData, s: GameState, now: number, isFinish: boolean): void {
   const p = currentPlayer(s)
   const q = pickQuestion(data, s, p)
@@ -477,6 +500,7 @@ function ask(data: GameData, s: GameState, now: number, isFinish: boolean): void
     eliminated: [],
     fiftyFiftyUsed: false,
     swapUsed: false,
+    textLength: textLengthOf(q),
   }
   emit(s, 'asked', p.id, { questionId: q.id, difficulty: q.difficulty, isFinish })
   if (s.turn.auto) {
@@ -541,6 +565,12 @@ function gainPowerup(data: GameData, s: GameState, now: number, moved: number): 
   const t = s.turn
   const item = pickWeighted(s, data.powerups.items)
   emit(s, 'powerupGained', p.id, { powerup: item.id })
+  if (item.kind === 'instant' && t.auto) {
+    // người mất kết nối không dùng power-up: món dùng ngay không có tác dụng (mục 9)
+    t.outcome = { kind: 'powerup', moved, powerup: item.id, kept: false, idle: true }
+    toReveal(s, p, now, 'notice')
+    return
+  }
   if (item.kind === 'instant') {
     p.stats.powerupsUsed += 1
     if (item.id === 'advance3') {
@@ -601,7 +631,8 @@ function drawTrap(data: GameData, s: GameState, now: number, moved: number): voi
   const t = s.turn
   const card = pickWeighted(s, data.traps.cards)
   p.stats.trapsHit += 1
-  const shieldIdx = p.bag.indexOf('shield')
+  // người mất kết nối (lượt tự động) không dùng power-up: Khiên không tự chặn (mục 9)
+  const shieldIdx = t.auto ? -1 : p.bag.indexOf('shield')
   if (shieldIdx >= 0) {
     // Khiên tự dùng, chặn được cả hai loại thẻ (mục 7)
     p.bag.splice(shieldIdx, 1)
@@ -694,6 +725,7 @@ function usePowerup(data: GameData, s: GameState, p: PlayerState, id: PowerupId,
         // câu mới: 50:50 dùng lại được (mục 6 — dùng "khi đang trả lời", không gắn với câu cũ)
         fiftyFiftyUsed: false,
         swapUsed: true,
+        textLength: textLengthOf(q),
       }
       t.guesses = {}
       setDeadline(s, p, 'answer', now)

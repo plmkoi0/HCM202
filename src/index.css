@@ -59,6 +59,18 @@
   font-size: 112.5%;
 }
 
+/* Màn hình ≥ 1600 px (máy chiếu, màn lớn — mục 16): mọi kích thước tính bằng rem nên phóng to cỡ
+   chữ gốc là bàn cờ, chữ, cửa sổ câu hỏi cùng to theo bề rộng (giới hạn theo chiều cao để bàn cờ
+   vẫn nằm trọn trong màn). 1920 × 1080 → khoảng 20 px. */
+@media (min-width: 1600px) {
+  :root {
+    font-size: clamp(16px, min(1.05vw, 1.9vh), 26px);
+  }
+  :root[data-text='large'] {
+    font-size: calc(1.125 * clamp(16px, min(1.05vw, 1.9vh), 26px));
+  }
+}
+
 @theme inline {
   --color-bg: var(--bg);
   --color-surface: var(--surface);

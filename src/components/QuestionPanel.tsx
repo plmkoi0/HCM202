@@ -1,6 +1,7 @@
 // Cửa sổ câu hỏi (mục 8, 12.5): nhãn "Độ khó n", đồng hồ, nút 50:50 / Đổi câu nếu có; sau khi
 // chốt chỉ hiện Đúng / Sai và đáp án đúng (bản 1.6). Đáp án trộn theo state.turn.question.order.
 import { Check, X } from 'lucide-react'
+import { revealMsOf } from '../engine/reducer'
 import type { GameData, GameState, PowerupId } from '../engine/types'
 import { site } from '../lib/gameData'
 import { fill } from '../lib/text'
@@ -77,7 +78,7 @@ export function QuestionPanel({ data, state, playerName, canAnswer, bag, onAnswe
             <p className="rounded-2xl bg-bg p-3" data-correct-answer>
               <span className="font-bold text-ink-soft">{t.correctAnswer}:</span> {q.answers[outcome.correctIndex]}
             </p>
-            <Countdown deadline={autoAt} total={state.config.timers.revealMs} label={(s) => fill(site.game.autoContinueIn, { s })} />
+            <Countdown deadline={autoAt} total={revealMsOf(state, state.config.timers)} label={(s) => fill(site.game.autoContinueIn, { s })} />
             {canContinue && (
               <button type="button" className="btn-primary" data-autofocus onClick={onContinue}>
                 {site.game.continue}
