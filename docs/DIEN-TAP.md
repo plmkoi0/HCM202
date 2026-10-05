@@ -41,7 +41,7 @@ Ngày diễn tập: ………… · Người điền: ………… · Số máy 
 | 20 | "Chơi trên một máy" trên **máy chiếu / laptop của lớp** (phương án dự phòng) | | | |
 | 21 | Vùng function: trước buổi diễn tập đổi sang **Singapore (sin1)** (`docs/HUONG-DAN-VERCEL.md` bước 1.7), Redeploy; `/api/health` báo `pingMs` dưới ~20 ms; thao tác trong phòng phản hồi nhanh | | | `pingMs` trước: ~220 sau: ~60. Claude Code đo lại 04/10/2026: function chạy ở `sin1`, `pingMs` = 1 ms ổn định (~60 ms là lần đầu nối Redis) |
 | 22 | Xem **Usage** của Vercel và Upstash trước và sau buổi diễn tập (`docs/HUONG-DAN-VERCEL.md` mục 5) | | | Lệnh Upstash trước: ……… sau: ……… |
-| 23 | **Kho câu hỏi khóa trước buổi chơi**: bấm Kho câu hỏi chỉ thấy ô nhập mã (không thấy câu, đáp án); **chiếu mã sau khi chơi**, cả lớp nhập và mở được (không phân biệt hoa thường); máy đã mở thì lần sau vào thẳng | | | |
+| 23 | **Kho câu hỏi khóa trước buổi chơi**: bấm Kho câu hỏi chỉ thấy ô nhập mã (không thấy câu, đáp án); **chiếu mã sau khi chơi**, cả lớp nhập và mở được (không phân biệt hoa thường); Kho mở **10 phút** (có đồng hồ) rồi tự khóa, nhập lại mã thì mở tiếp | | | |
 | 24 | Một máy tắt mạng khi sắp tới lượt → **8 giây** sau game tự động tung, câu tính sai, Khiên không tự chặn bẫy | | | |
 | 25 | Cửa sổ câu hỏi ghi rõ của ai ("Câu hỏi của …", chip màu ngựa); kết quả ghi "Tên: Đúng!"; máy chơi cùng "suy nghĩ" 4–6 giây | | | |
 | 26 | Máy chiếu / màn ≥ 1600 px: bàn cờ, chữ, cửa sổ câu hỏi to, đọc được từ cuối lớp | | | |
@@ -69,7 +69,7 @@ Mini game kết thúc buổi thuyết trình (phần "Khởi động + mini game
 2. **Chia phòng ≤ 5 người** (khoảng 2 phút): mỗi nhóm cử **một chủ phòng** bấm **Tạo phòng**, chọn số người, chọn mốc **5 phút** (hoặc **7 phút** nếu còn thời gian), rồi đưa QR / mã phòng cho các bạn trong nhóm. Bạn nào ngồi lẻ thì chơi một mình (phòng 1 người, có thể thêm máy chơi cùng).
 3. **Chơi** (5 hoặc 7 phút): chủ phòng bấm **Bắt đầu** khi đủ người. Nhóm thuyết trình đi quanh hỗ trợ.
 4. **Kết thúc** (khoảng 2 phút): mỗi phòng xem xếp hạng; người về đích trước, hoặc người dẫn đầu khi hết giờ, thắng. Mời vài bạn đọc câu mình trả lời sai (màn **Ôn lại câu trả lời sai**). Chốt thông điệp **"Chủ nhân không đứng ngoài"**.
-5. **Chiếu mã mở Kho câu hỏi** (khoảng 1 phút, sau phần Kết thúc): cả lớp bấm **Kho câu hỏi** ở trang chủ, nhập mã để ôn lại toàn bộ câu hỏi (kể cả **Sổ ôn tập** — câu mình từng sai). Chỉ chiếu mã **sau khi** mọi phòng đã chơi xong.
+5. **Chiếu mã mở Kho câu hỏi** (khoảng 1 phút, sau phần Kết thúc): cả lớp bấm **Kho câu hỏi** ở trang chủ, nhập mã để ôn lại toàn bộ câu hỏi (kể cả **Sổ ôn tập** — câu mình từng sai). Kho mở 10 phút rồi tự khóa. Chỉ chiếu mã **sau khi** mọi phòng đã chơi xong.
 
 **Dự phòng khi mạng trường lỗi:**
 

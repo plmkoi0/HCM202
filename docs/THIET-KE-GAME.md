@@ -336,7 +336,7 @@ Một giao diện co giãn cho cả máy tính và điện thoại.
 8. **Kho câu hỏi — khóa bằng mã** (05/10/2026: sáng bỏ hẳn để tránh gian lận, cùng ngày đưa trở lại có khóa mã — mục 20):
    - Bấm "Kho câu hỏi" ở trang chủ → ô nhập mã kèm dòng "Nhóm sẽ cho mã sau khi chơi xong". Chưa đúng mã thì không thấy câu hỏi, đáp án hay nút "Ôn tập N câu". Khóa cả bản online lẫn bản offline.
    - Mã do nhóm đặt; nhập không phân biệt hoa thường, bỏ khoảng trắng hai đầu. Repo chỉ lưu salt + SHA-256 (`src/data/bank-lock.json`), không lưu mã gốc; đổi mã bằng `npm run set:bank-code -- <mã>`.
-   - Đúng mã → Kho mở, máy nhớ đã mở theo băm hiện tại (đổi mã thì mọi máy khóa lại). Sai → "Mã chưa đúng"; sai 5 lần → chờ 30 giây.
+   - Đúng mã → Kho mở **10 phút** trên máy đó (06/10/2026), có đồng hồ "Kho đóng sau mm:ss"; hết 10 phút Kho tự khóa lại (đang xem cũng đóng, kể cả cửa sổ ôn tập) và phải nhập mã lần nữa. Máy nhớ lúc mở theo băm hiện tại (đổi mã thì mọi máy khóa lại ngay). Sai → "Mã chưa đúng"; sai 5 lần → chờ 30 giây.
    - Mở rồi: "Tổng số câu hỏi: N", lọc theo độ khó, **Sổ ôn tập** ("Câu từng trả lời sai trên máy này" — khôi phục, cũng sau mã), đáp án ẩn mặc định (nút hiện), ôn tập các câu đang lọc.
    - Vẫn ẩn nút Kho khi đang ở trong phòng chơi (L5).
    - **Không khóa:** "Ôn lại câu trả lời sai" và "Làm lại các câu sai" ở màn kết thúc ván; Luật chơi; Cài đặt; dòng "Tổng số câu hỏi: N" trên trang chủ.
@@ -716,7 +716,7 @@ Reducer thuần, không phụ thuộc trình duyệt hay Node. Hành động:
 - **Tự động:** tự tung; tự xử lý khi mất kết nối; thử thách cá nhân đếm lượt, kỷ lục chỉ lưu khi về đích.
 - **Khác:** hoàn tác (chơi trên một máy) chỉ cho thao tác chọn — tung / hiện câu / 50:50 / Đổi câu / nhận power-up / rút thẻ bẫy xóa lịch sử; cùng seed → cùng kết quả (cả thẻ bẫy và bot); Kho câu hỏi ẩn khi đang ở trong phòng.
 - **Mất kết nối (05/10/2026):** tự tung sau 8 s; Khiên không tự chặn, power-up dùng ngay không có tác dụng; hiện đáp án 3 s khi đúng / 5 s khi sai; bot trả lời sau 4–6 s; "Phải tung đúng số" có lý do riêng khi không đi được.
-- **Khóa Kho câu hỏi (05/10/2026):** mã đúng mở được kể cả khác hoa thường / khoảng trắng hai đầu; mã sai không mở; sai 5 lần chờ 30 s; đổi băm thì khóa lại; SHA-256 thuần JS khớp `node:crypto`; mã gốc không có trong mã nguồn, `dist/`, `dist-offline/`, gói zip. e2e: trang chủ có Kho, Kho khóa khi mở lần đầu, mở bằng **mã thử** riêng (biến `BANK_TEST_CODE`, chỉ khi build để chạy thử).
+- **Khóa Kho câu hỏi (05/10/2026):** mã đúng mở được kể cả khác hoa thường / khoảng trắng hai đầu; mã sai không mở; sai 5 lần chờ 30 s; đổi băm thì khóa lại; mở được đúng 10 phút rồi tự khóa (06/10); SHA-256 thuần JS khớp `node:crypto`; mã gốc không có trong mã nguồn, `dist/`, `dist-offline/`, gói zip. e2e: trang chủ có Kho, Kho khóa khi mở lần đầu, mở bằng **mã thử** riêng (biến `BANK_TEST_CODE`, chỉ khi build để chạy thử).
 
 ### Dữ liệu
 - id không trùng; 2–4 đáp án, không trùng nhau; `correct` hợp lệ.
@@ -832,6 +832,7 @@ Như mục 11; dùng kết quả để chỉnh `board.json`, `powerups.json`, `t
 **Thay đổi sau G6 (nhóm quyết định):**
 - [x] **05/10/2026 (sáng) — Bỏ Kho câu hỏi** để tránh gian lận (commit `d53b016`): gỡ màn Kho câu hỏi, nút trên trang chủ và Sổ ôn tập.
 - [x] **05/10/2026 — Đưa Kho câu hỏi trở lại, khóa bằng mã** (nhóm đổi quyết định cùng ngày): Kho và Sổ ôn tập khôi phục, chỉ mở khi nhập đúng mã nhóm đưa sau khi chơi (mục 12.8). Repo chỉ có salt + SHA-256 (`src/data/bank-lock.json`); `npm run set:bank-code -- <mã>` đổi mã. **Giới hạn (L5):** đáp án vẫn nằm trong mã trang (cần cho chơi trên một máy / offline) — người biết dùng công cụ nhà phát triển vẫn đọc được; khóa chỉ chặn tra cứu thông thường.
+- [x] **06/10/2026 — Kho câu hỏi đóng sau 10 phút mở** (nhóm yêu cầu): mỗi lần nhập đúng mã chỉ mở 10 phút trên máy đó, hết giờ tự khóa lại (mục 12.8).
 - [x] **05/10/2026 — Nhóm trả lời các câu hỏi rà soát G6:** hoàn tác phương án (a) (chỉ hoàn tác thao tác chọn); người mất kết nối: Khiên và power-up không tự có tác dụng (đúng mục 9); thêm dòng "Cần tung đúng số để về Đích"; màn hình ≥ 1600 px phóng to bàn cờ, chữ, cửa sổ câu hỏi; hiện đáp án 3 s khi đúng / 5 s khi sai; tự tung cho người mất kết nối sau 8 s (thay 20 s); Sổ ôn tập khôi phục sau mã; giữ tên tạm. Diễn tập: chưa có kết quả mới sau lần 1.
 - [x] **05/10/2026 — Sửa lỗi từ đợt kiểm tra độc lập 04/10** (mỗi lỗi có test; đã kiểm test hỏng trên mã cũ):
   - Kết nối Redis lần đầu chậm hơn hạn chờ làm hỏng instance ("Socket already opened" → 503 tới khi instance bị thu hồi): giữ promise kết nối gốc, hạn chờ chỉ áp cho lượt gọi, không gọi `connect()` khi đã mở (`tests/redis-faults.test.ts`, proxy TCP làm chậm redis-server thật).

@@ -1,7 +1,8 @@
 // Khóa Kho câu hỏi bằng mã (mục 12.8, L5 — 05/10/2026)
 import { createHash } from 'node:crypto'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { codeMatches, hashCode, isBankUnlocked, MAX_TRIES, tryUnlock, unlockWait, WAIT_MS, type BankLock } from '../src/lib/bankLock'
+import { bankOpenUntil, codeMatches, hashCode, isBankUnlocked, MAX_TRIES, OPEN_MS, tryUnlock, UNLOCK_KEY, unlockWait, WAIT_MS, type BankLock } from '../src/lib/bankLock'
+import { save } from '../src/lib/storage'
 import { sha256Hex } from '../src/lib/sha256'
 import { hashCode as nodeHash, leaksCode, lockReady, readLock, scanForLeaks } from '../scripts/lib/bank-lock.mjs'
 
@@ -46,18 +47,34 @@ describe('mở Kho bằng mã', () => {
     expect(codeMatches('  MA-THU-77  ', lock)).toBe(true)
     expect(codeMatches('ma-thu-78', lock)).toBe(false)
     expect(codeMatches('', lock)).toBe(false)
-    expect(isBankUnlocked(lock)).toBe(false)
+    expect(isBankUnlocked(lock, 0)).toBe(false)
     expect(tryUnlock('sai', 0, lock)).toEqual({ ok: false, reason: 'wrong', left: MAX_TRIES - 1 })
-    expect(isBankUnlocked(lock)).toBe(false)
+    expect(isBankUnlocked(lock, 0)).toBe(false)
     expect(tryUnlock('Ma-thu-77', 0, lock)).toEqual({ ok: true })
-    expect(isBankUnlocked(lock)).toBe(true)
+    expect(isBankUnlocked(lock, 0)).toBe(true)
+  })
+
+  it('mở được 10 phút rồi tự khóa; nhập lại mã thì mở thêm 10 phút (06/10/2026)', () => {
+    const T = 1_000_000
+    tryUnlock('ma-thu-77', T, lock)
+    expect(bankOpenUntil(T, lock)).toBe(T + OPEN_MS)
+    expect(OPEN_MS).toBe(10 * 60_000)
+    expect(isBankUnlocked(lock, T + OPEN_MS - 1)).toBe(true)
+    expect(isBankUnlocked(lock, T + OPEN_MS)).toBe(false)
+    expect(tryUnlock('ma-thu-77', T + OPEN_MS + 5000, lock)).toEqual({ ok: true })
+    expect(bankOpenUntil(T + OPEN_MS + 5000, lock)).toBe(T + 2 * OPEN_MS + 5000)
+    // giờ máy bị chỉnh lùi về trước lúc mở → khóa (không kéo dài được bằng cách lùi giờ)
+    expect(isBankUnlocked(lock, T)).toBe(false)
+    // dữ liệu kiểu cũ (chỉ lưu băm, không có lúc mở) → khóa
+    save(UNLOCK_KEY, lock.hash)
+    expect(isBankUnlocked(lock, T)).toBe(false)
   })
 
   it('đổi băm (đổi mã) thì máy đã mở bị khóa lại', () => {
     tryUnlock('ma-thu-77', 0, lock)
-    expect(isBankUnlocked(lock)).toBe(true)
+    expect(isBankUnlocked(lock, 1000)).toBe(true)
     const other: BankLock = { salt: 'salt-moi-5678', hash: hashCode('ma-moi', 'salt-moi-5678') }
-    expect(isBankUnlocked(other)).toBe(false)
+    expect(isBankUnlocked(other, 1000)).toBe(false)
   })
 
   it('sai 5 lần thì chờ 30 giây — trong lúc chờ mã đúng cũng không mở', () => {
@@ -65,7 +82,7 @@ describe('mở Kho bằng mã', () => {
     expect(tryUnlock('sai', 1000, lock)).toEqual({ ok: false, reason: 'wait', waitMs: WAIT_MS })
     expect(unlockWait(1000 + 10_000)).toBe(WAIT_MS - 10_000)
     expect(tryUnlock('ma-thu-77', 1000 + 10_000, lock)).toMatchObject({ ok: false, reason: 'wait' })
-    expect(isBankUnlocked(lock)).toBe(false)
+    expect(isBankUnlocked(lock, 1000 + 10_000)).toBe(false)
     expect(unlockWait(1000 + WAIT_MS)).toBe(0)
     expect(tryUnlock('ma-thu-77', 1000 + WAIT_MS, lock)).toEqual({ ok: true })
   })

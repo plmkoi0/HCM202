@@ -116,6 +116,13 @@ async function infoScreens(page, label) {
   }
   check(await visible(page.getByText(/^Bạn trả lời đúng \d+\/\d+ câu\.$/)), `${label}: ôn tập tới hết, có tổng kết`)
   await dlg.getByRole('button', { name: 'Đóng' }).click()
+  // Kho mở 10 phút rồi tự khóa (06/10/2026)
+  check(/^Kho đóng sau \d+:\d\d$/.test((await page.locator('[data-bank-left]').textContent())?.trim() ?? ''), `${label}: Kho đang mở có đồng hồ "Kho đóng sau …"`)
+  await page.clock.runFor(10 * 60_000)
+  check(
+    (await page.locator('[data-question]').count()) === 0 && (await visible(page.getByText('Kho đã đóng sau 10 phút mở — nhập lại mã để mở tiếp.'))),
+    `${label}: sau 10 phút Kho tự khóa lại, phải nhập lại mã`,
+  )
   await page.getByRole('button', { name: /Về trang chủ/ }).first().click()
 
   await page.getByRole('button', { name: 'Cài đặt' }).click()

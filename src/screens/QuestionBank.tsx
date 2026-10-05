@@ -3,13 +3,13 @@
 // có trụ cột, nguồn, [Chờ xác minh]. Chỉ mở được từ trang chủ — không có khi đang ở trong phòng (L5).
 // Khóa bằng mã (05/10/2026): chưa đúng mã thì không hiện câu hỏi, đáp án hay nút ôn tập.
 import { Check, Eye, EyeOff, GraduationCap, Lock } from 'lucide-react'
-import { useMemo, useState, type FormEvent } from 'react'
+import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { Practice } from '../components/Practice'
 import { clearReview, loadReview, removeFromReview } from '../game/review'
-import { isBankUnlocked, tryUnlock, unlockWait } from '../lib/bankLock'
+import { bankOpenUntil, tryUnlock, unlockWait } from '../lib/bankLock'
 import { useNow } from '../lib/hooks'
 import { gameData, questionList, site } from '../lib/gameData'
-import { fill } from '../lib/text'
+import { clock, fill } from '../lib/text'
 
 const LETTERS = ['A', 'B', 'C', 'D']
 
@@ -21,12 +21,26 @@ function fold(s: string): string {
 }
 
 export function QuestionBank({ onBack }: { onBack: () => void }) {
-  const [unlocked, setUnlocked] = useState(isBankUnlocked)
-  return unlocked ? <BankContent onBack={onBack} /> : <BankLocked onBack={onBack} onUnlocked={() => setUnlocked(true)} />
+  // Kho mở 10 phút sau mỗi lần nhập đúng mã, hết giờ tự khóa (06/10/2026)
+  const [until, setUntil] = useState(() => bankOpenUntil(Date.now()))
+  const [expired, setExpired] = useState(false)
+  return until > 0 ? (
+    <BankContent
+      key={until}
+      until={until}
+      onBack={onBack}
+      onExpired={() => {
+        setUntil(0)
+        setExpired(true)
+      }}
+    />
+  ) : (
+    <BankLocked onBack={onBack} expired={expired} onUnlocked={() => setUntil(bankOpenUntil(Date.now()))} />
+  )
 }
 
-/** Ô nhập mã: đúng mã → mở (máy nhớ theo băm); sai 5 lần → chờ 30 giây */
-function BankLocked({ onBack, onUnlocked }: { onBack: () => void; onUnlocked: () => void }) {
+/** Ô nhập mã: đúng mã → mở 10 phút (máy nhớ theo băm); sai 5 lần → chờ 30 giây */
+function BankLocked({ onBack, onUnlocked, expired }: { onBack: () => void; onUnlocked: () => void; expired: boolean }) {
   const t = site.bank
   const [code, setCode] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -55,6 +69,11 @@ function BankLocked({ onBack, onUnlocked }: { onBack: () => void; onUnlocked: ()
         <h2 id="bank-lock-title" className="flex items-center gap-2 text-lg font-bold">
           <Lock size={20} aria-hidden="true" /> {t.lockTitle}
         </h2>
+        {expired && (
+          <p className="font-semibold" role="status">
+            {t.closedAfter}
+          </p>
+        )}
         <p className="text-ink-soft">{t.lockNote}</p>
         <label className="flex flex-col gap-1 font-semibold">
           {t.codeLabel}
@@ -81,8 +100,13 @@ function BankLocked({ onBack, onUnlocked }: { onBack: () => void; onUnlocked: ()
   )
 }
 
-function BankContent({ onBack }: { onBack: () => void }) {
+function BankContent({ until, onBack, onExpired }: { until: number; onBack: () => void; onExpired: () => void }) {
   const t = site.bank
+  const now = useNow(1000)
+  const left = until - now
+  useEffect(() => {
+    if (left <= 0) onExpired()
+  }, [left, onExpired])
   const [f, setF] = useState<Filter>({ difficulty: 'all', wrong: false, test: false, text: '' })
   const [shown, setShown] = useState<Set<string>>(new Set())
   const [review, setReview] = useState(() => loadReview((id) => gameData.questionById.has(id)))
@@ -123,6 +147,9 @@ function BankContent({ onBack }: { onBack: () => void }) {
         </button>
         <h1 className="mt-2 font-serif text-3xl font-bold">{t.title}</h1>
         <p className="mt-1 text-lg font-semibold">{fill(t.total, { n: questionList.length })}</p>
+        <p className="text-sm font-semibold text-accent-text" role="timer" data-bank-left>
+          {fill(t.openFor, { time: clock(Math.max(0, left)) })}
+        </p>
         <p className="text-sm text-ink-soft">{t.intro}</p>
       </header>
 

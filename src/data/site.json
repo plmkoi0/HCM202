@@ -344,6 +344,8 @@
     "unlock": "Mở Kho câu hỏi",
     "codeWrong": "Mã chưa đúng.",
     "codeWait": "Nhập sai 5 lần — thử lại sau {s} giây.",
+    "openFor": "Kho đóng sau {time}",
+    "closedAfter": "Kho đã đóng sau 10 phút mở — nhập lại mã để mở tiếp.",
     "intro": "Đáp án ẩn mặc định — bấm \"Hiện đáp án\" ở từng câu. Kho câu hỏi không mở được khi đang ở trong phòng chơi.",
     "filterDifficulty": "Độ khó",
     "filterOther": "Lọc thêm",
