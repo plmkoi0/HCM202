@@ -13,13 +13,14 @@ Thiết kế (nguồn chuẩn): [`docs/THIET-KE-GAME.md`](docs/THIET-KE-GAME.md)
 - **Tạo phòng** (1–5 người, có máy chơi cùng) → mời bạn bằng **mã 5 ký tự**, **mã QR** hoặc **link** `/p/ABCDE`.
 - **Vào phòng** bằng mã, hoặc quét QR / mở link mời.
 - **Chơi trên một máy**: 1–5 người thay phiên trên cùng thiết bị; 1 người và 0 máy = thử thách cá nhân.
+- **Kho câu hỏi** khóa bằng mã: nhóm chiếu mã sau khi cả lớp chơi xong (đổi mã: `npm run set:bank-code -- <mã>`, xem dưới).
 - Trên lớp: chủ phòng chọn mốc **5 hoặc 7 phút**. Ảnh QR để đặt lên slide: [`docs/phat-hanh/qr-game.png`](docs/phat-hanh/qr-game.png).
 
 ## Bản offline (không cần mạng)
 
 - Tải gói [`phat-hanh/HCM202-Con-duong-tu-tuong.zip`](phat-hanh/HCM202-Con-duong-tu-tuong.zip) (trên GitHub: mở file → **Download raw file**).
 - Giải nén, mở `index.html` bằng trình duyệt (Chrome, Edge, Firefox, Safari). Hướng dẫn ngắn ở `HUONG-DAN.txt` trong gói.
-- Chỉ có **"Chơi trên một máy"** (kèm Luật chơi, Kho câu hỏi, Cài đặt); không có chơi qua phòng. Bản offline không gửi request mạng nào.
+- Chỉ có **"Chơi trên một máy"** (kèm Luật chơi, Kho câu hỏi — cũng khóa bằng mã, Cài đặt); không có chơi qua phòng. Bản offline không gửi request mạng nào.
 
 ## Dự phòng khi mất mạng
 
@@ -57,15 +58,16 @@ Cần Node.js ≥ 22.12. Lần đầu: `npm install` (`npm audit` báo lỗi ở
 | `npm run build` | Bản online → `dist/` (Vercel chạy lệnh này) |
 | `npm run build:offline` | Bản offline một file → `dist-offline/index.html` (kiểm luôn không có mã mạng) |
 | `npm run package:offline` | Build offline rồi đóng gói `phat-hanh/HCM202-Con-duong-tu-tuong.zip` (index.html + HUONG-DAN.txt) |
+| `npm run set:bank-code -- <mã>` | Đổi mã mở Kho câu hỏi: ghi salt + SHA-256 vào `src/data/bank-lock.json` (không lưu mã gốc; mã chỉ hiện trên dòng lệnh của máy mình). Sau đó `npm run package:offline` |
 | `npm run qr` | Tạo lại `docs/phat-hanh/qr-game.png` từ `siteUrl` trong `src/data/site.json` (không gọi mạng) |
 | `npm run import:questions` | Nhập `docs/CAU-HOI-GAME.md` → `src/data/questions.json` |
 | `npm run test` | Toàn bộ test (engine, dữ liệu, câu hỏi, server, kho Redis, lớp Vercel) |
 | `npm run lint` | Kiểm tra mã (oxlint) |
-| `npm run e2e` | Chạy thử trong Chromium: chơi trên một máy (bản offline, chạy `build:offline` trước) + 3 máy chơi qua phòng (server cục bộ) |
+| `npm run e2e` | Chạy thử trong Chromium: chơi trên một máy (tự build bản offline vào `dist-e2e/` với Kho câu hỏi khóa bằng một mã thử riêng — biến `BANK_TEST_CODE`) + 3 máy chơi qua phòng (server cục bộ) |
 | `npm run e2e:local` | Chỉ phần chơi trên một máy |
 | `npm run e2e:online -- --url <địa chỉ>` | Chạy thử 3 máy trên bản deploy thật |
 | `npm run check:deploy -- <địa chỉ> [--long]` | Kiểm bản deploy: `/api/health`, WebSocket, polling, (`--long`) đóng / nối lại ở 300 s |
-| `npm run check:release` | Kiểm trước phát hành: không còn câu hỏi thử, `questions.json` khớp file câu hỏi, bản offline không có mã mạng, `siteUrl`, ảnh QR và gói zip mới nhất |
+| `npm run check:release` | Kiểm trước phát hành: không còn câu hỏi thử, `questions.json` khớp file câu hỏi, bản offline không có mã mạng, `siteUrl`, ảnh QR và gói zip mới nhất, Kho câu hỏi có băm mã và mã gốc không lộ trong mã nguồn / bản build / gói zip |
 | `npm run simulate` | Mô phỏng cân bằng 1.000 ván bot mỗi cấu hình (mục 11) |
 | `npm run sim:load` | Mô phỏng tải 10 phòng × 5 + 20 phòng 1 người qua HTTP / WebSocket thật |
 

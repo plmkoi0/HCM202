@@ -8,7 +8,7 @@ import {
   Sparkles,
   Star,
   Swords,
-  Zap,
+  TriangleAlert,
   Repeat,
   ChevronsUp,
   Divide,
@@ -19,7 +19,7 @@ import {
 import type { PowerupId } from '../engine/types'
 
 /** Biểu tượng loại ô (board.json → cellTypes.icon) */
-export const CELL_ICONS: Record<string, LucideIcon> = { gate: DoorOpen, question: CircleHelp, star: Star, trap: Zap, finish: Flag }
+export const CELL_ICONS: Record<string, LucideIcon> = { gate: DoorOpen, question: CircleHelp, star: Star, trap: TriangleAlert, finish: Flag }
 
 export const POWERUP_ICONS: Record<PowerupId, LucideIcon> = {
   advance3: ChevronsUp,

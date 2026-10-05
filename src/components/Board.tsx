@@ -315,30 +315,35 @@ export function cellLegendItems(data: GameData): { key: string; swatch: React.Re
   ]
 }
 
-/** Chú thích bàn cờ (mục 12.4): loại ô, màu ngựa, ô đích của bước đi */
+/**
+ * Chú thích bàn cờ (mục 12.4, 16): luôn hiện, không gấp lại — mỗi loại ô một mục ngắn (biểu tượng
+ * + tên) xếp trên một dòng (điện thoại thì xuống dòng); mô tả dài để cho trình đọc màn hình và
+ * trang Luật chơi.
+ */
 export function BoardLegend({ data }: { data: GameData }) {
   const t = site.board
   const items = cellLegendItems(data)
   return (
-    <details className="card board-light text-sm">
-      <summary className="-my-1 cursor-pointer py-2.5 font-bold">{t.legend}</summary>
-      <ul className="mt-2 flex flex-col gap-2">
+    <section className="card board-light px-3 py-2 text-sm" aria-labelledby="board-legend-title">
+      <h2 id="board-legend-title" className="sr-only">
+        {t.legend}
+      </h2>
+      <ul className="flex flex-wrap items-center gap-x-3 gap-y-1 [&_svg]:h-6 [&_svg]:w-6">
         {items.map((it) => (
-          <li key={it.key} className="flex items-start gap-2">
+          <li key={it.key} className="flex items-center gap-1">
             {it.swatch}
-            <span>
-              <span className="font-semibold">{it.label}</span>
-              {it.text ? ` — ${it.text}` : ''}
-            </span>
+            <span className="font-semibold">{it.label}</span>
+            {it.text && <span className="sr-only"> — {it.text}</span>}
           </li>
         ))}
-        <li className="flex items-start gap-2">
+        <li className="flex items-center gap-1">
           <svg width={30} height={30} viewBox="-15 -15 30 30" aria-hidden="true" className="shrink-0">
             <circle r={11} fill="none" stroke="var(--gold)" strokeWidth={4} />
           </svg>
           <span className="font-semibold">{t.target}</span>
+          <span className="sr-only"> — {t.targetHint}</span>
         </li>
       </ul>
-    </details>
+    </section>
   )
 }

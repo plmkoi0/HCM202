@@ -76,7 +76,7 @@ export function Lobby({ view, act, onLeave, report }: { view: StateView; act: Ac
             )}
           </div>
         </div>
-        {qr && <div className="w-44 rounded-2xl bg-white p-2" role="img" aria-label={fill(t.qrLabel, { code: r.code })} dangerouslySetInnerHTML={{ __html: qr }} />}
+        {qr && <div className="w-44 rounded-2xl bg-white p-2" data-qr role="img" aria-label={fill(t.qrLabel, { code: r.code })} dangerouslySetInnerHTML={{ __html: qr }} />}
       </section>
 
       <section className="card flex flex-col gap-3">

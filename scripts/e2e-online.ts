@@ -111,8 +111,18 @@ await host.getByLabel(/Đoán cùng/).check()
 // bản deploy: hạn thật → chọn mốc 5 phút để ván kết thúc theo giờ nếu chưa ai về đích
 if (remote) await host.locator('label.seg', { hasText: /^5 phút$/ }).first().click()
 await axe(host, 'tạo phòng')
+// như trên điện thoại: đang cuộn ở cuối form thì bấm Tạo phòng → phòng chờ phải cuộn về đầu (thấy mã + QR)
+await host.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
 await host.getByRole('button', { name: 'Tạo phòng' }).click()
 await host.locator('[data-room-code]').waitFor()
+await host.locator('[data-qr]').waitFor()
+check(
+  // (không khai báo hàm bên trong evaluate: tsx thêm __name không có trong trang)
+  await host.evaluate(
+    () => document.querySelector('[data-room-code]')!.getBoundingClientRect().top >= 0 && document.querySelector('[data-qr]')!.getBoundingClientRect().bottom <= window.innerHeight + 1,
+  ),
+  'phòng chờ: mã phòng và QR nằm trong màn hình đầu sau khi tạo phòng',
+)
 const code = (await host.locator('[data-room-code]').getAttribute('data-room-code'))!
 check(/^[A-Z2-9]{5}$/.test(code), `tạo phòng được mã ${code}`)
 check(await visible(host, host.getByRole('img', { name: new RegExp(`Mã QR vào phòng ${code}`) })), 'phòng chờ có mã QR')
@@ -190,7 +200,17 @@ if (remote) {
   // Chromium trong môi trường có proxy chặn TLS không nâng cấp được WebSocket (proxy bỏ header Upgrade);
   // WebSocket thật được check:deploy kiểm bằng Node → ở đây chỉ đòi máy đã có kết nối lại
   check(await visible(g2, g2.locator('[data-conn="ws"], [data-conn="poll"]')), `máy từng mất mạng đã có kết nối lại (${await g2.locator('[data-conn]').first().getAttribute('data-conn')})`)
-} else check(await visible(g2, g2.locator('[data-conn="ws"]')), 'máy từng mất mạng đã nối lại WebSocket ("Trực tiếp")')
+} else {
+  // Server cục bộ ở đây đóng mỗi WebSocket sau 25 s (giả lập giới hạn 300 s của Vercel, rút ngắn) mà
+  // client chỉ chủ động thay kết nối ở mốc 280 s → cứ 25 s máy về polling ~1 s rồi nối lại. Kiểm một
+  // lần đúng lúc đó thì hỏng (e2e 05/10: 1/3 lần chạy) → chờ tối đa 6 s cho "Trực tiếp".
+  let ws = false
+  for (let i = 0; i < 30 && !ws; i++) {
+    ws = await visible(g2, g2.locator('[data-conn="ws"]'))
+    if (!ws) await sleep(200)
+  }
+  check(ws, 'máy từng mất mạng đã nối lại WebSocket ("Trực tiếp")')
+}
 check(await visible(g3, g3.locator('[data-room-status="ended"]')), 'máy tải lại trang vẫn về đúng phòng (phiên đã lưu)')
 await axe(host, 'kết thúc (chơi qua phòng)')
 if (shots) await g2.screenshot({ path: join(shots, 'end-mobile.png'), fullPage: true })

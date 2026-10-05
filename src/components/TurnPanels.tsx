@@ -5,6 +5,7 @@ import type { GameData, GameState, PowerupId } from '../engine/types'
 import { site } from '../lib/gameData'
 import { fill } from '../lib/text'
 import { Countdown } from './Countdown'
+import { PlayerChip } from './PlayerChip'
 import { POWERUP_ICONS, TRAP_ICONS } from './icons'
 import { Sheet } from './Sheet'
 
@@ -34,6 +35,7 @@ export function OutcomePanel({
   autoAt: number | null
 }) {
   const o = state.turn.outcome
+  const owner = state.players.find((p) => p.id === state.turn.playerId)
   const t = site.game.outcome
   if (!o || o.kind === 'answered') return null
   let title = ''
@@ -76,7 +78,11 @@ export function OutcomePanel({
   return (
     <Sheet labelledBy="outcome-title" tone={tone}>
       <div className="flex flex-col gap-3" aria-live="polite">
-        <p className="text-sm font-semibold text-ink-soft">{playerName}</p>
+        {owner && (
+          <p>
+            <PlayerChip player={owner} text={playerName} />
+          </p>
+        )}
         <h2 id="outcome-title" className="flex items-center gap-2 font-serif text-xl font-bold">
           {Icon && <Icon size={28} aria-hidden={true} />}
           {title}

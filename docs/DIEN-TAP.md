@@ -9,7 +9,9 @@
 
 Ngày diễn tập: ………… · Người điền: ………… · Số máy dùng: ………… (≥ 5, gồm điện thoại và laptop)
 
-**Tiến độ (04/10/2026, lần 1 — diễn tập một phần):** đạt 7 dòng (4, 5, 6, 11, 13, 14, 19), chưa ghi lỗi nào; đã đổi vùng function sang Singapore (dòng 21). **Còn phải thử:** 1–3, 7–10, 12, 15–18, 20, 22 và đo lệnh Redis của một ván.
+**Tiến độ (04/10/2026, lần 1 — diễn tập một phần):** đạt 7 dòng (4, 5, 6, 11, 13, 14, 19), chưa ghi lỗi nào; đã đổi vùng function sang Singapore (dòng 21). **Còn phải thử:** 1–3, 7–10, 12, 15–18, 20, 22, 23–26 và đo lệnh Redis của một ván.
+
+**Thay đổi sau lần 1 (05/10/2026) — thử lại ở lần diễn tập tới:** Kho câu hỏi khóa bằng mã (dòng 23); hiện đáp án 3 giây khi đúng, 5 giây khi sai (dòng 16); người mất kết nối được tự tung sau 8 giây, Khiên không tự chặn (dòng 24); máy chơi cùng trả lời sau 4–6 giây; cửa sổ câu hỏi / kết quả ghi tên người (dòng 25); có mạng lại thì về "Trực tiếp" ngay (dòng 13); màn ≥ 1600 px phóng to (dòng 26).
 
 ## 1. Danh sách diễn tập
 
@@ -32,13 +34,17 @@ Ngày diễn tập: ………… · Người điền: ………… · Số máy 
 | 13 | Đang chơi, tắt Wi-Fi vài giây rồi bật lại → báo "Mất kết nối — đang thử lại", sau đó về "Trực tiếp", ván chơi tiếp đúng chỗ | ✓ | | |
 | 14 | Tải lại trang giữa ván → về đúng phòng, đúng vị trí | ✓ | | |
 | 15 | Âm thanh trên điện thoại (iPhone ở chế độ im lặng có thể không phát tiếng); nút loa / tắt tiếng hoạt động | | | |
-| 16 | **Đọc kịp đáp án đúng trong 3 giây** sau khi trả lời (người trả lời bấm "Tiếp tục" được nếu muốn đi sớm) | | | |
+| 16 | **Đọc kịp đáp án đúng**: 3 giây khi trả lời đúng, **5 giây khi sai** (người trả lời bấm "Tiếp tục" được nếu muốn đi sớm) | | | |
 | 17 | **Trong một ván không lặp câu** (ghi lại vài câu đã gặp; câu chỉ lặp khi đã hỏi hết 55 câu) | | | |
 | 18 | **Ô Đích hỏi câu như các ô khác** (nhãn "Câu về đích", độ khó bất kỳ 1 / 2 / 3, không luôn là câu khó nhất) | | | |
 | 19 | Bản offline: giải nén gói zip, mở `index.html` khi **tắt mạng** → "Chơi trên một máy" chơi được | ✓ | | |
 | 20 | "Chơi trên một máy" trên **máy chiếu / laptop của lớp** (phương án dự phòng) | | | |
 | 21 | Vùng function: trước buổi diễn tập đổi sang **Singapore (sin1)** (`docs/HUONG-DAN-VERCEL.md` bước 1.7), Redeploy; `/api/health` báo `pingMs` dưới ~20 ms; thao tác trong phòng phản hồi nhanh | | | `pingMs` trước: ~220 sau: ~60. Claude Code đo lại 04/10/2026: function chạy ở `sin1`, `pingMs` = 1 ms ổn định (~60 ms là lần đầu nối Redis) |
 | 22 | Xem **Usage** của Vercel và Upstash trước và sau buổi diễn tập (`docs/HUONG-DAN-VERCEL.md` mục 5) | | | Lệnh Upstash trước: ……… sau: ……… |
+| 23 | **Kho câu hỏi khóa trước buổi chơi**: bấm Kho câu hỏi chỉ thấy ô nhập mã (không thấy câu, đáp án); **chiếu mã sau khi chơi**, cả lớp nhập và mở được (không phân biệt hoa thường); máy đã mở thì lần sau vào thẳng | | | |
+| 24 | Một máy tắt mạng khi sắp tới lượt → **8 giây** sau game tự động tung, câu tính sai, Khiên không tự chặn bẫy | | | |
+| 25 | Cửa sổ câu hỏi ghi rõ của ai ("Câu hỏi của …", chip màu ngựa); kết quả ghi "Tên: Đúng!"; máy chơi cùng "suy nghĩ" 4–6 giây | | | |
+| 26 | Máy chiếu / màn ≥ 1600 px: bàn cờ, chữ, cửa sổ câu hỏi to, đọc được từ cuối lớp | | | |
 
 **Đo lệnh Redis của một ván (để cập nhật mục 15.5):** ghi số **Commands** trên Upstash ngay trước khi tạo một phòng, chơi một ván **3 người** (mốc 5 hoặc 7 phút) tới hết, chờ 1–2 phút, ghi lại số **Commands**.
 
@@ -56,12 +62,14 @@ Mini game kết thúc buổi thuyết trình (phần "Khởi động + mini game
 3. Xem Usage của Upstash: còn đủ lệnh trong tháng (hạn mức 500.000).
 4. Slide cuối có **ảnh QR** (`docs/phat-hanh/qr-game.png`) và địa chỉ game viết rõ dưới QR.
 5. Laptop máy chiếu có sẵn **bản offline** (đã giải nén) và đã mở thử.
+6. Chuẩn bị một slide riêng có **mã mở Kho câu hỏi** (mã nhóm đã đặt; đổi mã bằng `npm run set:bank-code -- <mã>` rồi `npm run package:offline`) — chỉ chiếu sau khi chơi xong.
 
 **Trên lớp:**
 1. **Chiếu QR** (khoảng 1 phút): cả lớp quét QR hoặc gõ địa chỉ.
 2. **Chia phòng ≤ 5 người** (khoảng 2 phút): mỗi nhóm cử **một chủ phòng** bấm **Tạo phòng**, chọn số người, chọn mốc **5 phút** (hoặc **7 phút** nếu còn thời gian), rồi đưa QR / mã phòng cho các bạn trong nhóm. Bạn nào ngồi lẻ thì chơi một mình (phòng 1 người, có thể thêm máy chơi cùng).
 3. **Chơi** (5 hoặc 7 phút): chủ phòng bấm **Bắt đầu** khi đủ người. Nhóm thuyết trình đi quanh hỗ trợ.
 4. **Kết thúc** (khoảng 2 phút): mỗi phòng xem xếp hạng; người về đích trước, hoặc người dẫn đầu khi hết giờ, thắng. Mời vài bạn đọc câu mình trả lời sai (màn **Ôn lại câu trả lời sai**). Chốt thông điệp **"Chủ nhân không đứng ngoài"**.
+5. **Chiếu mã mở Kho câu hỏi** (khoảng 1 phút, sau phần Kết thúc): cả lớp bấm **Kho câu hỏi** ở trang chủ, nhập mã để ôn lại toàn bộ câu hỏi (kể cả **Sổ ôn tập** — câu mình từng sai). Chỉ chiếu mã **sau khi** mọi phòng đã chơi xong.
 
 **Dự phòng khi mạng trường lỗi:**
 
@@ -70,7 +78,7 @@ Mini game kết thúc buổi thuyết trình (phần "Khởi động + mini game
 | Trang mở được nhưng tạo / vào phòng báo lỗi server | Bấm **"Chơi trên một máy"** trên laptop máy chiếu: cả lớp chia 2–5 đội, mỗi đội một màu ngựa, thay phiên trả lời trên màn chiếu |
 | Không mở được trang game | Mở **bản offline** (`index.html` trong gói zip) trên laptop máy chiếu, chơi "Chơi trên một máy" như trên |
 | Một số máy không vào được (mạng yếu) | Bạn đó không vào được phòng → xem chung máy với bạn bên cạnh, hoặc chơi "Chơi trên một máy" trên máy mình |
-| Mất mạng giữa ván | Chờ vài giây: game tự chuyển chế độ dự phòng / tự nối lại. Tải lại trang vẫn về đúng phòng. Tới lượt người mất kết nối thì sau 20 giây game tự động tung, câu hỏi tính là sai |
+| Mất mạng giữa ván | Chờ vài giây: game tự chuyển chế độ dự phòng / tự nối lại. Tải lại trang vẫn về đúng phòng. Tới lượt người mất kết nối thì sau 8 giây game tự động tung, câu hỏi tính là sai |
 | Chủ phòng rời phòng | Quyền chủ phòng tự chuyển cho người vào sớm nhất còn kết nối |
 
 ## 3. Gửi kết quả

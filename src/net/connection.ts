@@ -92,12 +92,19 @@ export class RoomConnection {
 
   start(initial?: StateView): void {
     if (initial) this.accept(initial)
+    if (typeof globalThis.addEventListener === 'function') globalThis.addEventListener('online', this.onOnline)
     if (this.wsImpl()) this.openSocket(false)
     else this.startPolling()
   }
 
+  /** trình duyệt báo có mạng lại */
+  private onOnline = (): void => {
+    if (!this.stopped && this.mode !== 'ws') this.retrySocketSoon()
+  }
+
   stop(): void {
     this.stopped = true
+    if (typeof globalThis.removeEventListener === 'function') globalThis.removeEventListener('online', this.onOnline)
     this.setMode('closed')
     for (const s of [this.sock, this.renewing]) if (s) this.dropSocket(s, 1000, 'stop')
     this.sock = this.renewing = null
@@ -288,6 +295,21 @@ export class RoomConnection {
     this.socketFailed()
   }
 
+  /**
+   * Mạng có lại (sự kiện `online` của trình duyệt, hoặc lần poll đầu tiên thành công sau khi mất mạng):
+   * đặt lại khoảng lùi và thử WebSocket sau ~0,5 s. Trước đây máy ở chế độ dự phòng tới hết khoảng
+   * lùi đã tăng trong lúc mất mạng (1 → 2 → 5 → 10 → 30 s) — e2e 05/10 hỏng vì vậy.
+   */
+  retrySocketSoon(): void {
+    if (this.stopped || this.sock || !this.wsImpl()) return
+    this.retries = 0
+    if (this.retryTimer) clearTimeout(this.retryTimer)
+    this.retryTimer = setTimeout(() => {
+      this.retryTimer = null
+      if (!this.sock && !this.stopped) this.openSocket(false)
+    }, 500)
+  }
+
   /** WebSocket không dùng được → polling ngay, hẹn thử lại WebSocket */
   private socketFailed(): void {
     if (this.stopped) return
@@ -331,7 +353,11 @@ export class RoomConnection {
   async pollOnce(): Promise<void> {
     try {
       const v = await this.o.api.state(this.o.session, this.view?.version)
-      if (this.polling && this.mode === 'offline') this.setMode('poll')
+      if (this.polling && this.mode === 'offline') {
+        this.setMode('poll')
+        // mạng vừa có lại → thử WebSocket ngay, không chờ hết khoảng lùi (có thể tới 30 s)
+        this.retrySocketSoon()
+      }
       if (v) this.accept(v)
     } catch (e) {
       const code = e instanceof ApiError ? e.code : 'NETWORK'

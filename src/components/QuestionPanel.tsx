@@ -6,6 +6,7 @@ import type { GameData, GameState, PowerupId } from '../engine/types'
 import { site } from '../lib/gameData'
 import { fill } from '../lib/text'
 import { Countdown } from './Countdown'
+import { PlayerChip } from './PlayerChip'
 import { POWERUP_ICONS } from './icons'
 import { Sheet } from './Sheet'
 
@@ -44,7 +45,8 @@ export function QuestionPanel({ data, state, playerName, canAnswer, bag, onAnswe
   const tone = revealed ? (outcome.correct ? 'good' : 'bad') : 'default'
   const FiftyIcon = POWERUP_ICONS.fiftyFifty
   const SwapIcon = POWERUP_ICONS.swap
-  const result = revealed ? `${outcome.correct ? t.correct : outcome.timedOut ? t.timeout : t.wrong} — ${outcome.correct ? (outcome.finished ? t.reachedFinish : fill(t.moveOn, { n: outcome.moved })) : t.stay}` : ''
+  const owner = state.players.find((p) => p.id === state.turn.playerId)
+  const result = revealed ? `${playerName}: ${outcome.correct ? t.correct : outcome.timedOut ? t.timeout : t.wrong} — ${outcome.correct ? (outcome.finished ? t.reachedFinish : fill(t.moveOn, { n: outcome.moved })) : t.stay}` : ''
 
   return (
     <Sheet labelledBy="q-title" tone={tone}>
@@ -54,6 +56,7 @@ export function QuestionPanel({ data, state, playerName, canAnswer, bag, onAnswe
           {result}
         </p>
         <div className="flex flex-wrap items-center gap-2 text-sm">
+          {owner && <PlayerChip player={owner} text={fill(t.owner, { name: playerName })} />}
           <span className="rounded-full bg-line px-2.5 py-0.5 font-semibold">{fill(t.difficulty, { n: q.difficulty })}</span>
           {aq.isFinish && <span className="rounded-full bg-gold px-2.5 py-0.5 font-bold text-on-gold">{t.finish}</span>}
           {q.test && <span className="rounded-full border border-ink-soft px-2 py-0.5 text-ink-soft">{site.testLabel}</span>}
@@ -69,7 +72,7 @@ export function QuestionPanel({ data, state, playerName, canAnswer, bag, onAnswe
         {revealed && (
           <div className="flex flex-col gap-3">
             <p className={`text-xl font-bold ${outcome.correct ? 'text-ok' : 'text-bad'}`}>
-              {outcome.correct ? t.correct : outcome.timedOut ? t.timeout : t.wrong}{' '}
+              <span className="text-ink">{playerName}:</span> {outcome.correct ? t.correct : outcome.timedOut ? t.timeout : t.wrong}{' '}
               <span className="font-semibold text-ink">
                 — {outcome.correct ? (outcome.finished ? t.reachedFinish : fill(t.moveOn, { n: outcome.moved })) : t.stay}
               </span>

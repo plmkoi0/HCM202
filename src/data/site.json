@@ -146,6 +146,7 @@
     "inStable": "trong chuồng",
     "question": {
       "title": "Câu hỏi",
+      "owner": "Câu hỏi của {name}",
       "finish": "Câu về đích",
       "difficulty": "Độ khó {n}",
       "timeLeft": "Còn {s} giây",
@@ -248,7 +249,8 @@
   "board": {
     "label": "Bàn cờ — {n} ô vòng chung, đường về đích {h} ô",
     "legend": "Chú thích",
-    "target": "Ô đích của bước đi"
+    "target": "Ô sẽ tới",
+    "targetHint": "ô đích của bước đi vừa tung"
   },
   "common": {
     "close": "Đóng",

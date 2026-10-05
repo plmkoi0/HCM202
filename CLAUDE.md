@@ -36,7 +36,7 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - **L2** 50:50 loại tới khi còn 2 đáp án (4 → 2, 3 → 2); câu 2 đáp án: nút mờ, không mất power-up.
 - **L3** Luật ra 6 xét mặt xúc xắc trước khi nhân đôi (Xúc xắc ×2).
 - **L4** Thử thách cá nhân: giới hạn mặc định 10 phút; kỷ lục (ít lượt nhất) chỉ lưu khi về đích; hết giờ báo số ô còn lại.
-- **L5** Chấp nhận đáp án nằm trong mã trang (bản online đóng gói `questions.json`); state vẫn không chứa đáp án trước khi chốt. **Kho câu hỏi đã bỏ hẳn (05/10/2026, tránh gian lận)** — cùng Sổ ôn tập.
+- **L5** Chấp nhận đáp án nằm trong mã trang (bản online đóng gói `questions.json`); state vẫn không chứa đáp án trước khi chốt; ẩn nút Kho câu hỏi khi đang ở trong phòng. **05/10/2026: Kho câu hỏi (+ Sổ ôn tập) khóa bằng mã** nhóm đưa sau khi chơi — chỉ chặn tra cứu thông thường (đáp án vẫn trong mã trang).
 - **T1** Giới hạn 5 / 7 / 10 / 15 phút / không giới hạn, mặc định 10; trên lớp chọn 5 hoặc 7; hết giờ xếp theo khoảng cách, người dẫn đầu được tôn vinh như người thắng; mô phỏng ở 20 s và 25 s/lượt.
 - ~~**N1** Thẻ hiện vật trong game: mã, ngày, tên, trụ cột, câu chuyện, trích dẫn + `quote.cite`, ghi chú ngữ cảnh; không ảnh, không "Ngày nay", không nguồn APA; hiện vật `hidden` không hiện chip.~~ *(đã bỏ ở 1.6)*
 - ~~**N2** Mục tiêu mỗi trụ cột ≥ 10 / 6 / 4 câu độ khó 1 / 2 / 3; trụ cột trong sạch được ít hơn 20 câu. Tổ hợp không có câu: lấy cùng trụ cột ở độ khó gần nhất, rồi trụ cột khác cùng độ khó (mục 8).~~ *(đã bỏ ở 1.6)*
@@ -50,6 +50,7 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - `docs/THIET-KE-GAME.md` là nguồn chuẩn duy nhất cho game; thay đổi đã được nhóm duyệt thì **cập nhật tài liệu trước rồi mới code**. Chỗ thiết kế thiếu, mâu thuẫn hoặc không khả thi: nêu ra kèm phương án đề xuất và hỏi nhóm, không tự quyết lặng lẽ.
 - **Không tự viết hay sửa nội dung câu hỏi** về tư tưởng Hồ Chí Minh — bộ câu hỏi do nhóm biên soạn và chịu trách nhiệm (mục 13); chỉ báo lỗi định dạng, câu trùng. Câu hỏi thử (mục 13.3) chỉ hỏi về luật chơi: id `TEST-`, `"test": true`, nhãn `[Câu hỏi thử]`.
 - Không tự thêm sự kiện, số liệu, trích dẫn vào chữ giao diện.
+- **Mã mở Kho câu hỏi:** không ghi mã gốc vào repo, commit, `CLAUDE.md` hay báo cáo — chỉ băm trong `src/data/bank-lock.json` (đổi bằng `npm run set:bank-code -- <mã>`); `check:release` và test dò mã gốc bị lộ.
 - Nhãn thẻ bẫy trung tính (N4); power-up và thẻ bẫy mô tả hiệu ứng bằng lời trung tính.
 - Khi nhóm gửi bản mới `docs/CAU-HOI-GAME.md`: chạy `npm run import:questions`, báo lỗi định dạng và câu trùng — **không tự sửa nội dung**; câu hỏi thử tự lấp độ khó còn thiếu; chạy lại test và mô phỏng.
 - Không tự lấy ảnh trên mạng khi chưa rõ bản quyền; không tự vẽ chân dung Bác.
@@ -102,10 +103,12 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 │   ├── check-release.mjs                ← npm run check:release: không câu hỏi thử, questions.json khớp, offline không mạng,
 │   │                                      siteUrl, QR và zip mới nhất
 │   ├── package-offline.mjs, make-qr.mjs ← npm run package:offline, npm run qr
+│   ├── set-bank-code.mjs                ← npm run set:bank-code -- <mã>: salt mới + SHA-256 vào src/data/bank-lock.json
 │   ├── lib/zip.mjs, lib/release.mjs     ← zip cố định byte (deflate, ngày cố định); tên gói, QR, HUONG-DAN.txt
+│   ├── lib/bank-lock.mjs                ← băm mã (node:crypto), dò mã gốc bị lộ (scanForLeaks: file git, dist/, dist-offline/, zip)
 │   └── lib/question-table.mjs, lib/quiz-source.mjs   ← đọc bảng câu hỏi, mẫu chữ cái phương án; đọc QUIZ-KIEN-THUC.md
 ├── src/
-│   ├── data/                            ← board, rules, powerups, traps, bots, tokens, site, questions (sinh từ script),
+│   ├── data/                            ← board, rules, powerups, traps, bots, tokens, site, questions (sinh từ script), bank-lock (băm mã Kho),
 │   │                                      test-questions (kho câu hỏi thử), NGUON.md (artifacts / mindmap / pillars đã gỡ ở 1.6)
 │   ├── engine/                          ← types, rng (mulberry32), data, board (hình học, đường đi), questions (chọn câu),
 │   │                                      reducer (luật), bot, ranking, history (hoàn tác), view (state gửi client), index
@@ -115,20 +118,23 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 │   │                                      polling, thay kết nối ~280 s, TICK khi quá hạn) — bản offline không nạp
 │   ├── game/                            ← local.ts (lưu / tiếp tục / hoàn tác / kỷ lục), useLocalGame (hành động, tạm dừng,
 │   │                                      tự động khi quá hạn), useBoardAnimation (xúc xắc lăn, ngựa đi từng ô, âm thanh,
-│   │                                      pháo giấy), useShortcuts (phím tắt, tắt tiếng, toàn màn hình)
+│   │                                      pháo giấy), review (Sổ ôn tập), useShortcuts (phím tắt, tắt tiếng, toàn màn hình)
 │   ├── components/                      ← Board (+ BoardLegend, cellLegendItems), Dice, Countdown, Sheet (giữ tiêu điểm),
 │   │                                      QuestionPanel, TurnPanels, PlayerStrip, EndPanel (thống kê, ôn câu sai, chia sẻ),
-│   │                                      Practice (ôn tập), GameMenu (loa, Menu), Confetti, ArtifactCard, PillarChip, …
-│   ├── screens/                         ← Home, LocalSetup, LocalGame, Rules (Luật chơi), Settings (Kho câu hỏi đã bỏ 05/10/2026)
+│   │                                      Practice (ôn tập), PlayerChip (chip màu + tên), GameMenu (loa, Menu), Confetti, …
+│   ├── screens/                         ← Home, LocalSetup, LocalGame, Rules (Luật chơi), QuestionBank (Kho câu hỏi, khóa mã), Settings
 │   ├── lib/                             ← gameData (nạp JSON → GameData), boardLayout (toạ độ SVG), eventText (nhật ký),
 │   │                                      storage (localStorage có try/catch), text (fill, clock, biệt danh), hooks,
-│   │                                      settings (cài đặt trên máy, data-theme/motion/text trên <html>), sound (Web Audio)
+│   │                                      settings (cài đặt trên máy, data-theme/motion/text trên <html>), sound (Web Audio),
+│   │                                      bankLock + sha256 (khóa Kho: SHA-256 thuần JS chạy cả file://)
 │   ├── assets/fonts.css, assets/fonts/  ← Be Vietnam Pro 400/400i/600/700, Noto Serif 700/400i + OFL
 │   ├── index.css, main.tsx, App.tsx     ← token màu sáng/tối, lớp nút/thẻ; App chuyển màn + ErrorBoundary
 │   └── vite-env.d.ts
 └── tests/                               ← helpers, data, questions, engine, local, server (lõi), server-net (HTTP + WebSocket thật),
                                            store (kho bộ nhớ + redis-server cục bộ), vercel-api (Node ESM như Vercel, cả rewrite
-                                           __p), g5 (cài đặt, phím tắt, thống kê, âm thanh), netHelpers
+                                           __p), g5 (cài đặt, Sổ ôn tập, phím tắt, thống kê, âm thanh), bank-lock (khóa Kho, dò lộ mã),
+                                           redis-faults (proxy TCP làm chậm / từ chối redis-server), socket-cleanup (waitUntil),
+                                           reconnect (có mạng lại → WebSocket ngay), release, netHelpers
 ```
 
 **Đích (mục 15.1):**
@@ -167,7 +173,8 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 | **G4 — Chơi qua phòng** | Trang chủ, tạo/vào phòng (mã, QR, link), phòng chờ, chơi qua mạng, trạng thái kết nối, kết thúc, chơi lại, Đoán cùng | ☑ Xong 03/10/2026 (e2e 3 máy cục bộ); kiểm trên Vercel ở đầu G5 |
 | **G5 — Hoàn thiện** | Ôn câu sai, thống kê, Kho câu hỏi, Luật chơi, Cài đặt, âm thanh, phím tắt, giao diện, reduced motion | ☑ Xong 03/10/2026 — 178 test; `npm run e2e` đạt; deploy thật: sửa catch-all `/api/*`, `check:deploy --long` + phòng 3 máy trên deploy đạt |
 | **Đ1.6 — Đơn giản hóa câu hỏi** | Bảng câu hỏi 8 cột + script nhập, 55 câu, rút ngẫu nhiên từ toàn bộ kho; bỏ trụ cột, giải thích, nguồn, xác minh, hiện vật; hiện đáp án 3 giây; mô phỏng lại | ☑ Xong 04/10/2026 — 157 test; mô phỏng đạt; `npm run e2e` đạt; deploy: `check:deploy` + phòng 3 máy đạt |
-| **G6 — Phát hành** | Hướng dẫn tạo project Vercel + Redis (nhóm làm), deploy preview, diễn tập, `check:release`, bản offline, README | ☑ phần Claude Code — chờ diễn tập (04/10/2026): `check:release`, `package:offline` (zip trong `phat-hanh/`), QR `docs/phat-hanh/qr-game.png`, README, `docs/DIEN-TAP.md`; rà soát 5 sub agent, đã sửa lỗi kỹ thuật, việc cần nhóm quyết ở mục 20. **Dừng — chờ kết quả diễn tập** |
+| **G6 — Phát hành** | Hướng dẫn tạo project Vercel + Redis (nhóm làm), deploy preview, diễn tập, `check:release`, bản offline, README | ☑ phần Claude Code (04/10/2026): `check:release`, `package:offline` (zip trong `phat-hanh/`), QR `docs/phat-hanh/qr-game.png`, README, `docs/DIEN-TAP.md`; rà soát 5 sub agent. Diễn tập lần 1 (04/10) đạt 7 dòng |
+| **Sau G6 — 05/10** | Quyết định của nhóm cho mục 20 (G6); Kho câu hỏi khóa mã; lỗi từ kiểm tra độc lập 04/10 | ☑ 05/10/2026 — 184 test; `npm run e2e` đạt; `e2e-online` 5 lần liên tiếp đạt; `check:release` đạt. **Dừng — chờ diễn tập lần 2** |
 
 ## Ghi chú nền tảng (G0, chi tiết ở mục 15.4–15.5)
 - Vite (giao diện tĩnh) + `api/` (Vercel Functions Node.js, handler kiểu Web), **không cần framework**. WebSocket: `experimental_upgradeWebSocket()` của `@vercel/functions` (cần `ws`), chỉ chạy trong runtime Vercel → chạy cục bộ/test bằng server Node riêng + Redis giả lập.
@@ -193,8 +200,10 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - Phòng = một khối JSON `Room` (server/types.ts), có `game: GameState`. Ghi qua `mutate()`: đọc (đệm/kho) → rà kết nối → sửa → `store.put(room, version cũ)` (Lua: kiểm version + ghi + hạn + publish) → xung đột thì đọc lại, thử lại. Lỗi phát hiện trên bản đệm có thể cũ → đọc lại kho trước khi báo (lỗi tìm ra nhờ mô phỏng tải).
 - Hành động tự động: máy gửi `TICK`, server chạy `pendingAutoAction(game, giờ server)`. Hạn luôn theo giờ server; client đo lệch đồng hồ.
 - Trạng thái kết nối: `links` (WebSocket đang mở, quá 320 s coi là chết) + `lastSeen` (lần ghi do chính người đó) + hash poll (tối đa 10 s/lần) → vắng 20 s thì `connected = false` (đồng bộ SET_CONNECTED sang engine) ở lần ghi kế tiếp; chủ phòng mất kết nối / rời → chuyển cho người vào sớm nhất còn kết nối.
-- **Sau G6 (nhóm yêu cầu):** 04/10 trang chủ bỏ dòng thông điệp + giới thiệu; 05/10 bỏ Kho câu hỏi và Sổ ôn tập (mục 20 "Thay đổi sau G6").
-- **Tiến độ phiên:** G6 (phần Claude Code) xong và đã commit; **dừng — nhóm diễn tập theo `docs/DIEN-TAP.md` và gửi kết quả; chỉ sửa sau khi nhận kết quả**. Rà soát G6 (5 sub agent) đã dùng — lần rà soát duy nhất trước phát hành.
+- **Sau G6 (nhóm yêu cầu, mục 20 "Thay đổi sau G6"):** 04/10 trang chủ bỏ dòng thông điệp + giới thiệu; 05/10 bỏ Kho câu hỏi rồi cùng ngày đưa lại có khóa mã (Sổ ôn tập khôi phục, sau mã); hoàn tác chỉ cho thao tác chọn (`revealsInfo` trong `game/local.ts`); mất kết nối tự tung sau 8 s, Khiên / power-up dùng ngay không tác dụng khi `turn.auto` (outcome `idle`); `blocked`/`stable` có `exact` ("Cần tung đúng số"); `revealWrongMs` 5 s; bot trả lời `botAnswerMinMs`–`botAnswerMaxMs` theo `question.textLength`; màn ≥ 1600 px phóng to qua `font-size` gốc (`index.css`).
+- **Tiến độ phiên:** đợt 05/10 (quyết định G6, Kho khóa mã, lỗi kiểm tra độc lập) xong và đã commit; **dừng — chờ nhóm diễn tập lần 2 theo `docs/DIEN-TAP.md`**. Rà soát G6 (5 sub agent) đã dùng — lần rà soát duy nhất trước phát hành.
+- **Server 05/10:** `RedisStore` giữ promise kết nối gốc, hạn chờ chỉ cho lượt gọi (`opts.timeoutMs`); subscribe lỗi thì xóa mục, hub thử lại 1 → 10 s; `attachSocket(…, { waitUntil })` (Vercel) cho `linkClose`. Client (`net/connection.ts`): có mạng lại (poll đầu thành công / sự kiện `online`) → `retrySocketSoon()`.
+- `e2e-online`: server cục bộ đóng WebSocket mỗi 25 s (client thay ở 280 s) → máy về polling ~1 s mỗi 25 s; kiểm "Trực tiếp" phải chờ (tối đa 6 s). Trong `page.evaluate` của script tsx không khai báo hàm (tsx thêm `__name`).
 - **G6 server:** giới hạn theo IP trước khi đọc kho (`Limits.requestsPerIp`, `failsPerIp`), nhớ mã phòng không tồn tại, `MAX_LINKS = 3`, `/api/health` giữ 5 s; `state` / `act` / `linkOpen` nhận `ip` (Vercel: `clientIp(request)`; Node: `remoteIp(req)`).
 - **Vercel:** `api/[...path].ts` ngoài Next.js chỉ khớp một cấp → `vercel.json` có rewrite `/api/(.*)` → `/api/[...path]?__p=$1`; `api/` khôi phục đường gốc từ `__p`. Đừng bỏ rewrite này.
 - `check:deploy` bằng Node đi thẳng (không qua proxy) có lúc bị tường lửa Vercel chặn 403 (`x-vercel-mitigated: deny`) → chạy với `NODE_USE_ENV_PROXY=1 NODE_EXTRA_CA_CERTS=/root/.ccr/ca-bundle.crt`.
@@ -215,9 +224,9 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - Cài đặt: `lib/settings.ts` (store + `useSettings`), khóa `settings.v1`; `applySettings` đặt `data-theme` / `data-motion` / `data-text` trên `<html>` (CSS dark mode: `@media` có `:root:not([data-theme='light'])` + `:root[data-theme='dark']`). `useReducedMotion()` = cài đặt "Hiệu ứng" kết hợp `prefers-reduced-motion`.
 - Âm thanh: `lib/sound.ts` (oscillator, không file); `useBoardAnimation` phát theo sự kiện (`segmentsOf` → `cue`) và trả `burst` cho `Confetti`. `Confetti` luôn là phần tử thứ hai của Fragment ở cả nhánh ván và nhánh kết thúc để không chạy lại.
 - Phím tắt: `shortcutOf` (thuần, có test) + `useShortcuts(handlers, enabled)`; màn chơi tự kiểm điều kiện như nút trên màn.
-- ~~Sổ ôn tập (`game/review.ts`, `review.v1`)~~ — **đã bỏ 05/10/2026 cùng Kho câu hỏi**; "Xóa dữ liệu trên máy" vẫn xóa khóa `review.v1` cũ. Màn kết thúc vẫn ôn / làm lại câu sai của ván đó (`Practice`).
+- Sổ ôn tập: `game/review.ts`, khóa `review.v1`; ghi khi ván kết thúc (một máy: `onEnded`; phòng: effect một lần mỗi ván theo `startedAt`); chỉ xem được trong Kho câu hỏi (sau mã). Khóa Kho: `lib/bankLock.ts`, khóa `bank.unlock.v1` (băm đã mở) và `bank.tries.v1` (5 lần sai → chờ 30 s).
 - Chữ mới trong `site.json`: `practice`, `bank`, `rules` (luật chơi — chỉ luật, không nội dung tư tưởng), `settings`.
-- `e2e-local` kiểm thêm: Luật chơi, trang chủ không có Kho câu hỏi (05/10/2026), Cài đặt (đổi giao diện, chữ lớn, nhớ sau tải lại), Menu trong ván, phím M / Space / 1, thống kê, làm lại câu sai; Đ1.6: không còn giải thích / nguồn / trụ cột trong cửa sổ câu hỏi.
+- `e2e-local` tự build bản offline vào `dist-e2e/` với `BANK_TEST_CODE` (mã thử; `vite.config.ts` → `__BANK_LOCK_TEST__`), kiểm thêm: Luật chơi, Kho câu hỏi (khóa → mã sai → mã thử, ẩn đáp án, lọc, Sổ ôn tập, ôn tập bằng phím), Cài đặt (đổi giao diện, chữ lớn, nhớ sau tải lại), Menu trong ván, phím M / Space / 1, thống kê, làm lại câu sai; Đ1.6: không còn giải thích / nguồn / trụ cột trong cửa sổ câu hỏi.
 
 ## Ghi chú dữ liệu (bản 1.6)
 - `questions.json` **sinh bởi** `npm run import:questions` từ `docs/CAU-HOI-GAME.md` (bảng 8 cột: id · độ khó · câu hỏi · đáp án A–D · đúng) — không sửa tay. Mỗi câu chỉ có `id, difficulty, type, question, answers, correct` (+ `test`). Loại câu tự suy ra: có `___` → `fillQuote`; đáp án đúng là "Đúng", "Sai" → `truefalse`; còn lại `single`.
@@ -225,13 +234,14 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - `test-questions.json`: 17 câu hỏi thử (chỉ luật chơi), chỉ lấp độ khó còn dưới 2 câu chính thức.
 - Engine: `pickQuestion(data, ctx, player, excludeId?)` rút từ toàn bộ kho (seed), không lặp tới hết kho; `ActiveQuestion` chỉ còn `difficulty` (nhãn, bot) + `isFinish`; `board.json` mỗi bố cục có `homeLength` (không còn độ khó theo ô). `GameState.schema` = 2, `Room.schema` = 2: ván lưu / phòng định dạng cũ bị bỏ.
 - Đã gỡ `artifacts.json`, `mindmap.json`, `pillars.json`, `ArtifactCard`, `PillarChip`, `stats.byPillar`. Bàn cờ: ô câu hỏi một màu (`QUESTION_STROKE`).
-- `revealMs` = 3000 (chỉ hiện Đúng / Sai + đáp án đúng, `data-correct-answer` trong giao diện).
+- `revealMs` = 3000 khi đúng, `revealWrongMs` = 5000 khi sai / hết giờ (`revealMsOf`); `disconnectMs` = 8000; `botAnswerMinMs` / `botAnswerMaxMs` = 4000 / 6000 (`rules.json`). Chỉ hiện Đúng / Sai + đáp án đúng (`data-correct-answer`).
 
 ## TODO (mục 20 tài liệu thiết kế)
 
 **Nhóm cần quyết:**
 - [ ] Tên chính thức của game — để sau, không chặn các mốc (đổi tên thì đổi tên gói zip).
-- [ ] Rà soát G6 (chi tiết mục 20): hoàn tác trong Chơi trên một máy bị lợi dụng (đề xuất chỉ hoàn tác thao tác chọn); Khiên / power-up dùng ngay cho người mất kết nối; chữ "Cần tung đúng số"; bàn cờ lớn hơn ở 1920 px; vài điểm máy chủ mức thấp.
+- [x] Rà soát G6: nhóm chọn 05/10 — hoàn tác (a), Khiên / power-up không tác dụng khi mất kết nối, dòng "Cần tung đúng số", phóng to ≥ 1600 px, đáp án 3 / 5 s, tự tung 8 s, Sổ ôn tập khôi phục sau mã — đã làm.
+- [ ] Vài điểm máy chủ mức thấp ở mục 20 (lỗi khác nhau cho không có phòng / sai token…) — chưa có quyết định.
 - [ ] Bộ câu hỏi: danh sách điểm cần nhóm xem (Q-27, Q-52/Q-53, Q-48, Q-43/Q-45, Q-14…) ở mục 20 — Claude Code không sửa nội dung.
 
 **Nội dung (nhóm cung cấp):**
@@ -243,7 +253,7 @@ Cũng đã chốt: **không có đá ngựa** · **bàn 6 nhánh**, phòng tối
 - [x] Điền `siteUrl` của game: `https://hcm-202-web-omega.vercel.app` (đã xác nhận đúng project game).
 - [ ] Kiểm tra Deployment Protection: thử trên điện thoại dùng Shareable Links; trước buổi học, tên miền chính mở được mà không cần đăng nhập Vercel — **đạt** ở diễn tập lần 1 (dòng 11 `docs/DIEN-TAP.md`).
 - [x] Đổi Function Region sang Singapore (`sin1`): trước ở `iad1`, `pingMs` ≈ 220 ms; nay `sin1`, `pingMs` ≈ 1 ms (diễn tập lần 1).
-- [ ] Diễn tập theo `docs/DIEN-TAP.md` và gửi kết quả — lần 1 (04/10/2026) đạt dòng 4, 5, 6, 11, 13, 14, 19; còn 1–3, 7–10, 12, 15–18, 20, 22 và đo lệnh Redis một ván.
+- [ ] Diễn tập theo `docs/DIEN-TAP.md` và gửi kết quả — lần 1 (04/10/2026) đạt dòng 4, 5, 6, 11, 13, 14, 19; còn 1–3, 7–10, 12, 15–18, 20, 22–26 (23: Kho khóa mã, chiếu mã sau khi chơi) và đo lệnh Redis một ván. Thử lại dòng 13, 16 vì đã đổi.
 
 **Cần xác minh:**
 - [ ] Upstash có tính mỗi tin pub/sub nhận được là một lệnh không — **chưa xác minh được** (upstash.com bị chặn; bằng chứng gián tiếp: không tính). Ước lượng chi phí đang tính **trường hợp xấu** (có tính). G6: chưa nhận kết quả; đo số Commands trước / sau một ván ở buổi diễn tập.

@@ -30,6 +30,13 @@ export function RoomScreen({ session, initial, onHome }: { session: Session; ini
     wasHost.current = isHost
   }, [isHost, view, t.becameHost])
 
+  // đổi trạng thái phòng (tạo phòng xong → phòng chờ, bắt đầu, kết thúc): cuộn về đầu để thấy ngay
+  // mã phòng + QR trên điện thoại (màn trước có thể đang cuộn ở nút "Tạo phòng" cuối form)
+  const status = view?.room.status
+  useEffect(() => {
+    if (status) window.scrollTo(0, 0)
+  }, [status])
+
   const playing = view?.room.status === 'playing'
   useEffect(() => {
     if (!playing) return
